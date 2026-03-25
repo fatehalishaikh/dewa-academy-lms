@@ -54,3 +54,23 @@ The system covers 13 modules per `planning/initial-plan.md`:
 13. Academic Calendar
 
 Design reference: Sana Labs (`planning/initial-docs/sana-design-guidelines.md`), DEWA brand (`planning/initial-docs/dewa-brand-guidelines.md`).
+
+## Recharts Chart Standards
+
+Every chart `<Tooltip>` must use these props — no exceptions:
+
+```tsx
+contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
+labelStyle={{ color: '#e2e8f0', fontWeight: 600 }}
+itemStyle={{ color: '#cbd5e1' }}
+// Bar charts:
+cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+// Area/Line charts:
+cursor={{ stroke: 'rgba(255,255,255,0.15)', strokeWidth: 1 }}
+```
+
+Axis ticks: `tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false}`
+
+Data fields passed to chart `data` prop must never be named `style` — React will throw a runtime error if a data item property named `style` contains a string (Recharts spreads data item props onto SVG `<path>` elements). Rename to `learningStyle`, `type`, etc.
+
+SVG gradient `id` values must be unique across the entire app — widgets rendered on the same page share one SVG namespace. Use widget-specific prefixes (e.g. `ilpCompletionGrad`, not `completionGrad`).

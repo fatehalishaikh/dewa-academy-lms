@@ -71,9 +71,11 @@ export function PathwayRecommendationsWidget() {
               />
               <YAxis tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
               <Tooltip
-                contentStyle={{ background: '#111820', border: '1px solid #1F2D3D', borderRadius: 8, fontSize: 11 }}
-                labelStyle={{ color: '#8B9BB4' }}
+                contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
+                labelStyle={{ color: '#e2e8f0', fontWeight: 600, marginBottom: 2 }}
+                itemStyle={{ color: '#94a3b8' }}
                 formatter={(val: any) => [`${val} students`]}
+                cursor={{ fill: 'rgba(255,255,255,0.05)' }}
               />
               <Bar dataKey="count" radius={[3, 3, 0, 0]} maxBarSize={28}>
                 {stageDistribution.map(d => (

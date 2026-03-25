@@ -57,8 +57,10 @@ export function GoalReflectionWidget() {
                 <YAxis type="category" dataKey="category" tick={{ fontSize: 10, fill: '#8B9BB4' }}
                   tickLine={false} axisLine={false} width={72} />
                 <Tooltip
-                  contentStyle={{ background: '#111820', border: '1px solid #1F2D3D', borderRadius: 8, fontSize: 11 }}
-                  labelStyle={{ color: '#8B9BB4' }}
+                  contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
+                  labelStyle={{ color: '#e2e8f0', fontWeight: 600 }}
+                itemStyle={{ color: '#cbd5e1' }}
+                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                   formatter={(val: any) => [`${val}% completion`]}
                 />
                 <Bar dataKey="pct" radius={[0, 3, 3, 0]} maxBarSize={20}>

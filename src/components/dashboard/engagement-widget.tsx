@@ -61,8 +61,10 @@ export function EngagementWidget() {
               <XAxis dataKey="date" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} interval={3} />
               <YAxis tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} domain={[50, 100]} />
               <Tooltip
-                contentStyle={{ background: '#111820', border: '1px solid #1F2D3D', borderRadius: 8, fontSize: 11 }}
-                labelStyle={{ color: '#8B9BB4' }}
+                contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
+                labelStyle={{ color: '#e2e8f0', fontWeight: 600 }}
+                itemStyle={{ color: '#cbd5e1' }}
+                cursor={{ stroke: 'rgba(255,255,255,0.15)', strokeWidth: 1 }}
               />
               <ReferenceLine y={65} stroke="#EF4444" strokeDasharray="4 2" strokeWidth={1.5} label={{ value: 'At-Risk', position: 'insideTopRight', fontSize: 9, fill: '#EF4444' }} />
               <Area type="monotone" dataKey="avg" stroke="#00B8A9" strokeWidth={2} fill="url(#engagementGrad)" name="Class Avg" />

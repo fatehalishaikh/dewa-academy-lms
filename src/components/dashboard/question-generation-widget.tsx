@@ -43,8 +43,10 @@ export function QuestionGenerationWidget() {
               <XAxis dataKey="subject" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
               <YAxis tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
               <Tooltip
-                contentStyle={{ background: '#111820', border: '1px solid #1F2D3D', borderRadius: 8, fontSize: 11 }}
-                labelStyle={{ color: '#8B9BB4' }}
+                contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
+                labelStyle={{ color: '#e2e8f0', fontWeight: 600 }}
+                itemStyle={{ color: '#cbd5e1' }}
+                cursor={{ fill: 'rgba(255,255,255,0.05)' }}
               />
               <Bar dataKey="easy" stackId="a" fill="#4CAF50" name="Easy" />
               <Bar dataKey="medium" stackId="a" fill="#FFC107" name="Medium" />
