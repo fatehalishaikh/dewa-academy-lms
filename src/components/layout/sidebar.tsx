@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 const navItems = [
   { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities' },
   { label: 'Registration', icon: ClipboardList, to: null },
-  { label: 'Learning Plans', icon: BookOpen, to: null },
+  { label: 'Learning Plans', icon: BookOpen, to: '/ilp' },
   { label: 'Assessments', icon: FileCheck, to: '/assessments' },
   { label: 'Student Portal', icon: GraduationCap, to: null },
   { label: 'Curriculum', icon: BookMarked, to: null },
@@ -44,6 +44,7 @@ export function Sidebar() {
             <NavLink
               key={label}
               to={to}
+              end={to === '/class-activities' || to === '/assessments'}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors border ${
                   isActive
