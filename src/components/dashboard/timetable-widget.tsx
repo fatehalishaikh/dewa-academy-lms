@@ -85,7 +85,7 @@ export function TimetableWidget() {
 
         {/* Conflict list */}
         <ScrollArea className="h-[100px]">
-          <div className="space-y-2">
+          <div className="space-y-2 pr-3">
             {timetableConflicts.map(c => {
               const cfg = statusConfig[c.status]
               const Icon = cfg.icon

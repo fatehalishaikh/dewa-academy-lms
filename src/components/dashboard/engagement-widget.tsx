@@ -57,7 +57,7 @@ export function EngagementWidget() {
                   <stop offset="95%" stopColor="#EF4444" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1F2D3D" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border" stroke="" />
               <XAxis dataKey="date" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} interval={3} />
               <YAxis tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} domain={[50, 100]} />
               <Tooltip

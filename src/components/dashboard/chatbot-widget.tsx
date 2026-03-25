@@ -49,8 +49,8 @@ export function ChatbotWidget() {
       {/* Chat panel */}
       {open && (
         <div className="fixed bottom-20 right-6 z-50 w-[360px]">
-          <Card className="rounded-2xl border-border bg-card shadow-2xl pb-0">
-            <CardHeader className="pb-3 shrink-0">
+          <Card className="rounded-2xl border-border bg-card shadow-2xl pb-0 gap-2">
+            <CardHeader className="pb-0 shrink-0">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
                   <Bot className="w-4 h-4 text-primary" />
@@ -88,9 +88,9 @@ export function ChatbotWidget() {
               )}
             </CardHeader>
 
-            <CardContent className="flex flex-col gap-3 p-4">
-              <ScrollArea className="h-[260px] pr-2">
-                <div className="space-y-3">
+            <CardContent className="flex flex-col gap-3 px-4 pt-2 pb-4">
+              <ScrollArea className="h-[260px]">
+                <div className="space-y-3 pr-3">
                   {messages.map((msg, i) => {
                     if (msg.role === 'system') {
                       return (
