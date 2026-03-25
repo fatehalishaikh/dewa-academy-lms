@@ -20,6 +20,13 @@ const PAGE_NAMES: Record<string, string> = {
   '/ilp/notifications': 'ILP — Notifications',
   '/ilp/goal-setting': 'ILP — Goal Setting',
   '/ilp/content-management': 'ILP — Content Management',
+  '/registration/dashboard': 'Registration Dashboard',
+  '/registration/applications': 'Registration — Applications',
+  '/registration/new-application': 'Registration — New Application',
+  '/registration/document-verification': 'Registration — Document Verification',
+  '/registration/ai-scoring': 'Registration — AI Scoring',
+  '/registration/communications': 'Registration — Communications',
+  '/registration/integrations': 'Registration — Integrations',
 }
 
 function getPageName(pathname: string): string {

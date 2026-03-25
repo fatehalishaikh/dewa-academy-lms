@@ -5,6 +5,7 @@ import { ClassActivitiesDashboard } from '@/pages/class-activities'
 import { AssessmentsDashboard } from '@/pages/assessments'
 import { IlpModule } from '@/pages/ilp'
 import { CurriculumDashboard } from '@/pages/curriculum'
+import { RegistrationModule } from '@/pages/registration'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/assessments" element={<AssessmentsDashboard />} />
         <Route path="/ilp/*" element={<IlpModule />} />
         <Route path="/curriculum" element={<CurriculumDashboard />} />
+        <Route path="/registration/*" element={<RegistrationModule />} />
         <Route path="*" element={<Navigate to="/class-activities" replace />} />
       </Routes>
     </AppLayout>

@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 const navItems = [
   { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities' },
-  { label: 'Registration', icon: ClipboardList, to: null },
+  { label: 'Registration', icon: ClipboardList, to: '/registration' },
   { label: 'Learning Plans', icon: BookOpen, to: '/ilp' },
   { label: 'Assessments', icon: FileCheck, to: '/assessments' },
   { label: 'Student Portal', icon: GraduationCap, to: null },
