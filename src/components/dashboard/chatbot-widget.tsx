@@ -3,8 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Bot, Send, X } from 'lucide-react'
+import { Bot, Send, X, LayoutGrid } from 'lucide-react'
 import { chatMessages, type ChatMessage } from '@/data/mock-class-activities'
+import { useChatContext } from '@/stores/chat-context-store'
 import { cn } from '@/lib/utils'
 
 export function ChatbotWidget() {
@@ -12,10 +13,27 @@ export function ChatbotWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>(chatMessages)
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
+  const { contexts, removeContext } = useChatContext()
+  const prevContextKeys = useRef<Set<string>>(new Set(Object.keys(contexts)))
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  // Inject a system message when a new context is added
+  useEffect(() => {
+    const current = new Set(Object.keys(contexts))
+    current.forEach(key => {
+      if (!prevContextKeys.current.has(key)) {
+        const entry = contexts[key]
+        setMessages(prev => [
+          ...prev,
+          { role: 'system', content: `Context added — ${entry.label}: ${entry.summary}` },
+        ])
+      }
+    })
+    prevContextKeys.current = current
+  }, [contexts])
 
   function handleSend() {
     const text = input.trim()
@@ -23,6 +41,8 @@ export function ChatbotWidget() {
     setMessages(prev => [...prev, { role: 'user', content: text }])
     setInput('')
   }
+
+  const contextEntries = Object.entries(contexts)
 
   return (
     <>
@@ -46,11 +66,30 @@ export function ChatbotWidget() {
                   </button>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Automates queries, notifications & scheduling</p>
+
+              {/* Page context indicator */}
+              <div className="flex items-center gap-1.5 mt-2 px-2 py-1.5 rounded-lg bg-muted/40 border border-border">
+                <LayoutGrid className="w-3 h-3 text-primary shrink-0" />
+                <span className="text-[10px] text-muted-foreground">Page context: <span className="text-foreground font-medium">Class Activities Dashboard</span></span>
+              </div>
+
+              {/* Active context chips */}
+              {contextEntries.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {contextEntries.map(([id, entry]) => (
+                    <div key={id} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] text-primary font-medium">
+                      {entry.label}
+                      <button onClick={() => removeContext(id)} className="hover:text-destructive transition-colors ml-0.5">
+                        <X className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardHeader>
 
             <CardContent className="flex flex-col gap-3 p-4">
-              <ScrollArea className="h-[300px] pr-2">
+              <ScrollArea className="h-[260px] pr-2">
                 <div className="space-y-3">
                   {messages.map((msg, i) => {
                     if (msg.role === 'system') {

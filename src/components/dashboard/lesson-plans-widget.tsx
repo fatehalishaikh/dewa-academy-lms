@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Progress } from '@/components/ui/progress'
 import { Lightbulb, BookOpen, FlaskConical, Languages } from 'lucide-react'
 import { lessonRecommendations } from '@/data/mock-class-activities'
+import { AddContextButton } from './add-context-button'
 
 const subjectIcons: Record<string, React.ElementType> = {
   Mathematics: BookOpen,
@@ -48,9 +49,15 @@ export function LessonPlansWidget() {
   return (
     <Card className="rounded-2xl border-border bg-card">
       <CardHeader className="pb-3">
-        <div className="flex items-center gap-2">
-          <Lightbulb className="w-4 h-4 text-primary" />
-          <CardTitle className="text-base font-semibold">Lesson Recommendations</CardTitle>
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="w-4 h-4 text-primary" />
+            <CardTitle className="text-base font-semibold">Lesson Recommendations</CardTitle>
+          </div>
+          <AddContextButton
+            id="lessons"
+            entry={{ label: 'Lesson Plans', summary: 'Math 10A at 65% comprehension (needs visual aids). Physics 11B at 78% (low engagement, suggest lab). English 9C at 92% (on track).' }}
+          />
         </div>
         <p className="text-xs text-muted-foreground mt-1">AI-personalized plans based on class performance</p>
       </CardHeader>

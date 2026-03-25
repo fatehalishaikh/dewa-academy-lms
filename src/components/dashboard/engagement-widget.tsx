@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Activity, TrendingDown, TrendingUp, Minus } from 'lucide-react'
+import { AddContextButton } from './add-context-button'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer
 } from 'recharts'
@@ -28,9 +29,15 @@ export function EngagementWidget() {
             <Activity className="w-4 h-4 text-primary" />
             <CardTitle className="text-base font-semibold">Engagement & Risk Analytics</CardTitle>
           </div>
-          <Badge variant="outline" className="text-xs bg-destructive/10 text-destructive border-destructive/20">
-            2 At-Risk
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-xs bg-destructive/10 text-destructive border-destructive/20">
+              2 At-Risk
+            </Badge>
+            <AddContextButton
+              id="engagement"
+              entry={{ label: 'Engagement', summary: '2 at-risk students: Layla Mahmoud (42%, trending down) and Youssef Nabil (55%, trending down). Class average trending downward over 14 days.' }}
+            />
+          </div>
         </div>
         <p className="text-xs text-muted-foreground mt-1">14-day engagement trend — all classes</p>
       </CardHeader>

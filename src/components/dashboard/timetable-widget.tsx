@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CalendarDays, CheckCircle2, Clock, RefreshCw } from 'lucide-react'
 import { timetableHeatmap, timetableConflicts } from '@/data/mock-class-activities'
+import { AddContextButton } from './add-context-button'
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Sun']
 const PERIODS = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -28,9 +29,15 @@ export function TimetableWidget() {
             <CalendarDays className="w-4 h-4 text-primary" />
             <CardTitle className="text-base font-semibold">Timetable Optimization</CardTitle>
           </div>
-          <Badge variant="outline" className="text-xs bg-chart-4/10 text-chart-4 border-chart-4/20">
-            3 Conflicts Resolved
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-xs bg-chart-4/10 text-chart-4 border-chart-4/20">
+              3 Conflicts Resolved
+            </Badge>
+            <AddContextButton
+              id="timetable"
+              entry={{ label: 'Timetable', summary: '3 conflicts this week (2 resolved, 1 pending). AI reduced scheduling conflicts by 73% this semester.' }}
+            />
+          </div>
         </div>
         <p className="text-xs text-muted-foreground mt-1">AI-optimized weekly schedule — Spring 2026</p>
       </CardHeader>

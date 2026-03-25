@@ -1,9 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { AppLayout } from '@/components/layout/app-layout'
 import { ClassActivitiesDashboard } from '@/pages/class-activities'
 
 export default function App() {
   return (
+    <TooltipProvider delay={400}>
     <AppLayout>
       <Routes>
         <Route path="/" element={<Navigate to="/class-activities" replace />} />
@@ -11,5 +13,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/class-activities" replace />} />
       </Routes>
     </AppLayout>
+    </TooltipProvider>
   )
 }

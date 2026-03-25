@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Eye, ScanFace } from 'lucide-react'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 import { attendanceSummary, flaggedStudents } from '@/data/mock-class-activities'
+import { AddContextButton } from './add-context-button'
 
 const COLORS = ['#00B8A9', '#FFC107', '#EF4444']
 
@@ -34,9 +35,15 @@ export function AttendanceWidget() {
             <Eye className="w-4 h-4 text-primary" />
             <CardTitle className="text-base font-semibold">Attendance Analytics</CardTitle>
           </div>
-          <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
-            AI Verified
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
+              AI Verified
+            </Badge>
+            <AddContextButton
+              id="attendance"
+              entry={{ label: 'Attendance', summary: '94% present, 4% late, 2% absent today (312 students). 3 flagged: Ahmed Al-Rashid (late 3×), Fatima Hassan (absent, no notification), Omar Khalil (behavioral alert).' }}
+            />
+          </div>
         </div>
         <p className="text-xs text-muted-foreground mt-1">Today — March 25, 2026 · {attendanceSummary.total} students</p>
       </CardHeader>
