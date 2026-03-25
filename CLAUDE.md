@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Purpose
 
-UI-only prototype for **DEWA Academy School Management System** — no backend, no API calls, all data is mocked in-memory or via static JSON. Do not add real authentication, network requests, or persistence.
+UI UX only prototype for **DEWA Academy School Management System** — no backend, no API calls, all data is mocked in-memory or via static JSON. Do not add real authentication, network requests, or persistence.
 
 ## Commands
 
