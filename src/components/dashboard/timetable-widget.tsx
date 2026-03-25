@@ -19,9 +19,9 @@ const busyDescriptions: Record<string, string> = {
 }
 
 const cellColor = {
-  normal: 'bg-primary/20',
-  busy: 'bg-chart-5/40',
-  conflict: 'bg-destructive/70',
+  normal: 'bg-primary/35',
+  busy: 'bg-chart-5/65',
+  conflict: 'bg-destructive/90',
 }
 
 const statusConfig = {
@@ -108,15 +108,15 @@ export function TimetableWidget() {
           {/* Legend */}
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded-sm bg-primary/20" />
+              <div className="w-3 h-3 rounded-sm bg-primary/35" />
               <span className="text-[10px] text-muted-foreground">Normal</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded-sm bg-chart-5/40" />
+              <div className="w-3 h-3 rounded-sm bg-chart-5/65" />
               <span className="text-[10px] text-muted-foreground">Busy</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded-sm bg-destructive/70" />
+              <div className="w-3 h-3 rounded-sm bg-destructive/90" />
               <span className="text-[10px] text-muted-foreground">Conflict</span>
             </div>
           </div>
