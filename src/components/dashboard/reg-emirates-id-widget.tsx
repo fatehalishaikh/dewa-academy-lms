@@ -1,16 +1,7 @@
-import { CreditCard, Sparkles, CheckCircle2 } from 'lucide-react'
+import { CreditCard, Sparkles } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { AddContextButton } from './add-context-button'
-
-const extractedFields = [
-  { field: 'Full Name (EN)', value: 'Mohammed Al Hamdan', confidence: 99 },
-  { field: 'Full Name (AR)', value: 'محمد الحمدان', confidence: 97 },
-  { field: 'ID Number', value: '784-2010-4567890-1', confidence: 98 },
-  { field: 'Nationality', value: 'UAE', confidence: 100 },
-  { field: 'Date of Birth', value: '05/11/2010', confidence: 97 },
-  { field: 'Expiry Date', value: '15/09/2028', confidence: 99 },
-]
 
 const recentExtractions = [
   { initials: 'MH', name: 'Mohammed Al Hamdan', confidence: 98, time: '2 min ago' },
