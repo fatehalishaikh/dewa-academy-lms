@@ -10,7 +10,7 @@ const navItems = [
   { label: 'Learning Plans', icon: BookOpen, to: '/ilp' },
   { label: 'Assessments', icon: FileCheck, to: '/assessments' },
   { label: 'Student Portal', icon: GraduationCap, to: null },
-  { label: 'Curriculum', icon: BookMarked, to: null },
+  { label: 'Curriculum', icon: BookMarked, to: '/curriculum' },
   { label: 'Reports', icon: BarChart3, to: null },
 ]
 

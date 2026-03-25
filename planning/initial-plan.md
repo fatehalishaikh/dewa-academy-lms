@@ -29,7 +29,7 @@ additional info:
 4. Curriculum and Lesson Planner
 4.1.        AI-driven Lesson Planner based on the curriculum and KHDA/MOE recommendation
 5. Registration and Admission
-5.1          Automate data extraction from Emirates ID.
+5.1          Automate data extraction from Emirates ID. (ICP UAE / UAE PASS INTEGRATION)
 5.2          Use Optical Character Recognition (OCR) and AI/ML to extract and verify uploaded document data (academic transcripts, ID proofs).
 5.3          Validate completeness and authenticity of documents with automated checks to reduce manual errors and fraud.
 5.4          Flag incomplete or suspicious applications for manual review with automated workflows.
