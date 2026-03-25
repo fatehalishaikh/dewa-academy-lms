@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { LayoutGrid, ClipboardList, BookOpen, FileCheck, GraduationCap, BookMarked, BarChart3, Sparkles } from 'lucide-react'
+import { LayoutGrid, ClipboardList, BookOpen, FileCheck, GraduationCap, BookMarked, BarChart3, Sparkles, Sun, Moon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 const navItems = [
-  { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities', active: true },
+  { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities' },
   { label: 'Registration', icon: ClipboardList, to: null },
   { label: 'Learning Plans', icon: BookOpen, to: null },
   { label: 'Assessments', icon: FileCheck, to: null },
@@ -14,6 +15,14 @@ const navItems = [
 ]
 
 export function Sidebar() {
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
+
+  function toggleTheme() {
+    const next = !isDark
+    document.documentElement.classList.toggle('dark', next)
+    setIsDark(next)
+  }
+
   return (
     <aside className="w-64 shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border">
       {/* Logo */}
@@ -62,15 +71,22 @@ export function Sidebar() {
 
       <Separator className="bg-sidebar-border" />
 
-      {/* User */}
+      {/* User + theme toggle */}
       <div className="px-4 py-4 flex items-center gap-3">
         <Avatar className="w-8 h-8">
           <AvatarFallback className="text-xs font-semibold text-white" style={{ background: '#00B8A9' }}>SA</AvatarFallback>
         </Avatar>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-[13px] font-medium text-sidebar-foreground truncate">Dr. Sarah Ahmed</p>
           <p className="text-[11px] text-muted-foreground truncate">Administrator</p>
         </div>
+        <button
+          onClick={toggleTheme}
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0"
+          aria-label="Toggle theme"
+        >
+          {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+        </button>
       </div>
     </aside>
   )

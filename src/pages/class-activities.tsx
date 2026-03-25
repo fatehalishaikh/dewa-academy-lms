@@ -3,7 +3,6 @@ import { TimetableWidget } from '@/components/dashboard/timetable-widget'
 import { AttendanceWidget } from '@/components/dashboard/attendance-widget'
 import { LessonPlansWidget } from '@/components/dashboard/lesson-plans-widget'
 import { EngagementWidget } from '@/components/dashboard/engagement-widget'
-import { ChatbotWidget } from '@/components/dashboard/chatbot-widget'
 
 export function ClassActivitiesDashboard() {
   return (
@@ -45,7 +44,6 @@ export function ClassActivitiesDashboard() {
         <AttendanceWidget />
         <LessonPlansWidget />
         <EngagementWidget />
-        <ChatbotWidget />
       </div>
     </div>
   )
