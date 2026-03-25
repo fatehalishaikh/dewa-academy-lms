@@ -1,12 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { CalendarDays, CheckCircle2, Clock, RefreshCw } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { CalendarDays, CheckCircle2, Clock, RefreshCw, AlertTriangle, Zap } from 'lucide-react'
 import { timetableHeatmap, timetableConflicts } from '@/data/mock-class-activities'
 import { AddContextButton } from './add-context-button'
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Sun']
 const PERIODS = [1, 2, 3, 4, 5, 6, 7, 8]
+
+const busyDescriptions: Record<string, string> = {
+  'Mon-2': 'Double science session + lab equipment booking',
+  'Mon-4': 'Back-to-back classes, 3 teachers scheduled',
+  'Mon-6': 'Staff meeting overlap — room 101 at capacity',
+  'Tue-3': 'Grade 10 & 11 exams running simultaneously',
+  'Tue-5': 'Sports hall booked, PE classes rescheduled here',
+  'Thu-2': 'Parent-teacher sessions + regular timetable',
+}
 
 const cellColor = {
   normal: 'bg-primary/20',
@@ -56,12 +66,41 @@ export function TimetableWidget() {
               <div className="w-8 text-[10px] text-muted-foreground flex items-center justify-center">P{period}</div>
               {DAYS.map(day => {
                 const cell = timetableHeatmap.find(c => c.day === day && c.period === period)
+                const load = cell?.load ?? 'normal'
+
+                if (load === 'normal') {
+                  return (
+                    <div key={day} className={`flex-1 h-5 rounded-sm ${cellColor.normal}`} />
+                  )
+                }
+
+                const conflict = timetableConflicts.find(c => c.day === day && c.period === period)
+                const busyDesc = busyDescriptions[`${day}-${period}`]
+
                 return (
-                  <div
-                    key={day}
-                    className={`flex-1 h-5 rounded-sm ${cellColor[cell?.load ?? 'normal']}`}
-                    title={`${day} P${period}: ${cell?.load}`}
-                  />
+                  <Tooltip key={day}>
+                    <TooltipTrigger className={`flex-1 h-5 rounded-sm cursor-pointer ${cellColor[load]}`} />
+                    <TooltipContent side="top" className="max-w-[200px] text-center">
+                      {load === 'conflict' && conflict ? (
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1 font-semibold">
+                            <AlertTriangle className="w-3 h-3 text-destructive" />
+                            {day} Period {period}
+                          </div>
+                          <p>{conflict.description}</p>
+                          <p className="capitalize opacity-70">{conflict.status}</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1 font-semibold">
+                            <Zap className="w-3 h-3 text-chart-5" />
+                            {day} Period {period} — Busy
+                          </div>
+                          <p>{busyDesc ?? 'High class load scheduled'}</p>
+                        </div>
+                      )}
+                    </TooltipContent>
+                  </Tooltip>
                 )
               })}
             </div>
