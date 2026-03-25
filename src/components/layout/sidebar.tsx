@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { LayoutGrid, ClipboardList, BookOpen, FileCheck, GraduationCap, BookMarked, BarChart3, Sparkles, Sun, Moon } from 'lucide-react'
+import { LayoutGrid, ClipboardList, BookOpen, FileCheck, GraduationCap, BookMarked, BarChart3, Sun, Moon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
@@ -27,9 +27,7 @@ export function Sidebar() {
     <aside className="w-64 shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border">
       {/* Logo */}
       <div className="px-6 py-5 flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#00B8A9' }}>
-          <Sparkles className="w-4 h-4 text-white" />
-        </div>
+        <img src="/dewa-logo-only.svg" alt="DEWA" className="w-8 h-8 shrink-0" />
         <div>
           <p className="text-[13px] font-semibold text-sidebar-foreground leading-tight">DEWA Academy</p>
           <p className="text-[10px] text-muted-foreground leading-tight">School Management</p>
