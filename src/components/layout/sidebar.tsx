@@ -8,7 +8,7 @@ const navItems = [
   { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities' },
   { label: 'Registration', icon: ClipboardList, to: null },
   { label: 'Learning Plans', icon: BookOpen, to: null },
-  { label: 'Assessments', icon: FileCheck, to: null },
+  { label: 'Assessments', icon: FileCheck, to: '/assessments' },
   { label: 'Student Portal', icon: GraduationCap, to: null },
   { label: 'Curriculum', icon: BookMarked, to: null },
   { label: 'Reports', icon: BarChart3, to: null },
@@ -45,10 +45,10 @@ export function Sidebar() {
               key={label}
               to={to}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors border ${
                   isActive
-                    ? 'bg-primary/10 text-primary border border-primary/20'
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent'
+                    ? 'bg-primary/10 text-primary border-primary/20'
+                    : 'border-transparent text-sidebar-foreground hover:bg-sidebar-accent'
                 }`
               }
             >
@@ -58,7 +58,7 @@ export function Sidebar() {
           ) : (
             <div
               key={label}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground/50 cursor-not-allowed select-none"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border border-transparent text-muted-foreground/50 cursor-not-allowed select-none"
             >
               <Icon className="w-4 h-4 shrink-0" />
               {label}
