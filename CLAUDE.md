@@ -9,7 +9,7 @@ UI UX only prototype for **DEWA Academy School Management System** — no backen
 ## Commands
 
 ```bash
-npm run dev       # start dev server
+npm run dev       # start dev server, don't start the server, its running at port 5173 already
 npm run build     # type-check + build
 npm run lint      # eslint
 ```
