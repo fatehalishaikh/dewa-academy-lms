@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,17 +9,49 @@ import { chatMessages, type ChatMessage } from '@/data/mock-class-activities'
 import { useChatContext } from '@/stores/chat-context-store'
 import { cn } from '@/lib/utils'
 
+const PAGE_NAMES: Record<string, string> = {
+  '/class-activities': 'Class Activities Dashboard',
+  '/assessments': 'Assessments & Exams',
+  '/ilp/dashboard': 'ILP Dashboard',
+  '/ilp/profile-assessment': 'ILP — Profile Assessment',
+  '/ilp/pathway-builder': 'ILP — Pathway Builder',
+  '/ilp/curation-rules': 'ILP — Curation Rules',
+  '/ilp/risk-intervention': 'ILP — Risk & Intervention',
+  '/ilp/notifications': 'ILP — Notifications',
+  '/ilp/goal-setting': 'ILP — Goal Setting',
+  '/ilp/content-management': 'ILP — Content Management',
+}
+
+function getPageName(pathname: string): string {
+  return PAGE_NAMES[pathname] ?? 'Dashboard'
+}
+
 export function ChatbotWidget() {
+  const location = useLocation()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>(chatMessages)
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
-  const { contexts, removeContext } = useChatContext()
+  const { contexts, removeContext, clearContexts } = useChatContext()
   const prevContextKeys = useRef<Set<string>>(new Set(Object.keys(contexts)))
+  const prevPathname = useRef<string>(location.pathname)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  // Inject a system message and clear contexts when the page changes
+  useEffect(() => {
+    if (location.pathname === prevPathname.current) return
+    prevPathname.current = location.pathname
+    clearContexts()
+    prevContextKeys.current = new Set()
+    const pageName = getPageName(location.pathname)
+    setMessages(prev => [
+      ...prev,
+      { role: 'system', content: `Switched to ${pageName}. Previous context cleared.` },
+    ])
+  }, [location.pathname, clearContexts])
 
   // Inject a system message when a new context is added
   useEffect(() => {
@@ -70,7 +103,7 @@ export function ChatbotWidget() {
               {/* Page context indicator */}
               <div className="flex items-center gap-1.5 mt-2 px-2 py-1.5 rounded-lg bg-muted/40 border border-border">
                 <LayoutGrid className="w-3 h-3 text-primary shrink-0" />
-                <span className="text-[10px] text-muted-foreground">Page context: <span className="text-foreground font-medium">Class Activities Dashboard</span></span>
+                <span className="text-[10px] text-muted-foreground">Page context: <span className="text-foreground font-medium">{getPageName(location.pathname)}</span></span>
               </div>
 
               {/* Active context chips */}

@@ -6,6 +6,7 @@ type ChatContextStore = {
   contexts: Record<string, ContextEntry>
   addContext: (id: string, entry: ContextEntry) => void
   removeContext: (id: string) => void
+  clearContexts: () => void
 }
 
 export const useChatContext = create<ChatContextStore>((set) => ({
@@ -18,4 +19,5 @@ export const useChatContext = create<ChatContextStore>((set) => ({
       delete next[id]
       return { contexts: next }
     }),
+  clearContexts: () => set({ contexts: {} }),
 }))
