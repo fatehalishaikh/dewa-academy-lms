@@ -18,7 +18,7 @@ const navItems = [
 
 const adminItems = [
   { label: 'All Students', icon: Users, to: '/admin/students' },
-  { label: 'Reports', icon: BarChart3, to: null as string | null },
+  { label: 'Reports', icon: BarChart3, to: '/reports' as string | null },
 ]
 
 export function Sidebar() {

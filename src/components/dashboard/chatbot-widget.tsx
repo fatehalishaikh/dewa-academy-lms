@@ -57,6 +57,13 @@ const PAGE_NAMES: Record<string, string> = {
   '/teacher/students':              'Teacher — Students',
   // Admin
   '/admin/students':                'Admin — All Students',
+  // Reports
+  '/reports/dashboard':             'Reports Dashboard',
+  '/reports/academic':              'Reports — Academic',
+  '/reports/attendance':            'Reports — Attendance',
+  '/reports/engagement':            'Reports — Engagement',
+  '/reports/exams':                 'Reports — Exams',
+  '/reports/builder':               'Reports — Report Builder',
 }
 
 function getPageName(pathname: string): string {

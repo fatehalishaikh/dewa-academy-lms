@@ -10,6 +10,7 @@ import { RoleSelectPage } from '@/pages/role-select'
 
 // ── Admin-specific pages ──────────────────────────────────────────────────────
 const AdminStudents = lazy(() => import('@/pages/admin/students').then(m => ({ default: m.AdminStudents })))
+const ReportsModule = lazy(() => import('@/pages/reports/index').then(m => ({ default: m.ReportsModule })))
 
 // ── Admin / shared module pages ──────────────────────────────────────────────
 const ClassActivitiesDashboard = lazy(() => import('@/pages/class-activities/index').then(m => ({ default: m.ClassActivitiesModule })))
@@ -56,6 +57,7 @@ function AdminRoutes() {
             <Route path="/registration/*" element={<RegistrationModule />} />
             <Route path="/admin/students" element={<AdminStudents />} />
             <Route path="/admin/students/:id" element={<StudentAnalysis />} />
+            <Route path="/reports/*" element={<ReportsModule />} />
             <Route path="*" element={<Navigate to="/class-activities" replace />} />
           </Routes>
         </Suspense>
@@ -85,6 +87,7 @@ function TeacherRoutes() {
             <Route path="/curriculum/*" element={<CurriculumDashboard />} />
             <Route path="/assessments/*" element={<AssessmentsDashboard />} />
             <Route path="/ilp/*" element={<IlpModule />} />
+            <Route path="/reports/*" element={<ReportsModule />} />
             <Route path="*" element={<Navigate to="/teacher/classes" replace />} />
           </Routes>
         </Suspense>
