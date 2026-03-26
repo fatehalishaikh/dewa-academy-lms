@@ -17,8 +17,8 @@ export function AssessmentsDashboardTab() {
         ].map(stat => (
           <div key={stat.label} className="bg-card border border-border rounded-xl px-4 py-3">
             <p className="text-xs text-muted-foreground">{stat.label}</p>
-            <p className="text-xl font-bold text-foreground mt-0.5">{stat.value}</p>
-            <p className="text-[10px] text-muted-foreground">{stat.sub}</p>
+            <p className="text-2xl font-bold text-foreground mt-0.5">{stat.value}</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">{stat.sub}</p>
           </div>
         ))}
       </div>

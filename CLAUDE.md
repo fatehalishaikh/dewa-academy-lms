@@ -75,3 +75,7 @@ Axis ticks: `tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={
 Data fields passed to chart `data` prop must never be named `style` — React will throw a runtime error if a data item property named `style` contains a string (Recharts spreads data item props onto SVG `<path>` elements). Rename to `learningStyle`, `type`, etc.
 
 SVG gradient `id` values must be unique across the entire app — widgets rendered on the same page share one SVG namespace. Use widget-specific prefixes (e.g. `ilpCompletionGrad`, not `completionGrad`).
+
+## General
+
+Do not take screenshots to investigate UI issues. Read source files directly with Grep/Read, or use snapshots. Only use screenshots when all other avenues are tried and failed.
