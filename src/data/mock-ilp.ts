@@ -14,34 +14,34 @@ export type RuleStatus = 'Active' | 'Draft' | 'Disabled'
 export type StyleDistribution = { style: LearningStyle; count: number; pct: number; color: string }
 
 export type RecentAssessment = {
-  name: string; initials: string; style: LearningStyle; strengths: string[]
+  studentId: string; name: string; initials: string; style: LearningStyle; strengths: string[]
   barriers: string[]; confidence: number; date: string
 }
 
 export type StageDistribution = { stage: PathwayStage; count: number }
 
 export type PathwayRecommendation = {
-  id: string; student: string; initials: string
+  id: string; studentId: string; student: string; initials: string
   from: PathwayStage; to: PathwayStage; subject: string; reason: string
 }
 
 export type RiskTimelinePoint = { date: string; actual: number | null; predicted: number | null }
 
 export type IlpRiskStudent = {
-  name: string; initials: string; riskScore: number; riskLevel: RiskLevel
+  studentId: string; name: string; initials: string; riskScore: number; riskLevel: RiskLevel
   factors: string[]; trend: 'up' | 'down' | 'flat'
 }
 
 export type ProgressTimelinePoint = { week: string; completion: number; engagement: number }
 
 export type NotificationEvent = {
-  type: 'milestone' | 'alert' | 'status_change'; text: string; student: string; timeAgo: string
+  studentId: string; type: 'milestone' | 'alert' | 'status_change'; text: string; student: string; timeAgo: string
 }
 
 export type GoalCompletion = { category: GoalCategory; completed: number; active: number; color: string }
 
 export type StudentGoal = {
-  student: string; initials: string; goal: string; category: GoalCategory
+  studentId: string; student: string; initials: string; goal: string; category: GoalCategory
   progress: number; nextReflection: string; status: 'on_track' | 'at_risk' | 'completed'
 }
 
@@ -114,19 +114,19 @@ export const styleDistribution: StyleDistribution[] = [
 
 export const recentAssessments: RecentAssessment[] = [
   {
-    name: 'Ahmed Al-Rashid', initials: 'AA', style: 'Visual',
+    studentId: 'stu-001', name: 'Ahmed Al-Rashid', initials: 'AR', style: 'Visual',
     strengths: ['Geometry', 'Data Analysis'], barriers: ['Algebra'], confidence: 94, date: 'Today'
   },
   {
-    name: 'Fatima Hassan', initials: 'FH', style: 'Auditory',
+    studentId: 'stu-002', name: 'Fatima Hassan', initials: 'FH', style: 'Auditory',
     strengths: ['English Literature', 'Arabic'], barriers: ['Chemistry'], confidence: 88, date: 'Today'
   },
   {
-    name: 'Omar Khalil', initials: 'OK', style: 'Kinesthetic',
+    studentId: 'stu-003', name: 'Omar Khalil', initials: 'OK', style: 'Kinesthetic',
     strengths: ['Physics Labs'], barriers: ['Essay Writing', 'Algebra'], confidence: 71, date: 'Yesterday'
   },
   {
-    name: 'Noor Al-Ali', initials: 'NA', style: 'Reading-Writing',
+    studentId: 'stu-010', name: 'Nour Al-Hashimi', initials: 'NH', style: 'Reading-Writing',
     strengths: ['History', 'Biology'], barriers: ['Math'], confidence: 83, date: 'Yesterday'
   },
 ]
@@ -143,22 +143,22 @@ export const stageDistribution: StageDistribution[] = [
 
 export const pathwayRecommendations: PathwayRecommendation[] = [
   {
-    id: '1', student: 'Ahmed Al-Rashid', initials: 'AA',
+    id: '1', studentId: 'stu-001', student: 'Ahmed Al-Rashid', initials: 'AR',
     from: 'Foundation', to: 'Core', subject: 'Mathematics',
     reason: 'Scored 82% on foundation quiz'
   },
   {
-    id: '2', student: 'Sara Al-Mansoori', initials: 'SM',
+    id: '2', studentId: 'stu-004', student: 'Sara Al-Zaabi', initials: 'SZ',
     from: 'Core', to: 'Practice', subject: 'English',
     reason: 'Completed all core modules'
   },
   {
-    id: '3', student: 'Omar Khalil', initials: 'OK',
+    id: '3', studentId: 'stu-003', student: 'Omar Khalil', initials: 'OK',
     from: 'Core', to: 'Foundation', subject: 'Chemistry',
     reason: '3 consecutive score drops detected'
   },
   {
-    id: '4', student: 'Layla Mahmoud', initials: 'LM',
+    id: '4', studentId: 'stu-008', student: 'Layla Ibrahim', initials: 'LI',
     from: 'Practice', to: 'Mastery', subject: 'Physics',
     reason: '91% practice set completion'
   },
@@ -180,23 +180,23 @@ export const riskTimeline: RiskTimelinePoint[] = riskDates.map((date, i) => ({
 
 export const ilpRiskStudents: IlpRiskStudent[] = [
   {
-    name: 'Omar Khalil', initials: 'OK', riskScore: 78, riskLevel: 'high',
+    studentId: 'stu-003', name: 'Omar Khalil', initials: 'OK', riskScore: 78, riskLevel: 'high',
     factors: ['Declining grades', 'Low engagement'], trend: 'down'
   },
   {
-    name: 'Tariq Hassan', initials: 'TH', riskScore: 65, riskLevel: 'moderate',
+    studentId: 'stu-009', name: 'Hamdan Al-Falasi', initials: 'HF', riskScore: 65, riskLevel: 'moderate',
     factors: ['Missing assignments'], trend: 'flat'
   },
   {
-    name: 'Reem Al-Zaabi', initials: 'RZ', riskScore: 61, riskLevel: 'moderate',
+    studentId: 'stu-012', name: 'Reem Al-Marzouqi', initials: 'RM', riskScore: 61, riskLevel: 'moderate',
     factors: ['Attendance: 68%'], trend: 'down'
   },
   {
-    name: 'Youssef Nabil', initials: 'YN', riskScore: 38, riskLevel: 'low',
+    studentId: 'stu-005', name: 'Yousef Mahmoud', initials: 'YM', riskScore: 38, riskLevel: 'low',
     factors: [], trend: 'up'
   },
   {
-    name: 'Noor Al-Ali', initials: 'NA', riskScore: 22, riskLevel: 'none',
+    studentId: 'stu-010', name: 'Nour Al-Hashimi', initials: 'NH', riskScore: 22, riskLevel: 'none',
     factors: [], trend: 'up'
   },
 ]
@@ -217,10 +217,10 @@ export const progressTimeline: ProgressTimelinePoint[] = [
 ]
 
 export const recentNotifications: NotificationEvent[] = [
-  { type: 'milestone', text: 'Completed Mathematics Core module', student: 'Ahmed Al-Rashid', timeAgo: '10 min ago' },
-  { type: 'alert', text: 'Inactive for 4 days — intervention suggested', student: 'Omar Khalil', timeAgo: '2 hrs ago' },
-  { type: 'status_change', text: 'Status changed: On Track → At-Risk', student: 'Reem Al-Zaabi', timeAgo: '5 hrs ago' },
-  { type: 'milestone', text: 'Achieved Mastery badge in English', student: 'Sara Al-Mansoori', timeAgo: 'Yesterday' },
+  { studentId: 'stu-001', type: 'milestone',     text: 'Completed Mathematics Core module',         student: 'Ahmed Al-Rashid',  timeAgo: '10 min ago' },
+  { studentId: 'stu-003', type: 'alert',          text: 'Inactive for 4 days — intervention suggested', student: 'Omar Khalil',     timeAgo: '2 hrs ago' },
+  { studentId: 'stu-012', type: 'status_change',  text: 'Status changed: On Track → At-Risk',        student: 'Reem Al-Marzouqi', timeAgo: '5 hrs ago' },
+  { studentId: 'stu-004', type: 'milestone',      text: 'Achieved Mastery badge in English',          student: 'Sara Al-Zaabi',    timeAgo: 'Yesterday' },
 ]
 
 export const goalCompletions: GoalCompletion[] = [
@@ -232,27 +232,27 @@ export const goalCompletions: GoalCompletion[] = [
 
 export const studentGoals: StudentGoal[] = [
   {
-    student: 'Ahmed Al-Rashid', initials: 'AA',
+    studentId: 'stu-001', student: 'Ahmed Al-Rashid', initials: 'AR',
     goal: 'Improve Mathematics grade to 85%', category: 'Academic',
     progress: 72, nextReflection: 'Mar 27', status: 'on_track'
   },
   {
-    student: 'Fatima Hassan', initials: 'FH',
+    studentId: 'stu-002', student: 'Fatima Hassan', initials: 'FH',
     goal: 'Complete engineering career pathway modules', category: 'Career',
     progress: 45, nextReflection: 'Mar 28', status: 'on_track'
   },
   {
-    student: 'Omar Khalil', initials: 'OK',
+    studentId: 'stu-003', student: 'Omar Khalil', initials: 'OK',
     goal: 'Maintain 80%+ assignment submission rate', category: 'Behavioral',
     progress: 38, nextReflection: 'Mar 26', status: 'at_risk'
   },
   {
-    student: 'Noor Al-Ali', initials: 'NA',
+    studentId: 'stu-010', student: 'Nour Al-Hashimi', initials: 'NH',
     goal: 'Read 5 Arabic literature books this term', category: 'Personal',
     progress: 60, nextReflection: 'Apr 1', status: 'on_track'
   },
   {
-    student: 'Sara Al-Mansoori', initials: 'SM',
+    studentId: 'stu-004', student: 'Sara Al-Zaabi', initials: 'SZ',
     goal: 'Earn English Mastery certification', category: 'Academic',
     progress: 100, nextReflection: 'Completed', status: 'completed'
   },

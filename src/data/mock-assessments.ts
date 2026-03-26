@@ -1,11 +1,11 @@
 export type QuestionBankStat = { subject: string; easy: number; medium: number; hard: number }
 export type RecentGeneration = { subject: string; count: number; difficulty: 'Mixed' | 'Easy' | 'Medium' | 'Hard'; timeAgo: string }
-export type AdaptiveStudent = { name: string; initials: string; difficulty: 'Easy' | 'Medium' | 'Hard'; questionsAnswered: number; accuracy: number; trend: 'up' | 'down' | 'flat' }
-export type GradingItem = { student: string; initials: string; assessment: string; confidence: number; status: 'graded' | 'review' | 'manual' }
+export type AdaptiveStudent = { studentId: string; name: string; initials: string; difficulty: 'Easy' | 'Medium' | 'Hard'; questionsAnswered: number; accuracy: number; trend: 'up' | 'down' | 'flat' }
+export type GradingItem = { studentId: string; student: string; initials: string; assessment: string; confidence: number; status: 'graded' | 'review' | 'manual' }
 export type BTECDocument = { filename: string; uploadDate: string; status: 'processed' | 'processing' | 'failed'; fieldsExtracted: number }
 export type BTECInsight = { unit: string; completionRate: number; cohortAvg: number; trend: 'up' | 'down' | 'flat' }
 export type PerformancePoint = { date: string; actual: number | null; predicted: number | null }
-export type RiskStudent = { name: string; initials: string; predictedScore: number; riskLevel: 'high' | 'moderate' | 'low'; trend: 'up' | 'down' | 'flat' }
+export type RiskStudent = { studentId: string; name: string; initials: string; predictedScore: number; riskLevel: 'high' | 'moderate' | 'low'; trend: 'up' | 'down' | 'flat' }
 
 export const questionBankStats: QuestionBankStat[] = [
   { subject: 'Math', easy: 102, medium: 153, hard: 85 },
@@ -24,16 +24,16 @@ export const recentGenerations: RecentGeneration[] = [
 export const adaptiveSummary = { easy: 68, medium: 156, hard: 88, total: 312 }
 
 export const adaptiveStudents: AdaptiveStudent[] = [
-  { name: 'Ahmed Al-Rashid', initials: 'AA', difficulty: 'Hard', questionsAnswered: 48, accuracy: 88, trend: 'up' },
-  { name: 'Fatima Hassan', initials: 'FH', difficulty: 'Medium', questionsAnswered: 34, accuracy: 72, trend: 'flat' },
-  { name: 'Omar Khalil', initials: 'OK', difficulty: 'Easy', questionsAnswered: 29, accuracy: 56, trend: 'down' },
-  { name: 'Noor Al-Ali', initials: 'NA', difficulty: 'Medium', questionsAnswered: 41, accuracy: 79, trend: 'up' },
+  { studentId: 'stu-001', name: 'Ahmed Al-Rashid',  initials: 'AR', difficulty: 'Hard',   questionsAnswered: 48, accuracy: 88, trend: 'up' },
+  { studentId: 'stu-002', name: 'Fatima Hassan',    initials: 'FH', difficulty: 'Medium', questionsAnswered: 34, accuracy: 72, trend: 'flat' },
+  { studentId: 'stu-003', name: 'Omar Khalil',      initials: 'OK', difficulty: 'Easy',   questionsAnswered: 29, accuracy: 56, trend: 'down' },
+  { studentId: 'stu-010', name: 'Nour Al-Hashimi',  initials: 'NH', difficulty: 'Medium', questionsAnswered: 41, accuracy: 79, trend: 'up' },
 ]
 
 export const gradingItems: GradingItem[] = [
-  { student: 'Sara Ahmed', initials: 'SA', assessment: 'Physics Mid-Term Essay', confidence: 97, status: 'graded' },
-  { student: 'Youssef Nabil', initials: 'YN', assessment: 'English Literature Analysis', confidence: 81, status: 'review' },
-  { student: 'Layla Mahmoud', initials: 'LM', assessment: 'Arabic Written Response', confidence: 64, status: 'manual' },
+  { studentId: 'stu-004', student: 'Sara Al-Zaabi',      initials: 'SZ', assessment: 'Physics Mid-Term Essay',       confidence: 97, status: 'graded' },
+  { studentId: 'stu-005', student: 'Yousef Mahmoud',     initials: 'YM', assessment: 'English Literature Analysis',  confidence: 81, status: 'review' },
+  { studentId: 'stu-008', student: 'Layla Ibrahim',      initials: 'LI', assessment: 'Arabic Written Response',      confidence: 64, status: 'manual' },
 ]
 
 export const gradingSummary = { autoGraded: 89, pendingReview: 7, manualRequired: 4, total: 847 }
@@ -66,11 +66,11 @@ export const performanceTimeline: PerformancePoint[] = perfDates.map((date, i) =
 }))
 
 export const riskStudents: RiskStudent[] = [
-  { name: 'Ahmed Khalil', initials: 'AK', predictedScore: 42, riskLevel: 'high', trend: 'down' },
-  { name: 'Layla Mahmoud', initials: 'LM', predictedScore: 48, riskLevel: 'high', trend: 'down' },
-  { name: 'Tariq Hassan', initials: 'TH', predictedScore: 58, riskLevel: 'moderate', trend: 'flat' },
-  { name: 'Noor Al-Ali', initials: 'NA', predictedScore: 63, riskLevel: 'moderate', trend: 'up' },
-  { name: 'Sara Ahmed', initials: 'SA', predictedScore: 81, riskLevel: 'low', trend: 'up' },
+  { studentId: 'stu-007', name: 'Khalid Al-Mansoori', initials: 'KM', predictedScore: 42, riskLevel: 'high',     trend: 'down' },
+  { studentId: 'stu-008', name: 'Layla Ibrahim',      initials: 'LI', predictedScore: 48, riskLevel: 'high',     trend: 'down' },
+  { studentId: 'stu-009', name: 'Hamdan Al-Falasi',   initials: 'HF', predictedScore: 58, riskLevel: 'moderate', trend: 'flat' },
+  { studentId: 'stu-010', name: 'Nour Al-Hashimi',    initials: 'NH', predictedScore: 63, riskLevel: 'moderate', trend: 'up' },
+  { studentId: 'stu-004', name: 'Sara Al-Zaabi',      initials: 'SZ', predictedScore: 81, riskLevel: 'low',      trend: 'up' },
 ]
 
 // ── New types for actionable sub-pages ────────────────────────────────────────

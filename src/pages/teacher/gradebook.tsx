@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCurrentTeacher } from '@/stores/role-store'
 import { getClassesByTeacher } from '@/data/mock-classes'
 import { getStudentById } from '@/data/mock-students'
+import { StudentNameLink } from '@/components/ui/student-name-link'
 import { useState } from 'react'
 
 // Mock grade data for the gradebook
@@ -97,7 +98,7 @@ export function TeacherGradebook() {
                           <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0" style={{ background: stu.avatarColor }}>
                             {stu.initials}
                           </div>
-                          <p className="text-xs font-medium text-foreground truncate">{stu.name}</p>
+                          <StudentNameLink studentId={stu.id} name={stu.name} className="text-xs font-medium text-foreground truncate" />
                         </div>
                       </td>
                       {assignments.map(a => {

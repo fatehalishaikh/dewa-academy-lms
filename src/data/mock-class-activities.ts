@@ -1,9 +1,9 @@
 export type HeatmapCell = { day: string; period: number; load: 'normal' | 'busy' | 'conflict' }
 export type TimetableConflict = { id: number; day: string; period: number; description: string; status: 'resolved' | 'pending' | 'reassigned' }
-export type FlaggedStudent = { name: string; initials: string; issue: string; severity: 'warning' | 'destructive' | 'secondary' }
+export type FlaggedStudent = { studentId: string; name: string; initials: string; issue: string; severity: 'warning' | 'destructive' | 'secondary' }
 export type LessonRecommendation = { subject: string; class: string; recommendation: string; progress: number }
 export type EngagementPoint = { date: string; avg: number; threshold: number }
-export type StudentEngagement = { name: string; score: number; trend: 'up' | 'down' | 'flat'; status: 'at-risk' | 'engaged' | 'stable' }
+export type StudentEngagement = { studentId: string; name: string; initials: string; score: number; trend: 'up' | 'down' | 'flat'; status: 'at-risk' | 'engaged' | 'stable' }
 export type ChatMessage = { role: 'system' | 'user' | 'bot'; content: string }
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Sun']
@@ -28,9 +28,9 @@ export const timetableConflicts: TimetableConflict[] = [
 export const attendanceSummary = { present: 94, late: 4, absent: 2, total: 312 }
 
 export const flaggedStudents: FlaggedStudent[] = [
-  { name: 'Ahmed Al-Rashid', initials: 'AA', issue: 'Late 3× this week', severity: 'warning' },
-  { name: 'Fatima Hassan', initials: 'FH', issue: 'Absent, no notification', severity: 'destructive' },
-  { name: 'Omar Khalil', initials: 'OK', issue: 'Behavioral alert', severity: 'secondary' },
+  { studentId: 'stu-001', name: 'Ahmed Al-Rashid', initials: 'AR', issue: 'Late 3× this week', severity: 'warning' },
+  { studentId: 'stu-002', name: 'Fatima Hassan',   initials: 'FH', issue: 'Absent, no notification', severity: 'destructive' },
+  { studentId: 'stu-003', name: 'Omar Khalil',     initials: 'OK', issue: 'Behavioral alert', severity: 'secondary' },
 ]
 
 export const lessonRecommendations: LessonRecommendation[] = [
@@ -66,10 +66,10 @@ export const engagementTimeline: EngagementPoint[] = dates.map((date, i) => ({
 }))
 
 export const studentEngagement: StudentEngagement[] = [
-  { name: 'Layla Mahmoud', score: 42, trend: 'down', status: 'at-risk' },
-  { name: 'Youssef Nabil', score: 55, trend: 'down', status: 'at-risk' },
-  { name: 'Sara Ahmed', score: 88, trend: 'up', status: 'engaged' },
-  { name: 'Khalid Omar', score: 76, trend: 'flat', status: 'stable' },
+  { studentId: 'stu-008', name: 'Layla Ibrahim',       initials: 'LI', score: 42, trend: 'down', status: 'at-risk' },
+  { studentId: 'stu-005', name: 'Yousef Mahmoud',      initials: 'YM', score: 55, trend: 'down', status: 'at-risk' },
+  { studentId: 'stu-004', name: 'Sara Al-Zaabi',       initials: 'SZ', score: 88, trend: 'up',   status: 'engaged' },
+  { studentId: 'stu-007', name: 'Khalid Al-Mansoori',  initials: 'KM', score: 76, trend: 'flat', status: 'stable' },
 ]
 
 export const chatMessages: ChatMessage[] = [

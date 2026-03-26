@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { academyClasses as mockClasses, getClassById } from '@/data/mock-classes'
 import { getStudentById } from '@/data/mock-students'
+import { StudentNameLink } from '@/components/ui/student-name-link'
 
 type ParticipationNote = { type: 'positive' | 'neutral' | 'concern'; text: string }
 
@@ -111,7 +112,7 @@ export function ClassActivitiesEngagement() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground">{stu.name}</p>
+                      <StudentNameLink studentId={stu.id} name={stu.name} className="text-sm font-medium text-foreground" />
                       <div className="flex items-center gap-2 mt-0.5">
                         <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                           <div

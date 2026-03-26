@@ -10,27 +10,62 @@ import { useChatContext } from '@/stores/chat-context-store'
 import { cn } from '@/lib/utils'
 
 const PAGE_NAMES: Record<string, string> = {
-  '/class-activities': 'Class Activities Dashboard',
-  '/assessments': 'Assessments & Exams',
-  '/ilp/dashboard': 'ILP Dashboard',
-  '/ilp/profile-assessment': 'ILP — Profile Assessment',
-  '/ilp/pathway-builder': 'ILP — Pathway Builder',
-  '/ilp/curation-rules': 'ILP — Curation Rules',
-  '/ilp/risk-intervention': 'ILP — Risk & Intervention',
-  '/ilp/notifications': 'ILP — Notifications',
-  '/ilp/goal-setting': 'ILP — Goal Setting',
-  '/ilp/content-management': 'ILP — Content Management',
-  '/registration/dashboard': 'Registration Dashboard',
-  '/registration/applications': 'Registration — Applications',
-  '/registration/new-application': 'Registration — New Application',
+  // Class Activities
+  '/class-activities/dashboard':    'Class Activities Dashboard',
+  '/class-activities/timetable':    'Class Activities — Timetable',
+  '/class-activities/attendance':   'Class Activities — Attendance',
+  '/class-activities/lessons':      'Class Activities — Lesson Plans',
+  '/class-activities/engagement':   'Class Activities — Engagement',
+  '/class-activities/communications': 'Class Activities — Communications',
+  // Assessments
+  '/assessments/dashboard':         'Assessments Dashboard',
+  '/assessments/question-bank':     'Assessments — Question Bank',
+  '/assessments/create-exam':       'Assessments — Create Exam',
+  '/assessments/schedule':          'Assessments — Schedule',
+  '/assessments/grading':           'Assessments — Grading',
+  '/assessments/results':           'Assessments — Results',
+  // ILP
+  '/ilp/dashboard':                 'ILP Dashboard',
+  '/ilp/profile-assessment':        'ILP — Profile Assessment',
+  '/ilp/pathway-builder':           'ILP — Pathway Builder',
+  '/ilp/curation-rules':            'ILP — Curation Rules',
+  '/ilp/risk-intervention':         'ILP — Risk & Intervention',
+  '/ilp/notifications':             'ILP — Notifications',
+  '/ilp/goal-setting':              'ILP — Goal Setting',
+  '/ilp/content-management':        'ILP — Content Management',
+  '/ilp/data-connection':           'ILP — Data Connection',
+  // Curriculum
+  '/curriculum/dashboard':          'Curriculum Dashboard',
+  '/curriculum/builder':            'Curriculum — Builder',
+  '/curriculum/standards':          'Curriculum — Standards',
+  '/curriculum/templates':          'Curriculum — Templates',
+  '/curriculum/resources':          'Curriculum — Resources',
+  '/curriculum/review':             'Curriculum — Review',
+  // Registration
+  '/registration/dashboard':        'Registration Dashboard',
+  '/registration/applications':     'Registration — Applications',
+  '/registration/new-application':  'Registration — New Application',
   '/registration/document-verification': 'Registration — Document Verification',
-  '/registration/ai-scoring': 'Registration — AI Scoring',
-  '/registration/communications': 'Registration — Communications',
-  '/registration/integrations': 'Registration — Integrations',
+  '/registration/ai-scoring':       'Registration — AI Scoring',
+  '/registration/communications':   'Registration — Communications',
+  '/registration/integrations':     'Registration — Integrations',
+  // Teacher
+  '/teacher/classes':               'Teacher — My Classes',
+  '/teacher/homework':              'Teacher — Homework',
+  '/teacher/homework/create':       'Teacher — Create Homework',
+  '/teacher/gradebook':             'Teacher — Gradebook',
+  '/teacher/students':              'Teacher — Students',
+  // Admin
+  '/admin/students':                'Admin — All Students',
 }
 
 function getPageName(pathname: string): string {
-  return PAGE_NAMES[pathname] ?? 'Dashboard'
+  if (PAGE_NAMES[pathname]) return PAGE_NAMES[pathname]
+  if (pathname.startsWith('/teacher/students/')) return 'Teacher — Student Analysis'
+  if (pathname.startsWith('/teacher/homework/')) return 'Teacher — Homework Detail'
+  if (pathname.startsWith('/teacher/classes/')) return 'Teacher — Class Detail'
+  if (pathname.startsWith('/admin/students/')) return 'Admin — Student Analysis'
+  return 'Dashboard'
 }
 
 export function ChatbotWidget() {

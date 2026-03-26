@@ -8,6 +8,9 @@ import { ParentLayout } from '@/components/layout/parent-layout'
 import { useRoleStore } from '@/stores/role-store'
 import { RoleSelectPage } from '@/pages/role-select'
 
+// ── Admin-specific pages ──────────────────────────────────────────────────────
+const AdminStudents = lazy(() => import('@/pages/admin/students').then(m => ({ default: m.AdminStudents })))
+
 // ── Admin / shared module pages ──────────────────────────────────────────────
 const ClassActivitiesDashboard = lazy(() => import('@/pages/class-activities/index').then(m => ({ default: m.ClassActivitiesModule })))
 const AssessmentsDashboard = lazy(() => import('@/pages/assessments/index').then(m => ({ default: m.AssessmentsModule })))
@@ -51,6 +54,8 @@ function AdminRoutes() {
             <Route path="/ilp/*" element={<IlpModule />} />
             <Route path="/curriculum/*" element={<CurriculumDashboard />} />
             <Route path="/registration/*" element={<RegistrationModule />} />
+            <Route path="/admin/students" element={<AdminStudents />} />
+            <Route path="/admin/students/:id" element={<StudentAnalysis />} />
             <Route path="*" element={<Navigate to="/class-activities" replace />} />
           </Routes>
         </Suspense>

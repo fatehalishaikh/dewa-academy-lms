@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { StudentNameLink } from '@/components/ui/student-name-link'
 import { exams, examSubmissions, type ExamSubmission } from '@/data/mock-assessments'
 import { getClassById } from '@/data/mock-classes'
 import { getStudentById } from '@/data/mock-students'
@@ -140,7 +141,7 @@ export function AssessmentsGrading() {
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground">{student.name}</p>
+                            <StudentNameLink studentId={student.id} name={student.name} className="text-sm font-medium text-foreground" />
                             <p className="text-[10px] text-muted-foreground">
                               Submitted {new Date(sub.submittedAt).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })}
                             </p>

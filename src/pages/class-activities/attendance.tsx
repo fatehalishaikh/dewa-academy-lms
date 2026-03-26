@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { academyClasses as mockClasses, getClassById } from '@/data/mock-classes'
 import { getStudentById } from '@/data/mock-students'
+import { StudentNameLink } from '@/components/ui/student-name-link'
 import { useAttendanceStore, type AttendanceStatus } from '@/stores/attendance-store'
 
 const TODAY = new Date().toISOString().split('T')[0]
@@ -166,7 +167,7 @@ export function ClassActivitiesAttendance() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground">{stu.name}</p>
+                    <StudentNameLink studentId={stu.id} name={stu.name} className="text-sm font-medium text-foreground" />
                     <p className="text-[10px] text-muted-foreground">Grade {stu.gradeLevel}{stu.section}</p>
                   </div>
                   <div className="flex items-center gap-1.5">

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { StudentNameLink } from '@/components/ui/student-name-link'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { exams, examSubmissions, gradeDistribution } from '@/data/mock-assessments'
 import { getStudentById } from '@/data/mock-students'
@@ -177,7 +178,7 @@ export function AssessmentsResults() {
                               {student.initials}
                             </AvatarFallback>
                           </Avatar>
-                          <span className="text-xs font-medium text-foreground">{student.name}</span>
+                          <StudentNameLink studentId={student.id} name={student.name} className="text-xs font-medium text-foreground" />
                         </div>
                       </td>
                       <td className="px-3 py-3 text-center">
