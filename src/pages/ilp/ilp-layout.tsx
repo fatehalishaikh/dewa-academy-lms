@@ -33,7 +33,7 @@ export function IlpLayout({ children }: IlpLayoutProps) {
       </div>
 
       {/* Single flat nav */}
-      <div className="border-b border-border flex items-center gap-0">
+      <div className="border-b border-border flex items-center gap-0 overflow-x-auto overflow-y-hidden">
         {navItems.map(({ label, to, icon: Icon, ai }) => (
           <NavLink
             key={to}

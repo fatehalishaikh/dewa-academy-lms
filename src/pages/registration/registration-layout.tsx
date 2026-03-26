@@ -32,7 +32,7 @@ export function RegistrationLayout({ children }: RegistrationLayoutProps) {
       </div>
 
       {/* Tab nav */}
-      <div className="border-b border-border flex items-center gap-0 overflow-x-auto">
+      <div className="border-b border-border flex items-center gap-0 overflow-x-auto overflow-y-hidden">
         {navItems.map(({ label, to, icon: Icon, ai }) => (
           <NavLink
             key={to}

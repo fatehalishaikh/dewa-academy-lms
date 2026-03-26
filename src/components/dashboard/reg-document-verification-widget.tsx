@@ -45,7 +45,7 @@ export function RegDocumentVerificationWidget() {
                 paddingAngle={2}
               >
                 {docVerificationStats.map((d) => (
-                  <Cell key={d.verificationLabel} fill={d.fill} />
+                  <Cell key={d.verificationLabel} fill={d.fill} strokeWidth={0} />
                 ))}
               </Pie>
               <Tooltip
