@@ -10,9 +10,9 @@ import { RoleSelectPage } from '@/pages/role-select'
 
 // ── Admin / shared module pages ──────────────────────────────────────────────
 const ClassActivitiesDashboard = lazy(() => import('@/pages/class-activities/index').then(m => ({ default: m.ClassActivitiesModule })))
-const AssessmentsDashboard = lazy(() => import('@/pages/assessments').then(m => ({ default: m.AssessmentsDashboard })))
+const AssessmentsDashboard = lazy(() => import('@/pages/assessments/index').then(m => ({ default: m.AssessmentsModule })))
 const IlpModule = lazy(() => import('@/pages/ilp').then(m => ({ default: m.IlpModule })))
-const CurriculumDashboard = lazy(() => import('@/pages/curriculum').then(m => ({ default: m.CurriculumDashboard })))
+const CurriculumDashboard = lazy(() => import('@/pages/curriculum/index').then(m => ({ default: m.CurriculumDashboard })))
 const RegistrationModule = lazy(() => import('@/pages/registration').then(m => ({ default: m.RegistrationModule })))
 
 // ── Teacher pages ─────────────────────────────────────────────────────────────
@@ -47,9 +47,9 @@ function AdminRoutes() {
           <Routes>
             <Route path="/" element={<Navigate to="/class-activities" replace />} />
             <Route path="/class-activities/*" element={<ClassActivitiesDashboard />} />
-            <Route path="/assessments" element={<AssessmentsDashboard />} />
+            <Route path="/assessments/*" element={<AssessmentsDashboard />} />
             <Route path="/ilp/*" element={<IlpModule />} />
-            <Route path="/curriculum" element={<CurriculumDashboard />} />
+            <Route path="/curriculum/*" element={<CurriculumDashboard />} />
             <Route path="/registration/*" element={<RegistrationModule />} />
             <Route path="*" element={<Navigate to="/class-activities" replace />} />
           </Routes>
@@ -77,8 +77,8 @@ function TeacherRoutes() {
             <Route path="/teacher/students/:id" element={<StudentAnalysis />} />
             {/* Shared module pages — teacher can view */}
             <Route path="/class-activities/*" element={<ClassActivitiesDashboard />} />
-            <Route path="/curriculum" element={<CurriculumDashboard />} />
-            <Route path="/assessments" element={<AssessmentsDashboard />} />
+            <Route path="/curriculum/*" element={<CurriculumDashboard />} />
+            <Route path="/assessments/*" element={<AssessmentsDashboard />} />
             <Route path="/ilp/*" element={<IlpModule />} />
             <Route path="*" element={<Navigate to="/teacher/classes" replace />} />
           </Routes>

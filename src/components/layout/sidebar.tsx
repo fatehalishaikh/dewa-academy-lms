@@ -64,7 +64,7 @@ export function Sidebar() {
           <NavLink
             key={label}
             to={to}
-            end={to === '/class-activities' || to === '/assessments'}
+            end={to === '/class-activities'}
             className={navLinkClass}
           >
             <Icon className="w-4 h-4 shrink-0" />
