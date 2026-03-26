@@ -1,30 +1,25 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
-  LayoutGrid, ClipboardList, BookOpen, FileCheck, BookMarked,
-  BarChart3, Users, Sun, Moon, LogOut, ChevronRight, Building2,
+  Home, BarChart3, Calendar, MessageSquare,
+  LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { useRoleStore } from '@/stores/role-store'
+import { useRoleStore, useCurrentParent } from '@/stores/role-store'
 
-const navItems = [
-  { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities' },
-  { label: 'Registration', icon: ClipboardList, to: '/registration' },
-  { label: 'Learning Plans', icon: BookOpen, to: '/ilp' },
-  { label: 'Assessments', icon: FileCheck, to: '/assessments' },
-  { label: 'Curriculum', icon: BookMarked, to: '/curriculum' },
+const parentLinks = [
+  { label: 'Overview', icon: Home, to: '/parent/dashboard' },
+  { label: "Child's Grades", icon: BarChart3, to: '/parent/grades' },
+  { label: 'Attendance', icon: Calendar, to: '/parent/attendance' },
+  { label: 'Messages', icon: MessageSquare, to: '/parent/messages' },
 ]
 
-const adminItems = [
-  { label: 'All Students', icon: Users, to: '/admin/students' },
-  { label: 'Reports', icon: BarChart3, to: null as string | null },
-]
-
-export function Sidebar() {
+function ParentSidebar() {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
   const navigate = useNavigate()
   const { clearRole } = useRoleStore()
+  const parent = useCurrentParent()
 
   function toggleTheme() {
     const next = !isDark
@@ -46,71 +41,45 @@ export function Sidebar() {
 
   return (
     <aside className="w-64 shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border">
-      {/* Logo */}
       <div className="px-6 py-5 flex items-center gap-2.5">
         <img src="/dewa-logo-only.svg" alt="DEWA" className="w-8 h-8 shrink-0" />
         <div>
           <p className="text-[13px] font-semibold text-sidebar-foreground leading-tight">DEWA Academy</p>
-          <p className="text-[10px] text-muted-foreground leading-tight">Admin Portal</p>
+          <p className="text-[10px] text-muted-foreground leading-tight">Parent Portal</p>
         </div>
       </div>
 
       <Separator className="bg-sidebar-border" />
 
-      {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Modules</p>
-        {navItems.map(({ label, icon: Icon, to }) => (
-          <NavLink
-            key={label}
-            to={to}
-            end={to === '/class-activities' || to === '/assessments'}
-            className={navLinkClass}
-          >
+        <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Navigation</p>
+        {parentLinks.map(({ label, icon: Icon, to }) => (
+          <NavLink key={label} to={to} className={navLinkClass}>
             <Icon className="w-4 h-4 shrink-0" />
             {label}
           </NavLink>
         ))}
-
-        <div className="pt-3">
-          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Administration</p>
-          {adminItems.map(({ label, icon: Icon, to }) =>
-            to ? (
-              <NavLink key={label} to={to} className={navLinkClass}>
-                <Icon className="w-4 h-4 shrink-0" />
-                {label}
-              </NavLink>
-            ) : (
-              <div
-                key={label}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border border-transparent text-muted-foreground/50 cursor-not-allowed select-none"
-              >
-                <Icon className="w-4 h-4 shrink-0" />
-                {label}
-              </div>
-            )
-          )}
-        </div>
       </nav>
 
       <Separator className="bg-sidebar-border" />
 
-      {/* User + theme toggle + switch role */}
       <div className="px-4 py-4 space-y-2">
         <div className="flex items-center gap-3">
           <Avatar className="w-8 h-8">
-            <AvatarFallback className="text-xs font-semibold text-white" style={{ background: '#F59E0B' }}>
-              <Building2 className="w-3.5 h-3.5" />
+            <AvatarFallback
+              className="text-xs font-semibold text-white"
+              style={{ background: parent?.avatarColor ?? '#8B5CF6' }}
+            >
+              {parent?.initials ?? 'P'}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-medium text-sidebar-foreground truncate">Dr. Hassan Al-Mansoori</p>
-            <p className="text-[11px] text-muted-foreground truncate">Administrator</p>
+            <p className="text-[13px] font-medium text-sidebar-foreground truncate">{parent?.name ?? 'Parent'}</p>
+            <p className="text-[11px] text-muted-foreground truncate">{parent?.relationship ?? 'Guardian'}</p>
           </div>
           <button
             onClick={toggleTheme}
             className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0"
-            aria-label="Toggle theme"
           >
             {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
           </button>
@@ -125,5 +94,14 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+  )
+}
+
+export function ParentLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex h-screen overflow-hidden bg-background">
+      <ParentSidebar />
+      <main className="flex-1 overflow-y-auto">{children}</main>
+    </div>
   )
 }
