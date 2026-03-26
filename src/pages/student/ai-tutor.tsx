@@ -8,6 +8,26 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 
 type Message = { role: 'user' | 'assistant'; content: string; timestamp: Date }
 
+function renderMarkdown(text: string) {
+  return text.split('\n').map((line, i) => {
+    // Bold: **text**
+    const parts = line.split(/(\*\*[^*]+\*\*)/g).map((part, j) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={j}>{part.slice(2, -2)}</strong>
+      }
+      // Italic: _text_
+      const italicParts = part.split(/(_[^_]+_)/g).map((p, k) => {
+        if (p.startsWith('_') && p.endsWith('_') && p.length > 2) {
+          return <em key={k}>{p.slice(1, -1)}</em>
+        }
+        return p
+      })
+      return <span key={j}>{italicParts}</span>
+    })
+    return <p key={i} className={line === '' ? 'h-2' : undefined}>{parts}</p>
+  })
+}
+
 const subjects = [
   { id: 'math', label: 'Mathematics', color: '#00B8A9', topics: ['Algebra', 'Quadratic Equations', 'Statistics', 'Trigonometry'] },
   { id: 'physics', label: 'Physics', color: '#0EA5E9', topics: ["Newton's Laws", 'Waves & Optics', 'Thermodynamics', 'Electricity'] },
@@ -213,8 +233,8 @@ export function StudentAiTutor() {
                           : <User className="w-3.5 h-3.5 text-muted-foreground" />
                         }
                       </div>
-                      <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-wrap ${msg.role === 'assistant' ? 'bg-card border border-border text-foreground' : 'bg-primary/10 border border-primary/20 text-foreground'}`}>
-                        {msg.content}
+                      <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${msg.role === 'assistant' ? 'bg-card border border-border text-foreground' : 'bg-primary/10 border border-primary/20 text-foreground'}`}>
+                        {msg.role === 'assistant' ? renderMarkdown(msg.content) : msg.content}
                       </div>
                     </div>
                   ))}

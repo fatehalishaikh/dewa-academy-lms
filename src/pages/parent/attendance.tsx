@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Sparkles, Calendar, CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -6,71 +7,128 @@ import { getStudentById } from '@/data/mock-students'
 
 type AttStatus = 'present' | 'absent' | 'late' | 'excused'
 
-const statusConfig: Record<AttStatus, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  present: { label: 'Present', color: 'text-emerald-400', bg: 'bg-emerald-500', icon: CheckCircle2 },
-  absent: { label: 'Absent', color: 'text-red-400', bg: 'bg-red-500', icon: XCircle },
-  late: { label: 'Late', color: 'text-amber-400', bg: 'bg-amber-500', icon: Clock },
-  excused: { label: 'Excused', color: 'text-blue-400', bg: 'bg-blue-500', icon: AlertCircle },
+const statusConfig: Record<AttStatus, { label: string; color: string; bg: string; dot: string; icon: React.ElementType }> = {
+  present: { label: 'Present', color: 'text-emerald-400', bg: 'bg-emerald-500/10', dot: 'bg-emerald-500', icon: CheckCircle2 },
+  absent:  { label: 'Absent',  color: 'text-red-400',    bg: 'bg-red-500/10',     dot: 'bg-red-500',     icon: XCircle     },
+  late:    { label: 'Late',    color: 'text-amber-400',  bg: 'bg-amber-500/10',   dot: 'bg-amber-500',   icon: Clock       },
+  excused: { label: 'Excused', color: 'text-blue-400',   bg: 'bg-blue-500/10',    dot: 'bg-blue-500',    icon: AlertCircle },
 }
 
-// Generate 30 days of mock attendance
-function generateAttendance(): { date: Date; status: AttStatus; note?: string }[] {
-  const records = []
-  const statuses: AttStatus[] = ['present', 'present', 'present', 'present', 'present', 'present', 'present', 'late', 'present', 'absent']
+type AttRecord = { date: Date; status: AttStatus; dateKey: string; note?: string }
+
+// Deterministic attendance — seeded by studentId so it's stable across renders
+function generateAttendance(studentId: string): AttRecord[] {
+  let seed = 0
+  for (const c of studentId) seed = (seed * 31 + c.charCodeAt(0)) & 0xffff
+
+  const records: AttRecord[] = []
   const today = new Date()
   for (let i = 29; i >= 0; i--) {
     const d = new Date(today)
     d.setDate(today.getDate() - i)
-    const dow = d.getDay()
-    if (dow === 5 || dow === 6) continue // skip Fri/Sat (weekend in UAE)
-    const status = statuses[Math.floor(Math.random() * statuses.length)]
+    if (d.getDay() === 5 || d.getDay() === 6) continue // skip Fri/Sat (UAE weekend)
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff
+    const r = seed % 10
+    const status: AttStatus = r < 7 ? 'present' : r < 8 ? 'late' : r < 9 ? 'absent' : 'excused'
     records.push({
       date: d,
       status,
-      note: status === 'absent' ? 'No notification received' : status === 'late' ? 'Arrived 15 min late' : undefined,
+      dateKey: d.toISOString().split('T')[0],
+      note: status === 'absent'  ? 'No notification received'
+          : status === 'late'    ? 'Arrived 15 min late'
+          : status === 'excused' ? 'Medical certificate provided'
+          : undefined,
     })
   }
   return records
 }
 
-const attendance = generateAttendance()
-const totalDays = attendance.length
-const presentDays = attendance.filter(a => a.status === 'present' || a.status === 'late').length
-const absentDays = attendance.filter(a => a.status === 'absent').length
-const lateDays = attendance.filter(a => a.status === 'late').length
-
 export function ParentAttendance() {
   const parent = useCurrentParent()
-  const child = parent ? getStudentById(parent.childIds[0]) : null
+  const children = (parent?.childIds ?? []).map(id => getStudentById(id)).filter(Boolean)
 
-  // Group by week
-  const weeks: (typeof attendance[0] | null)[][] = []
-  let week: (typeof attendance[0] | null)[] = []
-  for (const rec of attendance) {
-    const dow = rec.date.getDay() // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu
-    if (dow === 0 && week.length > 0) { weeks.push(week); week = [] }
+  const [selectedIdx, setSelectedIdx] = useState(0)
+  const selectedChild = children[selectedIdx]
+
+  // Pre-generate attendance for every child
+  const attByChild: Record<string, AttRecord[]> = {}
+  const lookupByChild: Record<string, Record<string, AttRecord>> = {}
+  for (const child of children) {
+    if (!child) continue
+    const records = generateAttendance(child.id)
+    attByChild[child.id] = records
+    lookupByChild[child.id] = Object.fromEntries(records.map(r => [r.dateKey, r]))
+  }
+
+  const selectedAtt = selectedChild ? (attByChild[selectedChild.id] ?? []) : []
+  const totalDays   = selectedAtt.length
+  const presentDays = selectedAtt.filter(a => a.status === 'present' || a.status === 'late').length
+  const absentDays  = selectedAtt.filter(a => a.status === 'absent').length
+  const lateDays    = selectedAtt.filter(a => a.status === 'late').length
+
+  // Build calendar weeks from the first child's records (all share the same school days)
+  const baseRecords = children[0] ? (attByChild[children[0].id] ?? []) : []
+  const weeks: (AttRecord | null)[][] = []
+  let week: (AttRecord | null)[] = []
+  for (const rec of baseRecords) {
+    if (rec.date.getDay() === 0 && week.length > 0) { weeks.push(week); week = [] }
     week.push(rec)
   }
   if (week.length > 0) weeks.push(week)
 
+  if (!parent || children.length === 0) return (
+    <div className="p-6"><p className="text-sm text-muted-foreground">No children found.</p></div>
+  )
+
+  const multiChild = children.length > 1
+
   return (
     <div className="p-6 space-y-6 max-w-4xl">
+      {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
           <Sparkles className="w-4 h-4 text-primary" />
           <span className="text-xs font-medium text-primary uppercase tracking-wider">Attendance Records</span>
         </div>
-        <h1 className="text-xl font-bold text-foreground">{child?.name ?? 'Child'}'s Attendance</h1>
+        <h1 className="text-xl font-bold text-foreground">
+          {multiChild ? "Children's Attendance" : `${children[0]?.name}'s Attendance`}
+        </h1>
         <p className="text-sm text-muted-foreground mt-0.5">Last 30 school days</p>
       </div>
+
+      {/* Child selector — only shown when multiple children */}
+      {multiChild && (
+        <div className="flex items-center gap-2 flex-wrap">
+          {children.map((child, i) => child && (
+            <button
+              key={child.id}
+              onClick={() => setSelectedIdx(i)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all ${
+                selectedIdx === i
+                  ? 'border-primary/30 bg-primary/10 text-primary'
+                  : 'border-border text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0"
+                style={{ background: child.avatarColor }}
+              >
+                {child.initials}
+              </div>
+              {child.name}
+            </button>
+          ))}
+          <span className="text-[11px] text-muted-foreground ml-1">Stats &amp; events shown for selected child</span>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-3">
         {[
-          { label: 'Attendance Rate', value: `${Math.round((presentDays / totalDays) * 100)}%`, color: '#00B8A9', icon: Calendar },
-          { label: 'Present', value: presentDays, color: '#10B981', icon: CheckCircle2 },
-          { label: 'Absent', value: absentDays, color: '#EF4444', icon: XCircle },
-          { label: 'Late', value: lateDays, color: '#F59E0B', icon: Clock },
+          { label: 'Attendance Rate', value: `${Math.round((presentDays / totalDays) * 100)}%`, color: '#00B8A9', icon: Calendar     },
+          { label: 'Present',         value: presentDays,                                         color: '#10B981', icon: CheckCircle2 },
+          { label: 'Absent',          value: absentDays,                                          color: '#EF4444', icon: XCircle      },
+          { label: 'Late',            value: lateDays,                                            color: '#F59E0B', icon: Clock        },
         ].map(({ label, value, color, icon: Icon }) => (
           <Card key={label} className="rounded-2xl border-border">
             <CardContent className="p-4">
@@ -81,6 +139,9 @@ export function ParentAttendance() {
                 </div>
               </div>
               <p className="text-xl font-bold" style={{ color }}>{value}</p>
+              {multiChild && selectedChild && (
+                <p className="text-[10px] text-muted-foreground mt-0.5">{selectedChild.name.split(' ')[0]}</p>
+              )}
             </CardContent>
           </Card>
         ))}
@@ -90,48 +151,74 @@ export function ParentAttendance() {
       <div className="flex items-center gap-4 flex-wrap">
         {Object.entries(statusConfig).map(([key, cfg]) => (
           <div key={key} className="flex items-center gap-1.5">
-            <div className={`w-2.5 h-2.5 rounded-full ${cfg.bg}`} />
+            <div className={`w-2.5 h-2.5 rounded-full ${cfg.dot}`} />
             <span className="text-[11px] text-muted-foreground">{cfg.label}</span>
           </div>
         ))}
+        {multiChild && (
+          <>
+            <div className="w-px h-3 bg-border mx-1" />
+            {children.map((child, i) => child && (
+              <div key={child.id} className="flex items-center gap-1.5">
+                <div
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ background: child.avatarColor }}
+                />
+                <span className="text-[11px] text-muted-foreground">
+                  dot {i + 1} = {child.name.split(' ')[0]}
+                </span>
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       {/* Calendar */}
       <Card className="rounded-2xl border-border">
         <CardHeader className="pb-2">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              Attendance Calendar
-            </CardTitle>
-          </div>
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-primary" />
+            Attendance Calendar
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Day headers */}
           <div className="grid grid-cols-5 gap-1.5 mb-2">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu'].map(d => (
               <p key={d} className="text-[10px] font-semibold text-muted-foreground text-center">{d}</p>
             ))}
           </div>
+
           <div className="space-y-1.5">
-            {weeks.map((week, wi) => {
-              // Pad the week to align with days
-              const dayOfFirst = week[0]!.date.getDay()
-              const padded: (typeof attendance[0] | null)[] = Array(dayOfFirst).fill(null).concat(week)
+            {weeks.map((wk, wi) => {
+              const dayOfFirst = wk[0]!.date.getDay()
+              const padded = (Array(dayOfFirst).fill(null) as (AttRecord | null)[]).concat(wk)
               return (
                 <div key={wi} className="grid grid-cols-5 gap-1.5">
                   {padded.slice(0, 5).map((rec, di) => {
                     if (!rec) return <div key={di} />
-                    const cfg = statusConfig[rec.status]
                     return (
                       <div
                         key={di}
-                        className="aspect-square rounded-lg flex flex-col items-center justify-center gap-0.5 border"
-                        style={{ borderColor: `${cfg.bg.replace('bg-', '')}40`, background: `${cfg.bg.replace('bg-', '')}15` }}
-                        title={rec.note}
+                        className="aspect-square rounded-lg flex flex-col items-center justify-center gap-1 border border-border bg-card"
                       >
-                        <p className="text-[10px] font-semibold text-muted-foreground">{rec.date.getDate()}</p>
-                        <div className={`w-2 h-2 rounded-full ${cfg.bg}`} />
+                        <p className="text-[10px] font-semibold text-muted-foreground leading-none">
+                          {rec.date.getDate()}
+                        </p>
+                        {/* One dot per child */}
+                        <div className="flex gap-0.5">
+                          {children.map(child => {
+                            if (!child) return null
+                            const childRec = lookupByChild[child.id]?.[rec.dateKey]
+                            const cfg = childRec ? statusConfig[childRec.status] : null
+                            return (
+                              <div
+                                key={child.id}
+                                className={`w-2 h-2 rounded-full ${cfg?.dot ?? 'bg-muted/30'}`}
+                                title={`${child.name.split(' ')[0]}: ${cfg?.label ?? '—'}`}
+                              />
+                            )
+                          })}
+                        </div>
                       </div>
                     )
                   })}
@@ -142,14 +229,16 @@ export function ParentAttendance() {
         </CardContent>
       </Card>
 
-      {/* Notable absences */}
-      {attendance.filter(a => a.status === 'absent' || a.status === 'late').length > 0 && (
+      {/* Notable events for selected child */}
+      {selectedAtt.filter(a => a.status !== 'present').length > 0 && (
         <Card className="rounded-2xl border-border">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Notable Events</CardTitle>
+            <CardTitle className="text-sm">
+              Notable Events{multiChild && selectedChild ? ` — ${selectedChild.name.split(' ')[0]}` : ''}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {attendance.filter(a => a.status !== 'present').map((rec, i) => {
+            {selectedAtt.filter(a => a.status !== 'present').map((rec, i) => {
               const cfg = statusConfig[rec.status]
               const Icon = cfg.icon
               return (
