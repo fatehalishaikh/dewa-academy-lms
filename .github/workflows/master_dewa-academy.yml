@@ -31,7 +31,7 @@ jobs:
 
       - name: Package node_modules as tar for Azure Oryx
         run: |
-          tar -czf node_modules.tar.gz node_modules
+          tar -czf node_modules.tar.gz -C node_modules .
           rm -rf node_modules
 
       - name: Upload artifact for deployment job
