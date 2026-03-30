@@ -1,10 +1,10 @@
 'use client'
 import { useState } from 'react'
-import { CheckCircle2, Circle, AlertTriangle } from 'lucide-react'
+import { CheckCircle2, Circle, AlertTriangle, GitBranch } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { standards, curriculumNodes, standardMappings, type Framework } from '@/data/mock-curriculum'
+import { standards, curriculumNodes, standardMappings, assessmentLinks, activityItems, type Framework } from '@/data/mock-curriculum'
 
 const coverageData = [
   { subject: 'Mathematics', grade: 'Grade 10', covered: 8, partial: 2, gap: 1 },
@@ -171,34 +171,87 @@ export default function CurriculumStandards() {
         </CardHeader>
         <CardContent className="p-4">
           <div className="space-y-2">
-            <div className="grid grid-cols-[160px_repeat(3,1fr)] gap-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-2">
+            <div className="grid grid-cols-[160px_repeat(4,1fr)] gap-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-2">
               <span>Subject</span>
               <span className="text-center">Covered</span>
               <span className="text-center">Partial</span>
               <span className="text-center">Gap</span>
+              <span className="text-center">Assessed</span>
             </div>
-            {coverageData.map(row => (
-              <div key={row.subject} className="grid grid-cols-[160px_repeat(3,1fr)] gap-2 items-center">
-                <div>
-                  <p className="text-xs font-medium text-foreground">{row.subject}</p>
-                  <p className="text-[9px] text-muted-foreground">{row.grade}</p>
+            {coverageData.map(row => {
+              // Count standards for this subject that have assessment links
+              const subjectStds = standards.filter(s => s.subject === row.subject)
+              const bothTypes = subjectStds.filter(s =>
+                assessmentLinks.some(a => a.standardIds.includes(s.id) && a.type === 'formative') &&
+                assessmentLinks.some(a => a.standardIds.includes(s.id) && a.type === 'summative')
+              ).length
+              const oneType = subjectStds.filter(s =>
+                assessmentLinks.some(a => a.standardIds.includes(s.id)) &&
+                !(assessmentLinks.some(a => a.standardIds.includes(s.id) && a.type === 'formative') &&
+                  assessmentLinks.some(a => a.standardIds.includes(s.id) && a.type === 'summative'))
+              ).length
+              const assessedCell = bothTypes > 0
+                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20'
+                : oneType > 0
+                  ? 'bg-amber-500/20 text-amber-400 border-amber-500/20'
+                  : 'bg-red-500/20 text-red-400 border-red-500/20'
+              const assessedLabel = bothTypes > 0 ? `${bothTypes} F+S` : oneType > 0 ? `${oneType}` : '—'
+              return (
+                <div key={row.subject} className="grid grid-cols-[160px_repeat(4,1fr)] gap-2 items-center">
+                  <div>
+                    <p className="text-xs font-medium text-foreground">{row.subject}</p>
+                    <p className="text-[9px] text-muted-foreground">{row.grade}</p>
+                  </div>
+                  <div className={`text-center text-[10px] font-semibold py-1 rounded-lg border ${coverageCell(row.covered, row.partial, 0)}`}>
+                    {row.covered}
+                  </div>
+                  <div className="text-center text-[10px] font-semibold py-1 rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-400">
+                    {row.partial}
+                  </div>
+                  <div className="text-center text-[10px] font-semibold py-1 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400">
+                    {row.gap}
+                  </div>
+                  <div className={`text-center text-[10px] font-semibold py-1 rounded-lg border ${assessedCell}`}>
+                    {assessedLabel}
+                  </div>
                 </div>
-                <div className={`text-center text-[10px] font-semibold py-1 rounded-lg border ${coverageCell(row.covered, row.partial, 0)}`}>
-                  {row.covered}
-                </div>
-                <div className="text-center text-[10px] font-semibold py-1 rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-400">
-                  {row.partial}
-                </div>
-                <div className="text-center text-[10px] font-semibold py-1 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400">
-                  {row.gap}
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
-          <div className="flex gap-4 mt-4 text-[10px] text-muted-foreground">
+          <div className="flex gap-4 mt-4 text-[10px] text-muted-foreground flex-wrap">
             <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-emerald-500/30 inline-block" /> Covered</span>
             <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-amber-500/30 inline-block" /> Partial</span>
             <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-red-500/30 inline-block" /> Gap</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-emerald-500/30 inline-block" /> Assessed (F+S = formative + summative)</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Multi-level mapping summary */}
+      <Card className="rounded-2xl border-border">
+        <CardHeader className="pb-2 border-b border-border">
+          <div className="flex items-center gap-2">
+            <GitBranch className="w-4 h-4 text-muted-foreground" />
+            <CardTitle className="text-sm">Multi-Level Standards Mapping</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="p-4">
+          <p className="text-[10px] text-muted-foreground mb-3">Standards are mapped across all curriculum levels — from courses down to individual activities within lessons.</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            {[
+              { level: 'Courses',    count: curriculumNodes.filter(n => n.nodeType === 'course' && standardMappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'course').length,  color: 'text-primary border-primary/30' },
+              { level: 'Units',      count: curriculumNodes.filter(n => n.nodeType === 'unit'   && standardMappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'unit').length,    color: 'text-blue-400 border-blue-500/30' },
+              { level: 'Lessons',    count: curriculumNodes.filter(n => n.nodeType === 'lesson' && standardMappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'lesson').length,  color: 'text-emerald-400 border-emerald-500/30' },
+              { level: 'Activities', count: activityItems.filter(a => a.standardIds.length > 0).length, total: activityItems.length, color: 'text-amber-400 border-amber-500/30' },
+            ].map((item, i, arr) => (
+              <div key={item.level} className="flex items-center gap-2">
+                <div className={`px-3 py-2 rounded-xl border text-center min-w-[80px] ${item.color} bg-muted/5`}>
+                  <p className="text-lg font-bold">{item.count}<span className="text-xs font-normal text-muted-foreground">/{item.total}</span></p>
+                  <p className="text-[9px] text-muted-foreground uppercase tracking-wide">{item.level}</p>
+                </div>
+                {i < arr.length - 1 && <span className="text-muted-foreground/50 text-xs">→</span>}
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
