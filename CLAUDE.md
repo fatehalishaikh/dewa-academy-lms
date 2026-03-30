@@ -5,12 +5,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Purpose
 
-UI UX only prototype for **DEWA Academy School Management System** — no backend, no API calls, all data is mocked in-memory or via static JSON. Do not add real authentication, network requests, or persistence.
+UI/UX prototype for **DEWA Academy School Management System** with LLM-powered features. Mock data is used for the UI layer (in-memory / static JSON). Real AI responses come from the `/api/ai/` Next.js API routes using Anthropic Claude or OpenAI. Do not add real authentication or non-AI persistence.
 
 ## Commands
 
 ```bash
-npm run dev       # start dev server, don't start the server, its running at port 5173 already
+npm run dev       # start dev server (Turbopack) — already running at port 3000
 npm run build     # type-check + build
 npm run lint      # eslint
 ```
@@ -22,20 +22,35 @@ npx shadcn@latest add <component>
 
 ## Stack
 
-- **React 19 + Vite + TypeScript**
-- **Tailwind CSS v4** — configured via `@tailwindcss/vite` plugin (no `tailwind.config.js`; all theme tokens are CSS custom properties in `src/index.css`)
-- **shadcn/ui** — components live in `src/components/ui/`, added via CLI
-- **React Router v7** — client-side routing only
-- **Zustand** — global mock state store
-- **Recharts** — bundled via shadcn's chart component (`src/components/ui/chart.tsx`)
+- **React 19 + Next.js 16 (App Router, Turbopack) + TypeScript**
+- **Tailwind CSS v4** — configured via `@tailwindcss/postcss` (no `tailwind.config.js`; all theme tokens are CSS custom properties in `app/globals.css`)
+- **shadcn/ui** — components live in `components/ui/`, added via CLI
+- **Zustand** — global state (role store, mock data stores)
+- **Recharts** — bundled via shadcn's chart component (`components/ui/chart.tsx`)
+- **`@anthropic-ai/sdk`** + **`openai`** — LLM providers for API routes
+
+## Routing
+
+Next.js App Router with file-based routing in `app/`:
+
+- `app/page.tsx` — role select (unauthenticated root)
+- `app/(dashboard)/layout.tsx` — reads Zustand role, renders appropriate layout (AdminLayout / TeacherLayout / StudentLayout / ParentLayout), redirects to `/` if no role
+- `app/(dashboard)/[module]/layout.tsx` — module tab nav layouts (ClassActivitiesLayout, etc.)
+- `app/(dashboard)/[module]/[tab]/page.tsx` — page components live directly in these files (`'use client'`, `export default function`)
+- `app/api/ai/` — LLM API routes (server-side, use `@anthropic-ai/sdk` or `openai`):
+  - `app/api/ai/chat/route.ts` — streaming chatbot (page context + widget contexts)
+  - `app/api/ai/tutor/route.ts` — streaming AI tutor (subject + topic aware)
+  - `app/api/ai/homework/generate/route.ts` — generate homework title/description/instructions
+  - `app/api/ai/questions/generate/route.ts` — generate exam questions array
+  - `app/api/ai/scoring/route.ts` — weighted composite scoring for admissions
 
 ## Path Alias
 
-`@/` maps to `src/`. Use it for all imports (e.g. `import { Button } from '@/components/ui/button'`).
+`@/` maps to the project root. Use it for all imports (e.g. `import { Button } from '@/components/ui/button'`).
 
 ## Theming
 
-CSS variables are defined in `src/index.css`. shadcn tokens (`--primary`, `--background`, etc.) are in `oklch()`. DEWA brand colors should be applied by overriding these variables. Dark mode is toggled via the `.dark` class (not `prefers-color-scheme`).
+CSS variables are defined in `app/globals.css`. shadcn tokens (`--primary`, `--background`, etc.) are in `oklch()`. DEWA brand colors override these variables. Dark mode is toggled via the `.dark` class (not `prefers-color-scheme`).
 
 ## Module Scope
 
