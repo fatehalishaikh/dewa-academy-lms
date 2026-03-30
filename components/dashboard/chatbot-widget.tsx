@@ -4,10 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Bot, Send, X, LayoutGrid } from 'lucide-react'
+import { Bot, Send, X, LayoutGrid, Trash2, Maximize2, Minimize2 } from 'lucide-react'
 import { chatMessages, type ChatMessage } from '@/data/mock-class-activities'
 import { useChatContext } from '@/stores/chat-context-store'
 import { cn } from '@/lib/utils'
+import { MarkdownRenderer } from '@/components/ui/markdown'
 
 const PAGE_NAMES: Record<string, string> = {
   // Class Activities
@@ -86,6 +87,7 @@ function getPageName(pathname: string | null): string {
 export function ChatbotWidget() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>(chatMessages)
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -124,6 +126,12 @@ export function ChatbotWidget() {
     })
     prevContextKeys.current = current
   }, [contexts])
+
+  function handleClear() {
+    setMessages([])
+    clearContexts()
+    prevContextKeys.current = new Set()
+  }
 
   async function handleSend() {
     const text = input.trim()
@@ -177,7 +185,7 @@ export function ChatbotWidget() {
     <>
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-20 right-6 z-50 w-[360px]">
+        <div className={cn('fixed bottom-20 right-6 z-50 transition-all duration-200', expanded ? 'w-[560px]' : 'w-[360px]')}>
           <Card className="rounded-2xl border-border bg-card shadow-2xl pb-0 gap-2">
             <CardHeader className="pb-0 shrink-0">
               <div className="flex items-start justify-between">
@@ -190,6 +198,12 @@ export function ChatbotWidget() {
                     <span className="w-1.5 h-1.5 rounded-full bg-chart-4 inline-block" />
                     Online
                   </Badge>
+                  <button onClick={() => setExpanded(e => !e)} title={expanded ? 'Collapse' : 'Expand'} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {expanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+                  </button>
+                  <button onClick={handleClear} title="Clear chat" className="text-muted-foreground hover:text-destructive transition-colors">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                   <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
                     <X className="w-4 h-4" />
                   </button>
@@ -218,7 +232,7 @@ export function ChatbotWidget() {
             </CardHeader>
 
             <CardContent className="flex flex-col gap-3 px-4 pt-2 pb-4">
-              <ScrollArea className="h-[260px]">
+              <ScrollArea className={cn('transition-all duration-200', expanded ? 'h-[460px]' : 'h-[260px]')}>
                 <div className="space-y-3 pr-3">
                   {messages.map((msg, i) => {
                     if (msg.role === 'system') {
@@ -239,7 +253,7 @@ export function ChatbotWidget() {
                               : 'bg-muted text-foreground rounded-bl-sm'
                           )}
                         >
-                          {msg.content}
+                          {isUser ? msg.content : <MarkdownRenderer content={msg.content} size="xs" />}
                         </div>
                       </div>
                     )

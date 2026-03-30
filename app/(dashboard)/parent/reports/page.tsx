@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useCurrentParent } from '@/stores/role-store'
 import { getStudentById } from '@/data/mock-students'
 import { ilpRiskStudents } from '@/data/mock-ilp'
+import { MarkdownRenderer } from '@/components/ui/markdown'
 
 type Period = 'this-week' | 'this-month' | 'this-term'
 const PERIOD_LABELS: Record<Period, string> = {
@@ -30,34 +31,6 @@ const MOCK_GRADES: Record<string, { subject: string; grade: number }[]> = {
     { subject: 'Biology', grade: 85 },
     { subject: 'English', grade: 93 },
   ],
-}
-
-// Simple markdown renderer (bold, headings, bullets)
-function renderMarkdown(text: string) {
-  const lines = text.split('\n')
-  return lines.map((line, i) => {
-    if (line.startsWith('## ')) {
-      return <h3 key={i} className="text-sm font-bold text-foreground mt-4 mb-1.5">{line.slice(3)}</h3>
-    }
-    if (line.startsWith('# ')) {
-      return <h2 key={i} className="text-base font-bold text-foreground mt-4 mb-2">{line.slice(2)}</h2>
-    }
-    if (line.startsWith('- ') || line.startsWith('* ')) {
-      const content = line.slice(2)
-      return (
-        <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
-          <span dangerouslySetInnerHTML={{ __html: content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
-        </li>
-      )
-    }
-    if (line.trim() === '') return <div key={i} className="h-1" />
-    return (
-      <p key={i} className="text-sm text-muted-foreground leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>') }}
-      />
-    )
-  })
 }
 
 export default function ParentReportsPage() {
@@ -219,8 +192,8 @@ export default function ParentReportsPage() {
             </div>
           </CardHeader>
           <CardContent className="px-5 pb-5">
-            <div className="prose-sm max-w-none space-y-1">
-              {renderMarkdown(reportText)}
+            <div className="max-w-none">
+              <MarkdownRenderer content={reportText} size="sm" />
               {isGenerating && (
                 <span className="inline-block w-1.5 h-4 bg-primary animate-pulse ml-0.5" />
               )}
