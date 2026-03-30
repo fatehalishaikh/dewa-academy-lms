@@ -177,7 +177,10 @@ export default function CurriculumBuilder() {
         <div
           className={`flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-colors group ${isSelected ? 'bg-primary/10' : 'hover:bg-muted/20'}`}
           style={{ paddingLeft: `${12 + depth * 20}px` }}
-          onClick={() => { setSelected(isSelected ? null : node.id) }}
+          onClick={() => {
+            setSelected(isSelected ? null : node.id)
+            if (children.length > 0) toggleExpand(node.id)
+          }}
         >
           {children.length > 0 ? (
             <button className="w-4 h-4 flex items-center justify-center text-muted-foreground shrink-0" onClick={e => { e.stopPropagation(); toggleExpand(node.id) }}>
@@ -556,7 +559,7 @@ export default function CurriculumBuilder() {
 
   // ── Tree + metadata panel ─────────────────────────────────────────────────────
   return (
-    <div className="grid grid-cols-[1fr_300px] gap-4 h-full">
+    <div className="grid grid-cols-[1fr_420px] gap-4 min-h-screen">
       {/* Tree */}
       <Card className="rounded-2xl border-border overflow-hidden flex flex-col">
         <CardHeader className="pb-3 border-b border-border shrink-0">
