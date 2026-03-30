@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useThemeStore } from '@/stores/theme-store'
 import { useRouter } from 'next/navigation'
 import {
   Home, ClipboardList, BarChart3, Bot, Calendar,
@@ -22,16 +22,10 @@ const studentLinks = [
 ]
 
 function StudentSidebar() {
-  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
+  const { isDark, toggleTheme } = useThemeStore()
   const router = useRouter()
   const { clearRole } = useRoleStore()
   const student = useCurrentStudent()
-
-  function toggleTheme() {
-    const next = !isDark
-    document.documentElement.classList.toggle('dark', next)
-    setIsDark(next)
-  }
 
   function switchRole() {
     clearRole()

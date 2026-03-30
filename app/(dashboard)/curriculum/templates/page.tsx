@@ -258,9 +258,12 @@ export default function CurriculumTemplates() {
               const isShared = shareToast === template.id
               return (
                 <Card key={template.id} className="rounded-2xl border-border overflow-hidden">
-                  <button
-                    className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-muted/10 transition-colors"
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-muted/10 transition-colors cursor-pointer"
                     onClick={() => setExpandedId(isExpanded ? null : template.id)}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setExpandedId(isExpanded ? null : template.id) }}
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
@@ -306,7 +309,7 @@ export default function CurriculumTemplates() {
                       </Button>
                       {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                     </div>
-                  </button>
+                  </div>
 
                   {isExpanded && (
                     <div className="border-t border-border px-5 py-4 space-y-3">
