@@ -183,6 +183,7 @@ export default function ParentAttendance() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="max-w-sm mx-auto">
           <div className="grid grid-cols-5 gap-1.5 mb-2">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu'].map(d => (
               <p key={d} className="text-[10px] font-semibold text-muted-foreground text-center">{d}</p>
@@ -226,6 +227,7 @@ export default function ParentAttendance() {
                 </div>
               )
             })}
+          </div>
           </div>
         </CardContent>
       </Card>

@@ -65,7 +65,7 @@ export default function LeaveRequestPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl">
+    <div className="p-6 space-y-6">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
