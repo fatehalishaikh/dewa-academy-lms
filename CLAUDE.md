@@ -5,12 +5,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Purpose
 
-UI UX only prototype for **DEWA Academy School Management System** — no backend, no API calls, all data is mocked in-memory or via static JSON. Do not add real authentication, network requests, or persistence.
+UI/UX prototype for **DEWA Academy School Management System** with LLM-powered features. Mock data is used for the UI layer (in-memory / static JSON). Real AI responses come from the `/api/ai/` Next.js API routes using Anthropic Claude or OpenAI. Do not add real authentication or non-AI persistence.
 
 ## Commands
 
 ```bash
-npm run dev       # start dev server, don't start the server, its running at port 5173 already
+npm run dev       # start dev server (Turbopack) — already running at port 3000
 npm run build     # type-check + build
 npm run lint      # eslint
 ```
@@ -22,12 +22,30 @@ npx shadcn@latest add <component>
 
 ## Stack
 
-- **React 19 + Vite + TypeScript**
-- **Tailwind CSS v4** — configured via `@tailwindcss/vite` plugin (no `tailwind.config.js`; all theme tokens are CSS custom properties in `src/index.css`)
+- **React 19 + Next.js 16 (App Router, Turbopack) + TypeScript**
+- **Tailwind CSS v4** — configured via `@tailwindcss/postcss` (no `tailwind.config.js`; all theme tokens are CSS custom properties in `app/globals.css`)
 - **shadcn/ui** — components live in `src/components/ui/`, added via CLI
-- **React Router v7** — client-side routing only
-- **Zustand** — global mock state store
+- **Zustand** — global state (role store, mock data stores)
 - **Recharts** — bundled via shadcn's chart component (`src/components/ui/chart.tsx`)
+- **`@anthropic-ai/sdk`** + **`openai`** — LLM providers for API routes
+
+## Routing
+
+Next.js App Router with file-based routing in `app/`:
+
+- `src/app/page.tsx` — role select (unauthenticated root)
+- `src/app/(dashboard)/layout.tsx` — reads Zustand role, renders appropriate layout (AdminLayout / TeacherLayout / StudentLayout / ParentLayout), redirects to `/` if no role
+- `src/app/(dashboard)/[module]/layout.tsx` — module tab nav layouts (ClassActivitiesLayout, etc.)
+- `src/app/(dashboard)/[module]/[tab]/page.tsx` — thin `'use client'` re-export wrappers pointing to `src/views/`
+- `src/app/api/ai/` — LLM API routes (server-side, use `@anthropic-ai/sdk` or `openai`)
+
+All `src/app/` page files use the thin wrapper pattern:
+```tsx
+'use client'
+export { ComponentName as default } from '@/views/module/file'
+```
+
+**Note:** Page components live in `src/views/` (not `src/pages/` — that name is reserved by Next.js Pages Router).
 
 ## Path Alias
 
@@ -35,7 +53,7 @@ npx shadcn@latest add <component>
 
 ## Theming
 
-CSS variables are defined in `src/index.css`. shadcn tokens (`--primary`, `--background`, etc.) are in `oklch()`. DEWA brand colors should be applied by overriding these variables. Dark mode is toggled via the `.dark` class (not `prefers-color-scheme`).
+CSS variables are defined in `app/globals.css`. shadcn tokens (`--primary`, `--background`, etc.) are in `oklch()`. DEWA brand colors override these variables. Dark mode is toggled via the `.dark` class (not `prefers-color-scheme`).
 
 ## Module Scope
 

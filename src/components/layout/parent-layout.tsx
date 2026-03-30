@@ -1,23 +1,25 @@
+'use client'
 import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import {
   Home, BarChart3, Calendar, MessageSquare,
   LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore, useCurrentParent } from '@/stores/role-store'
 
 const parentLinks = [
-  { label: 'Overview', icon: Home, to: '/parent/dashboard' },
-  { label: "Child's Grades", icon: BarChart3, to: '/parent/grades' },
-  { label: 'Attendance', icon: Calendar, to: '/parent/attendance' },
-  { label: 'Messages', icon: MessageSquare, to: '/parent/messages' },
+  { label: 'Overview', icon: Home, href: '/parent/dashboard' },
+  { label: "Child's Grades", icon: BarChart3, href: '/parent/grades' },
+  { label: 'Attendance', icon: Calendar, href: '/parent/attendance' },
+  { label: 'Messages', icon: MessageSquare, href: '/parent/messages' },
 ]
 
 function ParentSidebar() {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
-  const navigate = useNavigate()
+  const router = useRouter()
   const { clearRole } = useRoleStore()
   const parent = useCurrentParent()
 
@@ -29,7 +31,7 @@ function ParentSidebar() {
 
   function switchRole() {
     clearRole()
-    navigate('/')
+    router.push('/')
   }
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -53,8 +55,8 @@ function ParentSidebar() {
 
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Navigation</p>
-        {parentLinks.map(({ label, icon: Icon, to }) => (
-          <NavLink key={label} to={to} className={navLinkClass}>
+        {parentLinks.map(({ label, icon: Icon, href }) => (
+          <NavLink key={label} href={href} className={navLinkClass} end>
             <Icon className="w-4 h-4 shrink-0" />
             {label}
           </NavLink>

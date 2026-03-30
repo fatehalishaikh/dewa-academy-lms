@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useRoleStore } from '@/stores/role-store'
 
 type Props = {
@@ -10,19 +10,19 @@ type Props = {
 export function StudentNameLink({ studentId, name, className }: Props) {
   const { role } = useRoleStore()
 
-  const to = role === 'admin'
+  const href = role === 'admin'
     ? `/admin/students/${studentId}`
     : role === 'teacher'
     ? `/teacher/students/${studentId}`
     : null
 
-  if (!to) {
+  if (!href) {
     return <span className={className}>{name}</span>
   }
 
   return (
     <Link
-      to={to}
+      href={href}
       className={`${className ?? ''} hover:underline hover:text-primary transition-colors`}
       onClick={e => e.stopPropagation()}
     >

@@ -1,24 +1,26 @@
+'use client'
 import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import {
   Home, ClipboardList, BarChart3, Bot, Calendar,
   LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore, useCurrentStudent } from '@/stores/role-store'
 
 const studentLinks = [
-  { label: 'My Dashboard', icon: Home, to: '/student/dashboard' },
-  { label: 'My Assignments', icon: ClipboardList, to: '/student/assignments' },
-  { label: 'My Grades', icon: BarChart3, to: '/student/grades' },
-  { label: 'AI Tutor', icon: Bot, to: '/student/ai-tutor' },
-  { label: 'Schedule', icon: Calendar, to: '/student/schedule' },
+  { label: 'My Dashboard', icon: Home, href: '/student/dashboard' },
+  { label: 'My Assignments', icon: ClipboardList, href: '/student/assignments' },
+  { label: 'My Grades', icon: BarChart3, href: '/student/grades' },
+  { label: 'AI Tutor', icon: Bot, href: '/student/ai-tutor' },
+  { label: 'Schedule', icon: Calendar, href: '/student/schedule' },
 ]
 
 function StudentSidebar() {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
-  const navigate = useNavigate()
+  const router = useRouter()
   const { clearRole } = useRoleStore()
   const student = useCurrentStudent()
 
@@ -30,7 +32,7 @@ function StudentSidebar() {
 
   function switchRole() {
     clearRole()
-    navigate('/')
+    router.push('/')
   }
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -54,8 +56,8 @@ function StudentSidebar() {
 
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Navigation</p>
-        {studentLinks.map(({ label, icon: Icon, to }) => (
-          <NavLink key={label} to={to} className={navLinkClass}>
+        {studentLinks.map(({ label, icon: Icon, href }) => (
+          <NavLink key={label} href={href} className={navLinkClass} end>
             <Icon className="w-4 h-4 shrink-0" />
             {label}
           </NavLink>

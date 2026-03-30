@@ -1,29 +1,31 @@
+'use client'
 import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import {
   LayoutGrid, ClipboardList, BookOpen, FileCheck, BookMarked,
   BarChart3, Users, Sun, Moon, LogOut, ChevronRight, Building2,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore } from '@/stores/role-store'
 
 const navItems = [
-  { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities' },
-  { label: 'Registration', icon: ClipboardList, to: '/registration' },
-  { label: 'Learning Plans', icon: BookOpen, to: '/ilp' },
-  { label: 'Assessments', icon: FileCheck, to: '/assessments' },
-  { label: 'Curriculum', icon: BookMarked, to: '/curriculum' },
+  { label: 'Class Activities', icon: LayoutGrid, href: '/class-activities' },
+  { label: 'Registration', icon: ClipboardList, href: '/registration' },
+  { label: 'Learning Plans', icon: BookOpen, href: '/ilp' },
+  { label: 'Assessments', icon: FileCheck, href: '/assessments' },
+  { label: 'Curriculum', icon: BookMarked, href: '/curriculum' },
 ]
 
 const adminItems = [
-  { label: 'All Students', icon: Users, to: '/admin/students' },
-  { label: 'Reports', icon: BarChart3, to: '/reports' as string | null },
+  { label: 'All Students', icon: Users, href: '/admin/students' },
+  { label: 'Reports', icon: BarChart3, href: '/reports' as string | null },
 ]
 
 export function Sidebar() {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
-  const navigate = useNavigate()
+  const router = useRouter()
   const { clearRole } = useRoleStore()
 
   function toggleTheme() {
@@ -34,7 +36,7 @@ export function Sidebar() {
 
   function switchRole() {
     clearRole()
-    navigate('/')
+    router.push('/')
   }
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -60,11 +62,10 @@ export function Sidebar() {
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Modules</p>
-        {navItems.map(({ label, icon: Icon, to }) => (
+        {navItems.map(({ label, icon: Icon, href }) => (
           <NavLink
             key={label}
-            to={to}
-            end={to === '/class-activities'}
+            href={href}
             className={navLinkClass}
           >
             <Icon className="w-4 h-4 shrink-0" />
@@ -74,9 +75,9 @@ export function Sidebar() {
 
         <div className="pt-3">
           <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Administration</p>
-          {adminItems.map(({ label, icon: Icon, to }) =>
-            to ? (
-              <NavLink key={label} to={to} className={navLinkClass}>
+          {adminItems.map(({ label, icon: Icon, href }) =>
+            href ? (
+              <NavLink key={label} href={href} className={navLinkClass}>
                 <Icon className="w-4 h-4 shrink-0" />
                 {label}
               </NavLink>

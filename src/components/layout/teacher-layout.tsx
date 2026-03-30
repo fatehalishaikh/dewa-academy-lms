@@ -1,30 +1,32 @@
+'use client'
 import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import {
   LayoutGrid, BookOpen, BookMarked, FileCheck, Users,
   ClipboardList, TableProperties, LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore, useCurrentTeacher } from '@/stores/role-store'
 import { ChatbotWidget } from '@/components/dashboard/chatbot-widget'
 
 const moduleLinks = [
-  { label: 'Class Activities', icon: LayoutGrid, to: '/class-activities' },
-  { label: 'Curriculum', icon: BookMarked, to: '/curriculum' },
-  { label: 'Assessments', icon: FileCheck, to: '/assessments' },
+  { label: 'Class Activities', icon: LayoutGrid, href: '/class-activities' },
+  { label: 'Curriculum', icon: BookMarked, href: '/curriculum' },
+  { label: 'Assessments', icon: FileCheck, href: '/assessments' },
 ]
 
 const teacherLinks = [
-  { label: 'My Classes', icon: LayoutGrid, to: '/teacher/classes' },
-  { label: 'Homework', icon: ClipboardList, to: '/teacher/homework' },
-  { label: 'Gradebook', icon: TableProperties, to: '/teacher/gradebook' },
-  { label: 'Students', icon: Users, to: '/teacher/students' },
+  { label: 'My Classes', icon: LayoutGrid, href: '/teacher/classes' },
+  { label: 'Homework', icon: ClipboardList, href: '/teacher/homework' },
+  { label: 'Gradebook', icon: TableProperties, href: '/teacher/gradebook' },
+  { label: 'Students', icon: Users, href: '/teacher/students' },
 ]
 
 function TeacherSidebar() {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
-  const navigate = useNavigate()
+  const router = useRouter()
   const { clearRole } = useRoleStore()
   const teacher = useCurrentTeacher()
 
@@ -36,7 +38,7 @@ function TeacherSidebar() {
 
   function switchRole() {
     clearRole()
-    navigate('/')
+    router.push('/')
   }
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -61,8 +63,8 @@ function TeacherSidebar() {
 
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">My Workspace</p>
-        {teacherLinks.map(({ label, icon: Icon, to }) => (
-          <NavLink key={label} to={to} className={navLinkClass}>
+        {teacherLinks.map(({ label, icon: Icon, href }) => (
+          <NavLink key={label} href={href} className={navLinkClass}>
             <Icon className="w-4 h-4 shrink-0" />
             {label}
           </NavLink>
@@ -70,8 +72,8 @@ function TeacherSidebar() {
 
         <div className="pt-3">
           <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Modules</p>
-          {moduleLinks.map(({ label, icon: Icon, to }) => (
-            <NavLink key={label} to={to} className={navLinkClass}>
+          {moduleLinks.map(({ label, icon: Icon, href }) => (
+            <NavLink key={label} href={href} className={navLinkClass}>
               <Icon className="w-4 h-4 shrink-0" />
               {label}
             </NavLink>
@@ -80,7 +82,7 @@ function TeacherSidebar() {
 
         <div className="pt-3">
           <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Learning</p>
-          <NavLink to="/ilp" className={navLinkClass}>
+          <NavLink href="/ilp" className={navLinkClass}>
             <BookOpen className="w-4 h-4 shrink-0" />
             Learning Plans
           </NavLink>
