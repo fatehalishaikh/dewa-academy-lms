@@ -4,31 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { useCurrentStudent } from '@/stores/role-store'
-
-const gradesByClass = [
-  {
-    classId: 'cls-001',
-    subject: 'Mathematics',
-    teacher: 'Dr. Sarah Ahmed',
-    average: 84,
-    assignments: [
-      { title: 'Chapter 4 Quiz', grade: 92, points: '23/25', date: 'Mar 20' },
-      { title: 'Problem Set 3', grade: 80, points: '40/50', date: 'Mar 10' },
-      { title: 'Mid-Unit Test', grade: 88, points: '44/50', date: 'Feb 28' },
-    ],
-  },
-  {
-    classId: 'cls-003',
-    subject: 'Physics',
-    teacher: 'Mr. James Wilson',
-    average: 76,
-    assignments: [
-      { title: 'Midterm Exam', grade: 78, points: '78/100', date: 'Mar 18' },
-      { title: 'Lab Report 2', grade: 75, points: '75/100', date: 'Mar 5' },
-      { title: 'Waves Problem Set', grade: 71, points: '71/100', date: 'Feb 20' },
-    ],
-  },
-]
+import { gradesByClass, gradeColor, letterGrade } from '@/data/mock-grades'
 
 const gpaTrend = [
   { period: 'Sep', gpa: 3.2 },
@@ -40,19 +16,6 @@ const gpaTrend = [
   { period: 'Mar', gpa: 3.7 },
 ]
 
-function gradeColor(g: number) {
-  if (g >= 90) return 'text-emerald-400'
-  if (g >= 75) return 'text-amber-400'
-  return 'text-red-400'
-}
-
-function letterGrade(g: number) {
-  if (g >= 90) return 'A'
-  if (g >= 80) return 'B'
-  if (g >= 70) return 'C'
-  if (g >= 60) return 'D'
-  return 'F'
-}
 
 export default function StudentGrades() {
   const student = useCurrentStudent()
