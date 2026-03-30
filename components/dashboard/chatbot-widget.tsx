@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Bot, Send, X, LayoutGrid, Trash2, Maximize2, Minimize2 } from 'lucide-react'
+import { Bot, Send, X, LayoutGrid, Trash2, Maximize2, Minimize2, Info } from 'lucide-react'
 import { chatMessages, type ChatMessage } from '@/data/mock-class-activities'
 import { useChatContext } from '@/stores/chat-context-store'
+import { usePageAutoContext } from '@/hooks/use-page-auto-context'
 import { cn } from '@/lib/utils'
 import { MarkdownRenderer } from '@/components/ui/markdown'
 
@@ -92,6 +93,7 @@ export function ChatbotWidget() {
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const { contexts, removeContext, clearContexts } = useChatContext()
+  const autoContext = usePageAutoContext(pathname ?? '')
   const prevContextKeys = useRef<Set<string>>(new Set(Object.keys(contexts)))
   const prevPathname = useRef<string>(pathname)
 
@@ -152,7 +154,7 @@ export function ChatbotWidget() {
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history, pageContext: getPageName(pathname), contexts }),
+        body: JSON.stringify({ messages: history, pageContext: getPageName(pathname), contexts, autoContext }),
       })
       if (!res.body) return
       const reader = res.body.getReader()
@@ -215,6 +217,14 @@ export function ChatbotWidget() {
                 <LayoutGrid className="w-3 h-3 text-primary shrink-0" />
                 <span className="text-[10px] text-muted-foreground">Page context: <span className="text-foreground font-medium">{getPageName(pathname)}</span></span>
               </div>
+
+              {/* Auto page entity context */}
+              {autoContext && (
+                <div className="flex items-start gap-1.5 px-2 py-1.5 rounded-lg bg-primary/5 border border-primary/10">
+                  <Info className="w-3 h-3 text-primary/50 shrink-0 mt-0.5" />
+                  <span className="text-[10px] text-muted-foreground leading-relaxed line-clamp-2">{autoContext}</span>
+                </div>
+              )}
 
               {/* Active context chips */}
               {contextEntries.length > 0 && (

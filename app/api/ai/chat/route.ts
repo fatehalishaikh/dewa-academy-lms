@@ -5,10 +5,11 @@ import { NextRequest } from 'next/server'
 const provider = process.env.AI_PROVIDER ?? 'anthropic'
 
 export async function POST(req: NextRequest) {
-  const { messages, pageContext, contexts } = await req.json() as {
+  const { messages, pageContext, contexts, autoContext } = await req.json() as {
     messages: { role: 'user' | 'assistant'; content: string }[]
     pageContext?: string
     contexts?: Record<string, { label: string; summary: string }>
+    autoContext?: string
   }
 
   const systemParts = [
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
     'Be concise and direct. Use markdown formatting where appropriate.',
   ]
   if (pageContext) systemParts.push(`The user is currently on: ${pageContext}.`)
+  if (autoContext) systemParts.push(`Current page data: ${autoContext}`)
   if (contexts && Object.keys(contexts).length > 0) {
     const contextStr = Object.values(contexts).map(c => `${c.label}: ${c.summary}`).join('\n')
     systemParts.push(`Active context:\n${contextStr}`)
