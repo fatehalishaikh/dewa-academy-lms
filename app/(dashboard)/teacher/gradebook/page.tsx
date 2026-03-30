@@ -37,7 +37,7 @@ export default function TeacherGradebook() {
   const classStudents = cls ? cls.studentIds.map(id => getStudentById(id)).filter(Boolean) : []
 
   return (
-    <div className="p-6 space-y-6 max-w-5xl">
+    <div className="p-6 space-y-6">
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">

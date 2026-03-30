@@ -54,7 +54,7 @@ export default function StudentSchedule() {
   const mySubjects = [...new Set(classes.map(c => c.subject))]
 
   return (
-    <div className="p-6 space-y-5 max-w-5xl">
+    <div className="p-6 space-y-5">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">

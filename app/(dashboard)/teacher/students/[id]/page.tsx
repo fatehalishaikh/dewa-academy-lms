@@ -175,7 +175,7 @@ export default function StudentAnalysis() {
   }
 
   return (
-    <div className="p-6 space-y-5 max-w-5xl">
+    <div className="p-6 space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="sm" onClick={() => router.back()} className="gap-1.5 -ml-2">

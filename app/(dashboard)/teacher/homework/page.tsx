@@ -22,7 +22,7 @@ export default function TeacherHomework() {
   const pendingGrading = mockHomework.reduce((sum, hw) => sum + hw.pending, 0)
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl">
+    <div className="p-6 space-y-6">
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">

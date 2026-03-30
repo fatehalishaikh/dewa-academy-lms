@@ -40,7 +40,7 @@ export default function AdminStudents() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl">
+    <div className="p-6 space-y-6">
       <div>
         <h1 className="text-xl font-bold text-foreground">All Students</h1>
         <p className="text-sm text-muted-foreground mt-0.5">{students.length} students school-wide</p>

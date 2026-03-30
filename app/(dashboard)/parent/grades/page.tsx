@@ -62,7 +62,7 @@ export default function ParentGrades() {
   const child = children[selectedIdx] ?? null
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl">
+    <div className="p-6 space-y-6">
       <div>
         <div className="flex items-center gap-2 mb-1">
           <Sparkles className="w-4 h-4 text-primary" />
