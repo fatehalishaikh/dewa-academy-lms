@@ -40,22 +40,46 @@ export default function HomeworkGrade() {
 
   const maxRubricTotal = hw.rubric.reduce((s, r) => s + r.maxPoints, 0)
 
-  function loadAiSuggestion() {
+  async function loadAiSuggestion() {
+    if (!hw || !sub || !sub.content) return
     setIsAiLoading(true)
-    setTimeout(() => {
-      setIsAiLoading(false)
-      if (sub?.aiScore != null) {
-        setGrade(String(sub.aiScore))
-        setFeedback(sub.aiFeedback ?? '')
-        // Distribute AI score across rubric items proportionally
+    try {
+      const res = await fetch('/api/ai/grading', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questionText: `${hw.title}: ${hw.instructions}`,
+          questionType: 'essay',
+          correctAnswer: hw.instructions,
+          studentAnswer: sub.content,
+          maxPoints: hw.totalPoints,
+          subject: hw.subject,
+        }),
+      })
+      if (res.ok) {
+        const result = await res.json()
+        setGrade(String(result.score))
+        setFeedback(result.feedback ?? '')
         const newScores: Record<string, number> = {}
-        hw?.rubric.forEach(r => {
-          const proportion = r.maxPoints / maxRubricTotal
-          newScores[r.id] = Math.round(sub.aiScore! * proportion)
+        hw.rubric.forEach(r => {
+          newScores[r.id] = Math.round(result.score * (r.maxPoints / maxRubricTotal))
         })
         setRubricScores(newScores)
       }
-    }, 1200)
+    } catch {
+      // Fallback to pre-computed aiScore if API fails
+      if (sub.aiScore != null) {
+        setGrade(String(sub.aiScore))
+        setFeedback(sub.aiFeedback ?? '')
+        const newScores: Record<string, number> = {}
+        hw.rubric.forEach(r => {
+          newScores[r.id] = Math.round(sub.aiScore! * (r.maxPoints / maxRubricTotal))
+        })
+        setRubricScores(newScores)
+      }
+    } finally {
+      setIsAiLoading(false)
+    }
   }
 
   function handleSave() {
@@ -169,7 +193,7 @@ export default function HomeworkGrade() {
                   size="sm"
                   variant="outline"
                   onClick={loadAiSuggestion}
-                  disabled={isAiLoading || !sub.aiScore}
+                  disabled={isAiLoading || !sub.content}
                   className="gap-1.5 text-xs h-7 border-primary/30 text-primary hover:bg-primary/10"
                 >
                   {isAiLoading ? (

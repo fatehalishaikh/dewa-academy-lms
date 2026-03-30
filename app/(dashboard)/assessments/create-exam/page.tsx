@@ -44,6 +44,7 @@ export default function AssessmentsCreateExam() {
   const [bloomsLevel, setBloomsLevel] = useState<BloomsLevel | ''>('')
   const [aiGeneratedQs, setAiGeneratedQs] = useState<ExamQuestion[]>([])
   const [published, setPublished] = useState(false)
+  const [savedDraft, setSavedDraft] = useState(false)
 
   const selectedClass = academyClasses.find(c => c.id === details.classId)
   // Merge AI-generated questions with exam question bank (deduplicate by id)
@@ -111,7 +112,15 @@ export default function AssessmentsCreateExam() {
   }
 
   function handlePublish(asDraft: boolean) {
-    if (!asDraft) {
+    if (asDraft) {
+      setSavedDraft(true)
+      setTimeout(() => {
+        setStep(0)
+        setDetails({ title: '', classId: academyClasses[0]?.id ?? '', date: '', duration: '60', examType: 'formative', passingScore: '60' })
+        setSelectedIds(new Set())
+        setSavedDraft(false)
+      }, 2000)
+    } else {
       setPublished(true)
       setTimeout(() => {
         setStep(0)
@@ -120,6 +129,20 @@ export default function AssessmentsCreateExam() {
         setPublished(false)
       }, 2500)
     }
+  }
+
+  if (savedDraft) {
+    return (
+      <div className="flex items-center justify-center h-48">
+        <div className="text-center">
+          <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
+            <Check className="w-6 h-6 text-muted-foreground" />
+          </div>
+          <p className="text-sm font-medium text-foreground">Saved as draft</p>
+          <p className="text-xs text-muted-foreground">You can publish it later from the dashboard.</p>
+        </div>
+      </div>
+    )
   }
 
   if (published) {

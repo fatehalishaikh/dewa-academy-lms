@@ -4,7 +4,7 @@ import {
   Sparkles, Target, BookOpen, CheckCircle2, AlertCircle,
   Plus, Brain, Star, AlertTriangle, TrendingUp, TrendingDown,
   Minus, Loader2, Send, ChevronDown, ChevronUp, ExternalLink,
-  ShieldAlert, BarChart2,
+  ShieldAlert, BarChart2, Calendar, Clock, PlayCircle, BookMarked, Zap,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCurrentStudent } from '@/stores/role-store'
+import { useLearningPathStore } from '@/stores/learning-path-store'
 import {
   recentAssessments, studentGoals, ilpRiskStudents,
   type StudentGoal, type GoalCategory,
@@ -72,6 +73,8 @@ type PrivateGoal = { id: string; goal: string; category: GoalCategory; progress:
 
 export default function StudentMyPlanPage() {
   const student = useCurrentStudent()
+  const { getPublishedPath } = useLearningPathStore()
+  const teacherPublished = student ? getPublishedPath(student.id) : undefined
 
   const assessment = student ? recentAssessments.find(a => a.studentId === student.id) : null
   const myGoals: StudentGoal[] = student ? studentGoals.filter(g => g.studentId === student.id) : []
@@ -303,6 +306,93 @@ export default function StudentMyPlanPage() {
               )}
             </CardContent>
           </Card>
+
+          {/* ── Teacher-Published Learning Path ── */}
+          {teacherPublished && (
+            <Card className="rounded-2xl border-primary/30 bg-primary/5">
+              <CardHeader className="pb-3 pt-5 px-5">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-primary" />
+                    Learning Path from Your Teacher
+                  </CardTitle>
+                  <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">
+                    {new Date(teacherPublished.publishedAt).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })}
+                  </Badge>
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  Published by {teacherPublished.teacherName}
+                </p>
+              </CardHeader>
+              <CardContent className="px-5 pb-5 space-y-4">
+                {/* Strategy */}
+                <div className="p-3 rounded-xl bg-card border border-border">
+                  <p className="text-xs text-foreground leading-relaxed">{teacherPublished.path.overallStrategy}</p>
+                </div>
+
+                {/* Focus Areas */}
+                <div className="space-y-2">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <Target className="w-3 h-3" /> Focus Areas
+                  </p>
+                  {teacherPublished.path.focusAreas.map((fa, i) => (
+                    <div key={i} className="p-3 rounded-xl bg-card border border-border space-y-1">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-semibold text-foreground">{fa.subject}</p>
+                        <Badge variant="outline" className={`text-[9px] h-4 ${fa.priority === 'high' ? 'border-red-500/30 text-red-400' : fa.priority === 'medium' ? 'border-amber-500/30 text-amber-400' : 'border-emerald-500/30 text-emerald-400'}`}>
+                          {fa.priority} priority
+                        </Badge>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground">{fa.currentLevel} → {fa.targetLevel}</p>
+                      <p className="text-[11px] text-foreground">{fa.recommendation}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Weekly Plan */}
+                <div className="space-y-2">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <Calendar className="w-3 h-3" /> 4-Week Plan
+                  </p>
+                  {teacherPublished.path.weeklyPlan.map(week => (
+                    <div key={week.week} className="flex gap-3 p-3 rounded-xl bg-card border border-border">
+                      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                        <span className="text-xs font-bold text-primary">W{week.week}</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-xs font-semibold text-foreground">{week.theme}</p>
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                            <Clock className="w-3 h-3" />{week.hoursRequired}h
+                          </span>
+                        </div>
+                        <ul className="space-y-0.5">
+                          {week.activities.map((act, j) => (
+                            <li key={j} className="text-[10px] text-muted-foreground flex gap-1.5">
+                              <span className="text-primary shrink-0">·</span>{act}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Milestones */}
+                <div className="space-y-2">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3 h-3" /> Milestones
+                  </p>
+                  {teacherPublished.path.milestones.map((m, i) => (
+                    <div key={i} className="flex items-center justify-between p-2.5 rounded-xl bg-card border border-border">
+                      <p className="text-[11px] font-medium text-foreground">{m.title}</p>
+                      <Badge variant="outline" className="text-[9px] h-4 border-primary/30 text-primary shrink-0 ml-2">Wk {m.targetWeek}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* ── AI Personalized Learning Path ── */}
           <Card className="rounded-2xl border-border bg-card">

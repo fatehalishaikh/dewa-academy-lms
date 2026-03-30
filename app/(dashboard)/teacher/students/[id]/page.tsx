@@ -13,6 +13,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { getStudentById } from '@/data/mock-students'
 import { getClassesByStudent } from '@/data/mock-classes'
 import { useHomeworkStore } from '@/stores/homework-store'
+import { useLearningPathStore } from '@/stores/learning-path-store'
+import { useCurrentTeacher } from '@/stores/role-store'
 
 type RiskFactor = { name: string; score: number; weight: number; status: 'positive' | 'warning' | 'critical' }
 
@@ -95,6 +97,8 @@ export default function StudentAnalysis() {
   const student = getStudentById(studentId ?? '')
   const classes = student ? getClassesByStudent(student.id) : []
   const { homework, getSubmissionForStudent } = useHomeworkStore()
+  const { publishPath } = useLearningPathStore()
+  const currentTeacher = useCurrentTeacher()
   const [addingNote, setAddingNote] = useState(false)
   const [noteText, setNoteText] = useState('')
   const [notes, setNotes] = useState(teacherNotes)
@@ -102,6 +106,7 @@ export default function StudentAnalysis() {
   const [loadingRisk, setLoadingRisk] = useState(false)
   const [learningPath, setLearningPath] = useState<LearningPathResult | null>(null)
   const [loadingPath, setLoadingPath] = useState(false)
+  const [pathPublished, setPathPublished] = useState(false)
 
   if (!student) {
     return <div className="p-6 text-sm text-muted-foreground">Student not found</div>
@@ -532,6 +537,25 @@ export default function StudentAnalysis() {
                     ))}
                   </CardContent>
                 </Card>
+              </div>
+
+              {/* Publish to student */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-muted/40 border border-border">
+                <div>
+                  <p className="text-xs font-medium text-foreground">Publish to Student</p>
+                  <p className="text-[10px] text-muted-foreground">Student will see this path on their My Plan page</p>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    publishPath(student.id, learningPath!, currentTeacher?.name ?? 'Teacher')
+                    setPathPublished(true)
+                  }}
+                  disabled={pathPublished}
+                  className="gap-1.5 text-xs"
+                >
+                  {pathPublished ? <><CheckCircle2 className="w-3 h-3" /> Published</> : <><Sparkles className="w-3 h-3" /> Publish to Student</>}
+                </Button>
               </div>
             </div>
           )}

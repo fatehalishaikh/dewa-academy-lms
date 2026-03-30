@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
 
   const systemParts = [
     'You are an AI assistant for DEWA Academy, a school management system.',
-    'You help administrators, teachers, and staff navigate the system, interpret data, and get insights.',
+    'You help administrators, teachers, staff, and parents navigate the system, interpret data, and get insights.',
+    'When speaking with parents, focus on their child\'s academic performance, attendance, grades, behavior, and recommendations for improvement.',
     'Be concise and direct. Use markdown formatting where appropriate.',
   ]
   if (pageContext) systemParts.push(`The user is currently on: ${pageContext}.`)
