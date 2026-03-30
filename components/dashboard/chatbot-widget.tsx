@@ -99,7 +99,7 @@ export function ChatbotWidget() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, open])
 
   // Inject a system message and clear contexts when the page changes
   useEffect(() => {
