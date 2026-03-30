@@ -61,7 +61,7 @@ export function ReportsAttendance() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={180}>
+          <ResponsiveContainer width="100%" height={180} minWidth={0}>
             <AreaChart data={attendanceTrend}>
               <defs>
                 <linearGradient id="rptAttPresent" x1="0" y1="0" x2="0" y2="1">
@@ -100,7 +100,7 @@ export function ReportsAttendance() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={200} minWidth={0}>
               <BarChart data={classAttendance} layout="vertical">
                 <defs>
                   <linearGradient id="rptClassAttGrad" x1="0" y1="0" x2="1" y2="0">
@@ -127,7 +127,7 @@ export function ReportsAttendance() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={200} minWidth={0}>
               <BarChart data={dayAttendance}>
                 <defs>
                   <linearGradient id="rptDayAttGrad" x1="0" y1="0" x2="0" y2="1">

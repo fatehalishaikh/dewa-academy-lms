@@ -39,7 +39,7 @@ export function PacingAdaptationWidget() {
       <CardContent className="space-y-4">
         {/* Dual area chart */}
         <div className="h-[130px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <AreaChart data={pacingTimeline} margin={{ top: 4, right: 4, left: -28, bottom: 0 }}>
               <defs>
                 <linearGradient id="currPacingPlannedGrad" x1="0" y1="0" x2="0" y2="1">

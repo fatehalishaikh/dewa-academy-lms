@@ -39,7 +39,7 @@ export function LessonGeneratorWidget() {
       <CardContent className="space-y-4">
         {/* Stacked bar chart */}
         <div className="h-[130px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <BarChart data={lessonGenStats} margin={{ top: 4, right: 4, left: -28, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" stroke="" />
               <XAxis dataKey="subject" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />

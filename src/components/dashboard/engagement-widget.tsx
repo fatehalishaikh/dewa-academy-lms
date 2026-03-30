@@ -45,7 +45,7 @@ export function EngagementWidget() {
       <CardContent className="space-y-4">
         {/* Area chart */}
         <div className="h-[140px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <AreaChart data={engagementTimeline} margin={{ top: 4, right: 4, left: -28, bottom: 0 }}>
               <defs>
                 <linearGradient id="engagementGrad" x1="0" y1="0" x2="0" y2="1">

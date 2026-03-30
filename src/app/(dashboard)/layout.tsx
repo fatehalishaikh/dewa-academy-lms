@@ -1,7 +1,7 @@
 'use client'
 import { useRoleStore } from '@/stores/role-store'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { AppLayout } from '@/components/layout/app-layout'
 import { TeacherLayout } from '@/components/layout/teacher-layout'
 import { StudentLayout } from '@/components/layout/student-layout'
@@ -11,12 +11,15 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { role } = useRoleStore()
   const router = useRouter()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
-    if (!role) router.replace('/')
-  }, [role, router])
+    if (mounted && !role) router.replace('/')
+  }, [mounted, role, router])
 
-  if (!role) return null
+  if (!mounted || !role) return null
 
   const layouts = {
     admin: AppLayout,

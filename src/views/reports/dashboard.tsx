@@ -77,7 +77,7 @@ export function ReportsDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0}>
               <AreaChart data={enrollmentTrend}>
                 <defs>
                   <linearGradient id="rptEnrollGrad" x1="0" y1="0" x2="0" y2="1">
@@ -143,7 +143,7 @@ export function ReportsDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0}>
               <BarChart data={teacherWorkload} layout="vertical">
                 <defs>
                   <linearGradient id="rptWorkloadGrad" x1="0" y1="0" x2="1" y2="0">

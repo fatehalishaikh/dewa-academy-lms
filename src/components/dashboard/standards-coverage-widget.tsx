@@ -63,7 +63,7 @@ export function StandardsCoverageWidget() {
       <CardContent className="space-y-4">
         {/* Donut chart */}
         <div className="relative h-[120px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <PieChart>
               <Pie
                 data={coverageData}

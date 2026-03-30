@@ -24,7 +24,7 @@ export function RegPipelineWidget() {
       </CardHeader>
       <CardContent>
         <div className="h-[140px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <BarChart data={pipelineData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
               <XAxis dataKey="stageName" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
               <YAxis tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
