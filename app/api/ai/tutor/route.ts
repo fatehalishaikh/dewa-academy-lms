@@ -1,7 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk'
+import OpenAI from 'openai'
 import { NextRequest } from 'next/server'
 
-const client = new Anthropic()
+const provider = process.env.AI_PROVIDER ?? 'anthropic'
 
 export async function POST(req: NextRequest) {
   const { messages, subject, topic, mode } = await req.json() as {
@@ -22,14 +23,35 @@ export async function POST(req: NextRequest) {
     'Keep responses concise — under 200 words unless a detailed worked example is needed.',
   ].join('\n')
 
+  const encoder = new TextEncoder()
+
+  if (provider === 'openai') {
+    const openai = new OpenAI()
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      max_tokens: 1024,
+      messages: [{ role: 'system', content: system }, ...messages],
+      stream: true,
+    })
+    const readable = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of stream) {
+          const text = chunk.choices[0]?.delta?.content ?? ''
+          if (text) controller.enqueue(encoder.encode(text))
+        }
+        controller.close()
+      },
+    })
+    return new Response(readable, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
+  }
+
+  const client = new Anthropic()
   const stream = await client.messages.stream({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 1024,
     system,
     messages,
   })
-
-  const encoder = new TextEncoder()
   const readable = new ReadableStream({
     async start(controller) {
       for await (const chunk of stream) {
@@ -40,8 +62,5 @@ export async function POST(req: NextRequest) {
       controller.close()
     },
   })
-
-  return new Response(readable, {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-  })
+  return new Response(readable, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
 }
