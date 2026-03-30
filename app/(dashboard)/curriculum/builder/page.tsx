@@ -28,6 +28,7 @@ export default function CurriculumBuilder() {
   const [selected, setSelected] = useState<string | null>(null)
   const [addingForm, setAddingForm] = useState<AddingForm | null>(null)
   const [aiGenerating, setAiGenerating] = useState(false)
+  const [nodeGenerating, setNodeGenerating] = useState<string | null>(null)
 
   function toggleExpand(id: string) {
     setExpanded(prev => {
@@ -110,6 +111,55 @@ export default function CurriculumBuilder() {
 
   const selectedNode = selected ? nodes.find(n => n.id === selected) : null
 
+  async function handleNodeAiSuggest(node: CurriculumNode) {
+    setNodeGenerating(node.id)
+    try {
+      if (node.nodeType === 'unit') {
+        // Suggest lessons for this unit
+        const res = await fetch('/api/ai/curriculum/suggest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            courseTitle: node.title,
+            existingUnits: nodes.filter(n => n.parentId === node.id && n.nodeType === 'lesson').map(n => n.title),
+          }),
+        })
+        if (res.ok) {
+          const data = await res.json() as { units: { lessons: { title: string; description: string; objectives: string[]; duration?: number }[] }[] }
+          const lessons = data.units.flatMap(u => u.lessons)
+          const newLessons: CurriculumNode[] = lessons.map(l => ({
+            id: `ai-les-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+            parentId: node.id, nodeType: 'lesson' as NodeType,
+            title: l.title, description: l.description,
+            objectives: l.objectives ?? [], standardIds: [], status: 'draft' as NodeStatus,
+            duration: l.duration,
+          }))
+          setNodes(prev => [...prev, ...newLessons])
+          setExpanded(prev => new Set([...prev, node.id]))
+        }
+      } else if (node.nodeType === 'lesson') {
+        // Generate lesson content — update description + objectives on the lesson node
+        const res = await fetch('/api/ai/curriculum/suggest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ courseTitle: node.title }),
+        })
+        if (res.ok) {
+          const data = await res.json() as { units: { lessons: { description: string; objectives: string[] }[] }[] }
+          const lesson = data.units[0]?.lessons[0]
+          if (lesson) {
+            setNodes(prev => prev.map(n => n.id === node.id
+              ? { ...n, description: lesson.description, objectives: lesson.objectives ?? n.objectives }
+              : n
+            ))
+            setSelected(node.id)
+          }
+        }
+      }
+    } catch { /* silent */ }
+    finally { setNodeGenerating(null) }
+  }
+
   function renderNode(node: CurriculumNode, depth = 0) {
     const children = nodes.filter(n => n.parentId === node.id)
     const isExpanded = expanded.has(node.id)
@@ -155,6 +205,18 @@ export default function CurriculumBuilder() {
               title={`Add ${childType}`}
             >
               <Plus className="w-3 h-3" />
+            </button>
+          )}
+          {(node.nodeType === 'unit' || node.nodeType === 'lesson') && (
+            <button
+              className="opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-all shrink-0"
+              onClick={e => { e.stopPropagation(); handleNodeAiSuggest(node) }}
+              title={node.nodeType === 'unit' ? 'AI Suggest Lessons' : 'AI Generate Content'}
+              disabled={nodeGenerating === node.id}
+            >
+              {nodeGenerating === node.id
+                ? <span className="w-2.5 h-2.5 rounded-full border border-primary border-t-transparent animate-spin" />
+                : <Wand2 className="w-3 h-3" />}
             </button>
           )}
         </div>

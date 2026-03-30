@@ -35,6 +35,7 @@ export default function AssessmentsQuestionBank() {
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState<CreateForm>(BLANK)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [aiTopic, setAiTopic] = useState('')
 
   const filtered = questions.filter(q => {
     if (subjectFilter !== 'All' && q.subject !== subjectFilter) return false
@@ -80,6 +81,7 @@ export default function AssessmentsQuestionBank() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           subject,
+          topic: aiTopic.trim() || undefined,
           difficulty: diffFilter !== 'All' ? diffFilter : undefined,
           questionType: typeFilter !== 'All' ? typeFilter : undefined,
           count: 5,
@@ -157,6 +159,12 @@ export default function AssessmentsQuestionBank() {
         <Button size="sm" variant="outline" onClick={() => setShowCreate(v => !v)} className="gap-1 h-8 text-xs">
           <Plus className="w-3.5 h-3.5" /> Create
         </Button>
+        <input
+          value={aiTopic}
+          onChange={e => setAiTopic(e.target.value)}
+          placeholder="Topic for AI (e.g. Quadratic Equations)"
+          className="bg-card border border-border rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 min-w-[200px]"
+        />
         <Button size="sm" variant="outline" onClick={handleAiGenerate} disabled={isGenerating}
           className="gap-1 h-8 text-xs border-primary/30 text-primary hover:bg-primary/10">
           {isGenerating

@@ -5,15 +5,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useRouter } from 'next/navigation'
+import { studentAssignments } from '@/data/mock-student-assignments'
 
-const allAssignments = [
-  { id: 'hw-001', title: 'Quadratic Equations Problem Set', subject: 'Mathematics', due: 'Mar 27, 2026', status: 'pending', points: 20, description: 'Solve problems 1-20 from Chapter 5. Show all working.' },
-  { id: 'hw-002', title: "Newton's Laws Lab Report", subject: 'Physics', due: 'Mar 28, 2026', status: 'pending', points: 30, description: 'Write a 500-word lab report on the Newton\'s Laws experiment.' },
-  { id: 'hw-003', title: 'Essay: Technology in Society', subject: 'English', due: 'Mar 30, 2026', status: 'in-progress', points: 25, description: 'Write a 600-word essay on the impact of AI in modern education.' },
-  { id: 'hw-004', title: 'Chapter 6 Reading Summary', subject: 'English', due: 'Mar 22, 2026', status: 'submitted', points: 15, description: 'Summarize chapters 6-8 of the textbook.' },
-  { id: 'hw-005', title: 'Algebra Mid-Unit Test', subject: 'Mathematics', due: 'Mar 18, 2026', status: 'graded', points: 50, grade: 92, feedback: 'Excellent work! Very clear working shown.' },
-  { id: 'hw-006', title: 'Waves & Optics Problem Set', subject: 'Physics', due: 'Mar 15, 2026', status: 'graded', points: 25, grade: 78, feedback: 'Good effort. Review refraction concepts.' },
-]
+const allAssignments = studentAssignments
 
 const statusConfig = {
   pending: { label: 'Pending', color: 'text-amber-400', border: 'border-amber-500/30', icon: Clock },
@@ -22,7 +16,7 @@ const statusConfig = {
   graded: { label: 'Graded', color: 'text-primary', border: 'border-primary/30', icon: CheckCircle2 },
 }
 
-function AssignmentCard({ a }: { a: typeof allAssignments[0] }) {
+function AssignmentCard({ a }: { a: (typeof allAssignments)[0] }) {
   const router = useRouter()
   const cfg = statusConfig[a.status as keyof typeof statusConfig]
   const Icon = cfg.icon
