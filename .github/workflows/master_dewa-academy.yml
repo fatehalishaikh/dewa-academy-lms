@@ -29,16 +29,16 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Package node_modules as tar for Azure Oryx
+      - name: Prepare standalone deployment package
         run: |
-          tar -czf node_modules.tar.gz -C node_modules .
-          rm -rf node_modules
+          cp -r .next/static .next/standalone/.next/static
+          cp -r public .next/standalone/public
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: .next/standalone
 
   deploy:
     runs-on: ubuntu-latest
