@@ -161,7 +161,7 @@ export default function Integrations() {
           </CardHeader>
           <CardContent>
             <div className="h-[160px]">
-              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 320, height: 200 }}>
                 <AreaChart data={syncVolumeData} margin={{ top: 4, right: 8, left: -24, bottom: 0 }}>
                   <defs>
                     <linearGradient id="regSyncGrad" x1="0" y1="0" x2="0" y2="1">

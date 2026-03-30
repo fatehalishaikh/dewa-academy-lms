@@ -49,7 +49,7 @@ export function GoalReflectionWidget() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Goal completion bar chart */}
           <div className="h-[150px]">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 20, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" stroke="" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false}

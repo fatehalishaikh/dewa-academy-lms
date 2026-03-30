@@ -116,7 +116,7 @@ export default function ReportsExams() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180} minWidth={0}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <BarChart data={gradeDistribution}>
                 <defs>
                   <linearGradient id="rptGradeDistGrad" x1="0" y1="0" x2="0" y2="1">
@@ -143,7 +143,7 @@ export default function ReportsExams() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180} minWidth={0}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <BarChart data={difficultyAccuracy}>
                 <defs>
                   <linearGradient id="rptDiffGrad" x1="0" y1="0" x2="0" y2="1">
@@ -170,7 +170,7 @@ export default function ReportsExams() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180} minWidth={0}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <BarChart data={subjectExamQuarters}>
                 <defs>
                   <linearGradient id="rptSubjExamGrad" x1="0" y1="0" x2="0" y2="1">

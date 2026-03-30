@@ -116,7 +116,7 @@ export default function AssessmentsResults() {
             <CardTitle className="text-sm">Grade Distribution</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180} minWidth={0}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <BarChart data={gradeDistribution} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="assessGradeGrad" x1="0" y1="0" x2="0" y2="1">

@@ -32,7 +32,7 @@ export function RegDocumentVerificationWidget() {
       <CardContent className="space-y-4">
         {/* Donut chart */}
         <div className="relative h-[100px]">
-          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 320, height: 200 }}>
             <PieChart>
               <Pie
                 data={docVerificationStats}

@@ -43,7 +43,7 @@ export function LearningAssessmentWidget() {
         {/* Donut chart + legend side by side */}
         <div className="flex items-center gap-4">
           <div className="h-[120px] w-[120px] shrink-0">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <PieChart>
                 <Pie
                   data={styleDistribution.map(d => ({ count: d.count }))}

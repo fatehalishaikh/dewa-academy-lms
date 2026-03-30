@@ -59,7 +59,7 @@ export default function ReportsAcademic() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180} minWidth={0}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <BarChart data={gpaDistribution}>
                 <defs>
                   <linearGradient id="rptGpaDistGrad" x1="0" y1="0" x2="0" y2="1">
@@ -91,7 +91,7 @@ export default function ReportsAcademic() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180} minWidth={0}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <LineChart data={gradeTrend}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#2d4057" vertical={false} />
                 <XAxis dataKey="month" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
@@ -121,7 +121,7 @@ export default function ReportsAcademic() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={160} minWidth={0}>
+          <ResponsiveContainer width="100%" height={160} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
             <BarChart data={subjectPerformance}>
               <defs>
                 <linearGradient id="rptSubjPerfGrad" x1="0" y1="0" x2="0" y2="1">

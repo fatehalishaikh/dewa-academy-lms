@@ -41,7 +41,7 @@ export function RegAiScoringWidget() {
       <CardContent className="space-y-4">
         {/* Score distribution bar chart */}
         <div className="h-[100px]">
-          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 320, height: 200 }}>
             <BarChart data={scoreDistribution} margin={{ top: 4, right: 8, left: -24, bottom: 0 }}>
               <XAxis dataKey="band" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
               <YAxis tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />

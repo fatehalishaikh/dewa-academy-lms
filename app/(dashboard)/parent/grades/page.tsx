@@ -110,7 +110,7 @@ export default function ParentGrades() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={90} minWidth={0}>
+            <ResponsiveContainer width="100%" height={90} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <LineChart data={getGpaTrend(child?.gpa ?? 3.5)}>
                 <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
                 <YAxis domain={[2.5, 4]} tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />

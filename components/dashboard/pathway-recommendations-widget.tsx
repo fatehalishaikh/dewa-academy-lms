@@ -59,7 +59,7 @@ export function PathwayRecommendationsWidget() {
       <CardContent className="space-y-4">
         {/* Stage distribution bar chart */}
         <div className="h-[120px]">
-          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 320, height: 200 }}>
             <BarChart data={stageDistribution} margin={{ top: 4, right: 4, left: -28, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" stroke="" />
               <XAxis

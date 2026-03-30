@@ -72,7 +72,7 @@ export default function ReportsEngagement() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={180} minWidth={0}>
+          <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
             <AreaChart data={engagementTrend}>
               <defs>
                 <linearGradient id="rptEngTrendGrad" x1="0" y1="0" x2="0" y2="1">
@@ -102,7 +102,7 @@ export default function ReportsEngagement() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={180} minWidth={0}>
+            <ResponsiveContainer width="100%" height={180} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <BarChart data={engagementBySubject}>
                 <defs>
                   <linearGradient id="rptEngSubjGrad" x1="0" y1="0" x2="0" y2="1">
@@ -129,7 +129,7 @@ export default function ReportsEngagement() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex items-center gap-6">
-            <ResponsiveContainer width={140} height={140} minWidth={0}>
+            <ResponsiveContainer width={140} height={140} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
               <PieChart>
                 <Pie
                   data={riskDistribution}

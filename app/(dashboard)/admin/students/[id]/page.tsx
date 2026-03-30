@@ -174,7 +174,7 @@ export default function StudentAnalysis() {
               <CardTitle className="text-sm">Grade Trend</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={100} minWidth={0}>
+              <ResponsiveContainer width="100%" height={100} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
                 <LineChart data={gradeHistory}>
                   <XAxis dataKey="month" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
                   <YAxis domain={[60, 100]} tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
