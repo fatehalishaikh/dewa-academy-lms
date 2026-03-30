@@ -25,7 +25,7 @@ const hwStatusConfig = {
 
 export default function HomeworkDetail() {
   const _params = useParams()
-  const id = _params.id as string
+  const id = (_params?.id ?? '') as string
   const router = useRouter()
   const { getHomeworkById, getSubmissionsForHomework, updateHomeworkStatus } = useHomeworkStore()
 

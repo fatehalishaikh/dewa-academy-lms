@@ -13,8 +13,8 @@ import { getStudentById } from '@/data/mock-students'
 
 export default function HomeworkGrade() {
   const _params = useParams()
-  const homeworkId = _params.id as string
-  const submissionId = _params.submissionId as string
+  const homeworkId = (_params?.id ?? '') as string
+  const submissionId = (_params?.submissionId ?? '') as string
   const router = useRouter()
   const { getHomeworkById, getSubmissionById, getSubmissionsForHomework, gradeSubmission } = useHomeworkStore()
 

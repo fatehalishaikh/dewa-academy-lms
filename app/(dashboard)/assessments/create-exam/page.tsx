@@ -1,11 +1,14 @@
 'use client'
 import { useState } from 'react'
-import { Check, ChevronLeft, ChevronRight, Wand2, Sparkles } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, Wand2, Sparkles, Brain } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { academyClasses } from '@/data/mock-classes'
-import { examQuestions, type DifficultyLevel } from '@/data/mock-assessments'
+import { examQuestions, type ExamQuestion, type DifficultyLevel } from '@/data/mock-assessments'
+
+const BLOOMS_LEVELS = ['Remember', 'Understand', 'Apply', 'Analyze', 'Evaluate', 'Create'] as const
+type BloomsLevel = typeof BLOOMS_LEVELS[number]
 
 const STEP_LABELS = ['Details', 'Questions', 'Rules', 'Review']
 
@@ -38,13 +41,20 @@ export default function AssessmentsCreateExam() {
   })
   const [qSearch, setQSearch] = useState('')
   const [isAutoGenerating, setIsAutoGenerating] = useState(false)
+  const [bloomsLevel, setBloomsLevel] = useState<BloomsLevel | ''>('')
+  const [aiGeneratedQs, setAiGeneratedQs] = useState<ExamQuestion[]>([])
   const [published, setPublished] = useState(false)
 
   const selectedClass = academyClasses.find(c => c.id === details.classId)
-  const filteredQuestions = examQuestions.filter(q =>
+  // Merge AI-generated questions with exam question bank (deduplicate by id)
+  const allQuestions = [
+    ...aiGeneratedQs,
+    ...examQuestions.filter(q => !aiGeneratedQs.some(ai => ai.id === q.id)),
+  ]
+  const filteredQuestions = allQuestions.filter(q =>
     !qSearch || q.text.toLowerCase().includes(qSearch.toLowerCase()) || q.topic.toLowerCase().includes(qSearch.toLowerCase())
   )
-  const selectedQuestions = examQuestions.filter(q => selectedIds.has(q.id))
+  const selectedQuestions = allQuestions.filter(q => selectedIds.has(q.id))
   const totalPoints = selectedQuestions.reduce((s, q) => s + q.points, 0)
 
   function setD<K extends keyof ExamDetails>(k: K, v: ExamDetails[K]) {
@@ -60,16 +70,38 @@ export default function AssessmentsCreateExam() {
     })
   }
 
-  function handleAutoGenerate() {
+  async function handleAutoGenerate() {
     setIsAutoGenerating(true)
-    setTimeout(() => {
-      // Auto-select 8 questions with balanced difficulty
+    const classSubject = selectedClass?.subject ?? 'Mathematics'
+    try {
+      const res = await fetch('/api/ai/questions/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: classSubject,
+          count: 8,
+          examType: details.examType,
+          bloomsLevel: bloomsLevel || undefined,
+        }),
+      })
+      if (res.ok) {
+        const generated: ExamQuestion[] = await res.json()
+        // Prefix IDs to avoid collision
+        const withIds = generated.map((q, i) => ({ ...q, id: `ai-${Date.now()}-${i}` }))
+        setAiGeneratedQs(withIds)
+        setSelectedIds(new Set(withIds.map(q => q.id)))
+      } else {
+        throw new Error('API failed')
+      }
+    } catch {
+      // Fallback: select from existing bank with balanced difficulty
       const easy = examQuestions.filter(q => q.difficulty === 'Easy').slice(0, 3).map(q => q.id)
       const medium = examQuestions.filter(q => q.difficulty === 'Medium').slice(0, 3).map(q => q.id)
       const hard = examQuestions.filter(q => q.difficulty === 'Hard').slice(0, 2).map(q => q.id)
       setSelectedIds(new Set([...easy, ...medium, ...hard]))
+    } finally {
       setIsAutoGenerating(false)
-    }, 2000)
+    }
   }
 
   function canProceed() {
@@ -169,6 +201,34 @@ export default function AssessmentsCreateExam() {
                 <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Passing Score (%)</label>
                 <input type="number" value={details.passingScore} onChange={e => setD('passingScore', e.target.value)} min={0} max={100}
                   className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50" />
+              </div>
+            </div>
+            {/* Bloom's taxonomy */}
+            <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 space-y-2">
+              <div className="flex items-center gap-2">
+                <Brain className="w-3.5 h-3.5 text-primary" />
+                <p className="text-[11px] font-semibold text-primary">Bloom&apos;s Taxonomy Level <span className="text-muted-foreground font-normal">(for AI generation)</span></p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <button
+                  onClick={() => setBloomsLevel('')}
+                  className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-colors border ${
+                    bloomsLevel === '' ? 'bg-primary text-white border-primary' : 'border-border text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Any
+                </button>
+                {BLOOMS_LEVELS.map(level => (
+                  <button
+                    key={level}
+                    onClick={() => setBloomsLevel(level)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-colors border ${
+                      bloomsLevel === level ? 'bg-primary text-white border-primary' : 'border-border text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
               </div>
             </div>
           </CardContent>

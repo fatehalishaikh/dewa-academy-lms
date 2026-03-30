@@ -13,7 +13,7 @@ import { useHomeworkStore } from '@/stores/homework-store'
 
 export default function ClassDetail() {
   const _params = useParams()
-  const id = _params.id as string
+  const id = (_params?.id ?? '') as string
   const router = useRouter()
   const cls = getClassById(id ?? '')
   const { homework, getSubmissionForStudent } = useHomeworkStore()

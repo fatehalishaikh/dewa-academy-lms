@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Home, ClipboardList, BarChart3, Bot, Calendar,
+  CalendarCheck, Target,
   LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -11,11 +12,13 @@ import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore, useCurrentStudent } from '@/stores/role-store'
 
 const studentLinks = [
-  { label: 'My Dashboard', icon: Home, href: '/student/dashboard' },
-  { label: 'My Assignments', icon: ClipboardList, href: '/student/assignments' },
-  { label: 'My Grades', icon: BarChart3, href: '/student/grades' },
-  { label: 'AI Tutor', icon: Bot, href: '/student/ai-tutor' },
-  { label: 'Schedule', icon: Calendar, href: '/student/schedule' },
+  { label: 'My Dashboard',   icon: Home,          href: '/student/dashboard'   },
+  { label: 'My Assignments', icon: ClipboardList,  href: '/student/assignments' },
+  { label: 'My Grades',      icon: BarChart3,      href: '/student/grades'      },
+  { label: 'AI Tutor',       icon: Bot,            href: '/student/ai-tutor'    },
+  { label: 'Attendance',     icon: CalendarCheck,  href: '/student/attendance'  },
+  { label: 'My Plan',        icon: Target,         href: '/student/my-plan'     },
+  { label: 'Schedule',       icon: Calendar,       href: '/student/schedule'    },
 ]
 
 function StudentSidebar() {

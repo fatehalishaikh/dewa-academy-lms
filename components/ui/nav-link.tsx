@@ -14,7 +14,7 @@ export function NavLink({ href, className, end = false, children, ...props }: Na
   const pathname = usePathname()
   const isActive = end
     ? pathname === href
-    : pathname === href || pathname.startsWith(href + '/')
+    : pathname === href || (pathname?.startsWith(href + '/') ?? false)
 
   const resolvedClassName =
     typeof className === 'function' ? className({ isActive }) : className

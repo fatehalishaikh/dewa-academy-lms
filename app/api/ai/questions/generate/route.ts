@@ -5,18 +5,22 @@ import { NextRequest } from 'next/server'
 const provider = process.env.AI_PROVIDER ?? 'anthropic'
 
 export async function POST(req: NextRequest) {
-  const { subject, difficulty, questionType, topic, count = 5 } = await req.json() as {
+  const { subject, difficulty, questionType, topic, count = 5, bloomsLevel, examType } = await req.json() as {
     subject: string
     difficulty?: string
     questionType?: string
     topic?: string
     count?: number
+    bloomsLevel?: string
+    examType?: string
   }
 
   const prompt = [
     `Generate ${count} exam questions for ${subject}${topic ? ` on the topic of ${topic}` : ''}.`,
-    difficulty && difficulty !== 'All' ? `Difficulty: ${difficulty}.` : '',
+    difficulty && difficulty !== 'All' ? `Difficulty: ${difficulty}.` : 'Mix Easy, Medium, and Hard difficulty levels.',
     questionType && questionType !== 'All' ? `Question type: ${questionType}.` : 'Mix MCQ, Essay, and True-False types.',
+    bloomsLevel ? `Align questions to Bloom\'s Taxonomy level: ${bloomsLevel}.` : '',
+    examType ? `Exam type: ${examType} (formative = conceptual understanding, summative = comprehensive, diagnostic = identify gaps).` : '',
     'Return a JSON array. Each object must have:',
     '- text: string (the question)',
     '- questionType: "MCQ" | "Essay" | "True-False" | "Matching"',

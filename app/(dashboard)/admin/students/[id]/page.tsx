@@ -54,7 +54,7 @@ const ATT_COLORS = { present: '#10B981', absent: '#EF4444', late: '#F59E0B' }
 
 export default function StudentAnalysis() {
   const _params = useParams()
-  const studentId = _params.id as string
+  const studentId = (_params?.id ?? '') as string
   const router = useRouter()
   const student = getStudentById(studentId ?? '')
   const classes = student ? getClassesByStudent(student.id) : []

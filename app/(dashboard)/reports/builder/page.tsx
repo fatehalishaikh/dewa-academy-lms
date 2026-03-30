@@ -48,16 +48,24 @@ export default function ReportsBuilder() {
     }, 1500)
   }
 
-  function handleAiSuggest() {
+  async function handleAiSuggest() {
     setAiSuggesting(true)
-    setTimeout(() => {
-      setReportName('At-Risk Early Warning Report')
-      setDatePreset('Current Term')
-      setSelectedFields(new Set(['student_name', 'grade_level', 'attendance', 'engagement', 'gpa', 'at_risk']))
-      setGradeFilter('All')
-      setAiSuggesting(false)
-      setShowPreview(false)
-    }, 2000)
+    try {
+      const res = await fetch('/api/ai/report-suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ context: reportName || undefined }),
+      })
+      if (res.ok) {
+        const data = await res.json() as { reportName?: string; fields?: string[]; datePreset?: string; gradeFilter?: string }
+        if (data.reportName) setReportName(data.reportName)
+        if (data.fields) setSelectedFields(new Set(data.fields))
+        if (data.datePreset && DATE_PRESETS.includes(data.datePreset)) setDatePreset(data.datePreset)
+        if (data.gradeFilter) setGradeFilter(data.gradeFilter)
+        setShowPreview(false)
+      }
+    } catch { /* silent */ }
+    finally { setAiSuggesting(false) }
   }
 
   function handleDeleteReport(id: string) {

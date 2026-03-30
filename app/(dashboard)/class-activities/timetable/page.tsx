@@ -58,12 +58,27 @@ export default function ClassActivitiesTimetable() {
     })
   })
 
-  function handleOptimize() {
+  const [optimizeSummary, setOptimizeSummary] = useState<string | null>(null)
+
+  async function handleOptimize() {
     setIsOptimizing(true)
-    setTimeout(() => {
-      setIsOptimizing(false)
-      setOptimized(true)
-    }, 2000)
+    try {
+      const res = await fetch('/api/ai/timetable/optimize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conflicts,
+          totalClasses: mockClasses.length,
+          totalSessions: mockClasses.reduce((s, c) => s + c.schedule.length, 0),
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json() as { summary?: string }
+        setOptimizeSummary(data.summary ?? null)
+        setOptimized(true)
+      }
+    } catch { /* silent */ }
+    finally { setIsOptimizing(false) }
   }
 
   return (
@@ -159,6 +174,16 @@ export default function ClassActivitiesTimetable() {
           </div>
         ))}
       </div>
+
+      {/* AI optimization summary */}
+      {optimized && optimizeSummary && (
+        <Card className="rounded-2xl border-emerald-500/20 bg-emerald-500/5">
+          <CardContent className="p-4 flex items-start gap-3">
+            <Sparkles className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+            <p className="text-xs text-foreground">{optimizeSummary}</p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Conflicts panel */}
       {conflicts.length > 0 && !optimized && (

@@ -252,6 +252,7 @@ export default function AssessmentsQuestionBank() {
                 <th className="text-left px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Topic</th>
                 <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-20">Difficulty</th>
                 <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-24">Type</th>
+                <th className="text-left px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-36">Answer</th>
                 <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-16">Pts</th>
                 <th className="w-10" />
               </tr>
@@ -274,6 +275,11 @@ export default function AssessmentsQuestionBank() {
                   <td className="px-3 py-3 text-center">
                     <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
                   </td>
+                  <td className="px-3 py-3">
+                    <span className="text-[10px] text-emerald-400 block max-w-[130px] truncate" title={q.correctAnswer}>
+                      {q.correctAnswer || <span className="text-muted-foreground/50">—</span>}
+                    </span>
+                  </td>
                   <td className="px-3 py-3 text-center">
                     <span className="text-xs font-semibold text-foreground">{q.points}</span>
                   </td>
@@ -285,7 +291,7 @@ export default function AssessmentsQuestionBank() {
                 </tr>
               ))}
               {filtered.length === 0 && (
-                <tr><td colSpan={7} className="px-5 py-8 text-center text-sm text-muted-foreground">No questions match your filters.</td></tr>
+                <tr><td colSpan={8} className="px-5 py-8 text-center text-sm text-muted-foreground">No questions match your filters.</td></tr>
               )}
             </tbody>
           </table>

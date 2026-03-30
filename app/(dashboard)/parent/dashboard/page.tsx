@@ -1,8 +1,10 @@
 'use client'
-import { Sparkles, BarChart3, Calendar, MessageSquare, AlertTriangle, CheckCircle2, ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { Sparkles, BarChart3, Calendar, MessageSquare, AlertTriangle, CheckCircle2, ArrowRight, Bot, RefreshCw, FileText } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useCurrentParent } from '@/stores/role-store'
 import { getStudentById } from '@/data/mock-students'
@@ -15,10 +17,51 @@ const recentActivity = [
   { type: 'grade', icon: BarChart3, text: 'Physics Midterm graded — 78%', time: '3 days ago', color: '#0EA5E9' },
 ]
 
+type InsightData = {
+  riskLevel: 'on_track' | 'monitor' | 'at_risk'
+  riskScore: number
+  summary: string
+  recommendations: string[]
+  strengths: string[]
+  concerns: string[]
+}
+
+const riskLevelConfig = {
+  on_track: { label: 'On Track',  color: 'text-emerald-400', border: 'border-emerald-500/30', bg: 'bg-emerald-500/5' },
+  monitor:  { label: 'Monitor',   color: 'text-amber-400',   border: 'border-amber-500/30',   bg: 'bg-amber-500/5'   },
+  at_risk:  { label: 'At Risk',   color: 'text-red-400',     border: 'border-red-500/30',     bg: 'bg-red-500/5'     },
+}
+
 export default function ParentDashboard() {
   const router = useRouter()
   const parent = useCurrentParent()
   const primaryChild = parent ? getStudentById(parent.childIds[0]) : null
+
+  const [insights, setInsights] = useState<InsightData | null>(null)
+  const [loadingInsights, setLoadingInsights] = useState(false)
+
+  async function loadInsights() {
+    if (!primaryChild) return
+    setLoadingInsights(true)
+    try {
+      const res = await fetch('/api/ai/parent-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentName: primaryChild.name,
+          gpa: primaryChild.gpa,
+          attendanceRate: primaryChild.attendanceRate,
+          status: primaryChild.status,
+          recentGrades: [
+            { subject: 'Mathematics', grade: Math.round(primaryChild.gpa * 25) },
+            { subject: 'English', grade: Math.round(primaryChild.gpa * 26) },
+          ],
+        }),
+      })
+      if (res.ok) setInsights(await res.json())
+    } catch { /* silent */ }
+    finally { setLoadingInsights(false) }
+  }
 
   return (
     <div className="p-6 space-y-6 max-w-5xl">
@@ -93,6 +136,78 @@ export default function ParentDashboard() {
         ))}
       </div>
 
+      {/* AI Insights */}
+      {primaryChild && (
+        <Card className={`rounded-2xl border transition-colors ${insights ? riskLevelConfig[insights.riskLevel].border : 'border-primary/20'} bg-primary/5`}>
+          <CardHeader className="pb-3 pt-5 px-5">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Bot className="w-4 h-4 text-primary" />
+                AI Insights — {primaryChild.name.split(' ')[0]}
+              </CardTitle>
+              <div className="flex items-center gap-2">
+                {insights && (
+                  <Badge variant="outline" className={`text-[10px] h-5 ${riskLevelConfig[insights.riskLevel].color} ${riskLevelConfig[insights.riskLevel].border}`}>
+                    {riskLevelConfig[insights.riskLevel].label}
+                  </Badge>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={loadInsights}
+                  disabled={loadingInsights}
+                >
+                  {loadingInsights
+                    ? <><RefreshCw className="w-3 h-3 mr-1 animate-spin" />Loading</>
+                    : <><Sparkles className="w-3 h-3 mr-1" />{insights ? 'Refresh' : 'Get Insights'}</>}
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="px-5 pb-5">
+            {!insights && !loadingInsights && (
+              <p className="text-xs text-muted-foreground">
+                Click &ldquo;Get Insights&rdquo; to receive AI-powered recommendations and risk assessment for {primaryChild.name.split(' ')[0]}.
+              </p>
+            )}
+            {loadingInsights && (
+              <div className="space-y-2">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="h-3 bg-muted/40 rounded animate-pulse" style={{ width: `${70 + i * 10}%` }} />
+                ))}
+              </div>
+            )}
+            {insights && (
+              <div className="space-y-3">
+                <p className="text-xs text-foreground">{insights.summary}</p>
+                <div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Recommendations for You</p>
+                  <div className="space-y-1.5">
+                    {insights.recommendations.map((rec, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                        <p className="text-xs text-muted-foreground">{rec}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs h-6 text-primary p-0"
+                  onClick={() => router.push('/parent/reports')}
+                >
+                  <FileText className="w-3 h-3 mr-1" />
+                  Generate Full Report
+                  <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Recent Activity */}
         <Card className="rounded-2xl border-border">
@@ -127,6 +242,8 @@ export default function ParentDashboard() {
               { label: 'View All Grades', sub: 'See detailed grade breakdown', to: '/parent/grades', color: '#00B8A9', icon: BarChart3 },
               { label: 'Attendance Records', sub: 'Monthly attendance calendar', to: '/parent/attendance', color: '#10B981', icon: Calendar },
               { label: 'Messages', sub: '1 unread from Dr. Sarah Ahmed', to: '/parent/messages', color: '#8B5CF6', icon: MessageSquare },
+              { label: 'Leave Request', sub: 'Apply for absence or leave', to: '/parent/leave-request', color: '#F59E0B', icon: AlertTriangle },
+              { label: 'AI Progress Reports', sub: 'Generate personalized insights', to: '/parent/reports', color: '#00B8A9', icon: FileText },
             ].map(({ label, sub, to, color, icon: Icon }) => (
               <button
                 key={label}

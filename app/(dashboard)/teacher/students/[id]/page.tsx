@@ -2,16 +2,52 @@
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, Sparkles, BarChart3, Calendar, BookOpen, AlertTriangle, CheckCircle2, TrendingUp, TrendingDown, MessageSquare } from 'lucide-react'
+import { ChevronLeft, Sparkles, BarChart3, Calendar, BookOpen, AlertTriangle, CheckCircle2, TrendingUp, TrendingDown, MessageSquare, Wand2, ShieldAlert, Target, Clock, PlayCircle, BookMarked, Zap } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Progress } from '@/components/ui/progress'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { getStudentById } from '@/data/mock-students'
 import { getClassesByStudent } from '@/data/mock-classes'
 import { useHomeworkStore } from '@/stores/homework-store'
+
+type RiskFactor = { name: string; score: number; weight: number; status: 'positive' | 'warning' | 'critical' }
+
+type LearningFocusArea = { subject: string; priority: 'high' | 'medium' | 'low'; currentLevel: string; targetLevel: string; recommendation: string }
+type WeeklyPlanEntry = { week: number; theme: string; activities: string[]; hoursRequired: number }
+type LearningResource = { title: string; type: string; subject: string; priority: 'high' | 'medium' | 'low'; estimatedTime: string }
+type Milestone = { title: string; targetWeek: number; metric: string; subject: string }
+type LearningPathResult = {
+  focusAreas: LearningFocusArea[]
+  weeklyPlan: WeeklyPlanEntry[]
+  resources: LearningResource[]
+  milestones: Milestone[]
+  overallStrategy: string
+}
+
+type RiskAssessmentResult = {
+  riskScore: number
+  riskLevel: 'high' | 'moderate' | 'low'
+  summary: string
+  factors: RiskFactor[]
+  recommendations: string[]
+  interventionPriority: 'immediate' | 'within-week' | 'monitor'
+}
+
+const riskLevelConfig = {
+  high:     { color: '#EF4444', bg: 'bg-red-500/10',    border: 'border-red-500/30',     label: 'High Risk'     },
+  moderate: { color: '#F59E0B', bg: 'bg-amber-500/10',  border: 'border-amber-500/30',   label: 'Moderate Risk' },
+  low:      { color: '#10B981', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', label: 'Low Risk'      },
+}
+
+const factorStatusColors = {
+  positive: 'text-emerald-400',
+  warning:  'text-amber-400',
+  critical: 'text-red-400',
+}
 
 // Mock attendance data for 30 days
 type AttDay = { date: string; status: 'present' | 'absent' | 'late' }
@@ -54,7 +90,7 @@ const ATT_COLORS = { present: '#10B981', absent: '#EF4444', late: '#F59E0B' }
 
 export default function StudentAnalysis() {
   const _params = useParams()
-  const studentId = _params.id as string
+  const studentId = (_params?.id ?? '') as string
   const router = useRouter()
   const student = getStudentById(studentId ?? '')
   const classes = student ? getClassesByStudent(student.id) : []
@@ -62,6 +98,10 @@ export default function StudentAnalysis() {
   const [addingNote, setAddingNote] = useState(false)
   const [noteText, setNoteText] = useState('')
   const [notes, setNotes] = useState(teacherNotes)
+  const [riskResult, setRiskResult] = useState<RiskAssessmentResult | null>(null)
+  const [loadingRisk, setLoadingRisk] = useState(false)
+  const [learningPath, setLearningPath] = useState<LearningPathResult | null>(null)
+  const [loadingPath, setLoadingPath] = useState(false)
 
   if (!student) {
     return <div className="p-6 text-sm text-muted-foreground">Student not found</div>
@@ -83,6 +123,49 @@ export default function StudentAnalysis() {
       : null
     return { cls, graded, avg }
   })
+
+  async function handleRiskAnalysis() {
+    if (!student) return
+    setLoadingRisk(true)
+    try {
+      const res = await fetch('/api/ai/risk-assessment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentName: student.name,
+          gpa: student.gpa,
+          attendanceRate: student.attendanceRate,
+          status: student.status,
+          gradeHistory,
+          recentNotes: notes.slice(0, 3).map(n => n.note),
+        }),
+      })
+      if (res.ok) setRiskResult(await res.json())
+    } catch { /* silent */ }
+    finally { setLoadingRisk(false) }
+  }
+
+  async function handleGenerateLearningPath() {
+    if (!student) return
+    setLoadingPath(true)
+    try {
+      const res = await fetch('/api/ai/learning-path', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentName: student.name,
+          gpa: student.gpa,
+          attendanceRate: student.attendanceRate,
+          learningStyle: 'Visual / Logical',
+          subjects: classes.map(c => c.subject),
+          goals: ['Improve Mathematics grade to A by end of term', 'Maintain 90%+ attendance'],
+          gradeLevel: student.gradeLevel,
+        }),
+      })
+      if (res.ok) setLearningPath(await res.json())
+    } catch { /* silent */ }
+    finally { setLoadingPath(false) }
+  }
 
   function addNote() {
     if (!noteText.trim()) return
@@ -142,7 +225,7 @@ export default function StudentAnalysis() {
       {/* Tabs */}
       <Tabs defaultValue="overview">
         <TabsList className="bg-card border border-border">
-          {['overview', 'grades', 'attendance', 'ilp', 'notes'].map(tab => (
+          {['overview', 'grades', 'attendance', 'ilp', 'risk', 'notes'].map(tab => (
             <TabsTrigger key={tab} value={tab} className="text-xs capitalize">{tab}</TabsTrigger>
           ))}
         </TabsList>
@@ -319,6 +402,250 @@ export default function StudentAnalysis() {
               ))}
             </CardContent>
           </Card>
+
+          {/* AI Learning Path */}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-foreground">AI Personalized Learning Path</p>
+              <p className="text-xs text-muted-foreground">Generate a tailored 4-week learning plan based on student data</p>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleGenerateLearningPath}
+              disabled={loadingPath}
+              className="gap-1.5 text-xs border-primary/30 text-primary hover:bg-primary/10"
+            >
+              {loadingPath
+                ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Generating…</>
+                : <><Wand2 className="w-3.5 h-3.5" /> Generate Path</>}
+            </Button>
+          </div>
+
+          {learningPath && (
+            <div className="space-y-4">
+              {/* Strategy summary */}
+              <Card className="rounded-2xl border-primary/20 bg-primary/5">
+                <CardContent className="p-4 flex gap-3">
+                  <Zap className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <p className="text-xs text-foreground leading-relaxed">{learningPath.overallStrategy}</p>
+                </CardContent>
+              </Card>
+
+              {/* Focus areas */}
+              <Card className="rounded-2xl border-border">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <Target className="w-3.5 h-3.5" /> Focus Areas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {learningPath.focusAreas.map((fa, i) => (
+                    <div key={i} className="p-3 rounded-xl bg-card border border-border space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-semibold text-foreground">{fa.subject}</p>
+                        <Badge variant="outline" className={`text-[9px] h-4 ${fa.priority === 'high' ? 'border-red-500/30 text-red-400' : fa.priority === 'medium' ? 'border-amber-500/30 text-amber-400' : 'border-emerald-500/30 text-emerald-400'}`}>
+                          {fa.priority} priority
+                        </Badge>
+                      </div>
+                      <div className="flex gap-4 text-[10px] text-muted-foreground">
+                        <span>Now: {fa.currentLevel}</span>
+                        <span>→ Target: {fa.targetLevel}</span>
+                      </div>
+                      <p className="text-[11px] text-foreground">{fa.recommendation}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Weekly plan */}
+              <Card className="rounded-2xl border-border">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5" /> 4-Week Plan
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {learningPath.weeklyPlan.map(week => (
+                    <div key={week.week} className="flex gap-3 p-3 rounded-xl bg-card border border-border">
+                      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                        <span className="text-xs font-bold text-primary">W{week.week}</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-xs font-semibold text-foreground">{week.theme}</p>
+                          <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                            <Clock className="w-3 h-3" /> {week.hoursRequired}h
+                          </div>
+                        </div>
+                        <ul className="space-y-0.5">
+                          {week.activities.map((act, i) => (
+                            <li key={i} className="text-[10px] text-muted-foreground flex gap-1.5">
+                              <span className="text-primary shrink-0">·</span>{act}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Resources + Milestones side by side */}
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="rounded-2xl border-border">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                      <PlayCircle className="w-3.5 h-3.5" /> Resources
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {learningPath.resources.map((r, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <div className="w-5 h-5 rounded-lg bg-muted flex items-center justify-center shrink-0 mt-0.5">
+                          <BookMarked className="w-2.5 h-2.5 text-muted-foreground" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-medium text-foreground truncate">{r.title}</p>
+                          <p className="text-[9px] text-muted-foreground">{r.type} · {r.estimatedTime}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                <Card className="rounded-2xl border-border">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Milestones
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {learningPath.milestones.map((m, i) => (
+                      <div key={i} className="p-2.5 rounded-xl bg-card border border-border">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <p className="text-[11px] font-medium text-foreground">{m.title}</p>
+                          <Badge variant="outline" className="text-[9px] h-4 border-primary/30 text-primary">Wk {m.targetWeek}</Badge>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground">{m.metric}</p>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+        </TabsContent>
+
+        {/* Risk Assessment */}
+        <TabsContent value="risk" className="space-y-4 mt-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-foreground">AI Risk Assessment</p>
+              <p className="text-xs text-muted-foreground">Predictive risk scoring based on academic, behavioral, and engagement signals</p>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleRiskAnalysis}
+              disabled={loadingRisk}
+              className="gap-1.5 text-xs border-primary/30 text-primary hover:bg-primary/10"
+            >
+              {loadingRisk
+                ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Analyzing…</>
+                : <><Wand2 className="w-3.5 h-3.5" /> AI Analyze</>}
+            </Button>
+          </div>
+
+          {/* Pre-computed risk level from student status */}
+          {!riskResult && (
+            <Card className="rounded-2xl border-border bg-card">
+              <CardContent className="p-5 space-y-3">
+                <div className="flex items-center gap-3">
+                  <ShieldAlert className={`w-5 h-5 ${student.status === 'at-risk' ? 'text-red-400' : 'text-emerald-400'}`} />
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">
+                      {student.status === 'at-risk' ? 'Student is flagged as At Risk' : 'Student is On Track'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Click &ldquo;AI Analyze&rdquo; for a detailed risk breakdown and intervention recommendations.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {riskResult && (
+            <>
+              {/* Risk score */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <Card className={`rounded-2xl border-2 ${riskLevelConfig[riskResult.riskLevel].border} bg-card`}>
+                  <CardContent className="p-5 text-center space-y-2">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Risk Score</p>
+                    <p className="text-5xl font-bold" style={{ color: riskLevelConfig[riskResult.riskLevel].color }}>
+                      {riskResult.riskScore}
+                    </p>
+                    <Badge
+                      variant="outline"
+                      className={`text-[10px] h-5 ${riskLevelConfig[riskResult.riskLevel].border}`}
+                      style={{ color: riskLevelConfig[riskResult.riskLevel].color }}
+                    >
+                      {riskLevelConfig[riskResult.riskLevel].label}
+                    </Badge>
+                    <p className="text-[10px] text-muted-foreground">
+                      Priority: <span className="font-semibold capitalize">{riskResult.interventionPriority.replace('-', ' ')}</span>
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="rounded-2xl border-border bg-card lg:col-span-2">
+                  <CardHeader className="pb-2 pt-4 px-5">
+                    <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Risk Factors</CardTitle>
+                  </CardHeader>
+                  <CardContent className="px-5 pb-4 space-y-2.5">
+                    {riskResult.factors.map(factor => (
+                      <div key={factor.name} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs text-foreground">{factor.name}</p>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[10px] font-semibold ${factorStatusColors[factor.status]}`}>
+                              {factor.score}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground">({factor.weight}%)</span>
+                          </div>
+                        </div>
+                        <Progress value={factor.score} className="h-1.5" />
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Summary + Recommendations */}
+              <Card className="rounded-2xl border-border bg-card">
+                <CardHeader className="pb-2 pt-4 px-5">
+                  <CardTitle className="text-sm">AI Analysis</CardTitle>
+                </CardHeader>
+                <CardContent className="px-5 pb-5 space-y-3">
+                  <p className="text-sm text-muted-foreground">{riskResult.summary}</p>
+                  <div>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Recommended Interventions</p>
+                    <div className="space-y-1.5">
+                      {riskResult.recommendations.map((rec, i) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                            <span className="text-[9px] text-primary font-bold">{i + 1}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground">{rec}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </TabsContent>
 
         {/* Notes */}

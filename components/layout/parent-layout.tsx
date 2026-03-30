@@ -2,19 +2,22 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Home, BarChart3, Calendar, MessageSquare,
+  Home, BarChart3, Calendar, MessageSquare, CalendarOff, FileText,
   LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore, useCurrentParent } from '@/stores/role-store'
+import { ChatbotWidget } from '@/components/dashboard/chatbot-widget'
 
 const parentLinks = [
   { label: 'Overview', icon: Home, href: '/parent/dashboard' },
   { label: "Child's Grades", icon: BarChart3, href: '/parent/grades' },
   { label: 'Attendance', icon: Calendar, href: '/parent/attendance' },
   { label: 'Messages', icon: MessageSquare, href: '/parent/messages' },
+  { label: 'Leave Request', icon: CalendarOff, href: '/parent/leave-request' },
+  { label: 'Reports', icon: FileText, href: '/parent/reports' },
 ]
 
 function ParentSidebar() {
@@ -104,6 +107,7 @@ export function ParentLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen overflow-hidden bg-background">
       <ParentSidebar />
       <main className="flex-1 overflow-y-auto">{children}</main>
+      <ChatbotWidget />
     </div>
   )
 }

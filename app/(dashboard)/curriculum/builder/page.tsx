@@ -61,47 +61,51 @@ export default function CurriculumBuilder() {
     setAddingForm(null)
   }
 
-  function handleAiSuggest() {
+  async function handleAiSuggest() {
     const targetCourse = nodes.find(n => n.nodeType === 'course')
     if (!targetCourse) return
     setAiGenerating(true)
-    setTimeout(() => {
-      const unitId1 = `ai-unt-${Date.now()}`
-      const unitId2 = `ai-unt-${Date.now() + 1}`
-      const newNodes: CurriculumNode[] = [
-        {
-          id: unitId1, parentId: targetCourse.id, nodeType: 'unit',
-          title: 'Unit: Statistics & Probability',
-          description: 'AI-generated unit covering descriptive statistics, probability distributions, and data interpretation.',
-          objectives: ['Calculate mean, median, mode', 'Apply probability rules', 'Interpret statistical graphs'],
-          standardIds: [], status: 'draft',
-        },
-        {
-          id: `ai-les-${Date.now()}`, parentId: unitId1, nodeType: 'lesson',
-          title: 'Introduction to Descriptive Statistics',
-          description: 'Collect, organise, and summarise data using central tendency and spread measures.',
-          objectives: ['Calculate measures of central tendency', 'Interpret box plots'],
-          standardIds: [], status: 'draft',
-        },
-        {
-          id: unitId2, parentId: targetCourse.id, nodeType: 'unit',
-          title: 'Unit: Trigonometry Foundations',
-          description: 'AI-generated unit introducing trigonometric ratios, identities, and real-world applications.',
-          objectives: ['Define sine, cosine, tangent', 'Apply trig ratios in right triangles', 'Solve real-world trig problems'],
-          standardIds: [], status: 'draft',
-        },
-        {
-          id: `ai-les-${Date.now() + 2}`, parentId: unitId2, nodeType: 'lesson',
-          title: 'Sine and Cosine Ratios',
-          description: 'Understand and apply sine and cosine in right-angled triangles.',
-          objectives: ['Define sine and cosine', 'Calculate sides using ratios'],
-          standardIds: [], status: 'draft',
-        },
-      ]
-      setNodes(prev => [...prev, ...newNodes])
-      setExpanded(prev => new Set([...prev, targetCourse.id, unitId1, unitId2]))
-      setAiGenerating(false)
-    }, 2000)
+    try {
+      const existingUnits = nodes
+        .filter(n => n.parentId === targetCourse.id && n.nodeType === 'unit')
+        .map(n => n.title)
+      const res = await fetch('/api/ai/curriculum/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          courseTitle: targetCourse.title,
+          subject: targetCourse.title,
+          existingUnits,
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json() as { units: { title: string; description: string; objectives: string[]; duration?: number; lessons: { title: string; description: string; objectives: string[]; duration?: number }[] }[] }
+        const newNodes: CurriculumNode[] = []
+        const newUnitIds: string[] = []
+        data.units.forEach(unit => {
+          const unitId = `ai-unt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
+          newUnitIds.push(unitId)
+          newNodes.push({
+            id: unitId, parentId: targetCourse.id, nodeType: 'unit',
+            title: unit.title, description: unit.description,
+            objectives: unit.objectives ?? [], standardIds: [], status: 'draft',
+            duration: unit.duration,
+          })
+          unit.lessons.forEach(lesson => {
+            newNodes.push({
+              id: `ai-les-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              parentId: unitId, nodeType: 'lesson',
+              title: lesson.title, description: lesson.description,
+              objectives: lesson.objectives ?? [], standardIds: [], status: 'draft',
+              duration: lesson.duration,
+            })
+          })
+        })
+        setNodes(prev => [...prev, ...newNodes])
+        setExpanded(prev => new Set([...prev, targetCourse.id, ...newUnitIds]))
+      }
+    } catch { /* silent */ }
+    finally { setAiGenerating(false) }
   }
 
   const selectedNode = selected ? nodes.find(n => n.id === selected) : null

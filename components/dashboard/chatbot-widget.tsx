@@ -57,6 +57,13 @@ const PAGE_NAMES: Record<string, string> = {
   '/teacher/students':              'Teacher — Students',
   // Admin
   '/admin/students':                'Admin — All Students',
+  // Parent
+  '/parent/dashboard':              'Parent Portal — Overview',
+  '/parent/grades':                 'Parent Portal — Child\'s Grades',
+  '/parent/attendance':             'Parent Portal — Attendance',
+  '/parent/messages':               'Parent Portal — Messages',
+  '/parent/leave-request':          'Parent Portal — Leave Request',
+  '/parent/reports':                'Parent Portal — Progress Reports',
   // Reports
   '/reports/dashboard':             'Reports Dashboard',
   '/reports/academic':              'Reports — Academic',
@@ -66,7 +73,8 @@ const PAGE_NAMES: Record<string, string> = {
   '/reports/builder':               'Reports — Report Builder',
 }
 
-function getPageName(pathname: string): string {
+function getPageName(pathname: string | null): string {
+  if (!pathname) return 'Dashboard'
   if (PAGE_NAMES[pathname]) return PAGE_NAMES[pathname]
   if (pathname.startsWith('/teacher/students/')) return 'Teacher — Student Analysis'
   if (pathname.startsWith('/teacher/homework/')) return 'Teacher — Homework Detail'

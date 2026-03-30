@@ -7,7 +7,7 @@ import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { attendanceTrend, classAttendance, dayAttendance, monthlyAttendance, aiInsights } from '@/data/mock-reports'
+import { attendanceTrend, classAttendance, dayAttendance, monthlyAttendance } from '@/data/mock-reports'
 
 const stats = [
   { label: "Today's Attendance", value: '92%',  sub: '287 / 312 present', color: '#10B981' },
@@ -26,16 +26,25 @@ export default function ReportsAttendance() {
   const [analysis, setAnalysis] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
 
-  function handleAiAnalysis() {
+  async function handleAiAnalysis() {
     setLoading(true)
-    setTimeout(() => {
-      setAnalysis([
-        aiInsights.find(i => i.id === 'ins-007')!.text,
-        'Physics 11A has the lowest class attendance at 85% — teacher-student meeting recommended.',
-        'Chronic absentees are concentrated in Grade 11 — ILP intervention has been initiated for 5 students.',
-      ])
-      setLoading(false)
-    }, 2000)
+    try {
+      const res = await fetch('/api/ai/attendance-analysis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          todayRate: stats[0].value,
+          weeklyAvg: stats[1].value,
+          chronicAbsentees: 7,
+          classAttendance: classAttendance.map(c => ({ name: c.className, rate: c.rate })),
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json() as { insights: string[] }
+        setAnalysis(data.insights ?? [])
+      }
+    } catch { /* silent */ }
+    finally { setLoading(false) }
   }
 
   return (

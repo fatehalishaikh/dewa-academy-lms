@@ -1,20 +1,29 @@
 'use client'
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Wand2, CheckCircle2, Clock, Sparkles } from 'lucide-react'
+import { ChevronDown, ChevronUp, Wand2, CheckCircle2, Clock, Sparkles, TrendingUp, TrendingDown } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { StudentNameLink } from '@/components/ui/student-name-link'
-import { exams, examSubmissions, type ExamSubmission } from '@/data/mock-assessments'
+import { exams, examSubmissions, examQuestions, type ExamSubmission } from '@/data/mock-assessments'
 import { getClassById } from '@/data/mock-classes'
 import { getStudentById } from '@/data/mock-students'
+
+type AiGradeResult = {
+  score: number
+  confidence: number
+  feedback: string
+  strengths: string[]
+  improvements: string[]
+}
 
 export default function AssessmentsGrading() {
   const [expandedExamId, setExpandedExamId] = useState<string | null>(null)
   const [submissions, setSubmissions] = useState<ExamSubmission[]>(examSubmissions)
   const [gradingForm, setGradingForm] = useState<Record<string, { score: string; feedback: string }>>({})
   const [aiSuggestingId, setAiSuggestingId] = useState<string | null>(null)
+  const [aiResults, setAiResults] = useState<Record<string, AiGradeResult>>({})
   const [gradingSubId, setGradingSubId] = useState<string | null>(null)
 
   // Only show exams that have submissions
@@ -22,7 +31,13 @@ export default function AssessmentsGrading() {
 
   const totalPending = submissions.filter(s => s.submissionStatus === 'pending').length
   const totalGraded = submissions.filter(s => s.submissionStatus === 'graded').length
-  const autoGraded = 0 // MCQ would be auto-graded in a real system
+  // Count MCQ submissions as auto-gradable
+  const autoGraded = submissions.filter(s => {
+    const exam = exams.find(e => e.id === s.examId)
+    if (!exam) return false
+    const qs = examQuestions.filter(q => exam.questionIds?.includes(q.id))
+    return qs.length > 0 && qs.every(q => q.questionType === 'MCQ' || q.questionType === 'True-False')
+  }).length
 
   function getForm(subId: string) {
     const sub = submissions.find(s => s.id === subId)
@@ -33,19 +48,46 @@ export default function AssessmentsGrading() {
     setGradingForm(prev => ({ ...prev, [subId]: { ...getForm(subId), [field]: value } }))
   }
 
-  function handleAiSuggest(subId: string, maxPoints: number) {
+  async function handleAiSuggest(subId: string, maxPoints: number, examId: string) {
     setAiSuggestingId(subId)
-    setTimeout(() => {
+    const sub = submissions.find(s => s.id === subId)
+    const exam = exams.find(e => e.id === examId)
+    // Try to get first question from exam for context
+    const firstQ = exam?.questionIds?.[0]
+      ? examQuestions.find(q => q.id === exam.questionIds![0])
+      : null
+
+    try {
+      const res = await fetch('/api/ai/grading', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          questionText: firstQ?.text ?? `Exam: ${exam?.title ?? 'Assessment'}`,
+          questionType: firstQ?.questionType ?? 'Essay',
+          correctAnswer: firstQ?.correctAnswer,
+          studentAnswer: sub?.answers ? Object.values(sub.answers).join('\n') : `Student submission for exam: ${exam?.title}`,
+          maxPoints,
+          subject: firstQ?.subject ?? exam?.title,
+        }),
+      })
+      if (res.ok) {
+        const result: AiGradeResult = await res.json()
+        setAiResults(prev => ({ ...prev, [subId]: result }))
+        setGradingForm(prev => ({
+          ...prev,
+          [subId]: { score: String(result.score), feedback: result.feedback },
+        }))
+      }
+    } catch {
+      // Fallback to mock
       const mockScore = Math.round(maxPoints * (0.65 + Math.random() * 0.25))
-      const feedbacks = [
-        'Demonstrates solid understanding of core concepts. Could strengthen with more specific examples.',
-        'Good attempt. Key ideas are present but the argument needs further development and evidence.',
-        'Excellent response. Clear structure and accurate application of theory with relevant examples.',
-      ]
-      const mockFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)]
-      setGradingForm(prev => ({ ...prev, [subId]: { score: String(mockScore), feedback: mockFeedback } }))
+      setGradingForm(prev => ({
+        ...prev,
+        [subId]: { score: String(mockScore), feedback: 'Demonstrates reasonable understanding. Review key concepts for improvement.' },
+      }))
+    } finally {
       setAiSuggestingId(null)
-    }, 1500)
+    }
   }
 
   function handleSaveGrade(subId: string) {
@@ -193,7 +235,7 @@ export default function AssessmentsGrading() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => handleAiSuggest(sub.id, exam.totalPoints)}
+                                onClick={() => handleAiSuggest(sub.id, exam.totalPoints, exam.id)}
                                 disabled={aiSuggestingId === sub.id}
                                 className="h-7 text-xs gap-1 border-primary/30 text-primary hover:bg-primary/10 self-end"
                               >
@@ -201,7 +243,33 @@ export default function AssessmentsGrading() {
                                   ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Suggesting…</>
                                   : <><Wand2 className="w-3 h-3" /> AI Suggest</>}
                               </Button>
+                              {aiResults[sub.id] && (
+                                <Badge variant="outline" className="text-[10px] h-5 border-primary/30 text-primary self-end">
+                                  {aiResults[sub.id].confidence}% confident
+                                </Badge>
+                              )}
                             </div>
+                            {/* AI strengths/improvements */}
+                            {aiResults[sub.id] && (
+                              <div className="grid grid-cols-2 gap-2">
+                                <div className="p-2 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
+                                  <p className="text-[9px] font-semibold text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                                    <TrendingUp className="w-2.5 h-2.5" /> Strengths
+                                  </p>
+                                  {aiResults[sub.id].strengths.map((s, i) => (
+                                    <p key={i} className="text-[10px] text-muted-foreground">· {s}</p>
+                                  ))}
+                                </div>
+                                <div className="p-2 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                                  <p className="text-[9px] font-semibold text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                                    <TrendingDown className="w-2.5 h-2.5" /> Improve
+                                  </p>
+                                  {aiResults[sub.id].improvements.map((s, i) => (
+                                    <p key={i} className="text-[10px] text-muted-foreground">· {s}</p>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                             <div>
                               <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Feedback</label>
                               <textarea
