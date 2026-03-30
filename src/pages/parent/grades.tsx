@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Sparkles, BarChart3, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -5,23 +6,39 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { useCurrentParent } from '@/stores/role-store'
 import { getStudentById } from '@/data/mock-students'
 
-const gradesByClass = [
-  { subject: 'Mathematics', teacher: 'Dr. Sarah Ahmed', average: 84, trend: 'up', assignments: [
-    { title: 'Chapter 4 Quiz', grade: 92, date: 'Mar 20', points: '23/25' },
-    { title: 'Problem Set 3', grade: 80, date: 'Mar 10', points: '40/50' },
-    { title: 'Mid-Unit Test', grade: 88, date: 'Feb 28', points: '44/50' },
-  ]},
-  { subject: 'Physics', teacher: 'Mr. James Wilson', average: 76, trend: 'down', assignments: [
-    { title: 'Midterm Exam', grade: 78, date: 'Mar 18', points: '78/100' },
-    { title: 'Lab Report 2', grade: 75, date: 'Mar 5', points: '75/100' },
-    { title: 'Waves Problem Set', grade: 71, date: 'Feb 20', points: '71/100' },
-  ]},
+const SUBJECTS = [
+  { subject: 'Mathematics', teacher: 'Dr. Sarah Ahmed', assignmentTitles: ['Chapter 4 Quiz', 'Problem Set 3', 'Mid-Unit Test'], points: ['23/25', '40/50', '44/50'] },
+  { subject: 'Physics', teacher: 'Mr. James Wilson', assignmentTitles: ['Midterm Exam', 'Lab Report 2', 'Waves Problem Set'], points: ['78/100', '75/100', '71/100'] },
+  { subject: 'Arabic Language', teacher: 'Ms. Fatima Al-Rashidi', assignmentTitles: ['Essay Writing', 'Grammar Test', 'Reading Comprehension'], points: ['18/20', '35/40', '42/50'] },
+  { subject: 'Islamic Studies', teacher: 'Dr. Khalid Hassan', assignmentTitles: ['Recitation Assessment', 'Written Test', 'Project'], points: ['9/10', '45/50', '28/30'] },
 ]
 
-const gpaTrend = [
-  { period: 'Sep', gpa: 3.2 }, { period: 'Oct', gpa: 3.4 }, { period: 'Nov', gpa: 3.3 },
-  { period: 'Dec', gpa: 3.5 }, { period: 'Jan', gpa: 3.6 }, { period: 'Feb', gpa: 3.7 }, { period: 'Mar', gpa: 3.7 },
-]
+const DATES = ['Mar 20', 'Mar 10', 'Feb 28', 'Mar 18', 'Mar 5', 'Feb 20', 'Mar 15', 'Mar 2', 'Feb 25']
+
+function getGradesByClass(studentId: string) {
+  let seed = 0
+  for (const c of studentId) seed = (seed * 31 + c.charCodeAt(0)) & 0xffff
+
+  return SUBJECTS.map((s) => {
+    const assignments = s.assignmentTitles.map((title, i) => {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff
+      const grade = 55 + (seed % 46) // 55–100
+      return { title, grade, date: DATES[(seed % DATES.length)], points: s.points[i] }
+    })
+    const average = Math.round(assignments.reduce((sum, a) => sum + a.grade, 0) / assignments.length)
+    return { subject: s.subject, teacher: s.teacher, average, assignments }
+  })
+}
+
+function getGpaTrend(gpa: number) {
+  // Generate a plausible semester trend ending at the child's current GPA
+  const start = Math.max(2.0, gpa - 0.5)
+  const periods = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar']
+  return periods.map((period, i) => ({
+    period,
+    gpa: parseFloat((start + (gpa - start) * (i / (periods.length - 1)) + (i % 2 === 0 ? 0 : -0.05)).toFixed(2)),
+  }))
+}
 
 function gradeColor(g: number) {
   if (g >= 90) return 'text-emerald-400'
@@ -39,7 +56,9 @@ function letterGrade(g: number) {
 
 export function ParentGrades() {
   const parent = useCurrentParent()
-  const child = parent ? getStudentById(parent.childIds[0]) : null
+  const children = (parent?.childIds ?? []).map(id => getStudentById(id)).filter(Boolean)
+  const [selectedIdx, setSelectedIdx] = useState(0)
+  const child = children[selectedIdx] ?? null
 
   return (
     <div className="p-6 space-y-6 max-w-4xl">
@@ -51,6 +70,24 @@ export function ParentGrades() {
         <h1 className="text-xl font-bold text-foreground">{child?.name ?? 'Child'}'s Grades</h1>
         <p className="text-sm text-muted-foreground mt-0.5">Current semester performance — {child?.gradeLevel} Section {child?.section}</p>
       </div>
+
+      {children.length > 1 && (
+        <div className="flex gap-2">
+          {children.map((c, i) => (
+            <button
+              key={c!.id}
+              onClick={() => setSelectedIdx(i)}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                i === selectedIdx
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card border border-border text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {c!.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card className="rounded-2xl border-border">
@@ -73,7 +110,7 @@ export function ParentGrades() {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={90}>
-              <LineChart data={gpaTrend}>
+              <LineChart data={getGpaTrend(child?.gpa ?? 3.5)}>
                 <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
                 <YAxis domain={[2.5, 4]} tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
                 <Tooltip
@@ -89,7 +126,7 @@ export function ParentGrades() {
         </Card>
       </div>
 
-      {gradesByClass.map((cls) => (
+      {(child ? getGradesByClass(child.id) : []).map((cls) => (
         <Card key={cls.subject} className="rounded-2xl border-border">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
