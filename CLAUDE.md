@@ -24,32 +24,29 @@ npx shadcn@latest add <component>
 
 - **React 19 + Next.js 16 (App Router, Turbopack) + TypeScript**
 - **Tailwind CSS v4** — configured via `@tailwindcss/postcss` (no `tailwind.config.js`; all theme tokens are CSS custom properties in `app/globals.css`)
-- **shadcn/ui** — components live in `src/components/ui/`, added via CLI
+- **shadcn/ui** — components live in `components/ui/`, added via CLI
 - **Zustand** — global state (role store, mock data stores)
-- **Recharts** — bundled via shadcn's chart component (`src/components/ui/chart.tsx`)
+- **Recharts** — bundled via shadcn's chart component (`components/ui/chart.tsx`)
 - **`@anthropic-ai/sdk`** + **`openai`** — LLM providers for API routes
 
 ## Routing
 
 Next.js App Router with file-based routing in `app/`:
 
-- `src/app/page.tsx` — role select (unauthenticated root)
-- `src/app/(dashboard)/layout.tsx` — reads Zustand role, renders appropriate layout (AdminLayout / TeacherLayout / StudentLayout / ParentLayout), redirects to `/` if no role
-- `src/app/(dashboard)/[module]/layout.tsx` — module tab nav layouts (ClassActivitiesLayout, etc.)
-- `src/app/(dashboard)/[module]/[tab]/page.tsx` — thin `'use client'` re-export wrappers pointing to `src/views/`
-- `src/app/api/ai/` — LLM API routes (server-side, use `@anthropic-ai/sdk` or `openai`)
-
-All `src/app/` page files use the thin wrapper pattern:
-```tsx
-'use client'
-export { ComponentName as default } from '@/views/module/file'
-```
-
-**Note:** Page components live in `src/views/` (not `src/pages/` — that name is reserved by Next.js Pages Router).
+- `app/page.tsx` — role select (unauthenticated root)
+- `app/(dashboard)/layout.tsx` — reads Zustand role, renders appropriate layout (AdminLayout / TeacherLayout / StudentLayout / ParentLayout), redirects to `/` if no role
+- `app/(dashboard)/[module]/layout.tsx` — module tab nav layouts (ClassActivitiesLayout, etc.)
+- `app/(dashboard)/[module]/[tab]/page.tsx` — page components live directly in these files (`'use client'`, `export default function`)
+- `app/api/ai/` — LLM API routes (server-side, use `@anthropic-ai/sdk` or `openai`):
+  - `app/api/ai/chat/route.ts` — streaming chatbot (page context + widget contexts)
+  - `app/api/ai/tutor/route.ts` — streaming AI tutor (subject + topic aware)
+  - `app/api/ai/homework/generate/route.ts` — generate homework title/description/instructions
+  - `app/api/ai/questions/generate/route.ts` — generate exam questions array
+  - `app/api/ai/scoring/route.ts` — weighted composite scoring for admissions
 
 ## Path Alias
 
-`@/` maps to `src/`. Use it for all imports (e.g. `import { Button } from '@/components/ui/button'`).
+`@/` maps to the project root. Use it for all imports (e.g. `import { Button } from '@/components/ui/button'`).
 
 ## Theming
 
