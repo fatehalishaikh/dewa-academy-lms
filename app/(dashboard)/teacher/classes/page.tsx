@@ -1,5 +1,5 @@
 'use client'
-import { Sparkles, LayoutGrid, Users, BarChart3, ArrowRight, Calendar } from 'lucide-react'
+import { Sparkles, LayoutGrid, Users, BarChart3, ArrowRight, Calendar, CalendarDays } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,8 +8,18 @@ import { useCurrentTeacher } from '@/stores/role-store'
 import { getClassesByTeacher } from '@/data/mock-classes'
 import { students } from '@/data/mock-students'
 
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu']
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'] as const
 const todayDay = DAYS[new Date().getDay() === 5 || new Date().getDay() === 6 ? 0 : new Date().getDay() === 0 ? 0 : new Date().getDay()] as string
+
+const SUBJECT_COLORS: Record<string, string> = {
+  'Mathematics':     '#00B8A9',
+  'Physics':         '#0EA5E9',
+  'English Language':'#8B5CF6',
+  'Chemistry':       '#F59E0B',
+  'Biology':         '#10B981',
+  'Arabic':          '#EF4444',
+  'Social Studies':  '#EC4899',
+}
 
 function gradeColor(g: number) {
   if (g >= 80) return 'text-emerald-400'
@@ -34,6 +44,15 @@ export default function TeacherClasses() {
 
   const totalStudents = new Set(classes.flatMap(c => c.studentIds)).size
   const overallAvg = classes.length ? Math.round(classes.reduce((s, c) => s + c.averageGrade, 0) / classes.length) : 0
+
+  // Build personal timetable
+  const allSlots = classes.flatMap(cls =>
+    cls.schedule.map(slot => ({ ...slot, className: cls.name, subject: cls.subject, classId: cls.id }))
+  )
+  const uniqueTimes = [...new Set(allSlots.map(s => s.time))].sort()
+  const timetableMap: Record<string, Record<string, typeof allSlots[0] | undefined>> = {}
+  DAYS.forEach(d => { timetableMap[d] = {} })
+  allSlots.forEach(slot => { timetableMap[slot.day][slot.time] = slot })
 
   return (
     <div className="p-6 space-y-6">
@@ -176,6 +195,75 @@ export default function TeacherClasses() {
           </button>
         ))}
       </div>
+
+      {/* My Timetable */}
+      {uniqueTimes.length > 0 && (
+        <Card className="rounded-2xl border-border overflow-hidden">
+          <CardHeader className="pb-2 pt-5 px-5">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <CalendarDays className="w-4 h-4 text-primary" />
+                My Weekly Timetable
+              </CardTitle>
+              <p className="text-[10px] text-muted-foreground">{classes.length} classes · {allSlots.length} sessions/week</p>
+            </div>
+          </CardHeader>
+          <CardContent className="px-0 pb-4">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[600px]">
+                <thead>
+                  <tr className="bg-muted/20 border-b border-border">
+                    <th className="text-left px-4 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Time</th>
+                    {DAYS.map(d => (
+                      <th key={d} className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                        {d}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {uniqueTimes.map((time, i) => (
+                    <tr key={time} className={`border-b border-border ${i % 2 === 0 ? '' : 'bg-muted/5'}`}>
+                      <td className="px-4 py-2 text-xs text-muted-foreground font-mono whitespace-nowrap">{time}</td>
+                      {DAYS.map(day => {
+                        const entry = timetableMap[day]?.[time]
+                        const color = entry ? (SUBJECT_COLORS[entry.subject] ?? '#6B7280') : null
+                        return (
+                          <td key={day} className="px-2 py-1.5 align-top">
+                            {entry && color && (
+                              <div
+                                className="px-2 py-1.5 rounded-lg text-[10px] leading-tight cursor-pointer hover:opacity-80 transition-opacity"
+                                style={{ background: `${color}20`, borderLeft: `2px solid ${color}` }}
+                                onClick={() => router.push(`/teacher/classes/${entry.classId}`)}
+                              >
+                                <p className="font-semibold truncate" style={{ color }}>{entry.subject}</p>
+                                <p className="text-muted-foreground truncate">{entry.className.split('—')[0].trim()}</p>
+                                <p className="text-muted-foreground">{entry.room}</p>
+                              </div>
+                            )}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {/* Legend */}
+            <div className="flex flex-wrap gap-3 px-5 pt-3">
+              {teacher && [...new Set(classes.map(c => c.subject))].map(s => {
+                const color = SUBJECT_COLORS[s] ?? '#6B7280'
+                return (
+                  <div key={s} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                    <div className="w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
+                    {s}
+                  </div>
+                )
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

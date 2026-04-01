@@ -1,21 +1,29 @@
 import Anthropic from '@anthropic-ai/sdk'
 import OpenAI from 'openai'
 import { NextRequest } from 'next/server'
+import { format } from 'date-fns'
 
 const provider = process.env.AI_PROVIDER ?? 'anthropic'
 
 export async function POST(req: NextRequest) {
-  const { studentName, gpa, attendanceRate, status, period, gradeLevel, recentGrades, riskFactors, goals } = await req.json() as {
+  const { studentName, gpa, attendanceRate, status, dateFrom, dateTo, gradeLevel, recentGrades, riskFactors, goals } = await req.json() as {
     studentName: string
     gpa: number
     attendanceRate: number
     status: string
-    period: string
+    dateFrom?: string
+    dateTo?: string
     gradeLevel?: string
     recentGrades?: { subject: string; grade: number }[]
     riskFactors?: string[]
     goals?: string[]
   }
+
+  const periodLabel = dateFrom && dateTo
+    ? `${format(new Date(dateFrom), 'MMM d, yyyy')} – ${format(new Date(dateTo), 'MMM d, yyyy')}`
+    : dateFrom
+      ? `From ${format(new Date(dateFrom), 'MMM d, yyyy')}`
+      : 'Recent period'
 
   const gradesStr = recentGrades?.length
     ? recentGrades.map(g => `${g.subject}: ${g.grade}%`).join(', ')
@@ -23,7 +31,8 @@ export async function POST(req: NextRequest) {
 
   const systemPrompt = `You are an expert school counselor and report writer for DEWA Academy.
 Generate professional, warm, and actionable progress reports for parents.
-Use markdown formatting with clear headings. Be specific, encouraging, and honest.`
+Use markdown formatting with clear headings. Be specific, encouraging, and honest.
+IMPORTANT: Never use placeholder text such as "[your name]", "[student name]", "[parent name]", "[insert name]", or any bracketed placeholders. Always use the actual student name provided in the prompt. Write the report as a finished, ready-to-read document addressed directly to the parent.`
 
   const userPrompt = `Generate a comprehensive progress report for the parent of ${studentName}.
 
@@ -33,7 +42,7 @@ Student Information:
 - GPA: ${gpa.toFixed(2)} / 4.0
 - Attendance Rate: ${attendanceRate}%
 - Overall Status: ${status}
-- Report Period: ${period}
+- Report Period: ${periodLabel}
 - Recent Grades: ${gradesStr}
 ${riskFactors?.length ? `- Areas of Concern: ${riskFactors.join(', ')}` : ''}
 ${goals?.length ? `- Current Learning Goals: ${goals.join(', ')}` : ''}
@@ -58,7 +67,7 @@ Provide 3-4 specific, practical things parents can do at home to support their c
 ## Looking Ahead
 Brief encouraging note about the next period with goals to focus on.
 
-Keep the tone warm, professional, and parent-friendly. Avoid overly technical jargon.`
+Keep the tone warm, professional, and parent-friendly. Avoid overly technical jargon. Address the parent directly and use ${studentName}'s name throughout.`
 
   const encoder = new TextEncoder()
 

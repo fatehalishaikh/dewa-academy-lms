@@ -3,7 +3,7 @@ import { useThemeStore } from '@/stores/theme-store'
 import { useRouter } from 'next/navigation'
 import {
   Home, ClipboardList, BarChart3, Bot, Calendar,
-  CalendarCheck, Target,
+  CalendarCheck, Target, BookOpen,
   LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -18,6 +18,7 @@ const studentLinks = [
   { label: 'AI Tutor',       icon: Bot,            href: '/student/ai-tutor'    },
   { label: 'Attendance',     icon: CalendarCheck,  href: '/student/attendance'  },
   { label: 'My Plan',        icon: Target,         href: '/student/my-plan'     },
+  { label: 'My Courses',     icon: BookOpen,       href: '/student/my-courses'  },
   { label: 'Schedule',       icon: Calendar,       href: '/student/schedule'    },
 ]
 

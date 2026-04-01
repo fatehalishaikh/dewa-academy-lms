@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Sparkles, Target, BookOpen, CheckCircle2, AlertCircle,
   Plus, Brain, Star, AlertTriangle, TrendingUp, TrendingDown,
@@ -15,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useCurrentStudent } from '@/stores/role-store'
 import { useLearningPathStore } from '@/stores/learning-path-store'
+import { useStudentCourseStore } from '@/stores/student-course-store'
 import {
   recentAssessments, studentGoals, ilpRiskStudents,
   type StudentGoal, type GoalCategory,
@@ -72,8 +74,10 @@ type PrivateGoal = { id: string; goal: string; category: GoalCategory; progress:
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function StudentMyPlanPage() {
+  const router = useRouter()
   const student = useCurrentStudent()
   const { getPublishedPath } = useLearningPathStore()
+  const { createCourse } = useStudentCourseStore()
   const teacherPublished = student ? getPublishedPath(student.id) : undefined
 
   const assessment = student ? recentAssessments.find(a => a.studentId === student.id) : null
@@ -105,6 +109,7 @@ export default function StudentMyPlanPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [learningPath, setLearningPath] = useState<LearningPathResult | null>(null)
   const [courseRequested, setCourseRequested] = useState(false)
+  const [createdCourseId, setCreatedCourseId] = useState<string | null>(null)
   const [expandedWeeklyPlan, setExpandedWeeklyPlan] = useState(false)
   const [expandedResources, setExpandedResources] = useState(false)
 
@@ -182,6 +187,32 @@ export default function StudentMyPlanPage() {
   }
 
   function requestCourse() {
+    if (!student || !selectedSubject) return
+    const path = learningPath ?? {
+      focusAreas: [{ subject: selectedSubject, priority: 'high', currentLevel: 'Developing', targetLevel: 'Proficient', recommendation: `Complete 3 practice sessions per week focusing on core ${selectedSubject} concepts.` }],
+      weeklyPlan: [
+        { week: 1, theme: 'Foundation Review', activities: ['Identify key weak areas', 'Complete diagnostic quiz', 'Review core concepts'], hoursRequired: 4 },
+        { week: 2, theme: 'Core Skill Building', activities: ['AI Tutor sessions × 3', 'Practice worksheets', 'Group study'], hoursRequired: 5 },
+        { week: 3, theme: 'Applied Practice', activities: ['Mock assessment', 'Review and correct errors', 'Peer teaching'], hoursRequired: 5 },
+        { week: 4, theme: 'Assessment & Reflection', activities: ['Mini assessment', 'Progress review', 'Update goals'], hoursRequired: 3 },
+      ],
+      resources: [
+        { title: `AI Tutor — ${selectedSubject}`, type: 'tutoring', subject: selectedSubject, priority: 'high', estimatedTime: '30 min/session' },
+        { title: 'Video Explainer Series', type: 'video', subject: selectedSubject, priority: 'high', estimatedTime: '10–15 min each' },
+        { title: 'Practice Problem Sets', type: 'practice', subject: selectedSubject, priority: 'medium', estimatedTime: '20 min' },
+        { title: 'Concept Reading Guide', type: 'reading', subject: selectedSubject, priority: 'medium', estimatedTime: '15 min/day' },
+        { title: 'Past Exam Papers', type: 'practice', subject: 'All', priority: 'high', estimatedTime: '45 min each' },
+      ],
+      milestones: [
+        { title: 'Complete Foundation Assessment', targetWeek: 1, metric: 'Score ≥ 60% on diagnostic', subject: selectedSubject },
+        { title: 'Finish 3 AI Tutor Sessions', targetWeek: 2, metric: '3 sessions completed', subject: selectedSubject },
+        { title: 'Practice Portfolio', targetWeek: 3, metric: '3 completed worksheets', subject: selectedSubject },
+        { title: 'Achieve Target Grade', targetWeek: 4, metric: 'Score ≥ 75% on mini assessment', subject: selectedSubject },
+      ],
+      overallStrategy: `Focus on reinforcing foundational concepts in ${selectedSubject} before advancing to complex topics. Regular short sessions with the AI Tutor plus structured practice sets will build confidence and close knowledge gaps.`,
+    }
+    const id = createCourse(student.id, selectedSubject, path)
+    setCreatedCourseId(id)
     setCourseRequested(true)
   }
 
@@ -190,6 +221,7 @@ export default function StudentMyPlanPage() {
     setDescription('')
     setLearningPath(null)
     setCourseRequested(false)
+    setCreatedCourseId(null)
   }
 
   if (!student) {
@@ -413,16 +445,24 @@ export default function StudentMyPlanPage() {
                   <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                     <div>
-                      <p className="text-xs font-semibold text-emerald-400">Personalized Course Requested!</p>
+                      <p className="text-xs font-semibold text-emerald-400">Personalized Course Created!</p>
                       <p className="text-[11px] text-muted-foreground mt-0.5">
-                        Your personalized <span className="text-foreground font-medium">{selectedSubject}</span> course is being prepared. You'll be notified when it's ready.
+                        Your personalized <span className="text-foreground font-medium">{selectedSubject}</span> course has been added to My Courses.
                       </p>
                     </div>
                   </div>
                   {learningPath && <LearningPathDisplay path={learningPath} expandedWeeklyPlan={expandedWeeklyPlan} setExpandedWeeklyPlan={setExpandedWeeklyPlan} expandedResources={expandedResources} setExpandedResources={setExpandedResources} />}
-                  <Button variant="outline" size="sm" className="h-8 text-xs w-full" onClick={resetLearningPath}>
-                    Request Another Course
-                  </Button>
+                  <div className="flex gap-2">
+                    {createdCourseId && (
+                      <Button size="sm" className="h-8 text-xs flex-1" onClick={() => router.push(`/student/my-courses/${createdCourseId}`)}>
+                        <BookOpen className="w-3 h-3 mr-1.5" />
+                        View Course
+                      </Button>
+                    )}
+                    <Button variant="outline" size="sm" className="h-8 text-xs flex-1" onClick={resetLearningPath}>
+                      Request Another Course
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <>

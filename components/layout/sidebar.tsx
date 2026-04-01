@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import {
   LayoutGrid, ClipboardList, BookOpen, FileCheck, BookMarked,
   BarChart3, Users, Sun, Moon, LogOut, ChevronRight, Building2,
+  GraduationCap, Briefcase,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -20,6 +21,8 @@ const navItems = [
 
 const adminItems = [
   { label: 'All Students', icon: Users, href: '/admin/students' },
+  { label: 'All Teachers', icon: GraduationCap, href: '/admin/teachers' },
+  { label: 'All Staff', icon: Briefcase, href: '/admin/staff' },
   { label: 'Reports', icon: BarChart3, href: '/reports' as string | null },
 ]
 
