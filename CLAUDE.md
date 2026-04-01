@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Purpose
 
 UI/UX prototype for **DEWA Academy School Management System** with LLM-powered features. Mock data is used for the UI layer (in-memory / static JSON). Real AI responses come from the `/api/ai/` Next.js API routes using Anthropic Claude or OpenAI. Do not add real authentication or non-AI persistence.
+All prototype features MUST be end to end working, as in when you create things, they need to appear in listings of that thing, and be possible to take actions on that newly created data object. No database, no presistence, but as long as things are created/edited/removed on the spot, it should affect the prototype so users get a real feel of how it would function.
 
 ## Commands
 
