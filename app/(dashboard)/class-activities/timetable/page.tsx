@@ -8,6 +8,7 @@ import { academyClasses as mockClasses } from '@/data/mock-classes'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu']
 const TIME_SLOTS = [...new Set(mockClasses.flatMap(cls => cls.schedule.map(s => s.time)))].sort()
+const ALL_ROOMS = ['R-101', 'R-102', 'R-103', 'R-104', 'R-201', 'R-202', 'Lab-1', 'Lab-2', 'R-301', 'R-302']
 
 const SUBJECT_COLORS: Record<string, string> = {
   'Mathematics': '#00B8A9',
@@ -19,36 +20,75 @@ const SUBJECT_COLORS: Record<string, string> = {
   'Arabic': '#EF4444',
 }
 
+type Entry = { name: string; subject: string; room: string; teacher: string; day: string; time: string; moved?: boolean }
 type ConflictInfo = { slot: string; day: string; room: string; classes: string[] }
 
-export default function ClassActivitiesTimetable() {
-  const [isOptimizing, setIsOptimizing] = useState(false)
-  const [optimized, setOptimized] = useState(false)
+function buildInitialEntries(): Entry[] {
+  return mockClasses.flatMap(cls =>
+    cls.schedule.map(slot => ({
+      name: cls.name,
+      subject: cls.subject,
+      room: slot.room,
+      teacher: cls.teacherId,
+      day: slot.day,
+      time: slot.time,
+    }))
+  )
+}
 
-  // Build a lookup: day → time → class info
-  const timetableMap: Record<string, Record<string, { name: string; subject: string; room: string; teacher: string }[]>> = {}
-  DAYS.forEach(d => { timetableMap[d] = {} })
+function resolveConflicts(entries: Entry[]): Entry[] {
+  const result = entries.map(e => ({ ...e }))
 
-  mockClasses.forEach(cls => {
-    cls.schedule.forEach(slot => {
-      if (!timetableMap[slot.day]) return
-      if (!timetableMap[slot.day][slot.time]) timetableMap[slot.day][slot.time] = []
-      timetableMap[slot.day][slot.time].push({
-        name: cls.name,
-        subject: cls.subject,
-        room: slot.room,
-        teacher: cls.teacherId,
+  DAYS.forEach(day => {
+    TIME_SLOTS.forEach(time => {
+      const slotEntries = result.filter(e => e.day === day && e.time === time)
+      const roomGroups: Record<string, Entry[]> = {}
+      slotEntries.forEach(e => {
+        if (!roomGroups[e.room]) roomGroups[e.room] = []
+        roomGroups[e.room].push(e)
+      })
+      Object.values(roomGroups).forEach(group => {
+        if (group.length < 2) return
+        // Keep the first class in the room, reassign the rest
+        const occupiedRooms = new Set(slotEntries.map(e => e.room))
+        group.slice(1).forEach(entry => {
+          const freeRoom = ALL_ROOMS.find(r => !occupiedRooms.has(r))
+          if (freeRoom) {
+            entry.room = freeRoom
+            entry.moved = true
+            occupiedRooms.add(freeRoom)
+          }
+        })
       })
     })
   })
 
-  // Find conflicts (same room, same time, same day, multiple classes)
+  return result
+}
+
+export default function ClassActivitiesTimetable() {
+  const [entries, setEntries] = useState<Entry[]>(buildInitialEntries)
+  const [isOptimizing, setIsOptimizing] = useState(false)
+  const [optimized, setOptimized] = useState(false)
+  const [optimizeSummary, setOptimizeSummary] = useState<string | null>(null)
+  const [optimizeChanges, setOptimizeChanges] = useState<string[]>([])
+
+  // Derive timetable map from state
+  const timetableMap: Record<string, Record<string, Entry[]>> = {}
+  DAYS.forEach(d => { timetableMap[d] = {} })
+  entries.forEach(e => {
+    if (!timetableMap[e.day]) return
+    if (!timetableMap[e.day][e.time]) timetableMap[e.day][e.time] = []
+    timetableMap[e.day][e.time].push(e)
+  })
+
+  // Derive conflicts from state
   const conflicts: ConflictInfo[] = []
   DAYS.forEach(day => {
     TIME_SLOTS.forEach(time => {
-      const entries = timetableMap[day]?.[time] ?? []
+      const slotEntries = timetableMap[day]?.[time] ?? []
       const roomGroups: Record<string, string[]> = {}
-      entries.forEach(e => {
+      slotEntries.forEach(e => {
         if (!roomGroups[e.room]) roomGroups[e.room] = []
         roomGroups[e.room].push(e.name)
       })
@@ -58,11 +98,10 @@ export default function ClassActivitiesTimetable() {
     })
   })
 
-  const [optimizeSummary, setOptimizeSummary] = useState<string | null>(null)
-  const [optimizeChanges, setOptimizeChanges] = useState<string[]>([])
-
   async function handleOptimize() {
     setIsOptimizing(true)
+    // Resolve conflicts in the grid immediately
+    setEntries(resolveConflicts(entries))
     try {
       const res = await fetch('/api/ai/timetable/optimize', {
         method: 'POST',
@@ -77,10 +116,12 @@ export default function ClassActivitiesTimetable() {
         const data = await res.json() as { summary?: string; changes?: string[] }
         setOptimizeSummary(data.summary ?? null)
         setOptimizeChanges(data.changes ?? [])
-        setOptimized(true)
       }
     } catch { /* silent */ }
-    finally { setIsOptimizing(false) }
+    finally {
+      setOptimized(true)
+      setIsOptimizing(false)
+    }
   }
 
   return (
@@ -139,20 +180,23 @@ export default function ClassActivitiesTimetable() {
                 <tr key={time} className={`border-b border-border ${i % 2 === 0 ? '' : 'bg-muted/5'}`}>
                   <td className="px-4 py-2 text-xs text-muted-foreground font-mono">{time}</td>
                   {DAYS.map(day => {
-                    const entries = timetableMap[day]?.[time] ?? []
+                    const cellEntries = timetableMap[day]?.[time] ?? []
                     return (
                       <td key={day} className="px-2 py-1.5 align-top">
                         <div className="space-y-1">
-                          {entries.map((entry, j) => {
+                          {cellEntries.map((entry, j) => {
                             const color = SUBJECT_COLORS[entry.subject] ?? '#6B7280'
                             return (
                               <div
                                 key={j}
                                 className="px-2 py-1.5 rounded-lg text-[10px] leading-tight cursor-pointer hover:opacity-80 transition-opacity"
-                                style={{ background: `${color}20`, borderLeft: `2px solid ${color}` }}
+                                style={{ background: `${color}20`, borderLeft: `2px solid ${entry.moved ? '#10B981' : color}` }}
                               >
                                 <p className="font-semibold truncate" style={{ color }}>{entry.name}</p>
-                                <p className="text-muted-foreground truncate">Room {entry.room}</p>
+                                <p className="text-muted-foreground truncate flex items-center gap-1">
+                                  {entry.moved && <span className="text-emerald-400">↻</span>}
+                                  Room {entry.room}
+                                </p>
                               </div>
                             )
                           })}
