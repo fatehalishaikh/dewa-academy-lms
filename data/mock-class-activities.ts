@@ -1,29 +1,8 @@
-export type HeatmapCell = { day: string; period: number; load: 'normal' | 'busy' | 'conflict' }
-export type TimetableConflict = { id: number; day: string; period: number; description: string; status: 'resolved' | 'pending' | 'reassigned' }
 export type FlaggedStudent = { studentId: string; name: string; initials: string; issue: string; severity: 'warning' | 'destructive' | 'secondary' }
 export type LessonRecommendation = { subject: string; class: string; recommendation: string; progress: number }
 export type EngagementPoint = { date: string; avg: number; threshold: number }
 export type StudentEngagement = { studentId: string; name: string; initials: string; score: number; trend: 'up' | 'down' | 'flat'; status: 'at-risk' | 'engaged' | 'stable' }
 export type ChatMessage = { role: 'system' | 'user' | 'bot'; content: string }
-
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Sun']
-
-export const timetableHeatmap: HeatmapCell[] = DAYS.flatMap(day =>
-  Array.from({ length: 8 }, (_, i) => {
-    const period = i + 1
-    const isConflict = (day === 'Wed' && period === 3) || (day === 'Thu' && period === 5)
-    const isBusy = (day === 'Mon' && [2, 4, 6].includes(period)) ||
-      (day === 'Tue' && [3, 5].includes(period)) ||
-      (day === 'Thu' && period === 2)
-    return { day, period, load: isConflict ? 'conflict' : isBusy ? 'busy' : 'normal' }
-  })
-)
-
-export const timetableConflicts: TimetableConflict[] = [
-  { id: 1, day: 'Wed', period: 3, description: 'Physics & Chemistry lab overlap', status: 'resolved' },
-  { id: 2, day: 'Thu', period: 5, description: 'Room 204 double-booked', status: 'pending' },
-  { id: 3, day: 'Sun', period: 1, description: 'Mr. Khan unavailable — Auto-reassigned', status: 'reassigned' },
-]
 
 export const attendanceSummary = { present: 94, late: 4, absent: 2, total: 312 }
 

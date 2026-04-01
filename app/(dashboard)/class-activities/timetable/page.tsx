@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { academyClasses as mockClasses } from '@/data/mock-classes'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu']
-const TIME_SLOTS = ['07:30', '08:20', '09:10', '10:00', '10:50', '11:40', '12:30', '13:20']
+const TIME_SLOTS = [...new Set(mockClasses.flatMap(cls => cls.schedule.map(s => s.time)))].sort()
 
 const SUBJECT_COLORS: Record<string, string> = {
   'Mathematics': '#00B8A9',
