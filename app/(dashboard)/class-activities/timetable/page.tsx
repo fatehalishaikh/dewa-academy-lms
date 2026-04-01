@@ -59,6 +59,7 @@ export default function ClassActivitiesTimetable() {
   })
 
   const [optimizeSummary, setOptimizeSummary] = useState<string | null>(null)
+  const [optimizeChanges, setOptimizeChanges] = useState<string[]>([])
 
   async function handleOptimize() {
     setIsOptimizing(true)
@@ -73,8 +74,9 @@ export default function ClassActivitiesTimetable() {
         }),
       })
       if (res.ok) {
-        const data = await res.json() as { summary?: string }
+        const data = await res.json() as { summary?: string; changes?: string[] }
         setOptimizeSummary(data.summary ?? null)
+        setOptimizeChanges(data.changes ?? [])
         setOptimized(true)
       }
     } catch { /* silent */ }
@@ -176,11 +178,23 @@ export default function ClassActivitiesTimetable() {
       </div>
 
       {/* AI optimization summary */}
-      {optimized && optimizeSummary && (
+      {optimized && (
         <Card className="rounded-2xl border-emerald-500/20 bg-emerald-500/5">
-          <CardContent className="p-4 flex items-start gap-3">
-            <Sparkles className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
-            <p className="text-xs text-foreground">{optimizeSummary}</p>
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+              <p className="text-xs text-foreground">{optimizeSummary}</p>
+            </div>
+            {optimizeChanges.length > 0 && (
+              <ul className="space-y-1.5 pl-7">
+                {optimizeChanges.map((change, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
+                    <span className="text-emerald-400 mt-0.5 shrink-0">✓</span>
+                    {change}
+                  </li>
+                ))}
+              </ul>
+            )}
           </CardContent>
         </Card>
       )}
