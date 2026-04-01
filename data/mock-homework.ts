@@ -1,3 +1,7 @@
+import type { ExamQuestion } from '@/data/mock-assessments'
+
+export type { ExamQuestion }
+
 export type RubricItem = {
   id: string
   label: string
@@ -18,6 +22,7 @@ export type Homework = {
   totalPoints: number
   aiGenerated: boolean
   rubric: RubricItem[]
+  questions?: ExamQuestion[]
 }
 
 export type Submission = {

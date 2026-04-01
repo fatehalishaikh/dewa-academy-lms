@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     const openai = new OpenAI()
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
-      max_tokens: 1024,
+      max_tokens: 4096,
       messages: [{ role: 'user', content: prompt }],
     })
     text = completion.choices[0]?.message?.content ?? '[]'
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const client = new Anthropic()
     const message = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
+      max_tokens: 4096,
       messages: [{ role: 'user', content: prompt }],
     })
     text = message.content[0].type === 'text' ? message.content[0].text : '[]'

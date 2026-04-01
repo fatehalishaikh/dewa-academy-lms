@@ -1,7 +1,7 @@
 'use client'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, Sparkles, Users, CheckCircle2, Clock, XCircle, AlertCircle, Pencil, Send, Archive } from 'lucide-react'
+import { ChevronLeft, Sparkles, Users, CheckCircle2, Clock, XCircle, AlertCircle, Pencil, Send, Archive, ListChecks } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -121,6 +121,55 @@ export default function HomeworkDetail() {
           )}
         </CardContent>
       </Card>
+
+      {/* Questions */}
+      {hw.questions && hw.questions.length > 0 && (
+        <Card className="rounded-2xl border-border">
+          <CardHeader className="pb-2 border-b border-border">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm flex items-center gap-1.5">
+                <ListChecks className="w-4 h-4 text-primary" />
+                Questions
+              </CardTitle>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">{hw.questions.length} questions</Badge>
+                <Badge variant="outline" className="text-[10px]">{hw.totalPoints} pts</Badge>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-3 space-y-2">
+            {hw.questions.map((q, i) => {
+              const diffCls = q.difficulty === 'Easy' ? 'text-emerald-400 border-emerald-500/30' : q.difficulty === 'Hard' ? 'text-red-400 border-red-500/30' : 'text-amber-400 border-amber-500/30'
+              return (
+                <div key={q.id} className="p-3 rounded-xl bg-card border border-border space-y-1.5">
+                  <div className="flex items-start gap-2">
+                    <span className="text-xs font-semibold text-muted-foreground shrink-0 mt-0.5">{i + 1}.</span>
+                    <p className="text-sm text-foreground flex-1 leading-snug">{q.text}</p>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Badge variant="outline" className={`text-[9px] h-4 ${diffCls}`}>{q.difficulty}</Badge>
+                      <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
+                      <Badge variant="outline" className="text-[9px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
+                    </div>
+                  </div>
+                  {q.questionType === 'MCQ' && q.options && (
+                    <div className="pl-5 grid grid-cols-2 gap-1">
+                      {q.options.map((opt, oi) => (
+                        <div key={oi} className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg ${opt === q.correctAnswer ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-muted-foreground'}`}>
+                          {opt === q.correctAnswer && <CheckCircle2 className="w-3 h-3 shrink-0" />}
+                          <span>{opt}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {q.questionType !== 'MCQ' && (
+                    <p className="pl-5 text-[10px] text-emerald-400">Answer: {q.correctAnswer}</p>
+                  )}
+                </div>
+              )
+            })}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Submission stats */}
       <div className="grid grid-cols-4 gap-3">

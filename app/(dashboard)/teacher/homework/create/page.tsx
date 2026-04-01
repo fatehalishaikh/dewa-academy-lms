@@ -1,14 +1,16 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Sparkles, ChevronLeft, Wand2, Plus, X, Eye, Send } from 'lucide-react'
+import { Sparkles, ChevronLeft, Wand2, Plus, X, Eye, Send, CheckCircle2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useCurrentTeacher } from '@/stores/role-store'
 import { getClassesByTeacher } from '@/data/mock-classes'
 import { useHomeworkStore } from '@/stores/homework-store'
-import { aiHomeworkTemplates, type RubricItem } from '@/data/mock-homework'
+import { aiHomeworkTemplates, type RubricItem, type ExamQuestion } from '@/data/mock-homework'
+
+type DifficultyMix = { easy: number; medium: number; hard: number }
 
 type FormState = {
   title: string
@@ -18,6 +20,13 @@ type FormState = {
   dueDate: string
   totalPoints: number
   rubric: RubricItem[]
+  questions: ExamQuestion[]
+}
+
+const diffColor: Record<string, string> = {
+  Easy: 'text-emerald-400 border-emerald-500/30',
+  Medium: 'text-amber-400 border-amber-500/30',
+  Hard: 'text-red-400 border-red-500/30',
 }
 
 export default function HomeworkCreate() {
@@ -37,10 +46,17 @@ export default function HomeworkCreate() {
       { id: 'r1', label: 'Content accuracy', maxPoints: 10 },
       { id: 'r2', label: 'Presentation', maxPoints: 10 },
     ],
+    questions: [],
   })
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(false)
   const [preview, setPreview] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+
+  // Question generation controls
+  const [questionTopic, setQuestionTopic] = useState('')
+  const [questionTypePref, setQuestionTypePref] = useState('MCQ')
+  const [difficultyMix, setDifficultyMix] = useState<DifficultyMix>({ easy: 3, medium: 0, hard: 2 })
 
   const selectedClass = classes.find(c => c.id === form.classId)
 
@@ -64,13 +80,53 @@ export default function HomeworkCreate() {
         description: data.description || prev.description,
         instructions: data.instructions || prev.instructions,
       }))
+      if (data.title) setQuestionTopic(data.title)
     } catch {
       const templates = aiHomeworkTemplates[selectedClass.subject] ?? aiHomeworkTemplates['Mathematics']
       const template = templates[Math.floor(Math.random() * templates.length)]
       setForm(prev => ({ ...prev, title: template.title, description: template.description, instructions: template.instructions }))
+      setQuestionTopic(template.title)
     } finally {
       setIsGenerating(false)
     }
+  }
+
+  async function generateQuestions() {
+    if (!selectedClass) return
+    const { easy, medium, hard } = difficultyMix
+    if (easy + medium + hard === 0) return
+
+    setIsGeneratingQuestions(true)
+    try {
+      const calls: Promise<Response>[] = []
+      const difficulties: Array<{ difficulty: string; count: number }> = []
+
+      if (easy > 0) { calls.push(fetch('/api/ai/questions/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ subject: selectedClass.subject, topic: questionTopic || undefined, count: easy, difficulty: 'Easy', questionType: questionTypePref === 'Mix' ? undefined : questionTypePref }) })); difficulties.push({ difficulty: 'Easy', count: easy }) }
+      if (medium > 0) { calls.push(fetch('/api/ai/questions/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ subject: selectedClass.subject, topic: questionTopic || undefined, count: medium, difficulty: 'Medium', questionType: questionTypePref === 'Mix' ? undefined : questionTypePref }) })); difficulties.push({ difficulty: 'Medium', count: medium }) }
+      if (hard > 0) { calls.push(fetch('/api/ai/questions/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ subject: selectedClass.subject, topic: questionTopic || undefined, count: hard, difficulty: 'Hard', questionType: questionTypePref === 'Mix' ? undefined : questionTypePref }) })); difficulties.push({ difficulty: 'Hard', count: hard }) }
+
+      const responses = await Promise.all(calls)
+      const arrays = await Promise.all(responses.map(r => r.json())) as ExamQuestion[][]
+      const merged = arrays.flat()
+
+      const totalPts = merged.reduce((sum, q) => sum + (q.points ?? 0), 0)
+      setForm(prev => ({
+        ...prev,
+        questions: merged,
+        totalPoints: totalPts || prev.totalPoints,
+      }))
+    } catch {
+      // silently fail — user can retry
+    } finally {
+      setIsGeneratingQuestions(false)
+    }
+  }
+
+  function removeQuestion(id: string) {
+    setForm(prev => {
+      const updated = prev.questions.filter(q => q.id !== id)
+      return { ...prev, questions: updated, totalPoints: updated.reduce((s, q) => s + (q.points ?? 0), 0) || prev.totalPoints }
+    })
   }
 
   function addRubricItem() {
@@ -93,6 +149,7 @@ export default function HomeworkCreate() {
   }
 
   const rubricTotal = form.rubric.reduce((sum, r) => sum + Number(r.maxPoints), 0)
+  const totalDiffCount = difficultyMix.easy + difficultyMix.medium + difficultyMix.hard
 
   function handleSubmit(status: 'draft' | 'published') {
     if (!form.title || !form.classId || !form.dueDate) return
@@ -106,8 +163,9 @@ export default function HomeworkCreate() {
       dueDate: form.dueDate,
       status,
       totalPoints: form.totalPoints,
-      aiGenerated: false,
+      aiGenerated: form.questions.length > 0,
       rubric: form.rubric,
+      questions: form.questions,
     })
     setSubmitted(true)
     setTimeout(() => router.push('/teacher/homework'), 600)
@@ -178,6 +236,41 @@ export default function HomeworkCreate() {
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Instructions</p>
                 <p className="text-sm text-foreground leading-relaxed">{form.instructions}</p>
+              </div>
+            )}
+            {form.questions.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  Questions ({form.questions.length}) · {form.totalPoints} pts
+                </p>
+                <div className="space-y-2">
+                  {form.questions.map((q, i) => (
+                    <div key={q.id} className="p-3 rounded-xl bg-card border border-border space-y-1.5">
+                      <div className="flex items-start gap-2">
+                        <span className="text-xs font-semibold text-muted-foreground shrink-0 mt-0.5">{i + 1}.</span>
+                        <p className="text-sm text-foreground flex-1 leading-snug">{q.text}</p>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty] ?? ''}`}>{q.difficulty}</Badge>
+                          <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
+                          <Badge variant="outline" className="text-[9px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
+                        </div>
+                      </div>
+                      {q.questionType === 'MCQ' && q.options && (
+                        <div className="pl-5 grid grid-cols-2 gap-1">
+                          {q.options.map((opt, oi) => (
+                            <div key={oi} className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg ${opt === q.correctAnswer ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-muted-foreground'}`}>
+                              {opt === q.correctAnswer && <CheckCircle2 className="w-3 h-3 shrink-0" />}
+                              <span>{opt}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {q.questionType !== 'MCQ' && (
+                        <p className="pl-5 text-[10px] text-emerald-400">Answer: {q.correctAnswer}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             {form.rubric.length > 0 && (
@@ -281,6 +374,141 @@ export default function HomeworkCreate() {
               className="w-full bg-card border border-border rounded-xl px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 resize-none"
             />
           </div>
+
+          {/* AI Question Generation */}
+          <Card className="rounded-2xl border-border">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-primary" />
+                  AI Question Generator
+                </CardTitle>
+                {form.questions.length > 0 && (
+                  <span className="text-xs text-muted-foreground">
+                    {form.questions.length} questions · {form.totalPoints} pts
+                  </span>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {/* Topic + Type */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic</label>
+                  <input
+                    type="text"
+                    value={questionTopic}
+                    onChange={e => setQuestionTopic(e.target.value)}
+                    placeholder="e.g. Trigonometry, Quadratic Equations…"
+                    className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Question Type</label>
+                  <select
+                    value={questionTypePref}
+                    onChange={e => setQuestionTypePref(e.target.value)}
+                    className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50"
+                  >
+                    <option value="MCQ">Multiple Choice (MCQ)</option>
+                    <option value="True-False">True / False</option>
+                    <option value="Essay">Essay / Open</option>
+                    <option value="Mix">Mix of Types</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Difficulty mix */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Difficulty Mix</label>
+                  <span className="text-[10px] text-muted-foreground">{totalDiffCount} total question{totalDiffCount !== 1 ? 's' : ''}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['easy', 'medium', 'hard'] as const).map(level => (
+                    <div key={level} className="flex items-center gap-2 p-2 rounded-lg bg-background border border-border">
+                      <span className={`text-[10px] font-semibold capitalize flex-1 ${level === 'easy' ? 'text-emerald-400' : level === 'medium' ? 'text-amber-400' : 'text-red-400'}`}>{level}</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={20}
+                        value={difficultyMix[level]}
+                        onChange={e => setDifficultyMix(prev => ({ ...prev, [level]: Math.max(0, Number(e.target.value)) }))}
+                        className="w-10 bg-card border border-border rounded px-1.5 py-1 text-xs text-foreground text-center focus:outline-none focus:border-primary/50"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Generate button */}
+              <Button
+                onClick={generateQuestions}
+                disabled={isGeneratingQuestions || !form.classId || totalDiffCount === 0}
+                className="w-full gap-2 text-sm"
+                variant="outline"
+              >
+                {isGeneratingQuestions ? (
+                  <>
+                    <span className="w-3.5 h-3.5 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+                    Generating {totalDiffCount} questions…
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="w-3.5 h-3.5" />
+                    Generate {totalDiffCount > 0 ? `${totalDiffCount} ` : ''}Questions with AI
+                  </>
+                )}
+              </Button>
+
+              {/* Generated questions list */}
+              {form.questions.length > 0 && (
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Generated Questions</p>
+                    <button
+                      onClick={() => setForm(prev => ({ ...prev, questions: [], totalPoints: rubricTotal || 20 }))}
+                      className="text-[10px] text-muted-foreground hover:text-red-400 transition-colors"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                  {form.questions.map((q, i) => (
+                    <div key={q.id} className="p-3 rounded-xl bg-background border border-border space-y-1.5 group">
+                      <div className="flex items-start gap-2">
+                        <span className="text-xs font-semibold text-muted-foreground shrink-0 mt-0.5">{i + 1}.</span>
+                        <p className="text-xs text-foreground flex-1 leading-snug">{q.text}</p>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty] ?? ''}`}>{q.difficulty}</Badge>
+                          <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
+                          <Badge variant="outline" className="text-[9px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
+                          <button
+                            onClick={() => removeQuestion(q.id)}
+                            className="w-5 h-5 rounded flex items-center justify-center text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors ml-0.5"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                      {q.questionType === 'MCQ' && q.options && (
+                        <div className="pl-5 grid grid-cols-2 gap-1">
+                          {q.options.map((opt, oi) => (
+                            <div key={oi} className={`flex items-center gap-1.5 text-[10px] px-2 py-1 rounded-lg ${opt === q.correctAnswer ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-muted-foreground'}`}>
+                              {opt === q.correctAnswer && <CheckCircle2 className="w-2.5 h-2.5 shrink-0" />}
+                              <span>{opt}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {q.questionType !== 'MCQ' && (
+                        <p className="pl-5 text-[10px] text-emerald-400">Answer: {q.correctAnswer}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Points + Rubric */}
           <Card className="rounded-2xl border-border">

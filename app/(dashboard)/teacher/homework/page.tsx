@@ -4,12 +4,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-
-const mockHomework = [
-  { id: 'hw-001', title: 'Quadratic Equations Problem Set', class: 'Grade 10A — Mathematics', dueDate: 'Mar 27, 2026', status: 'published', totalPoints: 20, submissions: 2, total: 3, pending: 1 },
-  { id: 'hw-002', title: 'Statistics Chapter 5 Exercises', class: 'Grade 9B — Mathematics', dueDate: 'Mar 29, 2026', status: 'published', totalPoints: 15, submissions: 1, total: 2, pending: 0 },
-  { id: 'hw-003', title: 'Algebra Mid-Unit Review', class: 'Grade 10A — Mathematics', dueDate: 'Apr 3, 2026', status: 'draft', totalPoints: 25, submissions: 0, total: 3, pending: 0 },
-]
+import { useHomeworkStore } from '@/stores/homework-store'
+import { useCurrentTeacher } from '@/stores/role-store'
+import { getClassById } from '@/data/mock-classes'
 
 const statusConfig = {
   published: { label: 'Published', color: 'text-emerald-400', border: 'border-emerald-500/30' },
@@ -19,7 +16,15 @@ const statusConfig = {
 
 export default function TeacherHomework() {
   const router = useRouter()
-  const pendingGrading = mockHomework.reduce((sum, hw) => sum + hw.pending, 0)
+  const teacher = useCurrentTeacher()
+  const { homework, getSubmissionsForHomework } = useHomeworkStore()
+
+  const teacherHomework = homework.filter(h => h.teacherId === teacher?.id)
+
+  const pendingGrading = teacherHomework.reduce((sum, hw) => {
+    const subs = getSubmissionsForHomework(hw.id)
+    return sum + subs.filter(s => s.status === 'submitted' || s.status === 'late').length
+  }, 0)
 
   return (
     <div className="p-6 space-y-6">
@@ -43,8 +48,8 @@ export default function TeacherHomework() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: 'Total Assignments', value: mockHomework.length, color: '#00B8A9' },
-          { label: 'Published', value: mockHomework.filter(h => h.status === 'published').length, color: '#10B981' },
+          { label: 'Total Assignments', value: teacherHomework.length, color: '#00B8A9' },
+          { label: 'Published', value: teacherHomework.filter(h => h.status === 'published').length, color: '#10B981' },
           { label: 'Pending Grading', value: pendingGrading, color: '#F59E0B' },
         ].map(({ label, value, color }) => (
           <Card key={label} className="rounded-2xl border-border">
@@ -57,8 +62,14 @@ export default function TeacherHomework() {
       </div>
 
       <div className="space-y-3">
-        {mockHomework.map((hw) => {
-          const cfg = statusConfig[hw.status as keyof typeof statusConfig]
+        {teacherHomework.map((hw) => {
+          const cfg = statusConfig[hw.status]
+          const cls = getClassById(hw.classId)
+          const subs = getSubmissionsForHomework(hw.id)
+          const submittedCount = subs.filter(s => s.status !== 'not-submitted').length
+          const pendingCount = subs.filter(s => s.status === 'submitted' || s.status === 'late').length
+          const dueFormatted = new Date(hw.dueDate).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })
+
           return (
             <Card
               key={hw.id}
@@ -69,7 +80,7 @@ export default function TeacherHomework() {
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-foreground">{hw.title}</p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">{hw.class} · {hw.totalPoints} pts</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">{cls?.name ?? hw.classId} · {hw.totalPoints} pts</p>
                   </div>
                   <Badge variant="outline" className={`text-[10px] h-5 shrink-0 ${cfg.color} ${cfg.border}`}>
                     {cfg.label}
@@ -79,16 +90,16 @@ export default function TeacherHomework() {
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                       <Clock className="w-3 h-3" />
-                      Due {hw.dueDate}
+                      Due {dueFormatted}
                     </div>
                     <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                       <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                      {hw.submissions}/{hw.total} submitted
+                      {submittedCount}/{subs.length} submitted
                     </div>
-                    {hw.pending > 0 && (
+                    {pendingCount > 0 && (
                       <div className="flex items-center gap-1 text-[10px] text-amber-400">
                         <AlertCircle className="w-3 h-3" />
-                        {hw.pending} to grade
+                        {pendingCount} to grade
                       </div>
                     )}
                   </div>
@@ -98,6 +109,12 @@ export default function TeacherHomework() {
             </Card>
           )
         })}
+
+        {teacherHomework.length === 0 && (
+          <div className="text-center py-12 text-muted-foreground text-sm">
+            No assignments yet. Click <strong>New Assignment</strong> to create one.
+          </div>
+        )}
       </div>
     </div>
   )
