@@ -45,8 +45,8 @@ export const academyClasses: AcademyClass[] = [
     teacherId: 'tch-001',
     studentIds: ['stu-002', 'stu-011'],
     schedule: [
-      { day: 'Sun', time: '10:00–11:00', room: 'R-102' },
-      { day: 'Tue', time: '10:00–11:00', room: 'R-102' },
+      { day: 'Mon', time: '10:00–11:00', room: 'R-102' },
+      { day: 'Wed', time: '10:00–11:00', room: 'R-102' },
       { day: 'Thu', time: '08:00–09:00', room: 'R-102' },
     ],
     room: 'R-102',
@@ -78,8 +78,8 @@ export const academyClasses: AcademyClass[] = [
     teacherId: 'tch-002',
     studentIds: ['stu-003', 'stu-009'],
     schedule: [
-      { day: 'Mon', time: '11:00–12:00', room: 'Lab-1' },
-      { day: 'Wed', time: '11:00–12:00', room: 'Lab-1' },
+      { day: 'Tue', time: '11:00–12:00', room: 'Lab-1' },
+      { day: 'Thu', time: '11:00–12:00', room: 'Lab-1' },
     ],
     room: 'Lab-1',
     averageGrade: 69,
