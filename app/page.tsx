@@ -59,7 +59,7 @@ const roleConfigs: RoleConfig[] = [
     icon: BookOpen,
     accentColor: '#0EA5E9',
     borderColor: 'rgba(14,165,233,0.3)',
-    defaultRoute: '/teacher/classes',
+    defaultRoute: '/teacher/dashboard',
     personas: teachers.map(t => ({
       id: t.id,
       name: t.name,
@@ -75,7 +75,7 @@ const roleConfigs: RoleConfig[] = [
     icon: Building2,
     accentColor: '#F59E0B',
     borderColor: 'rgba(245,158,11,0.3)',
-    defaultRoute: '/class-activities',
+    defaultRoute: '/admin/dashboard',
     personas: [
       { id: 'adm-001', name: 'Dr. Hassan Al-Mansoori', initials: 'HM', avatarColor: '#F59E0B', subtitle: 'Principal' },
       { id: 'adm-002', name: 'Ms. Rania Al-Khouri', initials: 'RK', avatarColor: '#EF4444', subtitle: 'VP Academics' },

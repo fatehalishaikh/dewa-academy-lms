@@ -2,7 +2,7 @@
 import { useThemeStore } from '@/stores/theme-store'
 import { useRouter } from 'next/navigation'
 import {
-  LayoutGrid, ClipboardList, BookOpen, FileCheck, BookMarked,
+  LayoutGrid, LayoutDashboard, ClipboardList, BookOpen, FileCheck, BookMarked,
   BarChart3, Users, Sun, Moon, LogOut, ChevronRight, Building2,
   GraduationCap, Briefcase,
 } from 'lucide-react'
@@ -12,6 +12,7 @@ import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore } from '@/stores/role-store'
 
 const navItems = [
+  { label: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
   { label: 'Class Activities', icon: LayoutGrid, href: '/class-activities' },
   { label: 'Registration', icon: ClipboardList, href: '/registration' },
   { label: 'Learning Plans', icon: BookOpen, href: '/ilp' },

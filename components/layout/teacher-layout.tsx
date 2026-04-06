@@ -2,7 +2,7 @@
 import { useThemeStore } from '@/stores/theme-store'
 import { useRouter } from 'next/navigation'
 import {
-  LayoutGrid, BookOpen, BookMarked, FileCheck, Users,
+  LayoutGrid, LayoutDashboard, BookOpen, BookMarked, FileCheck, Users,
   ClipboardList, TableProperties, LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -18,6 +18,7 @@ const moduleLinks = [
 ]
 
 const teacherLinks = [
+  { label: 'Dashboard', icon: LayoutDashboard, href: '/teacher/dashboard' },
   { label: 'My Classes', icon: LayoutGrid, href: '/teacher/classes' },
   { label: 'Homework', icon: ClipboardList, href: '/teacher/homework' },
   { label: 'Gradebook', icon: TableProperties, href: '/teacher/gradebook' },

@@ -2,7 +2,7 @@
 import { useThemeStore } from '@/stores/theme-store'
 import { useRouter } from 'next/navigation'
 import {
-  Home, BarChart3, Calendar, MessageSquare, CalendarOff, FileText,
+  LayoutDashboard, BarChart3, Calendar, MessageSquare, CalendarOff, FileText,
   LogOut, Sun, Moon, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -12,7 +12,7 @@ import { useRoleStore, useCurrentParent } from '@/stores/role-store'
 import { ChatbotWidget } from '@/components/dashboard/chatbot-widget'
 
 const parentLinks = [
-  { label: 'Overview', icon: Home, href: '/parent/dashboard' },
+  { label: 'Dashboard', icon: LayoutDashboard, href: '/parent/dashboard' },
   { label: "Child's Grades", icon: BarChart3, href: '/parent/grades' },
   { label: 'Attendance', icon: Calendar, href: '/parent/attendance' },
   { label: 'Messages', icon: MessageSquare, href: '/parent/messages' },
