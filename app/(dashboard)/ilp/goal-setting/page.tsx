@@ -1,5 +1,6 @@
 'use client'
-import { Target, Plus, Pencil } from 'lucide-react'
+import { useState } from 'react'
+import { Target, Plus, Pencil, CheckCircle2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,13 @@ const categoryStyles: Record<string, string> = {
 }
 
 export default function GoalSetting() {
+  const [saved, setSaved] = useState(false)
+
+  function handleSave() {
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -137,7 +145,10 @@ export default function GoalSetting() {
             </div>
 
             <div className="flex justify-end">
-              <Button size="sm" className="rounded-full text-xs">Save Settings</Button>
+              <Button size="sm" className="rounded-full text-xs gap-1.5" onClick={handleSave}>
+                {saved && <CheckCircle2 className="w-3.5 h-3.5" />}
+                {saved ? 'Settings Saved' : 'Save Settings'}
+              </Button>
             </div>
           </CardContent>
         </Card>

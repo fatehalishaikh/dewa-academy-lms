@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Flag, Search, ChevronRight, CheckCircle2, Clock, AlertCircle, X,
-  LayoutGrid, List, PlusCircle, User, Sparkles
+  LayoutGrid, List, PlusCircle, User, Sparkles, UserPlus
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,8 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { mockApplications, type Application, type KanbanStage } from '@/data/mock-registration'
+import { type Application, type KanbanStage } from '@/data/mock-registration'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const STAGES: KanbanStage[] = [
   'Application Submitted',
@@ -112,6 +113,7 @@ function AppCard({ app, onClick }: { app: Application; onClick: () => void }) {
 // ─── Detail Panel ─────────────────────────────────────────────────────────────
 
 function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }) {
+  const { advanceApplication, setApplicationStatus, flagApplication, assignReviewer } = useAcademyStore()
   const statusColors: Record<string, string> = {
     Approved: 'bg-green-500/15 text-green-400 border-green-500/20',
     Rejected: 'bg-red-500/15 text-red-400 border-red-500/20',
@@ -230,12 +232,50 @@ function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }
           {/* Actions */}
           <div className="space-y-2">
             <p className="text-xs font-semibold text-foreground">Actions</p>
-            <Button size="sm" className="w-full text-xs bg-primary hover:bg-primary/90">Advance to Next Stage</Button>
+            <Button
+              size="sm"
+              className="w-full text-xs bg-primary hover:bg-primary/90"
+              onClick={() => { advanceApplication(app.id, 'Admin'); onClose() }}
+            >
+              Advance to Next Stage
+            </Button>
             <div className="grid grid-cols-2 gap-2">
-              <Button size="sm" variant="outline" className="text-xs">Assign Reviewer</Button>
-              <Button size="sm" variant="outline" className="text-xs text-red-400 border-red-500/30 hover:bg-red-500/10">Flag</Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs"
+                onClick={() => { assignReviewer(app.id, 'Sarah Al-Ahmad', 'SA'); onClose() }}
+              >
+                <UserPlus className="w-3 h-3 mr-1" />
+                Assign Reviewer
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className={`text-xs ${app.flagged ? 'text-muted-foreground' : 'text-red-400 border-red-500/30 hover:bg-red-500/10'}`}
+                onClick={() => { flagApplication(app.id, !app.flagged); onClose() }}
+              >
+                <Flag className="w-3 h-3 mr-1" />
+                {app.flagged ? 'Unflag' : 'Flag'}
+              </Button>
             </div>
-            <Button size="sm" variant="outline" className="w-full text-xs text-muted-foreground">Reject Application</Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="w-full text-xs text-red-400 border-red-500/30 hover:bg-red-500/10"
+              onClick={() => { setApplicationStatus(app.id, 'Rejected', 'Rejected by admin'); onClose() }}
+            >
+              Reject Application
+            </Button>
+            {app.stage === 'AI Scored' && (
+              <Button
+                size="sm"
+                className="w-full text-xs bg-emerald-500 hover:bg-emerald-500/90"
+                onClick={() => { setApplicationStatus(app.id, 'Approved'); advanceApplication(app.id, 'Admin'); onClose() }}
+              >
+                Confirm Admit
+              </Button>
+            )}
           </div>
         </div>
       </ScrollArea>
@@ -290,13 +330,19 @@ function TableView({ apps, onSelect }: { apps: Application[]; onSelect: (app: Ap
 
 export default function Applications() {
   const router = useRouter()
+  const registrationApps = useAcademyStore(s => s.registrationApps)
   const [selectedApp, setSelectedApp] = useState<Application | null>(null)
   const [viewMode, setViewMode] = useState<'kanban' | 'table'>('kanban')
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('all')
   const [stageFilter, setStageFilter] = useState('all')
 
-  const filtered = mockApplications.filter(app => {
+  // Keep selectedApp in sync with store updates
+  const liveSelectedApp = selectedApp
+    ? registrationApps.find(a => a.id === selectedApp.id) ?? null
+    : null
+
+  const filtered = registrationApps.filter(app => {
     const matchesSearch = search === '' ||
       app.nameEn.toLowerCase().includes(search.toLowerCase()) ||
       app.id.toLowerCase().includes(search.toLowerCase())
@@ -408,8 +454,8 @@ export default function Applications() {
           </div>
 
           {/* Detail panel */}
-          {selectedApp && (
-            <DetailPanel app={selectedApp} onClose={() => setSelectedApp(null)} />
+          {liveSelectedApp && (
+            <DetailPanel app={liveSelectedApp} onClose={() => setSelectedApp(null)} />
           )}
         </div>
       )}

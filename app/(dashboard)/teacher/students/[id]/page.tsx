@@ -15,6 +15,7 @@ import { getClassesByStudent } from '@/data/mock-classes'
 import { useHomeworkStore } from '@/stores/homework-store'
 import { useLearningPathStore } from '@/stores/learning-path-store'
 import { useCurrentTeacher } from '@/stores/role-store'
+import { useAcademyStore } from '@/stores/academy-store'
 
 type RiskFactor = { name: string; score: number; weight: number; status: 'positive' | 'warning' | 'critical' }
 
@@ -99,6 +100,7 @@ export default function StudentAnalysis() {
   const { homework, getSubmissionForStudent } = useHomeworkStore()
   const { publishPath } = useLearningPathStore()
   const currentTeacher = useCurrentTeacher()
+  const { addNotification, addStudentNote } = useAcademyStore()
   const [addingNote, setAddingNote] = useState(false)
   const [noteText, setNoteText] = useState('')
   const [notes, setNotes] = useState(teacherNotes)
@@ -173,8 +175,9 @@ export default function StudentAnalysis() {
   }
 
   function addNote() {
-    if (!noteText.trim()) return
+    if (!noteText.trim() || !student) return
     setNotes(prev => [{ date: 'Mar 26, 2026', author: 'Dr. Sarah Ahmed', type: 'neutral', note: noteText }, ...prev])
+    addStudentNote(student.id, noteText, currentTeacher?.id ?? 'teacher', 'teacher')
     setNoteText('')
     setAddingNote(false)
   }
@@ -221,7 +224,18 @@ export default function StudentAnalysis() {
             </div>
           </div>
         </div>
-        <Button size="sm" variant="outline" className="gap-1.5 text-xs shrink-0">
+        <Button
+          size="sm"
+          variant="outline"
+          className="gap-1.5 text-xs shrink-0"
+          onClick={() => addNotification({
+            type: 'message',
+            title: 'Message from teacher',
+            body: `Message sent regarding student ${student.name}`,
+            recipientRole: 'parent',
+            recipientId: student.parentId ?? undefined,
+          })}
+        >
           <MessageSquare className="w-3.5 h-3.5" />
           Message Parent
         </Button>

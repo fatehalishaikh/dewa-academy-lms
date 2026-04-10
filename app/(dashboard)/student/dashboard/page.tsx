@@ -1,11 +1,13 @@
 'use client'
-import { Sparkles, Clock, BookOpen, BarChart3, Calendar, CheckCircle2, ArrowRight } from 'lucide-react'
+import { Sparkles, Clock, BookOpen, BarChart3, Calendar, CheckCircle2, ArrowRight, LayoutDashboard, ChevronRight } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useCurrentStudent } from '@/stores/role-store'
 import { getClassesByStudent } from '@/data/mock-classes'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { getDashboardInbox } from '@/lib/academy-selectors'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu']
 const todayDay = DAYS[new Date().getDay() === 5 || new Date().getDay() === 6 ? 0 : new Date().getDay() === 0 ? 0 : new Date().getDay()]
@@ -37,26 +39,68 @@ export default function StudentDashboard() {
   ).sort((a, b) => a.slot.time.localeCompare(b.slot.time))
 
   const today = new Date().toLocaleDateString('en-AE', { weekday: 'long', day: 'numeric', month: 'long' })
+  const inboxItems = getDashboardInbox('student', student?.id ?? '')
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium text-primary uppercase tracking-wider">Student Dashboard</span>
+      {/* Hero: greeting + inbox */}
+      <Card className="rounded-2xl border-border overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-5">
+          <div className="lg:col-span-2 p-4 lg:border-r border-border">
+            <div className="flex items-center gap-2 mb-1">
+              <LayoutDashboard className="w-4 h-4 text-primary" />
+              <span className="text-xs font-medium text-primary uppercase tracking-wider">Student Dashboard</span>
+            </div>
+            <h1 className="text-xl font-bold text-foreground">
+              Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {student?.name.split(' ')[0] ?? 'Student'} 👋
+            </h1>
+            <p className="text-sm text-muted-foreground mt-0.5">{today}</p>
+            <Button size="sm" onClick={() => router.push('/student/ai-tutor')} className="mt-3 gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              AI Tutor
+            </Button>
           </div>
-          <h1 className="text-xl font-bold text-foreground">
-            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {student?.name.split(' ')[0] ?? 'Student'} 👋
-          </h1>
-          <p className="text-sm text-muted-foreground mt-0.5">{today}</p>
+          <div className="lg:col-span-3 p-4 flex flex-col justify-center">
+            {inboxItems.length === 0 ? (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">All caught up</p>
+                  <p className="text-xs text-muted-foreground">Nothing needs your attention right now.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                  <span className="text-2xl font-bold text-amber-400">{inboxItems.length}</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground">
+                    {inboxItems.length === 1 ? '1 thing needs' : `${inboxItems.length} things need`} your attention
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && (
+                      <span className="text-amber-400 font-medium">{inboxItems.filter(i => i.urgency === 'high').length} urgent</span>
+                    )}
+                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && inboxItems.filter(i => i.urgency !== 'high').length > 0 && ' · '}
+                    {inboxItems.filter(i => i.urgency !== 'high').length > 0 && (
+                      <span>{inboxItems.filter(i => i.urgency !== 'high').length} follow-up</span>
+                    )}
+                  </p>
+                  <Link
+                    href="/action-center"
+                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
+                  >
+                    Open Action Center <ChevronRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-        <Button size="sm" onClick={() => router.push('/student/ai-tutor')} className="gap-1.5">
-          <Sparkles className="w-3.5 h-3.5" />
-          AI Tutor
-        </Button>
-      </div>
+      </Card>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

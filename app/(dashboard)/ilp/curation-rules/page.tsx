@@ -1,5 +1,5 @@
 'use client'
-import { Filter, Search, Plus, Beaker } from 'lucide-react'
+import { Filter, Search, Plus, Beaker, CheckCircle2 } from 'lucide-react'
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -9,8 +9,8 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
-import { curationRules } from '@/data/mock-ilp'
 import type { CurationRule } from '@/data/mock-ilp'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const statusStyles: Record<string, string> = {
   Active: 'bg-chart-4/10 text-chart-4 border-chart-4/20',
@@ -23,7 +23,17 @@ const fieldOptions = ['learning_style', 'course_grade', 'course_grade.mathematic
 const operatorOptions = ['=', '>', '<', '>=', '<=', 'contains']
 
 export default function CurationRules() {
+  const { ilpSettings, updateCurationRules } = useAcademyStore()
+  const curationRules = ilpSettings.curationRules
   const [selected, setSelected] = useState<CurationRule>(curationRules[0])
+  const [saved, setSaved] = useState(false)
+
+  function handleSaveRule() {
+    const updated = curationRules.map(r => r.id === selected.id ? selected : r)
+    updateCurationRules(updated)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
 
   return (
     <div className="space-y-5">
@@ -161,10 +171,16 @@ export default function CurationRules() {
                 <span>Would affect <span className="font-semibold text-foreground">{selected.affectedStudents} students</span></span>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" variant="outline" className="rounded-full text-xs gap-1">
+                <Button size="sm" variant="outline" className="rounded-full text-xs gap-1" onClick={() => {
+                  // Test rule — just shows a toast-like indicator
+                  setSaved(false)
+                }}>
                   <Beaker className="w-3.5 h-3.5" /> Test Rule
                 </Button>
-                <Button size="sm" className="rounded-full text-xs">Save Rule</Button>
+                <Button size="sm" className="rounded-full text-xs gap-1" onClick={handleSaveRule}>
+                  {saved && <CheckCircle2 className="w-3.5 h-3.5" />}
+                  {saved ? 'Saved' : 'Save Rule'}
+                </Button>
               </div>
             </div>
           </CardContent>

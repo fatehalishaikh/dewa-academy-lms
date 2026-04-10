@@ -3,16 +3,17 @@ import { useState } from 'react'
 import {
   ChevronRight, ChevronDown, Plus, Wand2, BookOpen, BookMarked, Layers, FileText,
   Share2, Clock, Users, ClipboardList, Activity, ArrowLeft, BookText, GraduationCap,
-  FlaskConical, PenLine, NotebookPen,
+  FlaskConical, PenLine, NotebookPen, SendHorizonal,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
-  curriculumNodes, versionHistory, assessmentLinks, collaborators, activityItems, getLessonContent,
+  versionHistory, assessmentLinks, collaborators, activityItems,
   type CurriculumNode, type NodeStatus, type NodeType, type LessonContent,
 } from '@/data/mock-curriculum'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const statusColor: Record<NodeStatus, string> = {
   draft:          'border-amber-500/30 text-amber-400',
@@ -31,7 +32,16 @@ const nodeIcon: Record<NodeType, React.ElementType> = {
 type AddingForm = { parentId: string; nodeType: NodeType; title: string; description: string }
 
 export default function CurriculumBuilder() {
-  const [nodes, setNodes] = useState<CurriculumNode[]>(curriculumNodes)
+  const nodes = useAcademyStore(s => s.curriculumNodes)
+  const lessonContents = useAcademyStore(s => s.lessonContents)
+  const {
+    addCurriculumNode,
+    updateCurriculumNode,
+    setLessonContent,
+    updateNodeStatus,
+    addNotification,
+  } = useAcademyStore()
+
   const [expanded, setExpanded] = useState<Set<string>>(new Set(['prog-001', 'crs-001', 'crs-002']))
   const [selected, setSelected] = useState<string | null>(null)
   const [contentView, setContentView] = useState<string | null>(null) // lesson id for full content view
@@ -40,7 +50,6 @@ export default function CurriculumBuilder() {
   const [nodeGenerating, setNodeGenerating] = useState<string | null>(null)
   const [shareToast, setShareToast] = useState(false)
   const [openSection, setOpenSection] = useState<string | null>('keyConcepts')
-  const [generatedContents, setGeneratedContents] = useState<Record<string, LessonContent>>({})
   const [contentGenerating, setContentGenerating] = useState(false)
 
   function toggleExpand(id: string) {
@@ -60,8 +69,7 @@ export default function CurriculumBuilder() {
 
   function handleAddNode() {
     if (!addingForm) return
-    const newNode: CurriculumNode = {
-      id: `new-${Date.now()}`,
+    const nodeData: Omit<CurriculumNode, 'id'> = {
       parentId: addingForm.parentId,
       nodeType: addingForm.nodeType,
       title: addingForm.title || `New ${addingForm.nodeType}`,
@@ -73,7 +81,7 @@ export default function CurriculumBuilder() {
       updatedAt: new Date().toISOString().slice(0, 10),
       updatedBy: 'You',
     }
-    setNodes(prev => [...prev, newNode])
+    addCurriculumNode(addingForm.parentId, nodeData)
     setExpanded(prev => new Set([...prev, addingForm.parentId]))
     setAddingForm(null)
   }
@@ -93,17 +101,34 @@ export default function CurriculumBuilder() {
       })
       if (res.ok) {
         const data = await res.json() as { units: { title: string; description: string; objectives: string[]; duration?: number; lessons: { title: string; description: string; objectives: string[]; duration?: number }[] }[] }
-        const newNodes: CurriculumNode[] = []
         const newUnitIds: string[] = []
         data.units.forEach(unit => {
-          const unitId = `ai-unt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
+          const unitId = addCurriculumNode(targetCourse.id, {
+            parentId: targetCourse.id,
+            nodeType: 'unit',
+            title: unit.title,
+            description: unit.description,
+            objectives: unit.objectives ?? [],
+            standardIds: [],
+            status: 'draft',
+            duration: unit.duration,
+            version: 1,
+          })
           newUnitIds.push(unitId)
-          newNodes.push({ id: unitId, parentId: targetCourse.id, nodeType: 'unit', title: unit.title, description: unit.description, objectives: unit.objectives ?? [], standardIds: [], status: 'draft', duration: unit.duration, version: 1 })
           unit.lessons.forEach(lesson => {
-            newNodes.push({ id: `ai-les-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, parentId: unitId, nodeType: 'lesson', title: lesson.title, description: lesson.description, objectives: lesson.objectives ?? [], standardIds: [], status: 'draft', duration: lesson.duration, version: 1 })
+            addCurriculumNode(unitId, {
+              parentId: unitId,
+              nodeType: 'lesson',
+              title: lesson.title,
+              description: lesson.description,
+              objectives: lesson.objectives ?? [],
+              standardIds: [],
+              status: 'draft',
+              duration: lesson.duration,
+              version: 1,
+            })
           })
         })
-        setNodes(prev => [...prev, ...newNodes])
         setExpanded(prev => new Set([...prev, targetCourse.id, ...newUnitIds]))
       }
     } catch { /* silent */ }
@@ -122,8 +147,19 @@ export default function CurriculumBuilder() {
         if (res.ok) {
           const data = await res.json() as { units: { lessons: { title: string; description: string; objectives: string[]; duration?: number }[] }[] }
           const lessons = data.units.flatMap(u => u.lessons)
-          const newLessons: CurriculumNode[] = lessons.map(l => ({ id: `ai-les-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`, parentId: node.id, nodeType: 'lesson' as NodeType, title: l.title, description: l.description, objectives: l.objectives ?? [], standardIds: [], status: 'draft' as NodeStatus, duration: l.duration, version: 1 }))
-          setNodes(prev => [...prev, ...newLessons])
+          lessons.forEach(l => {
+            addCurriculumNode(node.id, {
+              parentId: node.id,
+              nodeType: 'lesson' as NodeType,
+              title: l.title,
+              description: l.description,
+              objectives: l.objectives ?? [],
+              standardIds: [],
+              status: 'draft' as NodeStatus,
+              duration: l.duration,
+              version: 1,
+            })
+          })
           setExpanded(prev => new Set([...prev, node.id]))
         }
       } else if (node.nodeType === 'lesson') {
@@ -133,10 +169,13 @@ export default function CurriculumBuilder() {
           const data = await res.json() as { units: { lessons: { description: string; objectives: string[] }[] }[] }
           const lesson = data.units[0]?.lessons[0]
           if (lesson) {
-            const updatedNode = { ...node, description: lesson.description, objectives: lesson.objectives ?? node.objectives }
-            setNodes(prev => prev.map(n => n.id === node.id ? updatedNode : n))
+            updateCurriculumNode(node.id, {
+              description: lesson.description,
+              objectives: lesson.objectives ?? node.objectives,
+            })
             setSelected(node.id)
             // Also generate rich content
+            const updatedNode = { ...node, description: lesson.description, objectives: lesson.objectives ?? node.objectives }
             await generateLessonContent(updatedNode)
           }
         }
@@ -159,7 +198,7 @@ export default function CurriculumBuilder() {
       })
       if (res.ok) {
         const data = await res.json() as Omit<LessonContent, 'lessonId'>
-        setGeneratedContents(prev => ({ ...prev, [node.id]: { ...data, lessonId: node.id } }))
+        setLessonContent(node.id, { ...data, lessonId: node.id })
       }
     } catch { /* silent */ }
     finally { setContentGenerating(false) }
@@ -192,6 +231,16 @@ export default function CurriculumBuilder() {
           {node.version && <span className="text-[9px] text-muted-foreground/50 shrink-0">v{node.version}</span>}
           <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${statusColor[node.status]}`}>{node.status}</Badge>
           {node.duration && <span className="text-[10px] text-muted-foreground shrink-0">{node.duration}h</span>}
+          {/* Submit for Review button */}
+          {node.status === 'draft' && (
+            <button
+              className="opacity-0 group-hover:opacity-100 h-5 px-1.5 flex items-center justify-center rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-all shrink-0 text-[9px] font-medium gap-1"
+              onClick={e => { e.stopPropagation(); updateNodeStatus(node.id, 'under-review', 'teacher') }}
+              title="Submit for Review"
+            >
+              <SendHorizonal className="w-3 h-3" /> Review
+            </button>
+          )}
           {/* Open content button for lessons */}
           {node.nodeType === 'lesson' && (
             <button
@@ -234,9 +283,7 @@ export default function CurriculumBuilder() {
   const rootNodes = nodes.filter(n => n.parentId === null)
   const selectedNode = selected ? nodes.find(n => n.id === selected) : null
   const contentNode = contentView ? nodes.find(n => n.id === contentView) : null
-  const lessonContent = contentView
-    ? (generatedContents[contentView] ?? getLessonContent(contentView))
-    : null
+  const lessonContent = contentView ? (lessonContents[contentView] ?? undefined) : undefined
 
   // Metadata panel derived data
   const nodeCollaborators = selectedNode ? collaborators.filter(c => c.nodeId === selectedNode.id) : []
@@ -340,7 +387,15 @@ export default function CurriculumBuilder() {
                       : <><Wand2 className="w-3 h-3" /> {lessonContent ? 'Regenerate' : 'Generate'}</>
                     }
                   </Button>
-                  <button onClick={() => { setShareToast(true); setTimeout(() => setShareToast(false), 2000) }} className="w-7 h-7 flex items-center justify-center rounded-xl border border-border hover:bg-muted/20 text-muted-foreground hover:text-foreground transition-colors shrink-0" title="Share">
+                  <button
+                    onClick={() => {
+                      setShareToast(true)
+                      setTimeout(() => setShareToast(false), 2000)
+                      addNotification({ type: 'curriculum', title: 'Curriculum shared', body: `"${contentNode.title}" shared with admin.`, recipientRole: 'admin' })
+                    }}
+                    className="w-7 h-7 flex items-center justify-center rounded-xl border border-border hover:bg-muted/20 text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                    title="Share"
+                  >
                     <Share2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -594,13 +649,35 @@ export default function CurriculumBuilder() {
                   <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${statusColor[selectedNode.status]}`}>{selectedNode.nodeType} · {selectedNode.status}</Badge>
                   <div className="flex items-center gap-1.5">
                     {selectedNode.version && <Badge variant="outline" className="text-[9px] h-4 border-muted-foreground/30 text-muted-foreground">v{selectedNode.version}</Badge>}
-                    <button onClick={() => { setShareToast(true); setTimeout(() => setShareToast(false), 2000) }} className="w-5 h-5 flex items-center justify-center rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors" title="Share"><Share2 className="w-3 h-3" /></button>
+                    <button
+                      onClick={() => {
+                        setShareToast(true)
+                        setTimeout(() => setShareToast(false), 2000)
+                        addNotification({ type: 'curriculum', title: 'Curriculum shared', body: `"${selectedNode.title}" shared with admin.`, recipientRole: 'admin' })
+                      }}
+                      className="w-5 h-5 flex items-center justify-center rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+                      title="Share"
+                    >
+                      <Share2 className="w-3 h-3" />
+                    </button>
                   </div>
                 </div>
                 <h3 className="text-sm font-semibold text-foreground">{selectedNode.title}</h3>
                 {selectedNode.duration && <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1"><Clock className="w-3 h-3" /> {selectedNode.duration}h duration</p>}
                 {selectedNode.updatedAt && <p className="text-[10px] text-muted-foreground mt-0.5">Updated {selectedNode.updatedAt} by {selectedNode.updatedBy}</p>}
               </div>
+
+              {/* Submit for Review */}
+              {selectedNode.status === 'draft' && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => updateNodeStatus(selectedNode.id, 'under-review', 'teacher')}
+                  className="w-full h-7 text-xs gap-1.5 border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                >
+                  <SendHorizonal className="w-3.5 h-3.5" /> Submit for Review
+                </Button>
+              )}
 
               {/* Open content button for lessons */}
               {selectedNode.nodeType === 'lesson' && (
@@ -698,19 +775,18 @@ export default function CurriculumBuilder() {
                 </div>
               )}
 
-              {/* Version History */}
+              {/* Version history */}
               {nodeVersionHistory.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1"><Clock className="w-3 h-3" /> Version History</p>
-                  <div className="space-y-1.5">
-                    {nodeVersionHistory.map(entry => (
-                      <div key={entry.version} className="bg-muted/10 rounded-lg px-2 py-1.5">
-                        <div className="flex items-center gap-1.5 mb-0.5">
-                          <Badge variant="outline" className="text-[8px] h-3.5 border-muted-foreground/30 text-muted-foreground px-1">v{entry.version}</Badge>
-                          <span className="text-[10px] text-muted-foreground">{entry.changedBy}</span>
-                          <span className="text-[9px] text-muted-foreground/60 ml-auto">{entry.changedAt}</span>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Version History</p>
+                  <div className="space-y-1">
+                    {nodeVersionHistory.map(v => (
+                      <div key={v.version} className="flex items-center justify-between bg-muted/10 rounded-lg px-2 py-1.5">
+                        <div>
+                          <span className="text-[10px] font-mono text-foreground">v{v.version}</span>
+                          <span className="text-[10px] text-muted-foreground ml-2">{v.changedBy}</span>
                         </div>
-                        <p className="text-[10px] text-muted-foreground">{entry.changeNote}</p>
+                        <span className="text-[9px] text-muted-foreground">{v.changedAt}</span>
                       </div>
                     ))}
                   </div>
@@ -719,18 +795,18 @@ export default function CurriculumBuilder() {
 
             </div>
           ) : (
-            <div className="text-center py-8">
-              <FileText className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
-              <p className="text-xs text-muted-foreground">Select a node from the tree</p>
-              <p className="text-[10px] text-muted-foreground/60 mt-1">Click a lesson to see its overview, then "Open Full Lesson Content" to view the instructional material</p>
+            <div className="flex flex-col items-center justify-center h-full gap-2 text-center py-16">
+              <BookOpen className="w-8 h-8 text-muted-foreground/30" />
+              <p className="text-xs text-muted-foreground">Select a node in the tree to see its details</p>
             </div>
           )}
         </CardContent>
       </Card>
 
+      {/* Share toast */}
       {shareToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-card border border-border rounded-xl px-4 py-2 shadow-lg text-xs text-foreground">
-          Link copied to clipboard!
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-2 bg-card border border-border rounded-xl shadow-xl text-xs text-foreground flex items-center gap-2">
+          <Share2 className="w-3.5 h-3.5 text-primary" /> Link copied to clipboard
         </div>
       )}
     </div>

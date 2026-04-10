@@ -1,8 +1,9 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { GraduationCap, Users, BookOpen, Building2, ChevronRight, Sparkles } from 'lucide-react'
+import { GraduationCap, Users, BookOpen, Building2, ChevronRight, Sparkles, Sun, Moon } from 'lucide-react'
 import { useRoleStore, type UserRole } from '@/stores/role-store'
+import { useThemeStore } from '@/stores/theme-store'
 import { students } from '@/data/mock-students'
 import { teachers } from '@/data/mock-teachers'
 import { parents } from '@/data/mock-parents'
@@ -86,6 +87,7 @@ const roleConfigs: RoleConfig[] = [
 export default function RoleSelectPage() {
   const router = useRouter()
   const { setRole } = useRoleStore()
+  const { isDark, toggleTheme } = useThemeStore()
   const [hoveredRole, setHoveredRole] = useState<UserRole | null>(null)
 
   function handleSelect(role: UserRole, personId: string, defaultRoute: string) {
@@ -102,9 +104,18 @@ export default function RoleSelectPage() {
           <p className="text-sm font-semibold text-foreground leading-tight">DEWA Academy</p>
           <p className="text-[11px] text-muted-foreground leading-tight">School Management System</p>
         </div>
-        <div className="ml-auto flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Sparkles className="w-3.5 h-3.5 text-primary" />
-          AI-Powered Platform
+        <div className="ml-auto flex items-center gap-3">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            AI-Powered Platform
+          </div>
+          <button
+            onClick={toggleTheme}
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            aria-label="Toggle theme"
+          >
+            {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+          </button>
         </div>
       </div>
 

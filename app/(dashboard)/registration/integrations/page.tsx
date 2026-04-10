@@ -1,5 +1,6 @@
 'use client'
-import { Link, CheckCircle2, AlertTriangle, XCircle, RefreshCw, Play, Settings } from 'lucide-react'
+import { useState } from 'react'
+import { Link, CheckCircle2, AlertTriangle, XCircle, RefreshCw, Play, Settings, X } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -37,12 +38,43 @@ const syncVolumeData = Array.from({ length: 14 }, (_, i) => ({
 }))
 
 export default function Integrations() {
+  const [syncingSystem, setSyncingSystem] = useState<string | null>(null)
+  const [testingSystem, setTestingSystem] = useState<string | null>(null)
+  const [syncResults, setSyncResults] = useState<Record<string, 'success' | 'error'>>({})
+  const [testResults, setTestResults] = useState<Record<string, 'success' | 'error'>>({})
+  const [settingsOpen, setSettingsOpen] = useState<string | null>(null)
+  const [mappingsOpen, setMappingsOpen] = useState(false)
+
+  function handleSync(system: string) {
+    setSyncingSystem(system)
+    setSyncResults(prev => ({ ...prev, [system]: undefined as unknown as 'success' }))
+    setTimeout(() => {
+      setSyncingSystem(null)
+      setSyncResults(prev => ({ ...prev, [system]: 'success' }))
+      setTimeout(() => setSyncResults(prev => { const n = { ...prev }; delete n[system]; return n }), 3000)
+    }, 1800)
+  }
+
+  function handleTest(system: string) {
+    setTestingSystem(system)
+    setTestResults(prev => ({ ...prev, [system]: undefined as unknown as 'success' }))
+    setTimeout(() => {
+      setTestingSystem(null)
+      setTestResults(prev => ({ ...prev, [system]: 'success' }))
+      setTimeout(() => setTestResults(prev => { const n = { ...prev }; delete n[system]; return n }), 3000)
+    }, 1200)
+  }
+
   return (
     <div className="space-y-6">
       {/* Integration status cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {integrations.map(intg => (
-          <Card key={intg.system} className={`border ${intg.connectionStatus === 'Healthy' ? 'border-green-500/20' : intg.connectionStatus === 'Warning' ? 'border-amber-500/20' : 'border-red-500/20'}`}>
+          <Card key={intg.system} className={`border transition-all ${
+            syncingSystem === intg.system ? 'border-primary/60 shadow-[0_0_12px_rgba(0,184,169,0.2)]' :
+            intg.connectionStatus === 'Healthy' ? 'border-green-500/20' :
+            intg.connectionStatus === 'Warning' ? 'border-amber-500/20' : 'border-red-500/20'
+          }`}>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -65,6 +97,18 @@ export default function Integrations() {
                   <p className="text-[9px] text-muted-foreground">{intg.lastSync.split(' ')[0]}</p>
                 </div>
               </div>
+
+              {/* Result banners */}
+              {syncResults[intg.system] === 'success' && (
+                <div className="flex items-center gap-1.5 text-[10px] text-green-400 bg-green-500/10 rounded-lg px-2.5 py-1.5">
+                  <CheckCircle2 className="w-3 h-3 shrink-0" />Sync completed successfully
+                </div>
+              )}
+              {testResults[intg.system] === 'success' && (
+                <div className="flex items-center gap-1.5 text-[10px] text-primary bg-primary/10 rounded-lg px-2.5 py-1.5">
+                  <CheckCircle2 className="w-3 h-3 shrink-0" />Connection test passed
+                </div>
+              )}
 
               {/* Sync history mini bar */}
               <div>
@@ -98,16 +142,53 @@ export default function Integrations() {
 
               {/* Actions */}
               <div className="flex gap-2">
-                <Button size="sm" variant="outline" className="flex-1 text-xs h-7 gap-1">
-                  <RefreshCw className="w-3 h-3" />Sync
+                <Button
+                  size="sm" variant="outline" className="flex-1 text-xs h-7 gap-1"
+                  disabled={syncingSystem === intg.system}
+                  onClick={() => handleSync(intg.system)}
+                >
+                  <RefreshCw className={`w-3 h-3 ${syncingSystem === intg.system ? 'animate-spin' : ''}`} />
+                  {syncingSystem === intg.system ? 'Syncing…' : 'Sync'}
                 </Button>
-                <Button size="sm" variant="outline" className="flex-1 text-xs h-7 gap-1">
-                  <Play className="w-3 h-3" />Test
+                <Button
+                  size="sm" variant="outline" className="flex-1 text-xs h-7 gap-1"
+                  disabled={testingSystem === intg.system}
+                  onClick={() => handleTest(intg.system)}
+                >
+                  <Play className="w-3 h-3" />
+                  {testingSystem === intg.system ? 'Testing…' : 'Test'}
                 </Button>
-                <Button size="sm" variant="outline" className="text-xs h-7 px-2">
-                  <Settings className="w-3 h-3" />
+                <Button
+                  size="sm" variant="outline" className="text-xs h-7 px-2"
+                  onClick={() => setSettingsOpen(settingsOpen === intg.system ? null : intg.system)}
+                >
+                  <Settings className={`w-3 h-3 ${settingsOpen === intg.system ? 'text-primary' : ''}`} />
                 </Button>
               </div>
+
+              {/* Settings panel */}
+              {settingsOpen === intg.system && (
+                <div className="border border-border rounded-lg p-3 space-y-2 bg-muted/20">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Connection Settings</p>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground">Sync Frequency</span>
+                      <span className="text-[10px] text-foreground font-medium">Every 6 hours</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground">Timeout</span>
+                      <span className="text-[10px] text-foreground font-medium">30s</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground">Retry on fail</span>
+                      <span className="text-[10px] text-foreground font-medium">3×</span>
+                    </div>
+                  </div>
+                  <Button size="sm" className="w-full h-6 text-[10px] rounded-md" onClick={() => setSettingsOpen(null)}>
+                    Apply Settings
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}
@@ -147,7 +228,10 @@ export default function Integrations() {
                 </tbody>
               </table>
             </div>
-            <Button variant="outline" size="sm" className="w-full mt-3 text-xs h-7 gap-1">
+            <Button
+              variant="outline" size="sm" className="w-full mt-3 text-xs h-7 gap-1"
+              onClick={() => setMappingsOpen(true)}
+            >
               <Settings className="w-3 h-3" />Manage All Mappings
             </Button>
           </CardContent>
@@ -240,6 +324,41 @@ export default function Integrations() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Manage All Mappings drawer */}
+      {mappingsOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50" onClick={() => setMappingsOpen(false)}>
+          <div className="bg-card border border-border rounded-2xl w-full max-w-lg mx-4 p-6 space-y-4" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-foreground">Manage All Field Mappings</h3>
+              <Button size="icon" variant="ghost" className="w-7 h-7" onClick={() => setMappingsOpen(false)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">All field mappings across active integrations</p>
+            <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
+              {integrations.map(intg => (
+                <div key={intg.system}>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">{intg.system}</p>
+                  <div className="space-y-1">
+                    {intg.fieldMappings.map(m => (
+                      <div key={m.source} className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-muted/30">
+                        <span className="font-mono text-[10px] text-muted-foreground">{m.source}</span>
+                        <span className="text-[10px] text-muted-foreground mx-2">→</span>
+                        <span className="font-mono text-[10px] text-foreground flex-1">{m.mapsTo}</span>
+                        <Badge variant="outline" className={`text-[8px] capitalize ml-2 ${mappingBadge(m.mappingStatus)}`}>{m.mappingStatus}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Button className="w-full text-xs rounded-full" onClick={() => setMappingsOpen(false)}>
+              Done
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

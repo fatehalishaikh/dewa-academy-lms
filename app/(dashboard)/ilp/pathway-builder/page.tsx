@@ -1,5 +1,6 @@
 'use client'
-import { GitBranch, ChevronRight, Plus } from 'lucide-react'
+import { useState } from 'react'
+import { GitBranch, ChevronRight, Plus, CheckCircle2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -21,6 +22,12 @@ const stageColors: Record<string, string> = {
 }
 
 export default function PathwayBuilder() {
+  const [saved, setSaved] = useState(false)
+
+  function handleSavePipeline() {
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
   return (
     <div className="space-y-5">
       {/* Pipeline visual */}
@@ -155,7 +162,10 @@ export default function PathwayBuilder() {
             </Table>
           </div>
           <div className="flex justify-end mt-3">
-            <Button size="sm" className="rounded-full text-xs">Save Pipeline</Button>
+            <Button size="sm" className="rounded-full text-xs gap-1.5" onClick={handleSavePipeline}>
+              {saved && <CheckCircle2 className="w-3.5 h-3.5" />}
+              {saved ? 'Pipeline Saved' : 'Save Pipeline'}
+            </Button>
           </div>
         </CardContent>
       </Card>

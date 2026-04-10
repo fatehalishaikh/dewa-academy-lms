@@ -1,5 +1,6 @@
 'use client'
-import { ShieldAlert, Bell, Mail, PauseCircle, Calendar, ClipboardCheck, Route, Users, Eye, MessageCircle, Plus } from 'lucide-react'
+import { useState } from 'react'
+import { ShieldAlert, Bell, Mail, PauseCircle, Calendar, ClipboardCheck, Route, Users, Eye, MessageCircle, Plus, CheckCircle2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,7 +9,8 @@ import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Separator } from '@/components/ui/separator'
-import { riskFactors, interventionPlaybooks } from '@/data/mock-ilp'
+import { interventionPlaybooks } from '@/data/mock-ilp'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const stepIcons: Record<string, React.ElementType> = {
   Bell, Mail, PauseCircle, Calendar, ClipboardCheck, Route, Users, Eye, MessageCircle,
@@ -36,6 +38,25 @@ const thresholds = [
 ]
 
 export default function RiskIntervention() {
+  const { ilpSettings, updateRiskFactors } = useAcademyStore()
+  const riskFactors = ilpSettings.riskFactors
+  const [localWeights, setLocalWeights] = useState<Record<string, number>>(
+    Object.fromEntries(riskFactors.map(f => [f.name, f.weight]))
+  )
+  const [saved, setSaved] = useState(false)
+
+  function handleWeightChange(name: string, value: number) {
+    setLocalWeights(prev => ({ ...prev, [name]: value }))
+    setSaved(false)
+  }
+
+  function handleSaveFormula() {
+    const updated = riskFactors.map(f => ({ ...f, weight: localWeights[f.name] ?? f.weight }))
+    updateRiskFactors(updated)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -64,9 +85,13 @@ export default function RiskIntervention() {
                     <p className="text-xs font-medium text-foreground">{factor.name}</p>
                     <p className="text-[10px] text-muted-foreground">{factor.description}</p>
                   </div>
-                  <span className="text-sm font-bold text-primary">{factor.weight}%</span>
+                  <span className="text-sm font-bold text-primary">{localWeights[factor.name] ?? factor.weight}%</span>
                 </div>
-                <Slider defaultValue={[factor.weight]} min={0} max={60} step={5} className="w-full" />
+                <Slider
+                  value={[localWeights[factor.name] ?? factor.weight]}
+                  onValueChange={(vals) => handleWeightChange(factor.name, (vals as number[])[0])}
+                  min={0} max={60} step={5} className="w-full"
+                />
               </div>
             ))}
 
@@ -87,7 +112,10 @@ export default function RiskIntervention() {
                   </div>
                 </div>
               ))}
-              <Button size="sm" className="rounded-full text-xs w-full mt-1">Save Formula</Button>
+              <Button size="sm" className="rounded-full text-xs w-full mt-1 gap-1.5" onClick={handleSaveFormula}>
+                {saved ? <CheckCircle2 className="w-3.5 h-3.5" /> : null}
+                {saved ? 'Formula Saved' : 'Save Formula'}
+              </Button>
             </div>
           </CardContent>
         </Card>

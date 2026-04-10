@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Progress } from '@/components/ui/progress'
 import { mockApplications, type Application } from '@/data/mock-registration'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const baseScoredApps = mockApplications.filter(a => a.aiScore !== null && a.scoring !== null)
-const flaggedQueue = mockApplications.filter(a => a.flagged && a.aiScore !== null)
+const baseFlaggedQueue = mockApplications.filter(a => a.flagged && a.aiScore !== null)
 
 type AiResult = { id: string; compositeScore: number; recommendation: string; summary: string }
 
@@ -34,6 +35,12 @@ export default function AiScoring() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [aiResults, setAiResults] = useState<AiResult[]>([])
   const [isRecalculating, setIsRecalculating] = useState(false)
+  const [confirmedAdmits, setConfirmedAdmits] = useState<Set<string>>(new Set())
+  const [confirmedFlags, setConfirmedFlags] = useState<Set<string>>(new Set())
+  const [overriddenFlags, setOverriddenFlags] = useState<Set<string>>(new Set())
+  const { advanceApplication, setApplicationStatus, flagApplication, assignReviewer } = useAcademyStore()
+
+  const flaggedQueue = baseFlaggedQueue.filter(a => !overriddenFlags.has(a.id))
 
   const scoredApps = baseScoredApps.map(app => {
     const result = aiResults.find(r => r.id === app.id)
@@ -205,8 +212,18 @@ export default function AiScoring() {
                           AI Recommendation: {app.scoring.recommendation}
                         </Badge>
                         <div className="flex gap-2">
-                          <Button size="sm" className="text-xs h-7 bg-primary hover:bg-primary/90">Confirm Admit</Button>
-                          <Button size="sm" variant="outline" className="text-xs h-7">Override</Button>
+                          {confirmedAdmits.has(app.id) ? (
+                            <Button size="sm" className="text-xs h-7 bg-green-600 hover:bg-green-600 cursor-default gap-1">
+                              ✓ Admitted
+                            </Button>
+                          ) : (
+                            <Button size="sm" className="text-xs h-7 bg-primary hover:bg-primary/90" onClick={() => {
+                              setConfirmedAdmits(prev => new Set([...prev, app.id]))
+                              setApplicationStatus(app.id, 'Approved')
+                              advanceApplication(app.id, 'admin')
+                            }}>Confirm Admit</Button>
+                          )}
+                          <Button size="sm" variant="outline" className="text-xs h-7" onClick={() => setApplicationStatus(app.id, 'Rejected')}>Override</Button>
                         </div>
                       </div>
                     </div>
@@ -243,16 +260,26 @@ export default function AiScoring() {
                   <div className="space-y-1.5">
                     <p className="text-[9px] text-muted-foreground">Assign Reviewer</p>
                     <div className="flex gap-1.5">
-                      {['SA', 'OH', 'FA'].map(initials => (
-                        <button key={initials} className="w-6 h-6 rounded-full bg-muted hover:bg-primary/20 hover:text-primary flex items-center justify-center text-[9px] font-bold text-muted-foreground transition-colors">
+                      {[{ initials: 'SA', id: 'tch-001' }, { initials: 'OH', id: 'tch-002' }, { initials: 'FA', id: 'tch-003' }].map(({ initials, id }) => (
+                        <button key={initials} onClick={() => assignReviewer(app.id, id, initials)} className="w-6 h-6 rounded-full bg-muted hover:bg-primary/20 hover:text-primary flex items-center justify-center text-[9px] font-bold text-muted-foreground transition-colors">
                           {initials}
                         </button>
                       ))}
                     </div>
                   </div>
                   <div className="flex gap-1.5">
-                    <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6">Confirm Flag</Button>
-                    <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6 text-green-400 border-green-500/30 hover:bg-green-500/10">Override</Button>
+                    {confirmedFlags.has(app.id) ? (
+                      <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6 text-red-400 border-red-500/30 cursor-default">Flagged ✓</Button>
+                    ) : (
+                      <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6" onClick={() => {
+                        setConfirmedFlags(prev => new Set([...prev, app.id]))
+                        flagApplication(app.id, true)
+                      }}>Confirm Flag</Button>
+                    )}
+                    <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6 text-green-400 border-green-500/30 hover:bg-green-500/10" onClick={() => {
+                      setOverriddenFlags(prev => new Set([...prev, app.id]))
+                      flagApplication(app.id, false)
+                    }}>Override</Button>
                   </div>
                 </CardContent>
               </Card>

@@ -12,6 +12,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { getStudentById } from '@/data/mock-students'
 import { getClassesByStudent } from '@/data/mock-classes'
 import { useHomeworkStore } from '@/stores/homework-store'
+import { useAcademyStore } from '@/stores/academy-store'
 
 // Mock attendance data for 30 days
 type AttDay = { date: string; status: 'present' | 'absent' | 'late' }
@@ -59,6 +60,7 @@ export default function StudentAnalysis() {
   const student = getStudentById(studentId ?? '')
   const classes = student ? getClassesByStudent(student.id) : []
   const { homework, getSubmissionForStudent } = useHomeworkStore()
+  const { addNotification, addStudentNote } = useAcademyStore()
   const [addingNote, setAddingNote] = useState(false)
   const [noteText, setNoteText] = useState('')
   const [notes, setNotes] = useState(teacherNotes)
@@ -85,8 +87,9 @@ export default function StudentAnalysis() {
   })
 
   function addNote() {
-    if (!noteText.trim()) return
+    if (!noteText.trim() || !student) return
     setNotes(prev => [{ date: 'Mar 26, 2026', author: 'Dr. Sarah Ahmed', type: 'neutral', note: noteText }, ...prev])
+    addStudentNote(student.id, noteText, 'admin', 'admin')
     setNoteText('')
     setAddingNote(false)
   }
@@ -133,7 +136,18 @@ export default function StudentAnalysis() {
             </div>
           </div>
         </div>
-        <Button size="sm" variant="outline" className="gap-1.5 text-xs shrink-0">
+        <Button
+          size="sm"
+          variant="outline"
+          className="gap-1.5 text-xs shrink-0"
+          onClick={() => addNotification({
+            type: 'message',
+            title: 'Message from teacher',
+            body: `Message sent regarding student ${student.name}`,
+            recipientRole: 'parent',
+            recipientId: student.parentId ?? undefined,
+          })}
+        >
           <MessageSquare className="w-3.5 h-3.5" />
           Message Parent
         </Button>

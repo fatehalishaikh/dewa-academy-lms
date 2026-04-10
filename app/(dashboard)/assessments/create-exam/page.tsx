@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { academyClasses } from '@/data/mock-classes'
 import { examQuestions, type ExamQuestion, type DifficultyLevel } from '@/data/mock-assessments'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const BLOOMS_LEVELS = ['Remember', 'Understand', 'Apply', 'Analyze', 'Evaluate', 'Create'] as const
 type BloomsLevel = typeof BLOOMS_LEVELS[number]
@@ -29,6 +30,7 @@ const diffColor: Record<DifficultyLevel, string> = {
 }
 
 export default function AssessmentsCreateExam() {
+  const { addNotification } = useAcademyStore()
   const [step, setStep] = useState(0)
   const [details, setDetails] = useState<ExamDetails>({
     title: '', classId: academyClasses[0]?.id ?? '',
@@ -121,6 +123,12 @@ export default function AssessmentsCreateExam() {
         setSavedDraft(false)
       }, 2000)
     } else {
+      addNotification({
+        type: 'message',
+        title: 'New exam published',
+        body: `Exam "${details.title}" published`,
+        recipientRole: 'student',
+      })
       setPublished(true)
       setTimeout(() => {
         setStep(0)

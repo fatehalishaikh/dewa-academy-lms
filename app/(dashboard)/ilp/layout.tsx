@@ -1,6 +1,6 @@
 'use client'
 import { NavLink } from '@/components/ui/nav-link'
-import { Sparkles, BarChart3, ClipboardCheck, GitBranch, Filter, ShieldAlert, Bell, Target, FolderOpen } from 'lucide-react'
+import { Sparkles, BarChart3, ClipboardCheck, GitBranch, Filter, ShieldAlert, Bell, Target, FolderOpen, Database } from 'lucide-react'
 
 const navItems = [
   { label: 'Dashboard',        href: '/ilp/dashboard',           icon: BarChart3,      ai: true  },
@@ -11,6 +11,7 @@ const navItems = [
   { label: 'Notifications',    href: '/ilp/notifications',       icon: Bell,           ai: false },
   { label: 'Goals',            href: '/ilp/goal-setting',        icon: Target,         ai: false },
   { label: 'Content',          href: '/ilp/content-management',  icon: FolderOpen,     ai: false },
+  { label: 'Data Connection',  href: '/ilp/data-connection',     icon: Database,       ai: false },
 ]
 
 interface IlpLayoutProps { children: React.ReactNode }

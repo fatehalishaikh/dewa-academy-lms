@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { useAcademyStore } from '@/stores/academy-store'
 
 
 type Message = {
@@ -72,10 +73,13 @@ const initialMessages: Message[] = [
 ]
 
 export default function ParentMessages() {
+  const { addNotification } = useAcademyStore()
   const [messages, setMessages] = useState(initialMessages)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
   const [showCompose, setShowCompose] = useState(false)
+  const [composeSubject, setComposeSubject] = useState('')
+  const [composeText, setComposeText] = useState('')
 
   const selected = messages.find(m => m.id === selectedId)
 
@@ -86,8 +90,26 @@ export default function ParentMessages() {
 
   function sendReply() {
     if (!replyText.trim()) return
+    addNotification({
+      type: 'message',
+      title: 'Reply from parent',
+      body: replyText,
+      recipientRole: 'teacher',
+    })
     setReplyText('')
-    // In real app, would send the reply
+  }
+
+  function sendCompose() {
+    if (!composeText.trim()) return
+    addNotification({
+      type: 'message',
+      title: composeSubject || 'Message from parent',
+      body: composeText,
+      recipientRole: 'teacher',
+    })
+    setComposeSubject('')
+    setComposeText('')
+    setShowCompose(false)
   }
 
   const unreadCount = messages.filter(m => !m.read).length
@@ -108,6 +130,44 @@ export default function ParentMessages() {
           Compose
         </Button>
       </div>
+
+      {showCompose && (
+        <Card className="rounded-2xl border-primary/20 bg-primary/5">
+          <CardHeader className="pb-3 border-b border-border">
+            <CardTitle className="text-sm">New Message</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4 space-y-3">
+            <div>
+              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Subject</label>
+              <input
+                type="text"
+                value={composeSubject}
+                onChange={e => setComposeSubject(e.target.value)}
+                placeholder="Message subject…"
+                className="w-full bg-background border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Message</label>
+              <textarea
+                value={composeText}
+                onChange={e => setComposeText(e.target.value)}
+                placeholder="Write your message…"
+                rows={3}
+                className="w-full bg-background border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 resize-none"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm" onClick={sendCompose} disabled={!composeText.trim()} className="gap-1.5 text-xs">
+                <Send className="w-3.5 h-3.5" /> Send
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => { setShowCompose(false); setComposeSubject(''); setComposeText('') }} className="text-xs">
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-[320px_1fr] gap-4 h-[calc(100vh-240px)] min-h-[400px]">
         {/* Message list */}

@@ -9,6 +9,7 @@ import { StudentNameLink } from '@/components/ui/student-name-link'
 import { exams, examSubmissions, examQuestions, type ExamSubmission } from '@/data/mock-assessments'
 import { getClassById } from '@/data/mock-classes'
 import { getStudentById } from '@/data/mock-students'
+import { useAcademyStore } from '@/stores/academy-store'
 
 type AiGradeResult = {
   score: number
@@ -19,6 +20,7 @@ type AiGradeResult = {
 }
 
 export default function AssessmentsGrading() {
+  const { gradeExamSubmission } = useAcademyStore()
   const [expandedExamId, setExpandedExamId] = useState<string | null>(null)
   const [submissions, setSubmissions] = useState<ExamSubmission[]>(examSubmissions)
   const [gradingForm, setGradingForm] = useState<Record<string, { score: string; feedback: string }>>({})
@@ -99,6 +101,7 @@ export default function AssessmentsGrading() {
         ? { ...s, score: numScore, feedback: form.feedback, submissionStatus: 'graded' }
         : s
     ))
+    gradeExamSubmission(subId, numScore, form.feedback)
     setGradingSubId(null)
   }
 

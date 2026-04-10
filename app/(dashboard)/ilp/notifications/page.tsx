@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { notificationChannels, automationTriggers } from '@/data/mock-ilp'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const channelIcons: Record<string, React.ElementType> = {
   Mail, MessageSquare, Bell, Monitor,
@@ -19,6 +20,8 @@ const channelColors: Record<string, string> = {
 }
 
 export default function Notifications() {
+  const { ilpSettings, setNotificationsEnabled } = useAcademyStore()
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -52,7 +55,10 @@ export default function Notifications() {
                       style={{ background: `${color}15` }}>
                       <Icon className="w-4 h-4" style={{ color }} />
                     </div>
-                    <Switch defaultChecked={ch.enabled} />
+                    <Switch
+                      checked={ch.enabled}
+                      onCheckedChange={(v) => setNotificationsEnabled(v)}
+                    />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">{ch.name}</p>

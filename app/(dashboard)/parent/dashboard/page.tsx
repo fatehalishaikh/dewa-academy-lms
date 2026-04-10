@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Sparkles, BarChart3, Calendar, MessageSquare, AlertTriangle, CheckCircle2, ArrowRight, Bot, RefreshCw, FileText } from 'lucide-react'
+import { Sparkles, BarChart3, Calendar, MessageSquare, AlertTriangle, CheckCircle2, ArrowRight, Bot, RefreshCw, FileText, LayoutDashboard, ChevronRight } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useCurrentParent } from '@/stores/role-store'
 import { getStudentById } from '@/data/mock-students'
+import Link from 'next/link'
+import { getDashboardInbox } from '@/lib/academy-selectors'
 
 const recentActivity = [
   { type: 'grade', icon: BarChart3, text: 'Chapter 4 Quiz graded — 92%', time: '2 hours ago', color: '#10B981' },
@@ -37,6 +39,8 @@ export default function ParentDashboard() {
   const parent = useCurrentParent()
   const primaryChild = parent ? getStudentById(parent.childIds[0]) : null
 
+  const inboxItems = getDashboardInbox('parent', parent?.id ?? '')
+
   const [insights, setInsights] = useState<InsightData | null>(null)
   const [loadingInsights, setLoadingInsights] = useState(false)
 
@@ -65,19 +69,64 @@ export default function ParentDashboard() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium text-primary uppercase tracking-wider">Parent Portal</span>
+      {/* Hero: greeting + inbox */}
+      <Card className="rounded-2xl border-border overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-5">
+          <div className="lg:col-span-2 p-4 lg:border-r border-border">
+            <div className="flex items-center gap-2 mb-1">
+              <LayoutDashboard className="w-4 h-4 text-primary" />
+              <span className="text-xs font-medium text-primary uppercase tracking-wider">Parent Portal</span>
+            </div>
+            <h1 className="text-xl font-bold text-foreground">Welcome, {parent?.name.split(' ')[0]} 👋</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {new Date().toLocaleDateString('en-AE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            </p>
+            <Button size="sm" variant="outline" onClick={() => router.push('/parent/messages')} className="mt-3 gap-1.5">
+              <MessageSquare className="w-3.5 h-3.5" />
+              Messages
+            </Button>
           </div>
-          <h1 className="text-xl font-bold text-foreground">Welcome, {parent?.name.split(' ')[0]}</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {new Date().toLocaleDateString('en-AE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-          </p>
+          <div className="lg:col-span-3 p-4 flex flex-col justify-center">
+            {inboxItems.length === 0 ? (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">All caught up</p>
+                  <p className="text-xs text-muted-foreground">Nothing needs your attention right now.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                  <span className="text-2xl font-bold text-amber-400">{inboxItems.length}</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground">
+                    {inboxItems.length === 1 ? '1 thing needs' : `${inboxItems.length} things need`} your attention
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && (
+                      <span className="text-amber-400 font-medium">{inboxItems.filter(i => i.urgency === 'high').length} urgent</span>
+                    )}
+                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && inboxItems.filter(i => i.urgency !== 'high').length > 0 && ' · '}
+                    {inboxItems.filter(i => i.urgency !== 'high').length > 0 && (
+                      <span>{inboxItems.filter(i => i.urgency !== 'high').length} follow-up</span>
+                    )}
+                  </p>
+                  <Link
+                    href="/action-center"
+                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
+                  >
+                    Open Action Center <ChevronRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </Card>
 
       {/* Child selector (if multiple children) */}
       {parent && parent.childIds.length > 0 && (

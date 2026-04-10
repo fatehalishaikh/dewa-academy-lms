@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const STEPS = [
   { label: 'Emirates ID', icon: CreditCard },
@@ -430,8 +431,26 @@ function SuccessScreen({ onNew }: { onNew: () => void }) {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function NewApplication() {
+  const { createApplication, addNotification } = useAcademyStore()
   const [step, setStep] = useState(0)
   const [submitted, setSubmitted] = useState(false)
+
+  function handleSubmit() {
+    createApplication({
+      nameEn: extractedId.fullNameEn,
+      nameAr: extractedId.fullNameAr,
+      applicationType: 'Regular',
+      gradeApplying: 'Grade 9',
+      nationality: extractedId.nationality,
+    })
+    addNotification({
+      type: 'registration',
+      title: 'New application submitted',
+      body: `Application submitted for ${extractedId.fullNameEn}`,
+      recipientRole: 'admin',
+    })
+    setSubmitted(true)
+  }
 
   if (submitted) return <SuccessScreen onNew={() => { setStep(0); setSubmitted(false) }} />
 
@@ -464,7 +483,7 @@ export default function NewApplication() {
           {step === 0 && <Step1 onNext={() => setStep(1)} />}
           {step === 1 && <Step2 onNext={() => setStep(2)} onBack={() => setStep(0)} />}
           {step === 2 && <Step3 onNext={() => setStep(3)} onBack={() => setStep(1)} />}
-          {step === 3 && <Step4 onBack={() => setStep(2)} onSubmit={() => setSubmitted(true)} />}
+          {step === 3 && <Step4 onBack={() => setStep(2)} onSubmit={handleSubmit} />}
         </CardContent>
       </Card>
     </div>

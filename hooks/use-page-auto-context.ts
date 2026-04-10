@@ -2,16 +2,15 @@
 
 import { useMemo } from 'react'
 import { useCurrentTeacher, useCurrentStudent, useCurrentParent } from '@/stores/role-store'
-import { useHomeworkStore } from '@/stores/homework-store'
+import { useAcademyStore } from '@/stores/academy-store'
 import { getStudentById } from '@/data/mock-students'
 import { getClassById, getClassesByStudent, getClassesByTeacher } from '@/data/mock-classes'
-import { getAssignmentById } from '@/data/mock-student-assignments'
 
 export function usePageAutoContext(pathname: string): string | null {
   const teacher = useCurrentTeacher()
   const student = useCurrentStudent()
   const parent = useCurrentParent()
-  const { getHomeworkById, getSubmissionById, getSubmissionsForHomework } = useHomeworkStore()
+  const { getHomeworkById, getSubmissionById, getSubmissionsForHomework } = useAcademyStore()
 
   return useMemo(() => {
     const segments = pathname.split('/')
@@ -62,10 +61,9 @@ export function usePageAutoContext(pathname: string): string | null {
 
     // --- Student: /student/assignments/[id] ---
     if (role === 'student' && resource === 'assignments' && id) {
-      const a = getAssignmentById(id)
-      if (!a) return null
-      const gradeStr = a.grade !== undefined ? ` Grade: ${a.grade}%.` : ''
-      return `Assignment: '${a.title}' (${a.className}). Teacher: ${a.teacherName}. Status: ${a.status}. Due: ${a.due}. Points: ${a.points}.${gradeStr}`
+      const hw = getHomeworkById(id)
+      if (!hw) return null
+      return `Assignment: '${hw.title}'. Status: ${hw.status}. Due: ${hw.dueDate}. Points: ${hw.totalPoints}.`
     }
 
     // --- Teacher list pages ---
@@ -94,5 +92,6 @@ export function usePageAutoContext(pathname: string): string | null {
     }
 
     return null
-  }, [pathname, teacher?.id, student?.id, parent?.id, getHomeworkById, getSubmissionById, getSubmissionsForHomework])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, teacher?.id, student?.id, parent?.id])
 }

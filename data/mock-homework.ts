@@ -38,6 +38,11 @@ export type Submission = {
   content: string | null
 }
 
+// Helper: map student-facing status to submission status
+export function submissionStatus(sub: Submission | undefined): 'not-submitted' | 'submitted' | 'late' | 'graded' {
+  return sub?.status ?? 'not-submitted'
+}
+
 export const initialHomework: Homework[] = [
   {
     id: 'hw-001',
@@ -96,6 +101,101 @@ export const initialHomework: Homework[] = [
       { id: 'r2', label: 'Simultaneous equations (Q9–16)', maxPoints: 16 },
       { id: 'r3', label: 'Inequalities (Q17–25)', maxPoints: 18 },
     ],
+  },
+  // Physics (cls-003, tch-002)
+  {
+    id: 'hw-004',
+    title: "Newton's Laws Lab Report",
+    description: "Write a formal lab report based on the Newton's Laws experiment conducted in class last week.",
+    instructions: `Your lab report must include the following sections:\n\n**1. Title & Date** (1 pt)\n**2. Aim** – State the purpose of the experiment (2 pts)\n**3. Hypothesis** – Predict the outcome before the experiment (3 pts)\n**4. Materials & Method** – List equipment and describe procedure (5 pts)\n**5. Results** – Include your recorded data in a table and at least one graph (8 pts)\n**6. Discussion** – Analyze results, identify sources of error (7 pts)\n**7. Conclusion** – Relate findings to Newton's Laws (4 pts)\n\nWord count: minimum 500 words. Submit as a PDF via the portal.`,
+    classId: 'cls-003',
+    teacherId: 'tch-002',
+    subject: 'Physics',
+    dueDate: '2026-03-28',
+    createdDate: '2026-03-21',
+    status: 'published',
+    totalPoints: 30,
+    aiGenerated: false,
+    rubric: [
+      { id: 'r1', label: 'Structure & Format', maxPoints: 5 },
+      { id: 'r2', label: 'Scientific Accuracy', maxPoints: 10 },
+      { id: 'r3', label: 'Data & Graphs', maxPoints: 8 },
+      { id: 'r4', label: 'Analysis & Error', maxPoints: 5 },
+      { id: 'r5', label: 'Conclusion', maxPoints: 2 },
+    ],
+  },
+  // English Language (cls-005, tch-003)
+  {
+    id: 'hw-005',
+    title: 'Essay: Technology in Society',
+    description: 'Write a persuasive essay exploring the impact of artificial intelligence on modern education.',
+    instructions: `Write a persuasive essay (600–800 words) arguing FOR or AGAINST the use of AI tools in schools.\n\n**Requirements:**\n- Clear thesis statement in the introduction\n- Minimum 3 body paragraphs, each with a topic sentence, evidence, and analysis\n- Address one counter-argument and refute it\n- Formal academic tone (no slang or contractions)\n- Conclusion that restates thesis and provides a call to action\n- At least 2 cited sources (APA format)\n\n**Formatting:** Double-spaced, 12pt font, 1-inch margins. Submit as a Word document or PDF.`,
+    classId: 'cls-005',
+    teacherId: 'tch-003',
+    subject: 'English Language',
+    dueDate: '2026-03-30',
+    createdDate: '2026-03-23',
+    status: 'published',
+    totalPoints: 25,
+    aiGenerated: false,
+    rubric: [
+      { id: 'r1', label: 'Thesis & Argument', maxPoints: 8 },
+      { id: 'r2', label: 'Evidence & Analysis', maxPoints: 7 },
+      { id: 'r3', label: 'Counter-Argument', maxPoints: 4 },
+      { id: 'r4', label: 'Language & Style', maxPoints: 4 },
+      { id: 'r5', label: 'Citations', maxPoints: 2 },
+    ],
+  },
+  {
+    id: 'hw-006',
+    title: 'Chapter 6 Reading Summary',
+    description: 'Summarize the key themes and events from chapters 6–8 of the assigned novel.',
+    instructions: `Write a reading summary covering Chapters 6–8. Your summary should:\n\n1. Briefly describe the key events in chronological order (3–4 sentences per chapter)\n2. Identify the main theme of each chapter\n3. Note any important character developments\n4. Include one quote from the text with page number for each chapter\n\nLength: 300–400 words. Handwritten or typed.`,
+    classId: 'cls-005',
+    teacherId: 'tch-003',
+    subject: 'English Language',
+    dueDate: '2026-03-22',
+    createdDate: '2026-03-15',
+    status: 'closed',
+    totalPoints: 15,
+    aiGenerated: false,
+    rubric: [
+      { id: 'r1', label: 'Plot Summary', maxPoints: 6 },
+      { id: 'r2', label: 'Theme Identification', maxPoints: 5 },
+      { id: 'r3', label: 'Quotes', maxPoints: 4 },
+    ],
+  },
+  // Mathematics closed/graded (cls-001, tch-001)
+  {
+    id: 'hw-007',
+    title: 'Algebra Mid-Unit Test',
+    description: 'Mid-unit assessment covering all quadratic equation methods.',
+    instructions: 'In-class test. No additional submission required.',
+    classId: 'cls-001',
+    teacherId: 'tch-001',
+    subject: 'Mathematics',
+    dueDate: '2026-03-18',
+    createdDate: '2026-03-11',
+    status: 'closed',
+    totalPoints: 50,
+    aiGenerated: false,
+    rubric: [],
+  },
+  // Physics closed/graded (cls-003, tch-002)
+  {
+    id: 'hw-008',
+    title: 'Waves & Optics Problem Set',
+    description: 'Problem set covering wave behaviour, reflection, and refraction.',
+    instructions: 'In-class assignment. No additional submission required.',
+    classId: 'cls-003',
+    teacherId: 'tch-002',
+    subject: 'Physics',
+    dueDate: '2026-03-15',
+    createdDate: '2026-03-08',
+    status: 'closed',
+    totalPoints: 25,
+    aiGenerated: false,
+    rubric: [],
   },
 ]
 
@@ -217,6 +317,75 @@ Range = 5,800 steps
 Bar chart: [attached]
 
 Analysis: My step count varies significantly day to day. School days I walk more due to PE class.`,
+  },
+  // hw-004 submissions (cls-003: stu-001, stu-004, stu-012)
+  {
+    id: 'sub-006',
+    homeworkId: 'hw-004',
+    studentId: 'stu-001',
+    submittedDate: null,
+    status: 'not-submitted',
+    grade: null,
+    feedback: null,
+    aiScore: null,
+    aiFeedback: null,
+    content: null,
+  },
+  // hw-005 submission (cls-005: stu-001 in-progress)
+  {
+    id: 'sub-007',
+    homeworkId: 'hw-005',
+    studentId: 'stu-001',
+    submittedDate: null,
+    status: 'not-submitted',
+    grade: null,
+    feedback: null,
+    aiScore: null,
+    aiFeedback: null,
+    content: null,
+  },
+  // hw-006 submission (cls-005: stu-001 submitted)
+  {
+    id: 'sub-008',
+    homeworkId: 'hw-006',
+    studentId: 'stu-001',
+    submittedDate: '2026-03-21',
+    status: 'submitted',
+    grade: null,
+    feedback: null,
+    aiScore: 13,
+    aiFeedback: 'Strong summary across all three chapters. Quotes well-chosen and properly cited. Theme identification for Chapter 7 could be more specific — "perspective" is broad; consider "unreliable narration" or "moral ambiguity".',
+    content: `Chapter 6 focuses on the protagonist's growing internal conflict as she discovers the truth about her family's past. The key events include her finding the old letters, confronting her mother, and deciding to investigate further. The main theme is the tension between loyalty and truth. A pivotal moment is captured in this quote: "Some doors are better left closed" (p. 89).
+
+Chapter 7 shifts the narrative perspective to the antagonist, revealing his motivations for the first time. We learn he was once a friend of the family, which deepens the sense of betrayal. The theme of perspective and bias is central. "Every story has two sides, and neither is entirely true" (p. 104).
+
+Chapter 8 brings the two storylines together as the protagonist and antagonist meet unexpectedly at the archive. The tension builds as both characters realize what the other knows. The theme is revelation and consequence. "Knowing changes everything" (p. 121).`,
+  },
+  // hw-007 submission (cls-001: stu-001 graded)
+  {
+    id: 'sub-009',
+    homeworkId: 'hw-007',
+    studentId: 'stu-001',
+    submittedDate: '2026-03-18',
+    status: 'graded',
+    grade: 92,
+    feedback: 'Excellent work! Your working is very clear and you demonstrated strong understanding of factoring. Minor deduction on Q12 — you forgot to check for extraneous solutions. Keep it up!',
+    aiScore: 91,
+    aiFeedback: '**Strengths:**\n- Consistent and accurate use of the quadratic formula\n- Clear step-by-step working\n- Strong performance on factoring (full marks)\n\n**Areas for Growth:**\n- Check for extraneous solutions when solving by square roots (Q12)\n\n**Next Steps:** Practice completing the square with coefficient a ≠ 1.',
+    content: null,
+  },
+  // hw-008 submission (cls-003: stu-001 graded)
+  {
+    id: 'sub-010',
+    homeworkId: 'hw-008',
+    studentId: 'stu-001',
+    submittedDate: '2026-03-15',
+    status: 'graded',
+    grade: 78,
+    feedback: "Good effort on the wave calculations. Review refraction concepts — Snell's law application in Q8-10 had errors. Strong work on the reflection section.",
+    aiScore: 78,
+    aiFeedback: "**Strengths:**\n- Excellent understanding of wave properties — full marks on Q1–5\n- Correct law of reflection applied throughout\n\n**Areas for Growth:**\n- Snell's Law: mixed up n₁ and n₂ angles in Q8–10\n- Total internal reflection formula not applied (Q11)\n\n**Next Steps:** Re-read Section 8.3 on refraction and work through the examples.",
+    content: null,
   },
 ]
 

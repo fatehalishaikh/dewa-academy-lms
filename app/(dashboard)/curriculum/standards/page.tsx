@@ -1,10 +1,11 @@
 'use client'
 import { useState } from 'react'
-import { CheckCircle2, Circle, AlertTriangle, GitBranch } from 'lucide-react'
+import { CheckCircle2, Circle, AlertTriangle, GitBranch, X } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { standards, curriculumNodes, standardMappings, assessmentLinks, activityItems, type Framework } from '@/data/mock-curriculum'
+import { standards, curriculumNodes, assessmentLinks, activityItems, type Framework } from '@/data/mock-curriculum'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const coverageData = [
   { subject: 'Mathematics', grade: 'Grade 10', covered: 8, partial: 2, gap: 1 },
@@ -15,10 +16,12 @@ const coverageData = [
 ]
 
 export default function CurriculumStandards() {
+  const mappings = useAcademyStore(s => s.standardMappings)
+  const { linkStandard, unlinkStandard } = useAcademyStore()
+
   const [frameworkFilter, setFrameworkFilter] = useState<Framework | 'All'>('All')
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
   const [selectedStdId, setSelectedStdId] = useState<string | null>(null)
-  const [mappings, setMappings] = useState(standardMappings)
   const [linkFeedback, setLinkFeedback] = useState(false)
 
   const filteredStandards = standards.filter(s => {
@@ -35,9 +38,13 @@ export default function CurriculumStandards() {
   function handleLink() {
     if (!selectedNodeId || !selectedStdId) return
     if (isMapped(selectedNodeId, selectedStdId)) return
-    setMappings(prev => [...prev, { nodeId: selectedNodeId, standardId: selectedStdId }])
+    linkStandard(selectedNodeId, selectedStdId)
     setLinkFeedback(true)
     setTimeout(() => setLinkFeedback(false), 2000)
+  }
+
+  function handleUnlink(nodeId: string, standardId: string) {
+    unlinkStandard(nodeId, standardId)
   }
 
   const totalStds = standards.length
@@ -164,6 +171,48 @@ export default function CurriculumStandards() {
         </div>
       )}
 
+      {/* Active mappings for selected node */}
+      {selectedNodeId && (
+        <Card className="rounded-2xl border-border">
+          <CardHeader className="pb-2 border-b border-border">
+            <CardTitle className="text-sm">
+              Mappings for: <span className="text-primary font-normal">{leafNodes.find(n => n.id === selectedNodeId)?.title}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-3">
+            {mappings.filter(m => m.nodeId === selectedNodeId).length === 0 ? (
+              <p className="text-xs text-muted-foreground">No standards linked yet.</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {mappings
+                  .filter(m => m.nodeId === selectedNodeId)
+                  .map(m => {
+                    const std = standards.find(s => s.id === m.standardId)
+                    return (
+                      <div key={m.standardId} className="flex items-center gap-1 bg-muted/20 border border-border rounded-lg px-2 py-1">
+                        <Badge
+                          variant="outline"
+                          className={`text-[8px] h-4 shrink-0 ${std?.framework === 'KHDA' ? 'border-blue-500/30 text-blue-400' : 'border-emerald-500/30 text-emerald-400'}`}
+                        >
+                          {std?.framework}
+                        </Badge>
+                        <span className="text-[10px] font-mono text-foreground">{std?.code ?? m.standardId}</span>
+                        <button
+                          onClick={() => handleUnlink(m.nodeId, m.standardId)}
+                          className="w-4 h-4 flex items-center justify-center rounded hover:bg-red-500/20 text-muted-foreground hover:text-red-400 transition-colors ml-0.5"
+                          title="Unlink standard"
+                        >
+                          <X className="w-2.5 h-2.5" />
+                        </button>
+                      </div>
+                    )
+                  })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Coverage heatmap */}
       <Card className="rounded-2xl border-border">
         <CardHeader className="pb-2 border-b border-border">
@@ -239,9 +288,9 @@ export default function CurriculumStandards() {
           <p className="text-[10px] text-muted-foreground mb-3">Standards are mapped across all curriculum levels — from courses down to individual activities within lessons.</p>
           <div className="flex items-center gap-2 flex-wrap">
             {[
-              { level: 'Courses',    count: curriculumNodes.filter(n => n.nodeType === 'course' && standardMappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'course').length,  color: 'text-primary border-primary/30' },
-              { level: 'Units',      count: curriculumNodes.filter(n => n.nodeType === 'unit'   && standardMappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'unit').length,    color: 'text-blue-400 border-blue-500/30' },
-              { level: 'Lessons',    count: curriculumNodes.filter(n => n.nodeType === 'lesson' && standardMappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'lesson').length,  color: 'text-emerald-400 border-emerald-500/30' },
+              { level: 'Courses',    count: curriculumNodes.filter(n => n.nodeType === 'course' && mappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'course').length,  color: 'text-primary border-primary/30' },
+              { level: 'Units',      count: curriculumNodes.filter(n => n.nodeType === 'unit'   && mappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'unit').length,    color: 'text-blue-400 border-blue-500/30' },
+              { level: 'Lessons',    count: curriculumNodes.filter(n => n.nodeType === 'lesson' && mappings.some(m => m.nodeId === n.id)).length,  total: curriculumNodes.filter(n => n.nodeType === 'lesson').length,  color: 'text-emerald-400 border-emerald-500/30' },
               { level: 'Activities', count: activityItems.filter(a => a.standardIds.length > 0).length, total: activityItems.length, color: 'text-amber-400 border-amber-500/30' },
             ].map((item, i, arr) => (
               <div key={item.level} className="flex items-center gap-2">

@@ -4,7 +4,8 @@ import { Upload, Video, FileText, HelpCircle, Zap, Link2, CheckCircle2 } from 'l
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { curriculumResources, curriculumNodes, type CurriculumResource, type ResourceType } from '@/data/mock-curriculum'
+import { type ResourceType } from '@/data/mock-curriculum'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const TYPE_COLORS: Record<ResourceType, string> = {
   video:       'border-blue-500/30 text-blue-400 bg-blue-500/10',
@@ -24,7 +25,10 @@ const SUBJECTS = ['All', 'Mathematics', 'Physics', 'English', 'Arabic', 'Science
 const TYPES: (ResourceType | 'All')[] = ['All', 'video', 'document', 'quiz', 'interactive']
 
 export default function CurriculumResources() {
-  const [resources, setResources] = useState<CurriculumResource[]>(curriculumResources)
+  const resources = useAcademyStore(s => s.curriculumResources)
+  const nodes = useAcademyStore(s => s.curriculumNodes)
+  const { uploadResource, attachResourceToLesson } = useAcademyStore()
+
   const [searchQuery, setSearchQuery] = useState('')
   const [subjectFilter, setSubjectFilter] = useState('All')
   const [typeFilter, setTypeFilter] = useState<ResourceType | 'All'>('All')
@@ -33,7 +37,7 @@ export default function CurriculumResources() {
   const [linkLesson, setLinkLesson] = useState('')
   const [linkFeedback, setLinkFeedback] = useState<string | null>(null)
 
-  const lessons = curriculumNodes.filter(n => n.nodeType === 'lesson')
+  const lessons = nodes.filter(n => n.nodeType === 'lesson')
 
   const filtered = resources.filter(r => {
     if (searchQuery && !r.name.toLowerCase().includes(searchQuery.toLowerCase())) return false
@@ -45,27 +49,21 @@ export default function CurriculumResources() {
   function handleUploadDrop() {
     setUploadingState('uploading')
     setTimeout(() => {
-      const newRes: CurriculumResource = {
-        id: `res-${Date.now()}`,
+      uploadResource({
         name: 'New Uploaded Resource',
         resourceType: 'document',
         subject: 'Mathematics',
         gradeLevel: 'Grade 10',
         uploadDate: new Date().toISOString().split('T')[0],
         linkedLessonIds: [],
-      }
-      setResources(prev => [...prev, newRes])
+      })
       setUploadingState('done')
       setTimeout(() => setUploadingState('idle'), 2000)
     }, 1500)
   }
 
   function handleLink(resourceId: string, lessonId: string) {
-    setResources(prev => prev.map(r =>
-      r.id === resourceId && !r.linkedLessonIds.includes(lessonId)
-        ? { ...r, linkedLessonIds: [...r.linkedLessonIds, lessonId] }
-        : r
-    ))
+    attachResourceToLesson(resourceId, lessonId)
     setLinkFeedback(resourceId)
     setLinkingId(null)
     setLinkLesson('')

@@ -10,33 +10,40 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
-import { getAssignmentById } from '@/data/mock-student-assignments'
+import { useCurrentStudent } from '@/stores/role-store'
+import { getStudentAssignments, type StudentAssignmentView } from '@/lib/academy-selectors'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const statusConfig = {
-  pending:     { label: 'Pending',     color: 'text-amber-400',   border: 'border-amber-500/30',   icon: Clock },
-  'in-progress': { label: 'In Progress', color: 'text-blue-400', border: 'border-blue-500/30',    icon: BookOpen },
-  submitted:   { label: 'Submitted',   color: 'text-emerald-400', border: 'border-emerald-500/30', icon: CheckCircle2 },
-  graded:      { label: 'Graded',      color: 'text-primary',     border: 'border-primary/30',     icon: CheckCircle2 },
+  'not-submitted': { label: 'Pending',   color: 'text-amber-400',   border: 'border-amber-500/30',   icon: Clock },
+  submitted:       { label: 'Submitted', color: 'text-emerald-400', border: 'border-emerald-500/30', icon: CheckCircle2 },
+  late:            { label: 'Late',      color: 'text-red-400',     border: 'border-red-500/30',     icon: Clock },
+  graded:          { label: 'Graded',    color: 'text-primary',     border: 'border-primary/30',     icon: CheckCircle2 },
 }
 
 const subjectColors: Record<string, string> = {
-  Mathematics: '#3B82F6',
-  Physics:     '#8B5CF6',
-  English:     '#10B981',
-  Science:     '#F59E0B',
-  Arabic:      '#EC4899',
+  Mathematics:       '#3B82F6',
+  Physics:           '#8B5CF6',
+  'English Language':'#10B981',
+  English:           '#10B981',
+  Chemistry:         '#F59E0B',
+  Arabic:            '#EC4899',
 }
 
 export default function AssignmentDetailPage() {
   const params = useParams()
   const id = (params?.id ?? '') as string
   const router = useRouter()
-  const assignment = getAssignmentById(id)
+  const student = useCurrentStudent()
+  const submitHomework = useAcademyStore(s => s.submitHomework)
+  // Subscribe to store so UI reflects newly submitted work
+  const submissions = useAcademyStore(s => s.submissions)
+
+  const assignments = student ? getStudentAssignments(student.id) : []
+  const assignment: StudentAssignmentView | undefined = assignments.find(a => a.id === id)
 
   const [submissionText, setSubmissionText] = useState(assignment?.submittedContent ?? '')
-  const [submitted, setSubmitted] = useState(
-    assignment?.status === 'submitted' || assignment?.status === 'graded'
-  )
+  const [localSubmitted, setLocalSubmitted] = useState(false)
   const [showAiFeedback, setShowAiFeedback] = useState(false)
 
   if (!assignment) {
@@ -51,17 +58,21 @@ export default function AssignmentDetailPage() {
     )
   }
 
-  const cfg = statusConfig[assignment.status]
+  const cfg = statusConfig[assignment.status] ?? statusConfig['not-submitted']
   const StatusIcon = cfg.icon
   const accentColor = subjectColors[assignment.subject] ?? '#00B8A9'
-  const canSubmit = assignment.status === 'pending' || assignment.status === 'in-progress'
+  const isSubmitted = assignment.status === 'submitted' || assignment.status === 'late' || localSubmitted
   const isGraded = assignment.status === 'graded'
-  const gradePercent = isGraded && assignment.grade != null ? assignment.grade : 0
+  const canSubmit = !isSubmitted && !isGraded && assignment.homeworkStatus !== 'closed'
+  const gradePercent = isGraded && assignment.grade != null
+    ? Math.round((assignment.grade / assignment.totalPoints) * 100)
+    : 0
   const gradeColor = gradePercent >= 90 ? 'text-emerald-400' : gradePercent >= 75 ? 'text-amber-400' : 'text-red-400'
 
   function handleSubmit() {
-    if (!submissionText.trim()) return
-    setSubmitted(true)
+    if (!submissionText.trim() || !student) return
+    submitHomework(id, student.id, submissionText)
+    setLocalSubmitted(true)
   }
 
   return (
@@ -97,8 +108,8 @@ export default function AssignmentDetailPage() {
       <div className="flex flex-wrap gap-3">
         {[
           { label: 'Subject', value: assignment.subject, color: accentColor },
-          { label: 'Due Date', value: assignment.due, color: '#94A3B8' },
-          { label: 'Points', value: `${assignment.points} pts`, color: '#94A3B8' },
+          { label: 'Due Date', value: assignment.dueDate, color: '#94A3B8' },
+          { label: 'Points', value: `${assignment.totalPoints} pts`, color: '#94A3B8' },
           ...(assignment.submittedDate ? [{ label: 'Submitted', value: assignment.submittedDate, color: '#10B981' }] : []),
         ].map(({ label, value, color }) => (
           <div key={label} className="px-3 py-2 rounded-xl bg-card border border-border">
@@ -125,7 +136,7 @@ export default function AssignmentDetailPage() {
           </Card>
 
           {/* Instructions */}
-          {assignment.instructions && assignment.status !== 'graded' && (
+          {assignment.instructions && !isGraded && (
             <Card className="rounded-2xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -141,51 +152,37 @@ export default function AssignmentDetailPage() {
             </Card>
           )}
 
-          {/* Submission / Result */}
+          {/* Submit / submitted state */}
           {canSubmit && (
             <Card className="rounded-2xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
                   <Send className="w-4 h-4 text-primary" />
-                  {submitted ? 'Your Submission' : 'Submit Your Work'}
+                  Submit Your Work
                 </CardTitle>
               </CardHeader>
               <CardContent className="px-5 pb-5 space-y-3">
-                {submitted ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-400 text-xs font-medium">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      Submitted successfully — awaiting grading
-                    </div>
-                    <div className="p-3 rounded-xl bg-muted/30 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                      {submissionText}
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <Textarea
-                      value={submissionText}
-                      onChange={e => setSubmissionText(e.target.value)}
-                      placeholder="Type your answer or paste your work here…"
-                      className="min-h-40 bg-muted/30 border-border text-sm resize-none"
-                    />
-                    <Button
-                      onClick={handleSubmit}
-                      disabled={!submissionText.trim()}
-                      className="w-full"
-                      size="sm"
-                    >
-                      <Send className="w-3.5 h-3.5 mr-2" />
-                      Submit Assignment
-                    </Button>
-                  </>
-                )}
+                <Textarea
+                  value={submissionText}
+                  onChange={e => setSubmissionText(e.target.value)}
+                  placeholder="Type your answer or paste your work here…"
+                  className="min-h-40 bg-muted/30 border-border text-sm resize-none"
+                />
+                <Button
+                  onClick={handleSubmit}
+                  disabled={!submissionText.trim()}
+                  className="w-full"
+                  size="sm"
+                >
+                  <Send className="w-3.5 h-3.5 mr-2" />
+                  Submit Assignment
+                </Button>
               </CardContent>
             </Card>
           )}
 
-          {/* Submitted (not graded) */}
-          {assignment.status === 'submitted' && (
+          {/* Awaiting grading */}
+          {(isSubmitted && !isGraded) && (
             <Card className="rounded-2xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -195,11 +192,13 @@ export default function AssignmentDetailPage() {
               </CardHeader>
               <CardContent className="px-5 pb-5 space-y-3">
                 <div className="flex items-center gap-2 text-emerald-400 text-xs font-medium">
-                  Submitted on {assignment.submittedDate} — awaiting grading
+                  {localSubmitted ? 'Submitted just now — awaiting grading' : `Submitted on ${assignment.submittedDate} — awaiting grading`}
                 </div>
-                <div className="p-3 rounded-xl bg-muted/30 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                  {assignment.submittedContent}
-                </div>
+                {(assignment.submittedContent || submissionText) && (
+                  <div className="p-3 rounded-xl bg-muted/30 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                    {assignment.submittedContent ?? submissionText}
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
@@ -215,32 +214,31 @@ export default function AssignmentDetailPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="px-5 pb-5 space-y-4">
-                  {/* Score */}
                   <div className="flex items-center gap-4">
                     <div className="text-center">
-                      <p className={`text-4xl font-bold ${gradeColor}`}>{assignment.grade}%</p>
+                      <p className={`text-4xl font-bold ${gradeColor}`}>{assignment.grade}</p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">
-                        {Math.round((assignment.grade! / 100) * assignment.points)}/{assignment.points} pts
+                        /{assignment.totalPoints} pts ({gradePercent}%)
                       </p>
                     </div>
                     <div className="flex-1">
-                      <Progress value={assignment.grade ?? 0} className="h-2" />
+                      <Progress value={gradePercent} className="h-2" />
                       <p className="text-xs text-muted-foreground mt-1.5">
                         {gradePercent >= 90 ? 'Outstanding' : gradePercent >= 75 ? 'Good' : 'Needs Improvement'}
                       </p>
                     </div>
                   </div>
-                  {/* Teacher feedback */}
-                  <div>
-                    <p className="text-xs font-medium text-foreground mb-1.5">Teacher Feedback</p>
-                    <div className="p-3 rounded-xl bg-muted/30 text-sm text-muted-foreground leading-relaxed">
-                      {assignment.feedback}
+                  {assignment.feedback && (
+                    <div>
+                      <p className="text-xs font-medium text-foreground mb-1.5">Teacher Feedback</p>
+                      <div className="p-3 rounded-xl bg-muted/30 text-sm text-muted-foreground leading-relaxed">
+                        {assignment.feedback}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
 
-              {/* AI Feedback */}
               {assignment.aiFeedback && (
                 <Card className="rounded-2xl border-primary/20 bg-primary/5">
                   <CardHeader className="pb-2 pt-5 px-5">
@@ -283,23 +281,21 @@ export default function AssignmentDetailPage() {
                 {assignment.rubric.map((item, i) => (
                   <div key={i} className="p-3 rounded-xl bg-muted/20 space-y-1">
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-semibold text-foreground">{item.criterion}</p>
+                      <p className="text-xs font-semibold text-foreground">{item.label}</p>
                       <Badge variant="outline" className="text-[10px] h-4 border-primary/30 text-primary">
-                        {item.points} pts
+                        {item.maxPoints} pts
                       </Badge>
                     </div>
-                    <p className="text-[11px] text-muted-foreground">{item.description}</p>
                   </div>
                 ))}
                 <div className="flex items-center justify-between pt-2 border-t border-border">
                   <p className="text-xs font-semibold text-foreground">Total</p>
-                  <p className="text-xs font-bold text-primary">{assignment.points} pts</p>
+                  <p className="text-xs font-bold text-primary">{assignment.totalPoints} pts</p>
                 </div>
               </CardContent>
             </Card>
           )}
 
-          {/* Quick tips for in-progress */}
           {canSubmit && (
             <Card className="rounded-2xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">

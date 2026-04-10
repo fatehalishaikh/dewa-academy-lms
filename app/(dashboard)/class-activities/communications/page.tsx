@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { academyClasses as mockClasses } from '@/data/mock-classes'
+import { useAcademyStore } from '@/stores/academy-store'
 
 type Audience = 'class' | 'all' | 'individual'
 type MessageStatus = 'sent' | 'scheduled'
@@ -62,6 +63,7 @@ const INITIAL_MESSAGES: SentMessage[] = [
 ]
 
 export default function ClassActivitiesCommunications() {
+  const { addNotification } = useAcademyStore()
   const [messages, setMessages] = useState<SentMessage[]>(INITIAL_MESSAGES)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
@@ -101,6 +103,12 @@ export default function ClassActivitiesCommunications() {
         recipients: getRecipientCount(),
       }
       setMessages(prev => [newMsg, ...prev])
+      addNotification({
+        type: 'message',
+        title: title,
+        body: body,
+        recipientRole: audience === 'all' ? 'all' : audience === 'individual' ? 'student' : 'student',
+      })
       setTitle('')
       setBody('')
       setIsSending(false)

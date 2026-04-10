@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { Upload, CheckCircle2, AlertTriangle, RefreshCw, FileText } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -6,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Separator } from '@/components/ui/separator'
-import { fieldMappings, importHistory } from '@/data/mock-ilp'
+import { importHistory } from '@/data/mock-ilp'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const fieldOptions = [
   'Student ID', 'Full Name', 'Grade Level', 'Class / Section',
@@ -20,6 +22,20 @@ const importStatusStyle: Record<string, string> = {
 }
 
 export default function DataConnection() {
+  const { ilpSettings, updateFieldMappings } = useAcademyStore()
+  const fieldMappings = ilpSettings.fieldMappings
+  const [mappingsSaved, setMappingsSaved] = useState(false)
+
+  function handleApplyMapping() {
+    updateFieldMappings(fieldMappings)
+    setMappingsSaved(true)
+    setTimeout(() => setMappingsSaved(false), 2000)
+  }
+
+  function handleReset() {
+    updateFieldMappings(fieldMappings.map(m => ({ ...m, status: 'unmapped' as const })))
+  }
+
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -47,7 +63,10 @@ export default function DataConnection() {
                 <p className="text-sm font-medium text-foreground">Drop CSV file here or click to browse</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Supports .csv, .xlsx — max 10 MB</p>
               </div>
-              <Button size="sm" variant="outline" className="rounded-full">Browse Files</Button>
+              <Button size="sm" variant="outline" className="rounded-full" onClick={() => {
+                // Simulate file browse — show confirmation in badge
+                setMappingsSaved(false)
+              }}>Browse Files</Button>
             </div>
 
             <Separator />
@@ -135,8 +154,11 @@ export default function DataConnection() {
               </Table>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" className="rounded-full flex-1 text-xs">Apply Mapping</Button>
-              <Button size="sm" variant="outline" className="rounded-full text-xs">Reset</Button>
+              <Button size="sm" className="rounded-full flex-1 text-xs gap-1.5" onClick={handleApplyMapping}>
+                {mappingsSaved && <CheckCircle2 className="w-3.5 h-3.5" />}
+                {mappingsSaved ? 'Mapping Applied' : 'Apply Mapping'}
+              </Button>
+              <Button size="sm" variant="outline" className="rounded-full text-xs" onClick={handleReset}>Reset</Button>
             </div>
           </CardContent>
         </Card>

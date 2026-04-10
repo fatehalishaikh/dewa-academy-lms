@@ -4,7 +4,8 @@ import { ChevronDown, ChevronUp, Copy, Plus, Wand2, Share2, LayoutList, Calendar
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { lessonTemplates, type LessonTemplate, type LessonTemplateSections } from '@/data/mock-curriculum'
+import { type LessonTemplate, type LessonTemplateSections } from '@/data/mock-curriculum'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const subjectColor: Record<string, string> = {
   Science:     'border-emerald-500/30 text-emerald-400',
@@ -60,7 +61,9 @@ const emptyForm = (): CreateForm => ({
 })
 
 export default function CurriculumTemplates() {
-  const [templates, setTemplates] = useState<LessonTemplate[]>(lessonTemplates)
+  const templates = useAcademyStore(s => s.lessonTemplates)
+  const { addLessonTemplate, updateLessonTemplate, cloneLessonTemplate, addNotification } = useAcademyStore()
+
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState<CreateForm>(emptyForm())
@@ -72,42 +75,36 @@ export default function CurriculumTemplates() {
     setAiEnhancingId(id)
     setTimeout(() => {
       const suggestion = AI_DIFFERENTIATION.join(' ')
-      setTemplates(prev => prev.map(t =>
-        t.id === id ? { ...t, sections: { ...t.sections, differentiation: suggestion } } : t
-      ))
+      const t = templates.find(tmpl => tmpl.id === id)
+      if (t) {
+        updateLessonTemplate(id, { sections: { ...t.sections, differentiation: suggestion } })
+      }
       setAiEnhancingId(null)
     }, 2000)
   }
 
   function handleClone(template: LessonTemplate) {
-    const clone: LessonTemplate = {
-      ...template,
-      id: `clone-${Date.now()}`,
-      title: `${template.title} (Copy)`,
-      createdDate: new Date().toISOString().split('T')[0],
-    }
-    setTemplates(prev => [...prev, clone])
+    cloneLessonTemplate(template.id)
   }
 
   function handleShare(id: string, e: React.MouseEvent) {
     e.stopPropagation()
     setShareToast(id)
+    addNotification({ type: 'curriculum', title: 'Template shared', body: 'Template shared with team.', recipientRole: 'teacher' })
     setTimeout(() => setShareToast(null), 2000)
   }
 
   function handleCreate() {
     if (!form.title) return
-    const newTemplate: LessonTemplate = {
-      id: `tmpl-${Date.now()}`,
+    const newId = addLessonTemplate({
       title: form.title,
       subject: form.subject,
       createdDate: new Date().toISOString().split('T')[0],
       sections: form.sections,
-    }
-    setTemplates(prev => [...prev, newTemplate])
+    })
     setForm(emptyForm())
     setShowCreate(false)
-    setExpandedId(newTemplate.id)
+    setExpandedId(newId)
   }
 
   return (

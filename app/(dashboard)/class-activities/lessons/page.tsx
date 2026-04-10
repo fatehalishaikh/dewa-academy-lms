@@ -4,6 +4,7 @@ import { Plus, Wand2, ChevronDown, ChevronUp, CheckCircle2, Clock, BookOpen } fr
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { useAcademyStore } from '@/stores/academy-store'
 
 type LessonStatus = 'draft' | 'approved' | 'delivered'
 
@@ -81,6 +82,7 @@ const BLANK_FORM: CreateForm = {
 }
 
 export default function ClassActivitiesLessons() {
+  const { createLessonPlan, approveLessonPlan, addNotification } = useAcademyStore()
   const [lessons, setLessons] = useState<LessonPlan[]>(INITIAL_LESSONS)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
@@ -127,6 +129,16 @@ export default function ClassActivitiesLessons() {
       differentiation: form.differentiation,
     }
     setLessons(prev => [newLesson, ...prev])
+    createLessonPlan({
+      teacherId: 'teacher',
+      classId: form.className,
+      subject: form.subject,
+      topic: form.title,
+      date: form.date,
+      duration: Number(form.duration) || 50,
+      objectives: form.objectives ? [form.objectives] : [],
+      materials: form.materials ? [form.materials] : [],
+    })
     setForm(BLANK_FORM)
     setShowCreate(false)
     setExpandedId(newLesson.id)
@@ -263,7 +275,16 @@ export default function ClassActivitiesLessons() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => setLessons(prev => prev.map(l => l.id === lesson.id ? { ...l, status: 'approved' } : l))}
+                      onClick={() => {
+                        setLessons(prev => prev.map(l => l.id === lesson.id ? { ...l, status: 'approved' } : l))
+                        approveLessonPlan(lesson.id)
+                        addNotification({
+                          type: 'curriculum',
+                          title: 'Lesson plan approved',
+                          body: `Lesson plan "${lesson.title}" has been approved.`,
+                          recipientRole: 'admin',
+                        })
+                      }}
                       className="text-xs h-7 gap-1 border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
                     >
                       <CheckCircle2 className="w-3 h-3" /> Approve Plan

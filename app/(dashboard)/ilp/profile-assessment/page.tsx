@@ -1,5 +1,6 @@
 'use client'
-import { ClipboardCheck, Plus } from 'lucide-react'
+import { useState } from 'react'
+import { ClipboardCheck, Plus, CheckCircle2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -9,9 +10,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch'
 import { Slider } from '@/components/ui/slider'
 import { Separator } from '@/components/ui/separator'
-import { diagnosticAssessments, thresholdBands } from '@/data/mock-ilp'
+import { useAcademyStore } from '@/stores/academy-store'
 
 export default function ProfileAssessment() {
+  const { ilpSettings, updateThresholds, toggleDiagnosticAssessment } = useAcademyStore()
+  const diagnosticAssessments = ilpSettings.diagnosticAssessments
+  const thresholdBands = ilpSettings.thresholdBands
+  const [localBands, setLocalBands] = useState(thresholdBands.map(b => ({ ...b })))
+  const [saved, setSaved] = useState(false)
+
+  function handleSaveThresholds() {
+    updateThresholds(localBands)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
   return (
     <div className="space-y-5">
       {/* Diagnostic Assessments */}
@@ -57,7 +70,11 @@ export default function ProfileAssessment() {
                   </div>
                 </div>
               </div>
-              <Switch defaultChecked={a.enabled} className="shrink-0" />
+              <Switch
+                checked={a.enabled}
+                onCheckedChange={() => toggleDiagnosticAssessment(a.id)}
+                className="shrink-0"
+              />
             </div>
           ))}
           <Button size="sm" variant="outline" className="rounded-full w-full text-xs gap-1">
@@ -76,7 +93,7 @@ export default function ProfileAssessment() {
           </div>
         </CardHeader>
         <CardContent className="space-y-5">
-          {thresholdBands.map(band => (
+          {localBands.map((band, idx) => (
             <div key={band.label} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -86,7 +103,12 @@ export default function ProfileAssessment() {
                 <span className="text-xs text-muted-foreground font-mono">{band.min}% – {band.max}%</span>
               </div>
               <Slider
-                defaultValue={[band.min, band.max]}
+                value={[band.min, band.max]}
+                onValueChange={(vals) => {
+                  const [min, max] = vals as number[]
+                  setLocalBands(prev => prev.map((b, i) => i === idx ? { ...b, min, max } : b))
+                  setSaved(false)
+                }}
                 min={0} max={100} step={1}
                 className="w-full"
               />
@@ -99,7 +121,7 @@ export default function ProfileAssessment() {
           <div className="space-y-2">
             <p className="text-xs text-muted-foreground font-medium">Band Preview</p>
             <div className="flex rounded-lg overflow-hidden h-6 w-full">
-              {thresholdBands.slice().reverse().map(band => (
+              {localBands.slice().reverse().map(band => (
                 <div
                   key={band.label}
                   className="flex items-center justify-center"
@@ -121,7 +143,10 @@ export default function ProfileAssessment() {
           </div>
 
           <div className="flex justify-end">
-            <Button size="sm" className="rounded-full text-xs">Save Thresholds</Button>
+            <Button size="sm" className="rounded-full text-xs gap-1.5" onClick={handleSaveThresholds}>
+              {saved && <CheckCircle2 className="w-3.5 h-3.5" />}
+              {saved ? 'Thresholds Saved' : 'Save Thresholds'}
+            </Button>
           </div>
         </CardContent>
       </Card>

@@ -5,7 +5,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { curriculumNodes, type CurriculumNode, type NodeStatus } from '@/data/mock-curriculum'
+import { type CurriculumNode, type NodeStatus } from '@/data/mock-curriculum'
+import { useAcademyStore } from '@/stores/academy-store'
+import { useRoleStore } from '@/stores/role-store'
 
 const STATUS_ORDER: NodeStatus[] = ['draft', 'under-review', 'approved', 'published']
 
@@ -58,16 +60,20 @@ const NOTIFICATIONS = [
 type ReviewRole = 'Curriculum Coordinator' | 'Teacher' | 'Admin'
 
 export default function CurriculumReview() {
-  const [nodes, setNodes] = useState<CurriculumNode[]>(curriculumNodes)
+  const { role } = useRoleStore()
+  const nodes = useAcademyStore(s => s.curriculumNodes)
+  const { updateNodeStatus, addNodeComment, appNotifications } = useAcademyStore()
   const [comments, setComments] = useState<Record<string, string[]>>(MOCK_COMMENTS)
   const [activeCardId, setActiveCardId] = useState<string | null>(null)
   const [newComment, setNewComment] = useState<Record<string, string>>({})
   const [feedbackText, setFeedbackText] = useState<Record<string, string>>({})
   const [rejectingId, setRejectingId] = useState<string | null>(null)
-  const [role, setRole] = useState<ReviewRole>('Curriculum Coordinator')
   const [notifOpen, setNotifOpen] = useState(false)
 
-  const canApprove = role === 'Curriculum Coordinator' || role === 'Admin'
+  const canApprove = role === 'admin'
+
+  const curriculumNotifications = appNotifications.filter(n => n.type === 'curriculum')
+  const unreadCount = curriculumNotifications.filter(n => !n.read).length + NOTIFICATIONS.filter(n => !n.read).length
 
   function nextStatus(status: NodeStatus): NodeStatus | null {
     const idx = STATUS_ORDER.indexOf(status)
@@ -75,30 +81,26 @@ export default function CurriculumReview() {
   }
 
   function handleAdvance(nodeId: string) {
-    setNodes(prev => prev.map(n => {
-      if (n.id !== nodeId) return n
-      const next = nextStatus(n.status)
-      return next ? { ...n, status: next } : n
-    }))
+    const node = nodes.find(n => n.id === nodeId)
+    if (!node) return
+    const next = nextStatus(node.status)
+    if (next) updateNodeStatus(nodeId, next, 'Curriculum Coordinator')
   }
 
   function handleApprove(nodeId: string) {
-    setNodes(prev => prev.map(n =>
-      n.id === nodeId ? { ...n, status: 'approved' } : n
-    ))
+    updateNodeStatus(nodeId, 'approved', 'Curriculum Coordinator')
     setActiveCardId(null)
   }
 
   function handleReject(nodeId: string) {
-    setNodes(prev => prev.map(n =>
-      n.id === nodeId ? { ...n, status: 'draft' } : n
-    ))
+    updateNodeStatus(nodeId, 'draft', 'Curriculum Coordinator')
     const fb = feedbackText[nodeId]
     if (fb) {
       setComments(prev => ({
         ...prev,
         [nodeId]: [...(prev[nodeId] ?? []), `[Rejected] ${fb}`],
       }))
+      addNodeComment(nodeId, `[Rejected] ${fb}`, 'Curriculum Coordinator')
     }
     setRejectingId(null)
     setFeedbackText(prev => ({ ...prev, [nodeId]: '' }))
@@ -108,26 +110,15 @@ export default function CurriculumReview() {
     const text = newComment[nodeId]?.trim()
     if (!text) return
     setComments(prev => ({ ...prev, [nodeId]: [...(prev[nodeId] ?? []), text] }))
+    addNodeComment(nodeId, text, 'Curriculum Coordinator')
     setNewComment(prev => ({ ...prev, [nodeId]: '' }))
   }
 
-  const unreadCount = NOTIFICATIONS.filter(n => !n.read).length
-
   return (
     <div className="space-y-4">
-      {/* Role selector + Notifications */}
+      {/* Notifications */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground">Viewing as:</span>
-          <select
-            value={role}
-            onChange={e => setRole(e.target.value as ReviewRole)}
-            className="bg-card border border-border rounded-lg px-2 py-1 text-xs text-foreground focus:outline-none focus:border-primary/50"
-          >
-            <option>Curriculum Coordinator</option>
-            <option>Teacher</option>
-            <option>Admin</option>
-          </select>
           {canApprove ? (
             <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-400">Can approve</Badge>
           ) : (

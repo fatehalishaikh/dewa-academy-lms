@@ -1,11 +1,13 @@
 'use client'
 import { useState } from 'react'
-import { ScanSearch, Sparkles, CheckCircle2, AlertCircle, Clock, ThumbsUp, Flag, RefreshCw } from 'lucide-react'
+import { ScanSearch, Sparkles, CheckCircle2, AlertCircle, Clock, ThumbsUp, Flag, RefreshCw, Send } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { mockApplications } from '@/data/mock-registration'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const pendingApps = mockApplications.filter(a =>
   a.stage === 'Documents Under Review' || a.stage === 'Emirates ID Verified'
@@ -29,10 +31,48 @@ function FieldStatusIcon({ matches }: { matches: boolean }) {
 
 export default function DocumentVerification() {
   const [selectedApp, setSelectedApp] = useState(pendingApps[0] ?? null)
+  const [rescanning, setRescanning] = useState(false)
+  const [approvedApps, setApprovedApps] = useState<Set<string>>(new Set())
+  const [flaggedApps, setFlaggedApps] = useState<Set<string>>(new Set())
+  const [resubmitOpen, setResubmitOpen] = useState(false)
+  const [resubmitNote, setResubmitNote] = useState('')
+  const [resubmitSent, setResubmitSent] = useState(false)
+  const { addNotification } = useAcademyStore()
 
   const hasMismatch = selectedApp?.documents.some(d =>
     d.extractedFields.some(f => !f.matchesApplication)
   ) ?? false
+
+  const isApproved = selectedApp ? approvedApps.has(selectedApp.id) : false
+  const isFlagged = selectedApp ? flaggedApps.has(selectedApp.id) : false
+
+  function handleRescan() {
+    setRescanning(true)
+    setTimeout(() => setRescanning(false), 1600)
+  }
+
+  function handleApproveAll() {
+    if (!selectedApp) return
+    setApprovedApps(prev => new Set([...prev, selectedApp.id]))
+    addNotification({ type: 'registration', title: 'Documents approved', body: `All documents approved for ${selectedApp.nameEn}`, recipientRole: 'admin' })
+  }
+
+  function handleFlag() {
+    if (!selectedApp) return
+    setFlaggedApps(prev => {
+      const next = new Set(prev)
+      if (next.has(selectedApp.id)) next.delete(selectedApp.id)
+      else next.add(selectedApp.id)
+      return next
+    })
+  }
+
+  function handleResubmit() {
+    if (!selectedApp) return
+    addNotification({ type: 'registration', title: 'Resubmission requested', body: `Resubmission requested for ${selectedApp.nameEn}`, recipientRole: 'admin' })
+    setResubmitSent(true)
+    setTimeout(() => { setResubmitSent(false); setResubmitOpen(false); setResubmitNote('') }, 2000)
+  }
 
   return (
     <div className="flex gap-4" style={{ height: 'calc(100vh - 200px)' }}>
@@ -89,9 +129,26 @@ export default function DocumentVerification() {
               <p className="text-xs text-muted-foreground">{selectedApp.id} · {selectedApp.applicationType}</p>
             </div>
             <div className="flex items-center gap-2">
-              <Button size="sm" variant="outline" className="text-xs h-7 gap-1"><RefreshCw className="w-3 h-3" />Re-scan</Button>
-              <Button size="sm" className="text-xs h-7 gap-1 bg-primary hover:bg-primary/90"><ThumbsUp className="w-3 h-3" />Approve All</Button>
-              <Button size="sm" variant="outline" className="text-xs h-7 gap-1 text-red-400 border-red-500/30 hover:bg-red-500/10"><Flag className="w-3 h-3" />Flag</Button>
+              <Button size="sm" variant="outline" className="text-xs h-7 gap-1" disabled={rescanning} onClick={handleRescan}>
+                <RefreshCw className={`w-3 h-3 ${rescanning ? 'animate-spin' : ''}`} />
+                {rescanning ? 'Scanning…' : 'Re-scan'}
+              </Button>
+              {isApproved ? (
+                <Button size="sm" className="text-xs h-7 gap-1 bg-green-600 hover:bg-green-600 cursor-default">
+                  <CheckCircle2 className="w-3 h-3" />Approved
+                </Button>
+              ) : (
+                <Button size="sm" className="text-xs h-7 gap-1 bg-primary hover:bg-primary/90" onClick={handleApproveAll}>
+                  <ThumbsUp className="w-3 h-3" />Approve All
+                </Button>
+              )}
+              <Button
+                size="sm" variant="outline"
+                className={`text-xs h-7 gap-1 ${isFlagged ? 'text-red-400 border-red-500/30 bg-red-500/10' : 'text-red-400 border-red-500/30 hover:bg-red-500/10'}`}
+                onClick={handleFlag}
+              >
+                <Flag className="w-3 h-3" />{isFlagged ? 'Unflag' : 'Flag'}
+              </Button>
             </div>
           </div>
 
@@ -207,8 +264,23 @@ export default function DocumentVerification() {
                     ))}
                   </div>
                   <div className="mt-3 flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1 text-xs h-7">Request Resubmission</Button>
+                    <Button size="sm" variant="outline" className="flex-1 text-xs h-7" onClick={() => setResubmitOpen(v => !v)}>
+                      Request Resubmission
+                    </Button>
                   </div>
+                  {resubmitOpen && (
+                    <div className="mt-2 space-y-2">
+                      <Textarea
+                        value={resubmitNote}
+                        onChange={e => setResubmitNote(e.target.value)}
+                        placeholder="Note to applicant about what needs resubmitting…"
+                        className="text-xs resize-none h-20"
+                      />
+                      <Button size="sm" className="w-full text-xs gap-1.5" onClick={handleResubmit} disabled={resubmitSent}>
+                        {resubmitSent ? <><CheckCircle2 className="w-3 h-3" />Sent</> : <><Send className="w-3 h-3" />Send Request</>}
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

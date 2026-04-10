@@ -1,6 +1,7 @@
 export type SubjectGrade = {
   classId: string
   subject: string
+  teacherId: string
   teacher: string
   average: number
   trend: 'up' | 'down' | 'flat'
@@ -11,6 +12,7 @@ export const gradesByClass: SubjectGrade[] = [
   {
     classId: 'cls-001',
     subject: 'Mathematics',
+    teacherId: 'tch-001',
     teacher: 'Dr. Sarah Ahmed',
     average: 84,
     trend: 'up',
@@ -23,6 +25,7 @@ export const gradesByClass: SubjectGrade[] = [
   {
     classId: 'cls-003',
     subject: 'Physics',
+    teacherId: 'tch-002',
     teacher: 'Mr. James Wilson',
     average: 76,
     trend: 'down',
@@ -34,8 +37,9 @@ export const gradesByClass: SubjectGrade[] = [
   },
   {
     classId: 'cls-005',
-    subject: 'English',
-    teacher: 'Ms. Fatima Al-Zahra',
+    subject: 'English Language',
+    teacherId: 'tch-003',
+    teacher: 'Ms. Layla Al-Farsi',
     average: 91,
     trend: 'up',
     assignments: [
@@ -47,7 +51,8 @@ export const gradesByClass: SubjectGrade[] = [
   {
     classId: 'cls-007',
     subject: 'Chemistry',
-    teacher: 'Dr. Khalid Mansoor',
+    teacherId: 'tch-004',
+    teacher: 'Mr. Hassan Mahmoud',
     average: 68,
     trend: 'down',
     assignments: [
@@ -59,7 +64,8 @@ export const gradesByClass: SubjectGrade[] = [
   {
     classId: 'cls-009',
     subject: 'Arabic',
-    teacher: 'Mr. Omar Al-Rashid',
+    teacherId: 'tch-005',
+    teacher: 'Ms. Fatima Al-Zaabi',
     average: 87,
     trend: 'flat',
     assignments: [
