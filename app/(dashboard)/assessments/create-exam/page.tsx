@@ -1,12 +1,13 @@
 'use client'
 import { useState } from 'react'
-import { Check, ChevronLeft, ChevronRight, Wand2, Sparkles, Brain } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, Wand2, Sparkles, Brain, Zap } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { academyClasses } from '@/data/mock-classes'
-import { examQuestions, type ExamQuestion, type DifficultyLevel } from '@/data/mock-assessments'
+import { examQuestions, adaptiveStudents, type ExamQuestion, type DifficultyLevel } from '@/data/mock-assessments'
 import { useAcademyStore } from '@/stores/academy-store'
+import { getStudentDifficultyProfile, buildDifficultyMix } from '@/lib/adaptive-exam'
 
 const BLOOMS_LEVELS = ['Remember', 'Understand', 'Apply', 'Analyze', 'Evaluate', 'Create'] as const
 type BloomsLevel = typeof BLOOMS_LEVELS[number]
@@ -30,13 +31,16 @@ const diffColor: Record<DifficultyLevel, string> = {
 }
 
 export default function AssessmentsCreateExam() {
-  const { addNotification } = useAcademyStore()
+  const { addNotification, addExam } = useAcademyStore()
   const [step, setStep] = useState(0)
   const [details, setDetails] = useState<ExamDetails>({
     title: '', classId: academyClasses[0]?.id ?? '',
     date: '', duration: '60', examType: 'formative', passingScore: '60',
   })
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [adaptiveMode, setAdaptiveMode] = useState(false)
+  const [adaptiveTopic, setAdaptiveTopic] = useState('')
+  const [adaptiveCount, setAdaptiveCount] = useState(8)
   const [rules, setRules] = useState<Rules>({
     timeLimit: true, attempts: 1,
     randomizeQuestions: false, randomizeAnswers: true, showResultsAfter: true,
@@ -109,7 +113,7 @@ export default function AssessmentsCreateExam() {
 
   function canProceed() {
     if (step === 0) return details.title.trim() !== '' && details.classId !== '' && details.date !== ''
-    if (step === 1) return selectedIds.size > 0
+    if (step === 1) return adaptiveMode || selectedIds.size > 0
     return true
   }
 
@@ -123,10 +127,33 @@ export default function AssessmentsCreateExam() {
         setSavedDraft(false)
       }, 2000)
     } else {
+      const cls = academyClasses.find(c => c.id === details.classId)
+      addExam({
+        title: details.title,
+        classId: details.classId,
+        teacherId: cls?.teacherId ?? 'tch-001',
+        date: details.date,
+        duration: Number(details.duration),
+        examType: details.examType as 'formative' | 'summative' | 'diagnostic',
+        status: 'published',
+        totalPoints: adaptiveMode ? adaptiveCount * 4 : totalPoints,
+        questionIds: adaptiveMode ? [] : [...selectedIds],
+        rules: { ...rules },
+        room: 'TBD',
+        passingScore: Number(details.passingScore),
+        ...(adaptiveMode && {
+          adaptive: {
+            enabled: true as const,
+            subject: cls?.subject ?? 'General',
+            topic: adaptiveTopic.trim() || undefined,
+            totalQuestions: adaptiveCount,
+          },
+        }),
+      })
       addNotification({
         type: 'message',
         title: 'New exam published',
-        body: `Exam "${details.title}" published`,
+        body: `Exam "${details.title}" published${adaptiveMode ? ' (adaptive)' : ''}`,
         recipientRole: 'student',
       })
       setPublished(true)
@@ -134,6 +161,9 @@ export default function AssessmentsCreateExam() {
         setStep(0)
         setDetails({ title: '', classId: academyClasses[0]?.id ?? '', date: '', duration: '60', examType: 'formative', passingScore: '60' })
         setSelectedIds(new Set())
+        setAdaptiveMode(false)
+        setAdaptiveTopic('')
+        setAdaptiveCount(8)
         setPublished(false)
       }, 2500)
     }
@@ -268,42 +298,127 @@ export default function AssessmentsCreateExam() {
 
       {/* Step 1: Questions */}
       {step === 1 && (
-        <Card className="rounded-2xl border-border">
-          <CardHeader className="pb-3 border-b border-border">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm">Select Questions</CardTitle>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">{selectedIds.size} selected · {totalPoints} pts</span>
-                <Button size="sm" variant="outline" onClick={handleAutoGenerate} disabled={isAutoGenerating}
-                  className="h-7 text-xs gap-1 border-primary/30 text-primary hover:bg-primary/10">
-                  {isAutoGenerating
-                    ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Auto-generating…</>
-                    : <><Wand2 className="w-3 h-3" /> Auto-Generate</>}
-                </Button>
+        <div className="space-y-3">
+          {/* Adaptive mode toggle */}
+          <Card className="rounded-2xl border-border">
+            <CardContent className="pt-4 pb-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Brain className="w-3.5 h-3.5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Adaptive per student</p>
+                    <p className="text-[11px] text-muted-foreground">Questions personalized to each student&apos;s performance level</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setAdaptiveMode(v => !v)}
+                  className={`w-10 h-5 rounded-full transition-colors relative shrink-0 ${adaptiveMode ? 'bg-primary' : 'bg-muted'}`}
+                >
+                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${adaptiveMode ? 'left-5' : 'left-0.5'}`} />
+                </button>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-3 space-y-2">
-            <input type="text" value={qSearch} onChange={e => setQSearch(e.target.value)} placeholder="Search questions…"
-              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50" />
-            <div className="max-h-72 overflow-y-auto divide-y divide-border">
-              {filteredQuestions.map(q => (
-                <label key={q.id} className="flex items-start gap-3 px-2 py-2.5 hover:bg-muted/10 cursor-pointer">
-                  <input type="checkbox" checked={selectedIds.has(q.id)} onChange={() => toggleQuestion(q.id)}
-                    className="mt-0.5 accent-primary shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs text-foreground line-clamp-1">{q.text}</p>
-                    <p className="text-[10px] text-muted-foreground">{q.subject} · {q.topic}</p>
+
+              {adaptiveMode && (
+                <div className="space-y-3 pt-1 border-t border-border">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic <span className="font-normal">(optional)</span></label>
+                      <input
+                        type="text"
+                        value={adaptiveTopic}
+                        onChange={e => setAdaptiveTopic(e.target.value)}
+                        placeholder="e.g. Newton&apos;s Laws"
+                        className="w-full bg-background border border-border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-primary/50"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Total questions per student</label>
+                      <input
+                        type="number"
+                        value={adaptiveCount}
+                        onChange={e => setAdaptiveCount(Math.max(3, Number(e.target.value)))}
+                        min={3}
+                        max={20}
+                        className="w-full bg-background border border-border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-primary/50"
+                      />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
-                    <span className="text-[10px] text-muted-foreground">{q.points}pt</span>
+
+                  {/* Per-student preview */}
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-primary" /> Preview — each student&apos;s mix
+                    </p>
+                    {adaptiveStudents.map(as => {
+                      const profile = getStudentDifficultyProfile(as.studentId)
+                      const mix = buildDifficultyMix(profile.level, adaptiveCount)
+                      return (
+                        <div key={as.studentId} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-muted/20">
+                          <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                            <span className="text-[8px] font-bold text-primary">{as.initials}</span>
+                          </div>
+                          <p className="text-[11px] text-foreground flex-1 truncate">{as.name}</p>
+                          <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded border ${
+                            profile.level === 'Hard' ? 'border-red-500/30 text-red-400 bg-red-500/5' :
+                            profile.level === 'Medium' ? 'border-amber-500/30 text-amber-400 bg-amber-500/5' :
+                            'border-emerald-500/30 text-emerald-400 bg-emerald-500/5'
+                          }`}>{profile.level}</span>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {mix.easy > 0 && <span className="text-[9px] text-emerald-400">{mix.easy}e</span>}
+                            {mix.medium > 0 && <span className="text-[9px] text-amber-400">{mix.medium}m</span>}
+                            {mix.hard > 0 && <span className="text-[9px] text-red-400">{mix.hard}h</span>}
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
-                </label>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Static question picker (hidden in adaptive mode) */}
+          {!adaptiveMode && (
+            <Card className="rounded-2xl border-border">
+              <CardHeader className="pb-3 border-b border-border">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm">Select Questions</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">{selectedIds.size} selected · {totalPoints} pts</span>
+                    <Button size="sm" variant="outline" onClick={handleAutoGenerate} disabled={isAutoGenerating}
+                      className="h-7 text-xs gap-1 border-primary/30 text-primary hover:bg-primary/10">
+                      {isAutoGenerating
+                        ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Auto-generating…</>
+                        : <><Wand2 className="w-3 h-3" /> Auto-Generate</>}
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-3 space-y-2">
+                <input type="text" value={qSearch} onChange={e => setQSearch(e.target.value)} placeholder="Search questions…"
+                  className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50" />
+                <div className="max-h-72 overflow-y-auto divide-y divide-border">
+                  {filteredQuestions.map(q => (
+                    <label key={q.id} className="flex items-start gap-3 px-2 py-2.5 hover:bg-muted/10 cursor-pointer">
+                      <input type="checkbox" checked={selectedIds.has(q.id)} onChange={() => toggleQuestion(q.id)}
+                        className="mt-0.5 accent-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-foreground line-clamp-1">{q.text}</p>
+                        <p className="text-[10px] text-muted-foreground">{q.subject} · {q.topic}</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
+                        <span className="text-[10px] text-muted-foreground">{q.points}pt</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       )}
 
       {/* Step 2: Rules */}
@@ -365,8 +480,11 @@ export default function AssessmentsCreateExam() {
                   { label: 'Duration', value: `${details.duration} min` },
                   { label: 'Type', value: details.examType.charAt(0).toUpperCase() + details.examType.slice(1) },
                   { label: 'Passing Score', value: `${details.passingScore}%` },
-                  { label: 'Total Questions', value: `${selectedIds.size}` },
-                  { label: 'Total Points', value: `${totalPoints} pts` },
+                  { label: 'Mode', value: adaptiveMode ? 'Adaptive (per student)' : 'Static' },
+                  adaptiveMode
+                    ? { label: 'Questions per student', value: `${adaptiveCount} (personalized)` }
+                    : { label: 'Total Questions', value: `${selectedIds.size}` },
+                  { label: 'Total Points', value: adaptiveMode ? `~${adaptiveCount * 4} (varies)` : `${totalPoints} pts` },
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <p className="text-[10px] text-muted-foreground">{label}</p>
@@ -376,21 +494,61 @@ export default function AssessmentsCreateExam() {
               </div>
             </CardContent>
           </Card>
-          <Card className="rounded-2xl border-border">
-            <CardHeader className="pb-2 border-b border-border">
-              <CardTitle className="text-sm">Selected Questions ({selectedIds.size})</CardTitle>
-            </CardHeader>
-            <div className="divide-y divide-border max-h-52 overflow-y-auto">
-              {selectedQuestions.map((q, i) => (
-                <div key={q.id} className="flex items-start gap-3 px-5 py-2.5">
-                  <span className="text-[10px] text-muted-foreground w-5 shrink-0">{i + 1}.</span>
-                  <p className="text-xs text-foreground flex-1 line-clamp-1">{q.text}</p>
-                  <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
-                  <span className="text-[10px] text-muted-foreground shrink-0">{q.points}pt</span>
+
+          {/* Adaptive: explain how it works + per-student preview */}
+          {adaptiveMode ? (
+            <Card className="rounded-2xl border-primary/20 bg-primary/5">
+              <CardHeader className="pb-2 border-b border-primary/10">
+                <CardTitle className="text-sm flex items-center gap-2 text-primary">
+                  <Brain className="w-4 h-4" /> How adaptive delivery works
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-3 space-y-3">
+                <p className="text-xs text-muted-foreground">
+                  There are <strong className="text-foreground">no fixed questions</strong> for this exam. When each student opens it, the system analyses their past performance and assembles a personalised set of {adaptiveCount} questions on-the-fly — drawing from the question bank and AI-generated questions as needed. This ensures top performers are challenged and weaker students aren&apos;t overwhelmed.
+                </p>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Expected delivery per student</p>
+                  {adaptiveStudents.map(as => {
+                    const profile = getStudentDifficultyProfile(as.studentId)
+                    const mix = buildDifficultyMix(profile.level, adaptiveCount)
+                    return (
+                      <div key={as.studentId} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-background/50">
+                        <span className="text-[11px] text-foreground flex-1 truncate">{as.name}</span>
+                        <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded border ${
+                          profile.level === 'Hard' ? 'border-red-500/30 text-red-400' :
+                          profile.level === 'Medium' ? 'border-amber-500/30 text-amber-400' :
+                          'border-emerald-500/30 text-emerald-400'
+                        }`}>{profile.level}</span>
+                        <div className="flex items-center gap-1 text-[9px]">
+                          {mix.easy > 0 && <span className="text-emerald-400">{mix.easy}e</span>}
+                          {mix.medium > 0 && <span className="text-amber-400">{mix.medium}m</span>}
+                          {mix.hard > 0 && <span className="text-red-400">{mix.hard}h</span>}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
-              ))}
-            </div>
-          </Card>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="rounded-2xl border-border">
+              <CardHeader className="pb-2 border-b border-border">
+                <CardTitle className="text-sm">Selected Questions ({selectedIds.size})</CardTitle>
+              </CardHeader>
+              <div className="divide-y divide-border max-h-52 overflow-y-auto">
+                {selectedQuestions.map((q, i) => (
+                  <div key={q.id} className="flex items-start gap-3 px-5 py-2.5">
+                    <span className="text-[10px] text-muted-foreground w-5 shrink-0">{i + 1}.</span>
+                    <p className="text-xs text-foreground flex-1 line-clamp-1">{q.text}</p>
+                    <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
+                    <span className="text-[10px] text-muted-foreground shrink-0">{q.points}pt</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => handlePublish(true)} className="text-xs">Save as Draft</Button>
             <Button onClick={() => handlePublish(false)} className="gap-1.5 text-xs">

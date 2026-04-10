@@ -101,6 +101,14 @@ export type ExamRules = {
   showResultsAfter: boolean
 }
 
+export type AdaptiveBlueprint = {
+  enabled: true
+  subject: string
+  topic?: string
+  totalQuestions: number
+  pointsPerQuestion?: { easy: number; medium: number; hard: number }
+}
+
 export type Exam = {
   id: string
   title: string
@@ -115,6 +123,7 @@ export type Exam = {
   rules: ExamRules
   room: string
   passingScore: number
+  adaptive?: AdaptiveBlueprint
 }
 
 export type ExamSubmission = {
@@ -188,6 +197,7 @@ export const exams: Exam[] = [
     rules: { timeLimit: true, attempts: 1, randomizeQuestions: false, randomizeAnswers: true, showResultsAfter: false },
     room: 'B201',
     passingScore: 60,
+    adaptive: { enabled: true, subject: 'Mathematics', totalQuestions: 8 },
   },
   {
     id: 'exam-002',
@@ -203,6 +213,7 @@ export const exams: Exam[] = [
     rules: { timeLimit: true, attempts: 2, randomizeQuestions: true, randomizeAnswers: false, showResultsAfter: true },
     room: 'B103',
     passingScore: 50,
+    adaptive: { enabled: true, subject: 'Physics', topic: "Newton's Laws", totalQuestions: 8 },
   },
   {
     id: 'exam-003',
@@ -233,6 +244,22 @@ export const exams: Exam[] = [
     rules: { timeLimit: true, attempts: 1, randomizeQuestions: false, randomizeAnswers: true, showResultsAfter: false },
     room: 'C102',
     passingScore: 60,
+  },
+  {
+    id: 'exam-005',
+    title: 'Chemistry Adaptive Assessment',
+    classId: 'cls-007',
+    teacherId: 'tch-004',
+    date: '2026-04-20',
+    duration: 60,
+    examType: 'formative',
+    status: 'published',
+    totalPoints: 40,
+    questionIds: [],
+    rules: { timeLimit: true, attempts: 1, randomizeQuestions: false, randomizeAnswers: true, showResultsAfter: true },
+    room: 'C102',
+    passingScore: 60,
+    adaptive: { enabled: true, subject: 'Chemistry', totalQuestions: 6 },
   },
 ]
 

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { ChevronDown, ChevronUp, Wand2, CheckCircle2, Clock, Sparkles, TrendingUp, TrendingDown } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -20,9 +20,29 @@ type AiGradeResult = {
 }
 
 export default function AssessmentsGrading() {
-  const { gradeExamSubmission } = useAcademyStore()
+  const { gradeExamSubmission, examSubmissions: storeSubmissions } = useAcademyStore()
   const [expandedExamId, setExpandedExamId] = useState<string | null>(null)
-  const [submissions, setSubmissions] = useState<ExamSubmission[]>(examSubmissions)
+  const [localOverrides, setLocalOverrides] = useState<Record<string, Partial<ExamSubmission>>>({})
+
+  // Merge seed data with runtime store submissions; apply local grade overrides on top
+  const submissions: ExamSubmission[] = useMemo(() => {
+    const merged: ExamSubmission[] = [
+      ...examSubmissions,
+      ...storeSubmissions
+        .filter(s => !examSubmissions.some(seed => seed.id === s.id))
+        .map(s => ({
+          id: s.id,
+          examId: s.examId,
+          studentId: s.studentId,
+          answers: {},
+          score: s.score,
+          submissionStatus: (s.status === 'graded' ? 'graded' : 'pending') as 'graded' | 'pending',
+          feedback: s.feedback,
+          submittedAt: s.submittedAt,
+        })),
+    ]
+    return merged.map(s => ({ ...s, ...localOverrides[s.id] }))
+  }, [storeSubmissions, localOverrides])
   const [gradingForm, setGradingForm] = useState<Record<string, { score: string; feedback: string }>>({})
   const [aiSuggestingId, setAiSuggestingId] = useState<string | null>(null)
   const [aiResults, setAiResults] = useState<Record<string, AiGradeResult>>({})
@@ -96,11 +116,10 @@ export default function AssessmentsGrading() {
     const form = getForm(subId)
     const numScore = Number(form.score)
     if (isNaN(numScore)) return
-    setSubmissions(prev => prev.map(s =>
-      s.id === subId
-        ? { ...s, score: numScore, feedback: form.feedback, submissionStatus: 'graded' }
-        : s
-    ))
+    setLocalOverrides(prev => ({
+      ...prev,
+      [subId]: { score: numScore, feedback: form.feedback, submissionStatus: 'graded' },
+    }))
     gradeExamSubmission(subId, numScore, form.feedback)
     setGradingSubId(null)
   }

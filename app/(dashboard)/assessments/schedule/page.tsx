@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, AlertTriangle, Bell, CheckCircle2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, AlertTriangle, Bell, CheckCircle2, Brain } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { exams } from '@/data/mock-assessments'
 import { getClassById } from '@/data/mock-classes'
+import { useAcademyStore } from '@/stores/academy-store'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu']
 const TIME_SLOTS = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00']
@@ -30,6 +31,7 @@ const WEEK_LABELS = ['Mar 22–26', 'Mar 29–Apr 2', 'Apr 6–10']
 export default function AssessmentsSchedule() {
   const [weekOffset, setWeekOffset] = useState(1)
   const [published, setPublished] = useState(false)
+  const customExams = useAcademyStore(s => s.customExams)
 
   function handlePublish() {
     setPublished(true)
@@ -124,6 +126,45 @@ export default function AssessmentsSchedule() {
           </table>
         </div>
       </Card>
+
+      {/* Newly published exams (from store) */}
+      {customExams.length > 0 && (
+        <Card className="rounded-2xl border-primary/20">
+          <CardHeader className="pb-2 border-b border-border">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              Newly Published ({customExams.length})
+            </CardTitle>
+          </CardHeader>
+          <div className="divide-y divide-border">
+            {customExams.map(exam => {
+              const cls = getClassById(exam.classId)
+              const cfg = examTypeConfig[exam.examType]
+              return (
+                <div key={exam.id} className="flex items-center gap-4 px-5 py-3">
+                  <div className="w-2 h-2 rounded-full shrink-0" style={{ background: cfg.color }} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-foreground truncate">{exam.title}</p>
+                      {exam.adaptive?.enabled && (
+                        <Badge variant="outline" className="text-[9px] h-4 border-primary/30 text-primary gap-0.5">
+                          <Brain className="w-2.5 h-2.5" /> Adaptive
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">
+                      {cls?.name ?? '—'} · {exam.date} · {exam.duration} min · Room {exam.room}
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="text-[9px] shrink-0" style={{ borderColor: `${cfg.color}50`, color: cfg.color }}>
+                    {cfg.label}
+                  </Badge>
+                </div>
+              )
+            })}
+          </div>
+        </Card>
+      )}
 
       {/* Legend */}
       <div className="flex flex-wrap gap-4">

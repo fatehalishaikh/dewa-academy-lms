@@ -168,6 +168,11 @@ export type StudentNote = {
   createdAt: string
 }
 
+// ─── Exams (runtime-created via create-exam wizard) ──────────────────────────
+
+export type { Exam, AdaptiveBlueprint } from '@/data/mock-assessments'
+import type { Exam } from '@/data/mock-assessments'
+
 // ─── Exam Submission (assessments/grading) ───────────────────────────────────
 
 export type ExamSubmissionRecord = {
@@ -223,6 +228,9 @@ type AcademyState = {
 
   // Student notes (teacher/admin detail pages)
   studentNotes: StudentNote[]
+
+  // Exams created via create-exam wizard (runtime-only)
+  customExams: Exam[]
 
   // Exam submissions (assessments/grading)
   examSubmissions: ExamSubmissionRecord[]
@@ -303,6 +311,9 @@ type AcademyState = {
   addStudentNote: (studentId: string, text: string, authorId: string, authorRole: 'teacher' | 'admin') => void
   getStudentNotes: (studentId: string) => StudentNote[]
 
+  // ── Exam actions ──────────────────────────────────────────────────────────
+  addExam: (exam: Omit<Exam, 'id'>) => string
+
   // ── Exam submission actions ───────────────────────────────────────────────
   addExamSubmission: (sub: Omit<ExamSubmissionRecord, 'id'>) => string
   gradeExamSubmission: (subId: string, score: number, feedback: string) => void
@@ -333,6 +344,7 @@ let resCounter = 100
 let planCounter = 100
 let noteCounter = 100
 let examSubCounter = 100
+let examCounter = 100
 let appCounter = 20 // APP-2026-020 onwards
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -447,6 +459,7 @@ export const useAcademyStore = create<AcademyState>((set, get) => ({
   lessonContents: Object.fromEntries(initialLessonContents.map(lc => [lc.lessonId, lc])),
   lessonPlans: [],
   studentNotes: [],
+  customExams: [],
   examSubmissions: [],
   ilpSettings: {
     thresholdBands,
@@ -1087,6 +1100,15 @@ export const useAcademyStore = create<AcademyState>((set, get) => ({
 
   getStudentNotes: (studentId) => {
     return get().studentNotes.filter(n => n.studentId === studentId)
+  },
+
+  // ── Exams ─────────────────────────────────────────────────────────────────
+
+  addExam: (exam) => {
+    const id = `exam-custom-${String(++examCounter).padStart(3, '0')}`
+    const newExam: Exam = { ...exam, id }
+    set(s => ({ customExams: [newExam, ...s.customExams] }))
+    return id
   },
 
   // ── Exam submissions ──────────────────────────────────────────────────────
