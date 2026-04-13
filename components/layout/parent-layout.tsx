@@ -1,9 +1,9 @@
 'use client'
-import { useThemeStore } from '@/stores/theme-store'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useRouter } from 'next/navigation'
 import {
   LayoutDashboard, BarChart3, Calendar, MessageSquare, CalendarOff, FileText,
-  LogOut, Sun, Moon, ChevronRight,
+  LogOut, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -21,7 +21,7 @@ const parentLinks = [
 ]
 
 function ParentSidebar() {
-  const { isDark, toggleTheme } = useThemeStore()
+
   const router = useRouter()
   const { clearRole } = useRoleStore()
   const parent = useCurrentParent()
@@ -76,12 +76,7 @@ function ParentSidebar() {
             <p className="text-[13px] font-medium text-sidebar-foreground truncate">{parent?.name ?? 'Parent'}</p>
             <p className="text-[11px] text-muted-foreground truncate">{parent?.relationship ?? 'Guardian'}</p>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0"
-          >
-            {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-          </button>
+          <ThemeToggle className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0" />
         </div>
         <button
           onClick={switchRole}

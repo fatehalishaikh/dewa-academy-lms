@@ -1,9 +1,9 @@
 'use client'
-import { useThemeStore } from '@/stores/theme-store'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useRouter } from 'next/navigation'
 import {
   LayoutGrid, LayoutDashboard, ClipboardList, BookOpen, FileCheck, BookMarked,
-  BarChart3, Users, Sun, Moon, LogOut, ChevronRight, Building2,
+  BarChart3, Users, LogOut, ChevronRight, Building2,
   GraduationCap, Briefcase,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -28,7 +28,7 @@ const adminItems = [
 ]
 
 export function Sidebar() {
-  const { isDark, toggleTheme } = useThemeStore()
+
   const router = useRouter()
   const { clearRole } = useRoleStore()
 
@@ -106,13 +106,7 @@ export function Sidebar() {
             <p className="text-[13px] font-medium text-sidebar-foreground truncate">Dr. Hassan Al-Mansoori</p>
             <p className="text-[11px] text-muted-foreground truncate">Administrator</p>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0"
-            aria-label="Toggle theme"
-          >
-            {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-          </button>
+          <ThemeToggle className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0" />
         </div>
         <button
           onClick={switchRole}

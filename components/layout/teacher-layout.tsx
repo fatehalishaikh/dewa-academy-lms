@@ -1,9 +1,9 @@
 'use client'
-import { useThemeStore } from '@/stores/theme-store'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useRouter } from 'next/navigation'
 import {
   LayoutGrid, LayoutDashboard, BookOpen, BookMarked, FileCheck, Users,
-  ClipboardList, TableProperties, LogOut, Sun, Moon, ChevronRight,
+  ClipboardList, TableProperties, LogOut, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -26,7 +26,7 @@ const teacherLinks = [
 ]
 
 function TeacherSidebar() {
-  const { isDark, toggleTheme } = useThemeStore()
+
   const router = useRouter()
   const { clearRole } = useRoleStore()
   const teacher = useCurrentTeacher()
@@ -100,12 +100,7 @@ function TeacherSidebar() {
             <p className="text-[13px] font-medium text-sidebar-foreground truncate">{teacher?.name ?? 'Teacher'}</p>
             <p className="text-[11px] text-muted-foreground truncate">{teacher?.department ?? 'Teacher'}</p>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0"
-          >
-            {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-          </button>
+          <ThemeToggle className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0" />
         </div>
         <button
           onClick={switchRole}

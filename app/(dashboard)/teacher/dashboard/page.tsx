@@ -121,7 +121,7 @@ export default function TeacherDashboard() {
           { label: 'Avg Class Score', value: `${avgScore}%`, sub: 'across all classes', icon: BarChart3, color: '#10B981' },
         ].map(({ label, value, sub, icon: Icon, color }) => (
           <Card key={label} className="rounded-2xl border-border">
-            <CardContent className="p-4">
+            <CardContent className="px-4 py-2">
               <div className="flex items-start justify-between mb-2">
                 <p className="text-xs text-muted-foreground">{label}</p>
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${color}20` }}>
