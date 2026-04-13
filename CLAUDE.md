@@ -1,0 +1,97 @@
+# CLAUDE.md
+
+Don't add yourself to the commit authors.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Purpose
+
+UI/UX prototype for **DEWA Academy School Management System** with LLM-powered features. Mock data is used for the UI layer (in-memory / static JSON). Real AI responses come from the `/api/ai/` Next.js API routes using Anthropic Claude or OpenAI. Do not add real authentication or non-AI persistence.
+All prototype features MUST be end to end working, as in when you create things, they need to appear in listings of that thing, and be possible to take actions on that newly created data object. No database, no presistence, but as long as things are created/edited/removed on the spot, it should affect the prototype so users get a real feel of how it would function.
+
+## Commands
+
+```bash
+npm run dev       # start dev server (Turbopack) — already running at port 3000
+npm run build     # type-check + build
+npm run lint      # eslint
+```
+
+Adding shadcn components:
+```bash
+npx shadcn@latest add <component>
+```
+
+## Stack
+
+- **React 19 + Next.js 16 (App Router, Turbopack) + TypeScript**
+- **Tailwind CSS v4** — configured via `@tailwindcss/postcss` (no `tailwind.config.js`; all theme tokens are CSS custom properties in `app/globals.css`)
+- **shadcn/ui** — components live in `components/ui/`, added via CLI
+- **Zustand** — global state (role store, mock data stores)
+- **Recharts** — bundled via shadcn's chart component (`components/ui/chart.tsx`)
+- **`@anthropic-ai/sdk`** + **`openai`** — LLM providers for API routes
+
+## Routing
+
+Next.js App Router with file-based routing in `app/`:
+
+- `app/page.tsx` — role select (unauthenticated root)
+- `app/(dashboard)/layout.tsx` — reads Zustand role, renders appropriate layout (AdminLayout / TeacherLayout / StudentLayout / ParentLayout), redirects to `/` if no role
+- `app/(dashboard)/[module]/layout.tsx` — module tab nav layouts (ClassActivitiesLayout, etc.)
+- `app/(dashboard)/[module]/[tab]/page.tsx` — page components live directly in these files (`'use client'`, `export default function`)
+- `app/api/ai/` — LLM API routes (server-side, use `@anthropic-ai/sdk` or `openai`):
+  - `app/api/ai/chat/route.ts` — streaming chatbot (page context + widget contexts)
+  - `app/api/ai/tutor/route.ts` — streaming AI tutor (subject + topic aware)
+  - `app/api/ai/homework/generate/route.ts` — generate homework title/description/instructions
+  - `app/api/ai/questions/generate/route.ts` — generate exam questions array
+  - `app/api/ai/scoring/route.ts` — weighted composite scoring for admissions
+
+## Path Alias
+
+`@/` maps to the project root. Use it for all imports (e.g. `import { Button } from '@/components/ui/button'`).
+
+## Theming
+
+CSS variables are defined in `app/globals.css`. shadcn tokens (`--primary`, `--background`, etc.) are in `oklch()`. DEWA brand colors override these variables. Dark mode is toggled via the `.dark` class (not `prefers-color-scheme`).
+
+## Module Scope
+
+The system covers 13 modules per `planning/initial-plan.md`:
+1. Registration & Admission
+2. Class Activities
+3. Individual Learning Plan (ILP)
+4. Whiteboard Interaction
+5. Assessments & Exams
+6. Student Portal
+7. Case Management
+8. Medical Module
+9. Curriculum & Lesson Planner
+10. Reporting Module
+11. Student Profile
+12. Teacher Profile
+13. Academic Calendar
+
+Design reference: Sana Labs (`planning/initial-docs/sana-design-guidelines.md`), DEWA brand (`planning/initial-docs/dewa-brand-guidelines.md`).
+
+## Recharts Chart Standards
+
+Every chart `<Tooltip>` must use these props — no exceptions:
+
+```tsx
+contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
+labelStyle={{ color: '#e2e8f0', fontWeight: 600 }}
+itemStyle={{ color: '#cbd5e1' }}
+// Bar charts:
+cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+// Area/Line charts:
+cursor={{ stroke: 'rgba(255,255,255,0.15)', strokeWidth: 1 }}
+```
+
+Axis ticks: `tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false}`
+
+Data fields passed to chart `data` prop must never be named `style` — React will throw a runtime error if a data item property named `style` contains a string (Recharts spreads data item props onto SVG `<path>` elements). Rename to `learningStyle`, `type`, etc.
+
+SVG gradient `id` values must be unique across the entire app — widgets rendered on the same page share one SVG namespace. Use widget-specific prefixes (e.g. `ilpCompletionGrad`, not `completionGrad`).
+
+## General
+
+Do not take screenshots to investigate UI issues. Read source files directly with Grep/Read, or use snapshots. Only use screenshots when all other avenues are tried and failed.
