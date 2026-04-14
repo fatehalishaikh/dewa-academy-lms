@@ -12,10 +12,10 @@ import { useCurrentStudent } from '@/stores/role-store'
 type AttStatus = 'present' | 'absent' | 'late' | 'excused'
 
 const statusConfig: Record<AttStatus, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  present: { label: 'Present', color: 'text-emerald-500', bg: 'bg-emerald-500', icon: CheckCircle2 },
-  absent:  { label: 'Absent',  color: 'text-red-500',    bg: 'bg-red-500',     icon: XCircle     },
-  late:    { label: 'Late',    color: 'text-amber-500',  bg: 'bg-amber-500',   icon: Clock       },
-  excused: { label: 'Excused', color: 'text-blue-500',   bg: 'bg-blue-500',    icon: AlertCircle },
+  present: { label: 'Present', color: 'text-success', bg: 'bg-success', icon: CheckCircle2 },
+  absent:  { label: 'Absent',  color: 'text-destructive',    bg: 'bg-destructive',     icon: XCircle     },
+  late:    { label: 'Late',    color: 'text-warning',  bg: 'bg-warning',   icon: Clock       },
+  excused: { label: 'Excused', color: 'text-info',   bg: 'bg-info',    icon: AlertCircle },
 }
 
 type AttRecord = { date: Date; status: AttStatus; dateKey: string; note?: string }
@@ -103,9 +103,9 @@ export default function StudentAttendancePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { label: 'Attendance Rate', value: `${rate}%`, color: 'text-primary', bg: 'bg-primary/10', icon: TrendingUp },
-              { label: 'Present', value: presentDays, color: 'text-emerald-500', bg: 'bg-emerald-500/10', icon: CheckCircle2 },
-              { label: 'Absent', value: absentDays, color: 'text-red-500', bg: 'bg-red-500/10', icon: XCircle },
-              { label: 'Late', value: lateDays, color: 'text-amber-500', bg: 'bg-amber-500/10', icon: Clock },
+{ label: 'Present', value: presentDays, color: 'text-success', bg: 'bg-success/10', icon: CheckCircle2 },
+{ label: 'Absent', value: absentDays, color: 'text-destructive', bg: 'bg-destructive/10', icon: XCircle },
+{ label: 'Late', value: lateDays, color: 'text-warning', bg: 'bg-warning/10', icon: Clock },
             ].map(({ label, value, color, bg, icon: Icon }) => (
               <Card key={label} className="border-border/50">
                 <CardContent className="p-5">
@@ -165,10 +165,10 @@ export default function StudentAttendancePage() {
                             <div
                               key={di}
                               className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-1 border transition-all hover:scale-105 ${
-                                rec.status === 'present' ? 'border-emerald-500/20 bg-emerald-500/5' :
-                                rec.status === 'absent'  ? 'border-red-500/20 bg-red-500/5' :
-                                rec.status === 'late'    ? 'border-amber-500/20 bg-amber-500/5' :
-                                                           'border-blue-500/20 bg-blue-500/5'
+rec.status === 'present' ? 'border-success/20 bg-success/5' :
+rec.status === 'absent'  ? 'border-destructive/20 bg-destructive/5' :
+rec.status === 'late'    ? 'border-warning/20 bg-warning/5' :
+'border-info/20 bg-info/5'
                               }`}
                               title={`${rec.date.toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })} - ${cfg.label}`}
                             >
@@ -220,20 +220,20 @@ export default function StudentAttendancePage() {
         {/* Right Column */}
         <div className="space-y-6">
           {/* Clock In/Out Card */}
-          <Card className={`border-2 transition-all duration-300 ${clockedIn ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border'}`}>
+          <Card className={`border-2 transition-all duration-300 ${clockedIn ? 'border-success/30 bg-success/5' : 'border-border'}`}>
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${clockedIn ? 'bg-emerald-500/10' : 'bg-primary/10'}`}>
-                  <Fingerprint className={`w-4 h-4 ${clockedIn ? 'text-emerald-500' : 'text-primary'}`} />
+<div className={`w-8 h-8 rounded-lg flex items-center justify-center ${clockedIn ? 'bg-success/10' : 'bg-primary/10'}`}>
+<Fingerprint className={`w-4 h-4 ${clockedIn ? 'text-success' : 'text-primary'}`} />
                 </div>
                 Today&apos;s Check-In
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className={`flex items-center gap-3 px-4 py-3 rounded-xl ${clockedIn ? 'bg-emerald-500/10' : 'bg-accent/50'}`}>
-                <div className={`w-3 h-3 rounded-full ${clockedIn ? 'bg-emerald-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
-                <div className="flex-1">
-                  <p className={`text-sm font-medium ${clockedIn ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+<div className={`flex items-center gap-3 px-4 py-3 rounded-xl ${clockedIn ? 'bg-success/10' : 'bg-accent/50'}`}>
+<div className={`w-3 h-3 rounded-full ${clockedIn ? 'bg-success animate-pulse' : 'bg-muted-foreground/30'}`} />
+
+<p className={`text-sm font-medium ${clockedIn ? 'text-success' : 'text-muted-foreground'}`}>
                     {clockedIn ? 'Checked In' : 'Not Checked In'}
                   </p>
                   {clockTime && <p className="text-xs text-muted-foreground">at {clockTime}</p>}
@@ -248,7 +248,7 @@ export default function StudentAttendancePage() {
 
               <Button
                 onClick={handleClock}
-                className={`w-full gap-2 ${clockedIn ? 'bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30' : ''}`}
+                className={`w-full gap-2 ${clockedIn ? 'bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30' : ''}`}
                 variant={clockedIn ? 'outline' : 'default'}
               >
                 {clockedIn
@@ -273,7 +273,7 @@ export default function StudentAttendancePage() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 {[
-                  { label: 'Overall Rate', value: `${rate}%`, color: rate >= 90 ? 'text-emerald-500' : rate >= 75 ? 'text-amber-500' : 'text-red-500' },
+                  { label: 'Overall Rate', value: `${rate}%`, color: rate >= 90 ? 'text-success' : rate >= 75 ? 'text-warning' : 'text-destructive' },
                   { label: 'Days Attended', value: `${presentDays + lateDays}/${totalDays}`, color: 'text-foreground' },
                   { label: 'Punctual Days', value: `${presentDays}/${totalDays}`, color: 'text-foreground' },
                 ].map(({ label, value, color }) => (
@@ -285,9 +285,9 @@ export default function StudentAttendancePage() {
               </div>
               
               <div className={`px-4 py-3 rounded-xl text-center ${
-                rate >= 90 ? 'bg-emerald-500/10 text-emerald-500' :
-                rate >= 75 ? 'bg-amber-500/10 text-amber-500' :
-                'bg-red-500/10 text-red-500'
+rate >= 90 ? 'bg-success/10 text-success' :
+rate >= 75 ? 'bg-warning/10 text-warning' :
+'bg-destructive/10 text-destructive'
               }`}>
                 <p className="text-sm font-medium">
                   {rate >= 90 ? 'Excellent attendance!' : rate >= 75 ? 'Attendance needs improvement' : 'At-risk - contact your teacher'}

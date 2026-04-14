@@ -16,16 +16,16 @@ const DAY_LABELS: Record<Day, string> = {
 }
 
 const SUBJECT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  Mathematics:        { bg: 'bg-blue-500/10', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-500/30' },
-  Physics:            { bg: 'bg-purple-500/10', text: 'text-purple-600 dark:text-purple-400', border: 'border-purple-500/30' },
-  Chemistry:          { bg: 'bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-500/30' },
-  'English Language': { bg: 'bg-violet-500/10', text: 'text-violet-600 dark:text-violet-400', border: 'border-violet-500/30' },
-  Arabic:             { bg: 'bg-amber-500/10', text: 'text-amber-600 dark:text-amber-400', border: 'border-amber-500/30' },
-  'Social Studies':   { bg: 'bg-pink-500/10', text: 'text-pink-600 dark:text-pink-400', border: 'border-pink-500/30' },
-  Biology:            { bg: 'bg-lime-500/10', text: 'text-lime-600 dark:text-lime-400', border: 'border-lime-500/30' },
+  Mathematics:        { bg: 'bg-info/10', text: 'text-info', border: 'border-info/30' },
+  Physics:            { bg: 'bg-primary-variant/10', text: 'text-primary-variant', border: 'border-primary-variant/30' },
+  Chemistry:          { bg: 'bg-warning/10', text: 'text-warning', border: 'border-warning/30' },
+  'English Language': { bg: 'bg-primary/10', text: 'text-primary', border: 'border-primary/30' },
+  Arabic:             { bg: 'bg-water/10', text: 'text-water', border: 'border-water/30' },
+  'Social Studies':   { bg: 'bg-success/10', text: 'text-success', border: 'border-success/30' },
+  Biology:            { bg: 'bg-primary/10', text: 'text-primary', border: 'border-primary/30' },
 }
 
-const DEFAULT_COLOR = { bg: 'bg-slate-500/10', text: 'text-slate-600 dark:text-slate-400', border: 'border-slate-500/30' }
+const DEFAULT_COLOR = { bg: 'bg-muted/50', text: 'text-muted-foreground', border: 'border-border' }
 
 type GridEntry = { subject: string; time: string; room: string }
 

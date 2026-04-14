@@ -10,9 +10,9 @@ import { cn } from '@/lib/utils'
 type Message = { role: 'user' | 'assistant'; content: string; timestamp: Date }
 
 const subjects = [
-  { id: 'math', label: 'Mathematics', color: 'bg-blue-500', lightBg: 'bg-blue-500/10', textColor: 'text-blue-600 dark:text-blue-400', topics: ['Algebra', 'Quadratic Equations', 'Statistics', 'Trigonometry'] },
-  { id: 'physics', label: 'Physics', color: 'bg-purple-500', lightBg: 'bg-purple-500/10', textColor: 'text-purple-600 dark:text-purple-400', topics: ["Newton's Laws", 'Waves & Optics', 'Thermodynamics', 'Electricity'] },
-  { id: 'english', label: 'English', color: 'bg-violet-500', lightBg: 'bg-violet-500/10', textColor: 'text-violet-600 dark:text-violet-400', topics: ['Essay Writing', 'Reading Comprehension', 'Grammar', 'Literature'] },
+  { id: 'math', label: 'Mathematics', color: 'bg-info', lightBg: 'bg-info/10', textColor: 'text-info', topics: ['Algebra', 'Quadratic Equations', 'Statistics', 'Trigonometry'] },
+  { id: 'physics', label: 'Physics', color: 'bg-primary-variant', lightBg: 'bg-primary-variant/10', textColor: 'text-primary-variant', topics: ["Newton's Laws", 'Waves & Optics', 'Thermodynamics', 'Electricity'] },
+  { id: 'english', label: 'English', color: 'bg-primary', lightBg: 'bg-primary/10', textColor: 'text-primary', topics: ['Essay Writing', 'Reading Comprehension', 'Grammar', 'Literature'] },
 ]
 
 const aiResponses: Record<string, string[]> = {
@@ -237,7 +237,7 @@ export default function StudentAiTutor() {
                           )}
                         >
                           {masteredTopics.includes(topic) && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-success shrink-0" />
                           )}
                           <ChevronRight className="w-3 h-3 shrink-0" />
                           {topic}
@@ -355,7 +355,7 @@ export default function StudentAiTutor() {
           <Card className="border-border/50">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                <CheckCircle2 className="w-4 h-4 text-success" />
                 Mastered Topics
               </CardTitle>
             </CardHeader>
@@ -365,7 +365,7 @@ export default function StudentAiTutor() {
               ) : (
                 <div className="space-y-2">
                   {masteredTopics.map(t => (
-                    <div key={t} className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
+                    <div key={t} className="flex items-center gap-2 text-sm text-success">
                       <CheckCircle2 className="w-4 h-4 shrink-0" />
                       {t}
                     </div>

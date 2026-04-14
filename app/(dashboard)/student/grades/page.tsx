@@ -18,15 +18,15 @@ const gpaTrend = [
 ]
 
 function getGradeColorClass(grade: number) {
-  if (grade >= 90) return 'text-emerald-500'
-  if (grade >= 75) return 'text-amber-500'
-  return 'text-red-500'
+  if (grade >= 90) return 'text-success'
+  if (grade >= 75) return 'text-warning'
+  return 'text-destructive'
 }
 
 function getGradeBgClass(grade: number) {
-  if (grade >= 90) return 'bg-emerald-500/10'
-  if (grade >= 75) return 'bg-amber-500/10'
-  return 'bg-red-500/10'
+  if (grade >= 90) return 'bg-success/10'
+  if (grade >= 75) return 'bg-warning/10'
+  return 'bg-destructive/10'
 }
 
 export default function StudentGrades() {
@@ -55,9 +55,9 @@ export default function StudentGrades() {
                 <p className="text-5xl font-bold text-primary tracking-tight">{student?.gpa.toFixed(1) ?? '--'}</p>
                 <p className="text-sm text-muted-foreground mt-2">out of 4.0</p>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10">
-                <TrendingUp className="w-4 h-4 text-emerald-500" />
-                <span className="text-sm font-medium text-emerald-500">+0.2</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success/10">
+                <TrendingUp className="w-4 h-4 text-success" />
+                <span className="text-sm font-medium text-success">+0.2</span>
               </div>
             </div>
           </CardContent>
@@ -89,8 +89,8 @@ export default function StudentGrades() {
                 <p className="text-5xl font-bold text-foreground tracking-tight">{totalAssignments}</p>
                 <p className="text-sm text-muted-foreground mt-2">assignments this term</p>
               </div>
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center">
-                <BookOpen className="w-7 h-7 text-blue-500" />
+              <div className="w-14 h-14 rounded-2xl bg-info/10 flex items-center justify-center">
+                <BookOpen className="w-7 h-7 text-info" />
               </div>
             </div>
           </CardContent>
@@ -113,8 +113,8 @@ export default function StudentGrades() {
               <AreaChart data={gpaTrend}>
                 <defs>
                   <linearGradient id="gpaGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#00B8A9" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#00B8A9" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#007560" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#007560" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <XAxis 
@@ -146,7 +146,7 @@ export default function StudentGrades() {
                 <Area 
                   type="monotone" 
                   dataKey="gpa" 
-                  stroke="#00B8A9" 
+                  stroke="#007560" 
                   strokeWidth={2.5} 
                   fill="url(#gpaGradient)"
                 />

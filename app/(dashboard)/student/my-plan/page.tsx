@@ -25,22 +25,22 @@ import { gradesByClass, gradeColor, gradeBorderColor, letterGrade } from '@/data
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const goalStatusConfig = {
-  on_track:  { label: 'On Track',  color: 'text-emerald-400', border: 'border-emerald-500/30' },
-  at_risk:   { label: 'At Risk',   color: 'text-amber-400',   border: 'border-amber-500/30'   },
+  on_track:  { label: 'On Track',  color: 'text-success', border: 'border-success/30' },
+  at_risk:   { label: 'At Risk',   color: 'text-warning',   border: 'border-warning/30'   },
   completed: { label: 'Completed', color: 'text-primary',     border: 'border-primary/30'      },
 }
 
 const categoryColors: Record<GoalCategory, string> = {
-  Academic:   '#3B82F6',
-  Career:     '#8B5CF6',
-  Personal:   '#10B981',
-  Behavioral: '#F59E0B',
+  Academic:   '#2878C1',
+  Career:     '#004937',
+  Personal:   '#007560',
+  Behavioral: '#D4AF37',
 }
 
 const riskLevelConfig = {
-  high:     { label: 'High Risk',     color: 'text-red-400',     bg: 'bg-red-500/10',     border: 'border-red-500/30'     },
-  moderate: { label: 'Moderate Risk', color: 'text-amber-400',   bg: 'bg-amber-500/10',   border: 'border-amber-500/30'   },
-  low:      { label: 'Low Risk',      color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30' },
+  high:     { label: 'High Risk',     color: 'text-destructive',     bg: 'bg-destructive/10',     border: 'border-destructive/30'     },
+  moderate: { label: 'Moderate Risk', color: 'text-warning',   bg: 'bg-warning/10',   border: 'border-warning/30'   },
+  low:      { label: 'Low Risk',      color: 'text-success', bg: 'bg-success/10', border: 'border-success/30' },
   none:     { label: 'On Track',      color: 'text-primary',     bg: 'bg-primary/10',     border: 'border-primary/30'     },
 }
 
@@ -62,9 +62,9 @@ const WEEKS: WeekData[] = [
     week: 1, theme: 'Foundation Review', dateRange: 'Apr 14 – Apr 18', progress: 100, status: 'completed',
     studyHours: 12,
     topics: [
-      { subject: 'Mathematics', topic: 'Quadratic Equations', color: '#3B82F6' },
-      { subject: 'Physics', topic: "Newton's Laws of Motion", color: '#8B5CF6' },
-      { subject: 'English', topic: 'Essay Structure & Thesis', color: '#10B981' },
+      { subject: 'Mathematics', topic: 'Quadratic Equations', color: '#2878C1' },
+      { subject: 'Physics', topic: "Newton's Laws of Motion", color: '#004937' },
+      { subject: 'English', topic: 'Essay Structure & Thesis', color: '#007560' },
     ],
     assignments: [
       { title: 'Quadratic Problem Set', subject: 'Mathematics', dueDay: 'Wed', points: 20 },
@@ -75,10 +75,10 @@ const WEEKS: WeekData[] = [
     week: 2, theme: 'Core Skill Building', dateRange: 'Apr 21 – Apr 25', progress: 65, status: 'active',
     studyHours: 10,
     topics: [
-      { subject: 'Mathematics', topic: 'Statistics & Data Analysis', color: '#3B82F6' },
-      { subject: 'Physics', topic: 'Waves & Optics', color: '#8B5CF6' },
-      { subject: 'English', topic: 'Persuasive Writing Techniques', color: '#10B981' },
-      { subject: 'Chemistry', topic: 'Periodic Table Trends', color: '#F59E0B' },
+      { subject: 'Mathematics', topic: 'Statistics & Data Analysis', color: '#2878C1' },
+      { subject: 'Physics', topic: 'Waves & Optics', color: '#004937' },
+      { subject: 'English', topic: 'Persuasive Writing Techniques', color: '#007560' },
+      { subject: 'Chemistry', topic: 'Periodic Table Trends', color: '#D4AF37' },
     ],
     assignments: [
       { title: 'Statistics Data Report', subject: 'Mathematics', dueDay: 'Thu', points: 30 },
@@ -89,9 +89,9 @@ const WEEKS: WeekData[] = [
     week: 3, theme: 'Applied Practice', dateRange: 'Apr 28 – May 2', progress: 0, status: 'upcoming',
     studyHours: 11,
     topics: [
-      { subject: 'Mathematics', topic: 'Algebra Mid-Unit Review', color: '#3B82F6' },
-      { subject: 'Physics', topic: 'Forces & Momentum', color: '#8B5CF6' },
-      { subject: 'English', topic: 'Counter-Argument & Refutation', color: '#10B981' },
+      { subject: 'Mathematics', topic: 'Algebra Mid-Unit Review', color: '#2878C1' },
+      { subject: 'Physics', topic: 'Forces & Momentum', color: '#004937' },
+      { subject: 'English', topic: 'Counter-Argument & Refutation', color: '#007560' },
     ],
     assignments: [
       { title: 'Algebra Review Test', subject: 'Mathematics', dueDay: 'Wed', points: 50 },

@@ -5,93 +5,143 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #FAFBFC;
-  --foreground: #0F172A;
+  /* DEWA Light Mode Color Palette */
+  --background: #FFFFFF;
+  --foreground: #222222;
   --card: #FFFFFF;
-  --card-foreground: #0F172A;
+  --card-foreground: #222222;
   --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
-  --primary: #00B8A9;
+  --popover-foreground: #222222;
+  --primary: #007560;
   --primary-foreground: #FFFFFF;
-  --secondary: #F1F5F9;
-  --secondary-foreground: #0F172A;
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --accent: #F1F5F9;
-  --accent-foreground: #0F172A;
-  --destructive: #EF4444;
-  --border: #E2E8F0;
-  --input: #F1F5F9;
-  --ring: #00B8A9;
-  --chart-1: #00B8A9;
-  --chart-2: #3DD9C8;
-  --chart-3: #3B82F6;
-  --chart-4: #22C55E;
-  --chart-5: #F59E0B;
-  --radius: 0.625rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #0F172A;
-  --sidebar-primary: #00B8A9;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F8FAFC;
-  --sidebar-accent-foreground: #0F172A;
-  --sidebar-border: #E2E8F0;
-  --sidebar-ring: #00B8A9;
+  --primary-variant: #004937;
+  --secondary: #F2F3F3;
+  --secondary-foreground: #222222;
+  --muted: #EFEFEF;
+  --muted-foreground: #6F6F6F;
+  --accent: #F2F3F3;
+  --accent-foreground: #222222;
+  --destructive: #B00020;
+  --destructive-foreground: #FFFFFF;
+  --border: #D7D7D7;
+  --input: #F2F3F3;
+  --ring: #007560;
+  --placeholder: #4F4F4F;
   
-  /* Extended tokens for student portal */
-  --success: #22C55E;
+  /* Charts & Data Visualization */
+  --chart-1: #007560;
+  --chart-2: #004937;
+  --chart-3: #2878C1;
+  --chart-4: #3469A8;
+  --chart-5: #D4AF37;
+  
+  /* Water consumption colors */
+  --water: #2878C1;
+  --water-variant: #3469A8;
+  
+  /* Status colors */
+  --success: #007560;
   --success-foreground: #FFFFFF;
-  --warning: #F59E0B;
-  --warning-foreground: #FFFFFF;
-  --info: #3B82F6;
+  --warning: #D4AF37;
+  --warning-foreground: #222222;
+  --warning-bg: #FCF5E7;
+  --info: #2878C1;
   --info-foreground: #FFFFFF;
+  --error: #B00020;
+  --error-foreground: #FFFFFF;
+  
+  /* UI Elements */
+  --radius: 0.5rem;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #222222;
+  --sidebar-primary: #007560;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F2F3F3;
+  --sidebar-accent-foreground: #222222;
+  --sidebar-border: #D7D7D7;
+  --sidebar-ring: #007560;
+  
+  /* Gray scale */
+  --gray-100: #F2F3F3;
+  --gray-200: #EFEFEF;
+  --gray-300: #D7D7D7;
+  --gray-400: #8B8B8B;
+  --gray-600: #6F6F6F;
+  --gray-800: #4F4F4F;
+  --gray-900: #222222;
 }
 
 .dark {
-  --background: #0B0F14;
-  --foreground: #F1F5F9;
-  --card: #131A24;
-  --card-foreground: #F1F5F9;
-  --popover: #1A2332;
-  --popover-foreground: #F1F5F9;
-  --primary: #00D4C4;
-  --primary-foreground: #0B0F14;
-  --secondary: #1E293B;
-  --secondary-foreground: #F1F5F9;
-  --muted: #1E293B;
-  --muted-foreground: #94A3B8;
-  --accent: #1E293B;
-  --accent-foreground: #F1F5F9;
-  --destructive: #F87171;
-  --border: #1E293B;
-  --input: #1E293B;
-  --ring: #00D4C4;
-  --chart-1: #00D4C4;
-  --chart-2: #5EEAD4;
-  --chart-3: #60A5FA;
-  --chart-4: #4ADE80;
-  --chart-5: #FBBF24;
-  --sidebar: #0D1117;
-  --sidebar-foreground: #F1F5F9;
-  --sidebar-primary: #00D4C4;
-  --sidebar-primary-foreground: #0B0F14;
-  --sidebar-accent: #1A2332;
-  --sidebar-accent-foreground: #F1F5F9;
-  --sidebar-border: #1E293B;
-  --sidebar-ring: #00D4C4;
+  /* DEWA Dark Mode Color Palette */
+  --background: #212427;
+  --foreground: #E3E2E2;
+  --card: #212427;
+  --card-foreground: #E3E2E2;
+  --popover: #212427;
+  --popover-foreground: #E3E2E2;
+  --primary: #7FC9BB;
+  --primary-foreground: #212427;
+  --primary-variant: #27a086;
+  --secondary: #373B40;
+  --secondary-foreground: #E3E2E2;
+  --muted: #373B40;
+  --muted-foreground: #BDBDBD;
+  --accent: #373B40;
+  --accent-foreground: #E3E2E2;
+  --destructive: #CF6679;
+  --destructive-foreground: #212427;
+  --border: #5A5A5F;
+  --input: #373B40;
+  --ring: #7FC9BB;
+  --placeholder: #E2E2E2;
   
-  /* Extended tokens for student portal */
-  --success: #4ADE80;
-  --success-foreground: #0B0F14;
-  --warning: #FBBF24;
-  --warning-foreground: #0B0F14;
-  --info: #60A5FA;
-  --info-foreground: #0B0F14;
+  /* Charts & Data Visualization */
+  --chart-1: #7FC9BB;
+  --chart-2: #27a086;
+  --chart-3: #83D7FC;
+  --chart-4: #53befa;
+  --chart-5: #D4AF37;
+  
+  /* Water consumption colors */
+  --water: #83D7FC;
+  --water-variant: #53befa;
+  
+  /* Status colors */
+  --success: #7FC9BB;
+  --success-foreground: #212427;
+  --warning: #7E5F11;
+  --warning-foreground: #E3E2E2;
+  --warning-bg: #373B40;
+  --info: #83D7FC;
+  --info-foreground: #212427;
+  --error: #CF6679;
+  --error-foreground: #212427;
+  
+  /* UI Elements */
+  --sidebar: #212427;
+  --sidebar-foreground: #E3E2E2;
+  --sidebar-primary: #7FC9BB;
+  --sidebar-primary-foreground: #212427;
+  --sidebar-accent: #373B40;
+  --sidebar-accent-foreground: #E3E2E2;
+  --sidebar-border: #5A5A5F;
+  --sidebar-ring: #7FC9BB;
+  
+  /* Gray scale */
+  --gray-100: #373B40;
+  --gray-200: #373B40;
+  --gray-300: #5A5A5F;
+  --gray-400: #A5A5A0;
+  --gray-600: #BDBDBD;
+  --gray-800: #E2E2E2;
+  --gray-900: #FFFFFF;
 }
 
 @theme inline {
   --font-sans: 'Geist Variable', sans-serif;
   --font-heading: 'Geist Variable', sans-serif;
+  
+  /* Sidebar */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -100,15 +150,20 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  
+  /* Charts */
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+  
+  /* Core colors */
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -117,24 +172,44 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-variant: var(--primary-variant);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  
+  /* Status colors */
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-warning-bg: var(--warning-bg);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.5);
-  --radius-2xl: calc(var(--radius) * 2);
-  --radius-3xl: calc(var(--radius) * 2.5);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  
+  /* Water consumption */
+  --color-water: var(--water);
+  --color-water-variant: var(--water-variant);
+  
+  /* Gray scale */
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-600: var(--gray-600);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+  
+  /* Border radius */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 1);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
 }
 
 @layer base {

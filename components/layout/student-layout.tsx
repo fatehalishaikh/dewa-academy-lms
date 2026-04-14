@@ -102,7 +102,7 @@ function StudentSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
             <Avatar className="w-9 h-9 ring-2 ring-background">
               <AvatarFallback
                 className="text-xs font-semibold text-white"
-                style={{ background: student?.avatarColor ?? '#00B8A9' }}
+                style={{ background: student?.avatarColor ?? '#007560' }}
               >
                 {student?.initials ?? 'S'}
               </AvatarFallback>
@@ -158,7 +158,7 @@ function MobileHeader({ onMenuClick }: { onMenuClick: () => void }) {
       <Avatar className="w-8 h-8">
         <AvatarFallback
           className="text-[10px] font-semibold text-white"
-          style={{ background: student?.avatarColor ?? '#00B8A9' }}
+          style={{ background: student?.avatarColor ?? '#007560' }}
         >
           {student?.initials ?? 'S'}
         </AvatarFallback>

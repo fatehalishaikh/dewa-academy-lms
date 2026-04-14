@@ -12,9 +12,9 @@ import { exams } from '@/data/mock-assessments'
 import { getStudentDifficultyProfile } from '@/lib/adaptive-exam'
 
 const levelConfig: Record<string, { color: string; bg: string; border: string }> = {
-  Hard:   { color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/30' },
-  Medium: { color: 'text-amber-500', bg: 'bg-amber-500/10', border: 'border-amber-500/30' },
-  Easy:   { color: 'text-emerald-500', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30' },
+  Hard:   { color: 'text-destructive', bg: 'bg-destructive/10', border: 'border-destructive/30' },
+  Medium: { color: 'text-warning', bg: 'bg-warning/10', border: 'border-warning/30' },
+  Easy:   { color: 'text-success', bg: 'bg-success/10', border: 'border-success/30' },
 }
 
 export default function StudentExams() {

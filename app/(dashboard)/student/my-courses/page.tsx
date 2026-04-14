@@ -65,7 +65,7 @@ export default function MyCoursesPage() {
                   {/* Header gradient */}
                   <div className={cn(
                     "px-6 py-4 border-b border-border",
-                    isCompleted ? "bg-emerald-500/5" : "bg-primary/5"
+                    isCompleted ? "bg-success/5" : "bg-primary/5"
                   )}>
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-2">
@@ -78,8 +78,8 @@ export default function MyCoursesPage() {
                             className={cn(
                               "text-xs",
                               isCompleted
-                                ? 'border-emerald-500/30 text-emerald-500'
-                                : 'border-amber-500/30 text-amber-500'
+                                ? 'border-success/30 text-success'
+                                : 'border-warning/30 text-warning'
                             )}
                           >
                             {isCompleted ? 'Completed' : 'In Progress'}
@@ -91,10 +91,10 @@ export default function MyCoursesPage() {
                       </div>
                       <div className={cn(
                         "w-12 h-12 rounded-xl flex items-center justify-center shrink-0",
-                        isCompleted ? "bg-emerald-500/10" : "bg-primary/10"
+                        isCompleted ? "bg-success/10" : "bg-primary/10"
                       )}>
                         {isCompleted 
-                          ? <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                          ? <CheckCircle2 className="w-6 h-6 text-success" />
                           : <BookOpen className="w-6 h-6 text-primary" />
                         }
                       </div>

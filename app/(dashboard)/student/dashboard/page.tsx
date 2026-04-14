@@ -26,15 +26,15 @@ const recentGrades = [
 ]
 
 function gradeColor(g: number) {
-  if (g >= 90) return 'text-emerald-500'
-  if (g >= 75) return 'text-amber-500'
-  return 'text-red-500'
+  if (g >= 90) return 'text-success'
+  if (g >= 75) return 'text-warning'
+  return 'text-destructive'
 }
 
 function gradeBg(g: number) {
-  if (g >= 90) return 'bg-emerald-500/10'
-  if (g >= 75) return 'bg-amber-500/10'
-  return 'bg-red-500/10'
+  if (g >= 90) return 'bg-success/10'
+  if (g >= 75) return 'bg-warning/10'
+  return 'bg-destructive/10'
 }
 
 export default function StudentDashboard() {
@@ -95,9 +95,9 @@ export default function StudentDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Current GPA', value: student?.gpa.toFixed(1) ?? '--', sub: 'out of 4.0', icon: BarChart3, color: 'text-primary', bg: 'bg-primary/10', trend: '+0.2' },
-          { label: 'Attendance', value: `${student?.attendanceRate ?? 0}%`, sub: 'this semester', icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-500/10', trend: null },
-          { label: 'Due Soon', value: upcomingAssignments.length.toString(), sub: 'assignments', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-500/10', trend: null },
-          { label: 'Today\'s Classes', value: todayClasses.length.toString(), sub: 'sessions', icon: Calendar, color: 'text-blue-500', bg: 'bg-blue-500/10', trend: null },
+          { label: 'Attendance', value: `${student?.attendanceRate ?? 0}%`, sub: 'this semester', icon: CheckCircle2, color: 'text-success', bg: 'bg-success/10', trend: null },
+          { label: 'Due Soon', value: upcomingAssignments.length.toString(), sub: 'assignments', icon: Clock, color: 'text-warning', bg: 'bg-warning/10', trend: null },
+          { label: 'Today\'s Classes', value: todayClasses.length.toString(), sub: 'sessions', icon: Calendar, color: 'text-info', bg: 'bg-info/10', trend: null },
         ].map(({ label, value, sub, icon: Icon, color, bg, trend }) => (
           <Card key={label} className="group relative overflow-hidden border-border/50 hover:border-border hover:shadow-lg transition-all duration-300">
             <CardContent className="p-5">
@@ -106,7 +106,7 @@ export default function StudentDashboard() {
                   <Icon className={`w-5 h-5 ${color}`} />
                 </div>
                 {trend && (
-                  <div className="flex items-center gap-1 text-xs font-medium text-emerald-500">
+                  <div className="flex items-center gap-1 text-xs font-medium text-success">
                     <TrendingUp className="w-3 h-3" />
                     {trend}
                   </div>
@@ -120,19 +120,19 @@ export default function StudentDashboard() {
       </div>
 
       {/* Clock In/Out Card */}
-      <Card className={`relative overflow-hidden border-2 transition-all duration-300 ${clockedIn ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-primary/20 bg-primary/5'}`}>
+      <Card className={`relative overflow-hidden border-2 transition-all duration-300 ${clockedIn ? 'border-success/30 bg-success/5' : 'border-primary/20 bg-primary/5'}`}>
         <CardContent className="p-5 md:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${clockedIn ? 'bg-emerald-500/20' : 'bg-primary/10'}`}>
-                <Fingerprint className={`w-6 h-6 ${clockedIn ? 'text-emerald-500' : 'text-primary'}`} />
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${clockedIn ? 'bg-success/20' : 'bg-primary/10'}`}>
+                <Fingerprint className={`w-6 h-6 ${clockedIn ? 'text-success' : 'text-primary'}`} />
               </div>
               <div>
                 <div className="flex items-center gap-3">
                   <h3 className="text-base font-semibold text-foreground">Today&apos;s Check-In</h3>
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${clockedIn ? 'bg-emerald-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
-                    <span className={`text-sm font-medium ${clockedIn ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                    <div className={`w-2 h-2 rounded-full ${clockedIn ? 'bg-success animate-pulse' : 'bg-muted-foreground/30'}`} />
+                    <span className={`text-sm font-medium ${clockedIn ? 'text-success' : 'text-muted-foreground'}`}>
                       {clockedIn ? `Checked in at ${clockTime}` : 'Not checked in'}
                     </span>
                   </div>
@@ -160,8 +160,8 @@ export default function StudentDashboard() {
         <Card className="border-border/50">
           <CardHeader className="pb-3">
             <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <Calendar className="w-4 h-4 text-blue-500" />
+              <div className="w-8 h-8 rounded-lg bg-info/10 flex items-center justify-center">
+                <Calendar className="w-4 h-4 text-info" />
               </div>
               Today&apos;s Schedule
             </CardTitle>
@@ -196,8 +196,8 @@ export default function StudentDashboard() {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                  <BookOpen className="w-4 h-4 text-amber-500" />
+                <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center">
+                  <BookOpen className="w-4 h-4 text-warning" />
                 </div>
                 Upcoming Assignments
               </CardTitle>
@@ -213,13 +213,13 @@ export default function StudentDashboard() {
                 className="flex items-center gap-4 p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors cursor-pointer group"
                 onClick={() => router.push(`/student/assignments/${a.id}`)}
               >
-                <div className="w-1 h-12 rounded-full bg-amber-500/50 shrink-0" />
+                <div className="w-1 h-12 rounded-full bg-warning/50 shrink-0" />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{a.title}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{a.subject} &middot; {a.points} pts</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5">
+                  <Badge variant="outline" className="text-xs border-warning/30 text-warning bg-warning/5">
                     {a.due}
                   </Badge>
                 </div>

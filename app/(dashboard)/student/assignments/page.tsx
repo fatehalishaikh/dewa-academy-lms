@@ -10,9 +10,9 @@ import { getStudentAssignments, type StudentAssignmentView } from '@/lib/academy
 import { useAcademyStore } from '@/stores/academy-store'
 
 const statusConfig = {
-  'not-submitted': { label: 'Pending',     color: 'text-amber-500',   bg: 'bg-amber-500/10', border: 'border-amber-500/30',   icon: Clock },
-  submitted:       { label: 'Submitted',   color: 'text-emerald-500', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', icon: CheckCircle2 },
-  late:            { label: 'Late',        color: 'text-red-500',     bg: 'bg-red-500/10', border: 'border-red-500/30',     icon: AlertCircle },
+  'not-submitted': { label: 'Pending',     color: 'text-warning',   bg: 'bg-warning/10', border: 'border-warning/30',   icon: Clock },
+  submitted:       { label: 'Submitted',   color: 'text-success', bg: 'bg-success/10', border: 'border-success/30', icon: CheckCircle2 },
+  late:            { label: 'Late',        color: 'text-destructive',     bg: 'bg-destructive/10', border: 'border-destructive/30',     icon: AlertCircle },
   graded:          { label: 'Graded',      color: 'text-primary',     bg: 'bg-primary/10', border: 'border-primary/30',     icon: CheckCircle2 },
 }
 
@@ -38,8 +38,8 @@ function AssignmentCard({ a }: { a: StudentAssignmentView }) {
           <p className="text-sm font-medium text-foreground">{a.dueDate}</p>
         </div>
         {a.grade != null && (
-          <div className={`px-3 py-1.5 rounded-lg ${a.grade >= 90 ? 'bg-emerald-500/10' : a.grade >= 75 ? 'bg-amber-500/10' : 'bg-red-500/10'}`}>
-            <span className={`text-sm font-bold ${a.grade >= 90 ? 'text-emerald-500' : a.grade >= 75 ? 'text-amber-500' : 'text-red-500'}`}>
+          <div className={`px-3 py-1.5 rounded-lg ${a.grade >= 90 ? 'bg-success/10' : a.grade >= 75 ? 'bg-warning/10' : 'bg-destructive/10'}`}>
+            <span className={`text-sm font-bold ${a.grade >= 90 ? 'text-success' : a.grade >= 75 ? 'text-warning' : 'text-destructive'}`}>
               {a.grade}/{a.totalPoints}
             </span>
           </div>

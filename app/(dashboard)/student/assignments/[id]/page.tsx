@@ -17,19 +17,19 @@ import { useAcademyStore } from '@/stores/academy-store'
 import type { ExamQuestion } from '@/data/mock-assessments'
 
 const statusConfig = {
-  'not-submitted': { label: 'Pending',   color: 'text-amber-400',   border: 'border-amber-500/30',   bg: 'bg-amber-500/10',   icon: Clock },
-  submitted:       { label: 'Submitted', color: 'text-emerald-400', border: 'border-emerald-500/30', bg: 'bg-emerald-500/10', icon: CheckCircle2 },
-  late:            { label: 'Late',      color: 'text-red-400',     border: 'border-red-500/30',     bg: 'bg-red-500/10',     icon: Clock },
+  'not-submitted': { label: 'Pending',   color: 'text-warning',   border: 'border-warning/30',   bg: 'bg-warning/10',   icon: Clock },
+  submitted:       { label: 'Submitted', color: 'text-success', border: 'border-success/30', bg: 'bg-success/10', icon: CheckCircle2 },
+  late:            { label: 'Late',      color: 'text-destructive',     border: 'border-destructive/30',     bg: 'bg-destructive/10',     icon: Clock },
   graded:          { label: 'Graded',    color: 'text-primary',     border: 'border-primary/30',     bg: 'bg-primary/10',     icon: CheckCircle2 },
 }
 
 const subjectColors: Record<string, string> = {
-  Mathematics:       '#3B82F6',
-  Physics:           '#8B5CF6',
-  'English Language':'#10B981',
-  English:           '#10B981',
-  Chemistry:         '#F59E0B',
-  Arabic:            '#EC4899',
+  Mathematics:       '#2878C1',
+  Physics:           '#004937',
+  'English Language':'#007560',
+  English:           '#007560',
+  Chemistry:         '#D4AF37',
+  Arabic:            '#7FC9BB',
 }
 
 // ── MCQ Question Component ───────────────────────────────────────────────────
@@ -54,8 +54,8 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
         </div>
         {answered && (
           isCorrect
-            ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            : <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+            ? <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
+            : <XCircle className="w-4 h-4 text-destructive shrink-0" />
         )}
       </div>
 
@@ -65,8 +65,8 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
           const isAnswer = opt === q.correctAnswer
           let optClass = 'border-border bg-card hover:border-primary/40 hover:bg-primary/5 cursor-pointer'
           if (answered) {
-            if (isAnswer) optClass = 'border-emerald-500/50 bg-emerald-500/10 cursor-default'
-            else if (isSelected) optClass = 'border-red-500/40 bg-red-500/8 cursor-default'
+            if (isAnswer) optClass = 'border-success/50 bg-success/10 cursor-default'
+            else if (isSelected) optClass = 'border-destructive/40 bg-destructive/8 cursor-default'
             else optClass = 'border-border bg-muted/10 opacity-60 cursor-default'
           }
           return (
@@ -77,8 +77,8 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
               className={`w-full flex items-center gap-3 p-3 rounded-[10px] border text-left transition-all ${optClass}`}
             >
               <div className={`w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center ${
-                answered && isAnswer ? 'border-emerald-500 bg-emerald-500' :
-                answered && isSelected ? 'border-red-500 bg-red-500' :
+                answered && isAnswer ? 'border-success bg-success' :
+                answered && isSelected ? 'border-destructive bg-destructive' :
                 isSelected ? 'border-primary bg-primary' : 'border-border'
               }`}>
                 {(isSelected || (answered && isAnswer)) && (
@@ -86,8 +86,8 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
                 )}
               </div>
               <span className={`text-xs leading-relaxed ${
-                answered && isAnswer ? 'text-emerald-400 font-medium' :
-                answered && isSelected && !isAnswer ? 'text-red-400' :
+                answered && isAnswer ? 'text-success font-medium' :
+                answered && isSelected && !isAnswer ? 'text-destructive' :
                 'text-foreground'
               }`}>{opt}</span>
             </button>
@@ -97,7 +97,7 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
 
       {answered && (
         <div className={`ml-9 flex items-start gap-2 p-2.5 rounded-[10px] text-xs ${
-          isCorrect ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
+          isCorrect ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'
         }`}>
           {isCorrect
             ? <><CheckCheck className="w-3.5 h-3.5 shrink-0 mt-0.5" /><span>Correct! Well done.</span></>
