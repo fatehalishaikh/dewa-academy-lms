@@ -78,7 +78,7 @@ export default function LeaveRequestPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
-        <Card className="rounded-2xl border-border bg-card">
+        <Card className="rounded-[10px] border-border bg-card">
           <CardHeader className="pb-3 pt-5 px-5">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <CalendarOff className="w-4 h-4 text-primary" />
@@ -169,7 +169,7 @@ export default function LeaveRequestPage() {
                 {/* Document upload (UI only) */}
                 <div className="space-y-1.5">
                   <Label className="text-xs">Supporting Document <span className="text-muted-foreground">(optional)</span></Label>
-                  <div className="border-2 border-dashed border-border rounded-xl p-4 text-center hover:border-primary/40 transition-colors cursor-pointer">
+                  <div className="border-2 border-dashed border-border rounded-[10px] p-4 text-center hover:border-primary/40 transition-colors cursor-pointer">
                     <Upload className="w-5 h-5 text-muted-foreground mx-auto mb-1.5" />
                     <p className="text-xs text-muted-foreground">Drop file here or <span className="text-primary">browse</span></p>
                     <p className="text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG — max 5MB</p>
@@ -187,7 +187,7 @@ export default function LeaveRequestPage() {
 
         {/* Guidelines */}
         <div className="space-y-4">
-          <Card className="rounded-2xl border-border bg-card">
+          <Card className="rounded-[10px] border-border bg-card">
             <CardHeader className="pb-3 pt-5 px-5">
               <CardTitle className="text-sm font-semibold">Leave Policy</CardTitle>
             </CardHeader>
@@ -211,7 +211,7 @@ export default function LeaveRequestPage() {
           </Card>
 
           {selectedChild && (
-            <Card className="rounded-2xl border-border bg-card">
+            <Card className="rounded-[10px] border-border bg-card">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div
@@ -233,7 +233,7 @@ export default function LeaveRequestPage() {
 
       {/* Past requests */}
       {pastRequests.length > 0 && (
-        <Card className="rounded-2xl border-border bg-card">
+        <Card className="rounded-[10px] border-border bg-card">
           <CardHeader className="pb-3 pt-5 px-5">
             <CardTitle className="text-sm font-semibold">Previous Requests</CardTitle>
           </CardHeader>
@@ -243,7 +243,7 @@ export default function LeaveRequestPage() {
               const Icon = cfg.icon
               const isExpanded = expandedId === req.id
               return (
-                <div key={req.id} className="rounded-xl border border-border overflow-hidden">
+                <div key={req.id} className="rounded-[10px] border border-border overflow-hidden">
                   <button
                     className="w-full flex items-center gap-3 p-3 text-left hover:bg-muted/20 transition-colors"
                     onClick={() => setExpandedId(isExpanded ? null : req.id)}

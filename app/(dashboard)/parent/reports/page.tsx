@@ -113,7 +113,7 @@ export default function ParentReportsPage() {
       </div>
 
       {/* Controls */}
-      <Card className="rounded-2xl border-border bg-card">
+      <Card className="rounded-[10px] border-border bg-card">
         <CardContent className="p-5">
           <div className="flex items-end gap-3 flex-wrap">
             {/* Child selector */}
@@ -155,7 +155,7 @@ export default function ParentReportsPage() {
 
       {/* Error */}
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+        <div className="flex items-center gap-2 p-3 rounded-[10px] bg-red-500/10 border border-red-500/20">
           <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
           <p className="text-xs text-red-400">{error}</p>
         </div>
@@ -163,7 +163,7 @@ export default function ParentReportsPage() {
 
       {/* Report output */}
       {(reportText || isGenerating) && selectedChild && (
-        <Card className="rounded-2xl border-primary/20 bg-card">
+        <Card className="rounded-[10px] border-primary/20 bg-card">
           <CardHeader className="pb-3 pt-5 px-5">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div>

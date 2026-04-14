@@ -2,7 +2,7 @@
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useRouter } from 'next/navigation'
 import {
-  LayoutDashboard, BarChart3, Calendar, MessageSquare, CalendarOff, FileText,
+  LayoutDashboard, BarChart3, Calendar, MessageSquare, ClipboardList, FileText,
   LogOut, ChevronRight,
 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -16,7 +16,7 @@ const parentLinks = [
   { label: "Child's Grades", icon: BarChart3, href: '/parent/grades' },
   { label: 'Attendance', icon: Calendar, href: '/parent/attendance' },
   { label: 'Messages', icon: MessageSquare, href: '/parent/messages' },
-  { label: 'Leave Request', icon: CalendarOff, href: '/parent/leave-request' },
+  { label: 'Requests', icon: ClipboardList, href: '/parent/requests' },
   { label: 'Reports', icon: FileText, href: '/parent/reports' },
 ]
 

@@ -91,7 +91,7 @@ export default function ParentGrades() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="rounded-2xl border-border">
+        <Card className="rounded-[10px] border-border">
           <CardContent className="p-5 text-center">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Current GPA</p>
             <p className="text-4xl font-bold text-primary">{child?.gpa.toFixed(1) ?? '—'}</p>
@@ -102,7 +102,7 @@ export default function ParentGrades() {
             </div>
           </CardContent>
         </Card>
-        <Card className="rounded-2xl border-border lg:col-span-2">
+        <Card className="rounded-[10px] border-border lg:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-primary" />
@@ -128,7 +128,7 @@ export default function ParentGrades() {
       </div>
 
       {(child ? getGradesByClass(child.id) : []).map((cls) => (
-        <Card key={cls.subject} className="rounded-2xl border-border">
+        <Card key={cls.subject} className="rounded-[10px] border-border">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div>
@@ -144,7 +144,7 @@ export default function ParentGrades() {
           <CardContent>
             <div className="space-y-2">
               {cls.assignments.map((a) => (
-                <div key={a.title} className="flex items-center gap-3 p-2.5 rounded-xl bg-card border border-border">
+                <div key={a.title} className="flex items-center gap-3 p-2.5 rounded-[10px] bg-card border border-border">
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-medium text-foreground">{a.title}</p>
                     <p className="text-[10px] text-muted-foreground">{a.date} · {a.points}</p>
