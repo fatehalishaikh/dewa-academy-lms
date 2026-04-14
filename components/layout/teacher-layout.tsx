@@ -5,7 +5,6 @@ import {
   LayoutGrid, LayoutDashboard, BookOpen, BookMarked, FileCheck, Users,
   ClipboardList, TableProperties, LogOut, ChevronRight,
 } from 'lucide-react'
-import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore, useCurrentTeacher } from '@/stores/role-store'
@@ -37,27 +36,25 @@ function TeacherSidebar() {
   }
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors border ${
+    `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors ${
       isActive
-        ? 'bg-primary/10 text-primary border-primary/20'
-        : 'border-transparent text-sidebar-foreground hover:bg-sidebar-accent'
+        ? 'bg-primary/10 text-primary font-semibold'
+        : 'font-medium text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/60'
     }`
 
   return (
-    <aside className="w-64 shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border">
+    <aside className="w-64 shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border/60">
       {/* Logo */}
-      <div className="px-6 py-5 flex items-center gap-2.5">
+      <div className="px-6 py-6 flex items-center gap-3">
         <img src="/dewa-logo-only.svg" alt="DEWA" className="w-8 h-8 shrink-0" />
         <div>
-          <p className="text-[13px] font-semibold text-sidebar-foreground leading-tight">DEWA Academy</p>
-          <p className="text-[10px] text-muted-foreground leading-tight">Teacher Portal</p>
+          <p className="text-sm font-semibold text-sidebar-foreground leading-tight tracking-tight">DEWA Academy</p>
+          <p className="text-xs text-muted-foreground leading-tight mt-0.5">Teacher Portal</p>
         </div>
       </div>
 
-      <Separator className="bg-sidebar-border" />
-
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">My Workspace</p>
+      <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
+        <p className="px-3 mb-2 mt-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">My Workspace</p>
         {teacherLinks.map(({ label, icon: Icon, href }) => (
           <NavLink key={label} href={href} className={navLinkClass}>
             <Icon className="w-4 h-4 shrink-0" />
@@ -65,8 +62,8 @@ function TeacherSidebar() {
           </NavLink>
         ))}
 
-        <div className="pt-3">
-          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Modules</p>
+        <div className="pt-4">
+          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">Modules</p>
           {moduleLinks.map(({ label, icon: Icon, href }) => (
             <NavLink key={label} href={href} className={navLinkClass}>
               <Icon className="w-4 h-4 shrink-0" />
@@ -75,8 +72,8 @@ function TeacherSidebar() {
           ))}
         </div>
 
-        <div className="pt-3">
-          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Learning</p>
+        <div className="pt-4">
+          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">Learning</p>
           <NavLink href="/ilp" className={navLinkClass}>
             <BookOpen className="w-4 h-4 shrink-0" />
             Learning Plans
@@ -84,10 +81,10 @@ function TeacherSidebar() {
         </div>
       </nav>
 
-      <Separator className="bg-sidebar-border" />
+      <div className="border-t border-sidebar-border/60 mx-3 mb-0" />
 
-      <div className="px-4 py-4 space-y-2">
-        <div className="flex items-center gap-3">
+      <div className="px-4 py-4 space-y-1">
+        <div className="flex items-center gap-3 px-1 py-1.5">
           <Avatar className="w-8 h-8">
             <AvatarFallback
               className="text-xs font-semibold text-white"
@@ -97,18 +94,18 @@ function TeacherSidebar() {
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-medium text-sidebar-foreground truncate">{teacher?.name ?? 'Teacher'}</p>
-            <p className="text-[11px] text-muted-foreground truncate">{teacher?.department ?? 'Teacher'}</p>
+            <p className="text-sm font-medium text-sidebar-foreground truncate leading-tight">{teacher?.name ?? 'Teacher'}</p>
+            <p className="text-xs text-muted-foreground truncate mt-0.5">{teacher?.department ?? 'Teacher'}</p>
           </div>
           <ThemeToggle className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0" />
         </div>
         <button
           onClick={switchRole}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/60 transition-colors"
         >
           <LogOut className="w-3.5 h-3.5" />
           Switch Role
-          <ChevronRight className="w-3 h-3 ml-auto" />
+          <ChevronRight className="w-3 h-3 ml-auto opacity-50" />
         </button>
       </div>
     </aside>
