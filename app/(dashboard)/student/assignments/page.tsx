@@ -37,12 +37,14 @@ function AssignmentCard({ a }: { a: StudentAssignmentView }) {
       </div>
       <div className="flex items-center justify-between">
         <p className="text-[10px] text-muted-foreground">Due: {a.dueDate}</p>
-        {a.grade != null && (
-          <span className={`text-sm font-bold ${a.grade >= 90 ? 'text-emerald-400' : a.grade >= 75 ? 'text-amber-400' : 'text-red-400'}`}>
-            {a.grade}/{a.totalPoints}
-          </span>
-        )}
-        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+        <div className="flex items-center gap-2">
+          {a.grade != null && (
+            <span className={`text-sm font-bold ${a.grade >= 90 ? 'text-emerald-400' : a.grade >= 75 ? 'text-amber-400' : 'text-red-400'}`}>
+              {a.grade}/{a.totalPoints}
+            </span>
+          )}
+          <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+        </div>
       </div>
     </div>
   )
