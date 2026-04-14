@@ -1,18 +1,18 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { Sparkles, Send, Bot, User, CheckCircle2, Zap, ChevronRight } from 'lucide-react'
+import { Sparkles, Send, Bot, User, CheckCircle2, Zap, ChevronRight, BookOpen, Brain } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { MarkdownRenderer } from '@/components/ui/markdown'
+import { cn } from '@/lib/utils'
 
 type Message = { role: 'user' | 'assistant'; content: string; timestamp: Date }
 
 const subjects = [
-  { id: 'math', label: 'Mathematics', color: '#00B8A9', topics: ['Algebra', 'Quadratic Equations', 'Statistics', 'Trigonometry'] },
-  { id: 'physics', label: 'Physics', color: '#0EA5E9', topics: ["Newton's Laws", 'Waves & Optics', 'Thermodynamics', 'Electricity'] },
-  { id: 'english', label: 'English', color: '#8B5CF6', topics: ['Essay Writing', 'Reading Comprehension', 'Grammar', 'Literature'] },
+  { id: 'math', label: 'Mathematics', color: 'bg-blue-500', lightBg: 'bg-blue-500/10', textColor: 'text-blue-600 dark:text-blue-400', topics: ['Algebra', 'Quadratic Equations', 'Statistics', 'Trigonometry'] },
+  { id: 'physics', label: 'Physics', color: 'bg-purple-500', lightBg: 'bg-purple-500/10', textColor: 'text-purple-600 dark:text-purple-400', topics: ["Newton's Laws", 'Waves & Optics', 'Thermodynamics', 'Electricity'] },
+  { id: 'english', label: 'English', color: 'bg-violet-500', lightBg: 'bg-violet-500/10', textColor: 'text-violet-600 dark:text-violet-400', topics: ['Essay Writing', 'Reading Comprehension', 'Grammar', 'Literature'] },
 ]
 
 const aiResponses: Record<string, string[]> = {
@@ -133,7 +133,7 @@ export default function StudentAiTutor() {
     if (!q) return
     setMessages(prev => [...prev, {
       role: 'assistant',
-      content: `🎯 **Practice Time!**\n\n${q.question}\n\n_Hint: ${q.hint}_\n\nType your answer below!`,
+      content: `**Practice Time!**\n\n${q.question}\n\n_Hint: ${q.hint}_\n\nType your answer below!`,
       timestamp: new Date(),
     }])
   }
@@ -177,7 +177,6 @@ export default function StudentAiTutor() {
           })
         }
       }
-      // Mark as mastered if the response indicates correct
       if (selectedTopic && fullResponse.toLowerCase().includes('correct') && !masteredTopics.includes(selectedTopic)) {
         setMasteredTopics(prev => [...prev, selectedTopic])
       }
@@ -191,101 +190,136 @@ export default function StudentAiTutor() {
   }
 
   return (
-    <div className="h-screen flex flex-col p-6 gap-4">
+    <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col p-4 md:p-6 lg:p-8 gap-6">
       {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">AI-Powered Learning</span>
-        </div>
-        <h1 className="text-xl font-bold text-foreground">AI Tutor</h1>
+      <div className="shrink-0">
+        <p className="text-xs font-medium text-primary uppercase tracking-wider mb-1">AI-Powered Learning</p>
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">AI Tutor</h1>
+        <p className="text-sm text-muted-foreground mt-1">Get personalized help with any subject</p>
       </div>
 
-      <div className="flex-1 grid grid-cols-[240px_1fr_200px] gap-4 min-h-0">
-        {/* Left: Subject + Topic selector */}
-        <div className="space-y-3 overflow-y-auto">
-          {subjects.map((sub) => (
-            <div key={sub.id}>
-              <button
-                onClick={() => { setSelectedSubject(sub); setSelectedTopic(null); setMessages([]) }}
-                className={`w-full flex items-center gap-2 px-3 py-2 rounded-[10px] text-xs font-semibold transition-colors border ${selectedSubject.id === sub.id ? 'border-primary/30 bg-primary/10 text-primary' : 'border-transparent text-muted-foreground hover:bg-accent'}`}
-              >
-                <div className="w-2 h-2 rounded-full shrink-0" style={{ background: sub.color }} />
-                {sub.label}
-              </button>
-              {selectedSubject.id === sub.id && (
-                <div className="mt-1 space-y-0.5 pl-2">
-                  {sub.topics.map((topic) => (
-                    <button
-                      key={topic}
-                      onClick={() => selectTopic(topic)}
-                      className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-[10px] text-[11px] transition-colors ${selectedTopic === topic ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-accent hover:text-foreground'}`}
-                    >
-                      {masteredTopics.includes(topic) && <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />}
-                      <ChevronRight className="w-2.5 h-2.5 shrink-0" />
-                      {topic}
-                    </button>
-                  ))}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[280px_1fr_220px] gap-4 min-h-0">
+        {/* Left: Subject & Topic selector */}
+        <Card className="border-border/50 overflow-hidden flex flex-col">
+          <CardHeader className="pb-3 bg-accent/30 border-b border-border shrink-0">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-primary" />
+              Select Topic
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 flex-1 overflow-y-auto">
+            <div className="space-y-2">
+              {subjects.map((sub) => (
+                <div key={sub.id}>
+                  <button
+                    onClick={() => { setSelectedSubject(sub); setSelectedTopic(null); setMessages([]) }}
+                    className={cn(
+                      'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all',
+                      selectedSubject.id === sub.id
+                        ? `${sub.lightBg} ${sub.textColor}`
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                    )}
+                  >
+                    <div className={cn('w-2.5 h-2.5 rounded-full', sub.color)} />
+                    {sub.label}
+                  </button>
+                  {selectedSubject.id === sub.id && (
+                    <div className="mt-1 ml-3 space-y-0.5 border-l-2 border-border pl-3">
+                      {sub.topics.map((topic) => (
+                        <button
+                          key={topic}
+                          onClick={() => selectTopic(topic)}
+                          className={cn(
+                            'w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all',
+                            selectedTopic === topic
+                              ? `${sub.lightBg} ${sub.textColor} font-medium`
+                              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                          )}
+                        >
+                          {masteredTopics.includes(topic) && (
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          )}
+                          <ChevronRight className="w-3 h-3 shrink-0" />
+                          {topic}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Center: Chat */}
-        <Card className="rounded-[10px] border-border flex flex-col min-h-0">
+        <Card className="border-border/50 flex flex-col min-h-0 overflow-hidden">
           {!selectedTopic ? (
-            <div className="flex-1 flex items-center justify-center flex-col gap-3">
-              <div className="w-12 h-12 rounded-[10px] bg-primary/10 flex items-center justify-center">
-                <Bot className="w-6 h-6 text-primary" />
+            <div className="flex-1 flex items-center justify-center flex-col gap-4 p-8">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                <Bot className="w-8 h-8 text-primary" />
               </div>
-              <p className="text-sm font-medium text-foreground">Select a topic to get started</p>
-              <p className="text-[11px] text-muted-foreground">Choose a subject and topic from the left panel</p>
+              <div className="text-center">
+                <p className="text-base font-semibold text-foreground">Select a topic to get started</p>
+                <p className="text-sm text-muted-foreground mt-1">Choose a subject and topic from the left panel</p>
+              </div>
             </div>
           ) : (
             <>
-              <CardHeader className="pb-2 border-b border-border shrink-0">
+              <CardHeader className="pb-3 border-b border-border shrink-0 bg-accent/30">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Bot className="w-4 h-4 text-primary" />
-                    {selectedSubject.label} — {selectedTopic}
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center', selectedSubject.lightBg)}>
+                      <Bot className={cn('w-4 h-4', selectedSubject.textColor)} />
+                    </div>
+                    <div>
+                      <span className="text-foreground">{selectedTopic}</span>
+                      <p className="text-xs font-normal text-muted-foreground">{selectedSubject.label}</p>
+                    </div>
                   </CardTitle>
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-[10px] h-6 gap-1"
+                    className="text-xs gap-1.5"
                     onClick={startPractice}
                   >
-                    <Zap className="w-3 h-3" />
+                    <Zap className="w-3.5 h-3.5" />
                     Practice Mode
                   </Button>
                 </div>
               </CardHeader>
               <ScrollArea className="flex-1">
-                <div className="p-4 space-y-3">
+                <div className="p-4 space-y-4">
                   {messages.map((msg, i) => (
-                    <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${msg.role === 'assistant' ? 'bg-primary/20' : 'bg-muted'}`}>
+                    <div key={i} className={cn('flex gap-3', msg.role === 'user' ? 'flex-row-reverse' : '')}>
+                      <div className={cn(
+                        'w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5',
+                        msg.role === 'assistant' ? 'bg-primary/10' : 'bg-accent'
+                      )}>
                         {msg.role === 'assistant'
-                          ? <Bot className="w-3.5 h-3.5 text-primary" />
-                          : <User className="w-3.5 h-3.5 text-muted-foreground" />
+                          ? <Bot className="w-4 h-4 text-primary" />
+                          : <User className="w-4 h-4 text-muted-foreground" />
                         }
                       </div>
-                      <div className={`max-w-[85%] rounded-[10px] px-3.5 py-2.5 text-xs leading-relaxed ${msg.role === 'assistant' ? 'bg-card border border-border text-foreground' : 'bg-primary/10 border border-primary/20 text-foreground'}`}>
-                        {msg.role === 'assistant' ? <MarkdownRenderer content={msg.content} size="xs" /> : msg.content}
+                      <div className={cn(
+                        'max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
+                        msg.role === 'assistant'
+                          ? 'bg-card border border-border text-foreground'
+                          : 'bg-primary text-primary-foreground'
+                      )}>
+                        {msg.role === 'assistant' ? <MarkdownRenderer content={msg.content} size="sm" /> : msg.content}
                       </div>
                     </div>
                   ))}
                   {isTyping && (
-                    <div className="flex gap-2.5">
-                      <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-                        <Bot className="w-3.5 h-3.5 text-primary" />
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                        <Bot className="w-4 h-4 text-primary" />
                       </div>
-                      <div className="bg-card border border-border rounded-[10px] px-3.5 py-2.5">
-                        <div className="flex gap-1 items-center h-4">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <div className="bg-card border border-border rounded-2xl px-4 py-3">
+                        <div className="flex gap-1.5 items-center h-5">
+                          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
                         </div>
                       </div>
                     </div>
@@ -293,22 +327,22 @@ export default function StudentAiTutor() {
                   <div ref={bottomRef} />
                 </div>
               </ScrollArea>
-              <div className="p-3 border-t border-border shrink-0">
-                <div className="flex gap-2">
+              <div className="p-4 border-t border-border shrink-0 bg-card">
+                <div className="flex gap-3">
                   <input
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); mode === 'practice' && practiceState === 'question' ? submitAnswer() : sendMessage() } }}
                     placeholder={mode === 'practice' ? 'Type your answer...' : 'Ask a question...'}
-                    className="flex-1 bg-background border border-border rounded-[10px] px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+                    className="flex-1 bg-accent border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all"
                   />
                   <Button
-                    size="sm"
-                    className="h-8 w-8 p-0"
+                    size="icon"
+                    className="h-10 w-10 rounded-xl shrink-0"
                     onClick={mode === 'practice' && practiceState === 'question' ? submitAnswer : sendMessage}
                     disabled={!input.trim() || isTyping}
                   >
-                    <Send className="w-3.5 h-3.5" />
+                    <Send className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -317,37 +351,42 @@ export default function StudentAiTutor() {
         </Card>
 
         {/* Right: Progress */}
-        <div className="space-y-3">
-          <Card className="rounded-[10px] border-border">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xs flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+        <div className="space-y-4 hidden lg:block">
+          <Card className="border-border/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 Mastered Topics
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-1.5">
+            <CardContent>
               {masteredTopics.length === 0 ? (
-                <p className="text-[10px] text-muted-foreground">Complete practice to earn mastery</p>
+                <p className="text-xs text-muted-foreground">Complete practice to earn mastery badges</p>
               ) : (
-                masteredTopics.map(t => (
-                  <div key={t} className="flex items-center gap-1.5 text-[10px] text-emerald-400">
-                    <CheckCircle2 className="w-3 h-3 shrink-0" />
-                    {t}
-                  </div>
-                ))
+                <div className="space-y-2">
+                  {masteredTopics.map(t => (
+                    <div key={t} className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      {t}
+                    </div>
+                  ))}
+                </div>
               )}
             </CardContent>
           </Card>
 
-          <Card className="rounded-[10px] border-border">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xs">Study Tips</CardTitle>
+          <Card className="border-border/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                <Brain className="w-4 h-4 text-primary" />
+                Study Tips
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              {['Ask specific questions', 'Use Practice Mode to test yourself', 'Revisit weak topics'].map(tip => (
-                <div key={tip} className="flex items-start gap-1.5">
-                  <Sparkles className="w-3 h-3 text-primary shrink-0 mt-0.5" />
-                  <p className="text-[10px] text-muted-foreground">{tip}</p>
+            <CardContent className="space-y-3">
+              {['Ask specific questions for better answers', 'Use Practice Mode to test yourself', 'Revisit topics you find challenging'].map(tip => (
+                <div key={tip} className="flex items-start gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                  <p className="text-xs text-muted-foreground leading-relaxed">{tip}</p>
                 </div>
               ))}
             </CardContent>

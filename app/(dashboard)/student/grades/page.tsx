@@ -1,8 +1,9 @@
 'use client'
-import { Sparkles, BarChart3, TrendingUp } from 'lucide-react'
+import { BarChart3, TrendingUp, Award, BookOpen } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { Progress } from '@/components/ui/progress'
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts'
 import { useCurrentStudent } from '@/stores/role-store'
 import { gradesByClass, gradeColor, letterGrade } from '@/data/mock-grades'
 
@@ -16,97 +17,195 @@ const gpaTrend = [
   { period: 'Mar', gpa: 3.7 },
 ]
 
+function getGradeColorClass(grade: number) {
+  if (grade >= 90) return 'text-emerald-500'
+  if (grade >= 75) return 'text-amber-500'
+  return 'text-red-500'
+}
+
+function getGradeBgClass(grade: number) {
+  if (grade >= 90) return 'bg-emerald-500/10'
+  if (grade >= 75) return 'bg-amber-500/10'
+  return 'bg-red-500/10'
+}
 
 export default function StudentGrades() {
   const student = useCurrentStudent()
 
+  const totalAssignments = gradesByClass.reduce((sum, cls) => sum + cls.assignments.length, 0)
+  const avgGrade = Math.round(gradesByClass.reduce((sum, cls) => sum + cls.average, 0) / gradesByClass.length)
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6">
+      {/* Header */}
       <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">Academic Performance</span>
-        </div>
-        <h1 className="text-xl font-bold text-foreground">My Grades</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Current semester performance</p>
+        <p className="text-xs font-medium text-primary uppercase tracking-wider mb-1">Academic Performance</p>
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">My Grades</h1>
+        <p className="text-sm text-muted-foreground mt-1">Current semester performance overview</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* GPA Summary */}
-        <Card className="rounded-[10px] border-border">
-          <CardContent className="p-5 text-center">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Current GPA</p>
-            <p className="text-4xl font-bold text-primary">{student?.gpa.toFixed(1) ?? '—'}</p>
-            <p className="text-xs text-muted-foreground mt-1">out of 4.0</p>
-            <div className="mt-3 flex items-center justify-center gap-1 text-emerald-400 text-xs">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>+0.2 this semester</span>
+      {/* Top Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* GPA Card */}
+        <Card className="relative overflow-hidden border-border/50 bg-gradient-to-br from-primary/5 to-transparent">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Current GPA</p>
+                <p className="text-5xl font-bold text-primary tracking-tight">{student?.gpa.toFixed(1) ?? '--'}</p>
+                <p className="text-sm text-muted-foreground mt-2">out of 4.0</p>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10">
+                <TrendingUp className="w-4 h-4 text-emerald-500" />
+                <span className="text-sm font-medium text-emerald-500">+0.2</span>
+              </div>
+            </div>
+          </CardContent>
+          <div className="absolute bottom-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl translate-x-1/2 translate-y-1/2" />
+        </Card>
+
+        {/* Average Grade */}
+        <Card className="border-border/50">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Average Grade</p>
+                <p className="text-5xl font-bold text-foreground tracking-tight">{avgGrade}%</p>
+                <p className="text-sm text-muted-foreground mt-2">{letterGrade(avgGrade)} grade</p>
+              </div>
+              <div className={`w-14 h-14 rounded-2xl ${getGradeBgClass(avgGrade)} flex items-center justify-center`}>
+                <Award className={`w-7 h-7 ${getGradeColorClass(avgGrade)}`} />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* GPA Trend */}
-        <Card className="rounded-[10px] border-border lg:col-span-2">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
-              GPA Trend
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={90} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
-              <LineChart data={gpaTrend}>
-                <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
-                <YAxis domain={[2.5, 4]} tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
-                <Tooltip
-                  contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
-                  labelStyle={{ color: '#e2e8f0', fontWeight: 600 }}
-                  itemStyle={{ color: '#cbd5e1' }}
-                  cursor={{ stroke: 'rgba(255,255,255,0.15)', strokeWidth: 1 }}
-                />
-                <Line type="monotone" dataKey="gpa" stroke="#00B8A9" strokeWidth={2} dot={{ r: 2, fill: '#00B8A9' }} />
-              </LineChart>
-            </ResponsiveContainer>
+        {/* Assignments Graded */}
+        <Card className="border-border/50">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Graded Work</p>
+                <p className="text-5xl font-bold text-foreground tracking-tight">{totalAssignments}</p>
+                <p className="text-sm text-muted-foreground mt-2">assignments this term</p>
+              </div>
+              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+                <BookOpen className="w-7 h-7 text-blue-500" />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Grades by class */}
+      {/* GPA Trend Chart */}
+      <Card className="border-border/50">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <BarChart3 className="w-4 h-4 text-primary" />
+            </div>
+            GPA Trend
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[200px] mt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={gpaTrend}>
+                <defs>
+                  <linearGradient id="gpaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#00B8A9" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#00B8A9" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <XAxis 
+                  dataKey="period" 
+                  tick={{ fontSize: 12, fill: 'currentColor' }} 
+                  tickLine={false} 
+                  axisLine={false}
+                  className="text-muted-foreground"
+                />
+                <YAxis 
+                  domain={[2.5, 4]} 
+                  tick={{ fontSize: 12, fill: 'currentColor' }} 
+                  tickLine={false} 
+                  axisLine={false}
+                  className="text-muted-foreground"
+                />
+                <Tooltip
+                  contentStyle={{ 
+                    background: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))', 
+                    borderRadius: '8px', 
+                    fontSize: 13,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}
+                  labelStyle={{ color: 'hsl(var(--foreground))', fontWeight: 600 }}
+                  itemStyle={{ color: 'hsl(var(--muted-foreground))' }}
+                  cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 1, strokeDasharray: '4 4' }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="gpa" 
+                  stroke="#00B8A9" 
+                  strokeWidth={2.5} 
+                  fill="url(#gpaGradient)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Grades by Subject */}
       <div className="space-y-4">
-        {gradesByClass.map((cls) => (
-          <Card key={cls.classId} className="rounded-[10px] border-border">
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-sm">{cls.subject}</CardTitle>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{cls.teacher}</p>
-                </div>
-                <div className="text-right">
-                  <p className={`text-xl font-bold ${gradeColor(cls.average)}`}>{cls.average}%</p>
-                  <p className="text-[10px] text-muted-foreground">Class avg</p>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {cls.assignments.map((a) => (
-                  <div key={a.title} className="flex items-center gap-3 p-2.5 rounded-[10px] bg-card border border-border">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-foreground">{a.title}</p>
-                      <p className="text-[10px] text-muted-foreground">{a.date} · {a.points}</p>
+        <h2 className="text-lg font-semibold text-foreground">Grades by Subject</h2>
+        
+        <div className="grid gap-4">
+          {gradesByClass.map((cls) => (
+            <Card key={cls.classId} className="border-border/50 overflow-hidden">
+              <CardHeader className="pb-4 bg-accent/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl ${getGradeBgClass(cls.average)} flex items-center justify-center`}>
+                      <BookOpen className={`w-5 h-5 ${getGradeColorClass(cls.average)}`} />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-[10px] h-5">
-                        {letterGrade(a.grade)}
-                      </Badge>
-                      <span className={`text-sm font-bold ${gradeColor(a.grade)}`}>{a.grade}%</span>
+                    <div>
+                      <CardTitle className="text-base font-semibold">{cls.subject}</CardTitle>
+                      <p className="text-xs text-muted-foreground mt-0.5">{cls.teacher}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  <div className="text-right">
+                    <p className={`text-2xl font-bold ${getGradeColorClass(cls.average)}`}>{cls.average}%</p>
+                    <p className="text-xs text-muted-foreground">Class Average</p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Progress value={cls.average} className="h-2" />
+                </div>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <div className="space-y-2">
+                  {cls.assignments.map((a) => (
+                    <div key={a.title} className="flex items-center justify-between p-3 rounded-lg bg-accent/50 hover:bg-accent transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-lg ${getGradeBgClass(a.grade)} flex items-center justify-center`}>
+                          <span className={`text-sm font-bold ${getGradeColorClass(a.grade)}`}>{letterGrade(a.grade)}</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">{a.title}</p>
+                          <p className="text-xs text-muted-foreground">{a.date} &middot; {a.points}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-lg font-bold ${getGradeColorClass(a.grade)}`}>{a.grade}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   )

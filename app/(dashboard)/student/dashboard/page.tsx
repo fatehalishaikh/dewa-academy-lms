@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Sparkles, Clock, BookOpen, BarChart3, Calendar, CheckCircle2, ArrowRight, LayoutDashboard, ChevronRight, LogIn, LogOut, Fingerprint } from 'lucide-react'
+import { Sparkles, Clock, BookOpen, BarChart3, Calendar, CheckCircle2, ArrowRight, ChevronRight, LogIn, LogOut, Fingerprint, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -26,9 +26,15 @@ const recentGrades = [
 ]
 
 function gradeColor(g: number) {
-  if (g >= 90) return 'text-emerald-400'
-  if (g >= 75) return 'text-amber-400'
-  return 'text-red-400'
+  if (g >= 90) return 'text-emerald-500'
+  if (g >= 75) return 'text-amber-500'
+  return 'text-red-500'
+}
+
+function gradeBg(g: number) {
+  if (g >= 90) return 'bg-emerald-500/10'
+  if (g >= 75) return 'bg-amber-500/10'
+  return 'bg-red-500/10'
 }
 
 export default function StudentDashboard() {
@@ -51,148 +57,133 @@ export default function StudentDashboard() {
   const inboxItems = getDashboardInbox('student', student?.id ?? '')
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Hero: greeting + inbox */}
-      <Card className="rounded-[10px] border-border overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-5">
-          <div className="lg:col-span-2 px-4 py-2 lg:border-r border-border">
-            <div className="flex items-center gap-2 mb-1">
-              <LayoutDashboard className="w-4 h-4 text-primary" />
-              <span className="text-xs font-medium text-primary uppercase tracking-wider">Student Dashboard</span>
-            </div>
-            <h1 className="text-xl font-bold text-foreground">
-              Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {student?.name.split(' ')[0] ?? 'Student'} 👋
-            </h1>
-            <p className="text-sm text-muted-foreground mt-0.5">{today}</p>
-            <Button size="sm" onClick={() => router.push('/student/ai-tutor')} className="mt-3 gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
+    <div className="p-4 md:p-6 lg:p-8 space-y-6">
+      {/* Welcome Hero Section */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-primary/10 to-transparent border border-primary/10 p-6 md:p-8">
+        <div className="relative z-10">
+          <p className="text-xs font-medium text-primary uppercase tracking-wider mb-2">Student Dashboard</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {student?.name.split(' ')[0] ?? 'Student'}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">{today}</p>
+          
+          <div className="flex flex-wrap items-center gap-3 mt-5">
+            <Button onClick={() => router.push('/student/ai-tutor')} className="gap-2 shadow-lg shadow-primary/20">
+              <Sparkles className="w-4 h-4" />
               AI Tutor
             </Button>
-          </div>
-          <div className="lg:col-span-3 px-4 py-2 flex flex-col justify-center">
-            {inboxItems.length === 0 ? (
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">All caught up</p>
-                  <p className="text-xs text-muted-foreground">Nothing needs your attention right now.</p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-[10px] bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                  <span className="text-2xl font-bold text-amber-400">{inboxItems.length}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-foreground">
-                    {inboxItems.length === 1 ? '1 thing needs' : `${inboxItems.length} things need`} your attention
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && (
-                      <span className="text-amber-400 font-medium">{inboxItems.filter(i => i.urgency === 'high').length} urgent</span>
-                    )}
-                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && inboxItems.filter(i => i.urgency !== 'high').length > 0 && ' · '}
-                    {inboxItems.filter(i => i.urgency !== 'high').length > 0 && (
-                      <span>{inboxItems.filter(i => i.urgency !== 'high').length} follow-up</span>
-                    )}
-                  </p>
-                  <Link
-                    href="/action-center"
-                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
-                  >
-                    Open Action Center <ChevronRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </div>
+            {inboxItems.length > 0 && (
+              <Link
+                href="/action-center"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border text-sm font-medium text-foreground hover:bg-accent transition-colors"
+              >
+                <span className="w-5 h-5 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <span className="text-xs font-bold text-amber-500">{inboxItems.length}</span>
+                </span>
+                Action Items
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </Link>
             )}
           </div>
         </div>
-      </Card>
+        
+        {/* Decorative element */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      </div>
 
-      {/* Stats */}
+      {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Current GPA', value: student?.gpa.toFixed(1) ?? '—', sub: 'out of 4.0', icon: BarChart3, color: '#00B8A9' },
-          { label: 'Attendance', value: `${student?.attendanceRate ?? 0}%`, sub: 'this semester', icon: CheckCircle2, color: '#10B981' },
-          { label: 'Due Soon', value: upcomingAssignments.length.toString(), sub: 'assignments', icon: Clock, color: '#F59E0B' },
-          { label: 'Today\'s Classes', value: todayClasses.length.toString(), sub: 'sessions scheduled', icon: Calendar, color: '#0EA5E9' },
-        ].map(({ label, value, sub, icon: Icon, color }) => (
-          <Card key={label} className="rounded-[10px] border-border">
-            <CardContent className="px-4 py-2">
-              <div className="flex items-start justify-between mb-2">
-                <p className="text-xs text-muted-foreground">{label}</p>
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${color}20` }}>
-                  <Icon className="w-3.5 h-3.5" style={{ color }} />
+          { label: 'Current GPA', value: student?.gpa.toFixed(1) ?? '--', sub: 'out of 4.0', icon: BarChart3, color: 'text-primary', bg: 'bg-primary/10', trend: '+0.2' },
+          { label: 'Attendance', value: `${student?.attendanceRate ?? 0}%`, sub: 'this semester', icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-500/10', trend: null },
+          { label: 'Due Soon', value: upcomingAssignments.length.toString(), sub: 'assignments', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-500/10', trend: null },
+          { label: 'Today\'s Classes', value: todayClasses.length.toString(), sub: 'sessions', icon: Calendar, color: 'text-blue-500', bg: 'bg-blue-500/10', trend: null },
+        ].map(({ label, value, sub, icon: Icon, color, bg, trend }) => (
+          <Card key={label} className="group relative overflow-hidden border-border/50 hover:border-border hover:shadow-lg transition-all duration-300">
+            <CardContent className="p-5">
+              <div className="flex items-start justify-between mb-3">
+                <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center`}>
+                  <Icon className={`w-5 h-5 ${color}`} />
                 </div>
+                {trend && (
+                  <div className="flex items-center gap-1 text-xs font-medium text-emerald-500">
+                    <TrendingUp className="w-3 h-3" />
+                    {trend}
+                  </div>
+                )}
               </div>
-              <p className="text-2xl font-bold text-foreground">{value}</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">{sub}</p>
+              <p className="text-3xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-1">{label}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Clock In / Out — primary action */}
-      <Card className={`rounded-[10px] border-2 transition-colors ${clockedIn ? 'border-emerald-500/40 bg-emerald-500/5' : 'border-primary/30 bg-primary/5'}`}>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0 ${clockedIn ? 'bg-emerald-500/20' : 'bg-primary/10'}`}>
-                <Fingerprint className={`w-5 h-5 ${clockedIn ? 'text-emerald-400' : 'text-primary'}`} />
+      {/* Clock In/Out Card */}
+      <Card className={`relative overflow-hidden border-2 transition-all duration-300 ${clockedIn ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-primary/20 bg-primary/5'}`}>
+        <CardContent className="p-5 md:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${clockedIn ? 'bg-emerald-500/20' : 'bg-primary/10'}`}>
+                <Fingerprint className={`w-6 h-6 ${clockedIn ? 'text-emerald-500' : 'text-primary'}`} />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-foreground">Today&apos;s Check-In</p>
-                  <div className="flex items-center gap-1.5">
-                    <div className={`w-2 h-2 rounded-full ${clockedIn ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/30'}`} />
-                    <span className={`text-xs font-medium ${clockedIn ? 'text-emerald-400' : 'text-muted-foreground'}`}>
+                <div className="flex items-center gap-3">
+                  <h3 className="text-base font-semibold text-foreground">Today&apos;s Check-In</h3>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${clockedIn ? 'bg-emerald-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
+                    <span className={`text-sm font-medium ${clockedIn ? 'text-emerald-500' : 'text-muted-foreground'}`}>
                       {clockedIn ? `Checked in at ${clockTime}` : 'Not checked in'}
                     </span>
                   </div>
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-0.5">
+                <p className="text-sm text-muted-foreground mt-1">
                   {clockedIn ? 'Your attendance has been recorded for today.' : 'Tap to record your arrival for today.'}
                 </p>
               </div>
             </div>
             <Button
               onClick={handleClock}
-              size="sm"
               variant={clockedIn ? 'outline' : 'default'}
-              className={`shrink-0 gap-1.5 ${clockedIn ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : ''}`}
+              className={`shrink-0 gap-2 min-w-[120px] ${clockedIn ? 'border-red-500/30 text-red-500 hover:bg-red-500/10 hover:text-red-500' : ''}`}
             >
               {clockedIn
-                ? <><LogOut className="w-3.5 h-3.5" />Clock Out</>
-                : <><LogIn className="w-3.5 h-3.5" />Clock In</>}
+                ? <><LogOut className="w-4 h-4" />Clock Out</>
+                : <><LogIn className="w-4 h-4" />Clock In</>}
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Schedule */}
-        <Card className="rounded-[10px] border-border">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              Today's Schedule
+        <Card className="border-border/50">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                <Calendar className="w-4 h-4 text-blue-500" />
+              </div>
+              Today&apos;s Schedule
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-3">
             {todayClasses.length === 0 ? (
-              <p className="text-xs text-muted-foreground py-4 text-center">No classes today</p>
+              <div className="text-center py-8">
+                <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-3">
+                  <Calendar className="w-6 h-6 text-muted-foreground" />
+                </div>
+                <p className="text-sm text-muted-foreground">No classes today</p>
+              </div>
             ) : (
               todayClasses.map((cls) => (
-                <div key={cls.id + cls.slot.time} className="flex items-start gap-3 p-2.5 rounded-[10px] bg-card border border-border">
-                  <div className="text-center shrink-0">
-                    <p className="text-[10px] font-bold text-primary">{cls.slot.time.split('–')[0]}</p>
-                    <p className="text-[9px] text-muted-foreground">{cls.slot.room}</p>
+                <div key={cls.id + cls.slot.time} className="flex items-start gap-3 p-3 rounded-xl bg-accent/50 hover:bg-accent transition-colors">
+                  <div className="text-center shrink-0 min-w-[50px]">
+                    <p className="text-xs font-bold text-primary">{cls.slot.time.split('–')[0]}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">{cls.slot.room}</p>
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-medium text-foreground truncate">{cls.subject}</p>
-                    <p className="text-[10px] text-muted-foreground">{cls.slot.time}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-foreground truncate">{cls.subject}</p>
+                    <p className="text-xs text-muted-foreground">{cls.slot.time}</p>
                   </div>
                 </div>
               ))
@@ -201,35 +192,38 @@ export default function StudentDashboard() {
         </Card>
 
         {/* Upcoming Assignments */}
-        <Card className="rounded-[10px] border-border lg:col-span-2">
-          <CardHeader className="pb-2">
+        <Card className="lg:col-span-2 border-border/50">
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-primary" />
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                  <BookOpen className="w-4 h-4 text-amber-500" />
+                </div>
                 Upcoming Assignments
               </CardTitle>
-              <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => router.push('/student/assignments')}>
-                View all <ArrowRight className="w-3 h-3 ml-1" />
+              <Button variant="ghost" size="sm" className="text-sm h-8 gap-1" onClick={() => router.push('/student/assignments')}>
+                View all <ArrowRight className="w-3.5 h-3.5" />
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-3">
             {upcomingAssignments.map((a) => (
               <div
                 key={a.id}
-                className="flex items-center gap-3 p-3 rounded-[10px] bg-card border border-border hover:border-primary/30 transition-colors cursor-pointer"
+                className="flex items-center gap-4 p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors cursor-pointer group"
                 onClick={() => router.push(`/student/assignments/${a.id}`)}
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 mt-0.5" />
+                <div className="w-1 h-12 rounded-full bg-amber-500/50 shrink-0" />
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-medium text-foreground truncate">{a.title}</p>
-                  <p className="text-[10px] text-muted-foreground">{a.subject} · {a.points} pts</p>
+                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{a.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{a.subject} &middot; {a.points} pts</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <Badge variant="outline" className="text-[9px] h-4 border-amber-500/30 text-amber-400">
+                  <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5">
                     {a.due}
                   </Badge>
                 </div>
+                <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             ))}
           </CardContent>
@@ -237,28 +231,32 @@ export default function StudentDashboard() {
       </div>
 
       {/* Recent Grades */}
-      <Card className="rounded-[10px] border-border">
-        <CardHeader className="pb-2">
+      <Card className="border-border/50">
+        <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
+            <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-primary" />
+              </div>
               Recent Grades
             </CardTitle>
-            <Button variant="ghost" size="sm" className="text-xs h-7" onClick={() => router.push('/student/grades')}>
-              View all <ArrowRight className="w-3 h-3 ml-1" />
+            <Button variant="ghost" size="sm" className="text-sm h-8 gap-1" onClick={() => router.push('/student/grades')}>
+              View all <ArrowRight className="w-3.5 h-3.5" />
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {recentGrades.map((g) => (
-              <div key={g.title} className="p-3 rounded-[10px] bg-card border border-border">
-                <div className="flex items-start justify-between mb-1.5">
-                  <Badge variant="outline" className="text-[9px] h-4">{g.subject}</Badge>
-                  <span className={`text-lg font-bold ${gradeColor(g.grade)}`}>{g.grade}</span>
+              <div key={g.title} className="p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors">
+                <div className="flex items-start justify-between mb-3">
+                  <Badge variant="outline" className="text-xs">{g.subject}</Badge>
+                  <div className={`w-12 h-12 rounded-xl ${gradeBg(g.grade)} flex items-center justify-center`}>
+                    <span className={`text-lg font-bold ${gradeColor(g.grade)}`}>{g.grade}</span>
+                  </div>
                 </div>
-                <p className="text-xs font-medium text-foreground truncate">{g.title}</p>
-                <p className="text-[10px] text-muted-foreground">{g.points} · {g.date}</p>
+                <p className="text-sm font-medium text-foreground truncate">{g.title}</p>
+                <p className="text-xs text-muted-foreground mt-1">{g.points} &middot; {g.date}</p>
               </div>
             ))}
           </div>
