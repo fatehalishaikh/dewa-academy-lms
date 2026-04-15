@@ -75,24 +75,24 @@ export function LearningAssessmentWidget() {
         <div className="space-y-1.5">
           {recentAssessments.map(a => (
             <div key={a.name} className="flex items-center gap-3 py-1.5 px-3 rounded-lg bg-muted/40">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0"
+              <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0"
                 style={{ background: styleColors[a.style] ?? '#00B8A9' }}>
                 {a.initials}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-foreground truncate">{a.name}</p>
-                <p className="text-[10px] text-muted-foreground truncate">
+                <p className="text-[11px] text-muted-foreground truncate">
                   ↑ {a.strengths[0]}
                   {a.barriers.length > 0 && ` · ↓ ${a.barriers[0]}`}
                 </p>
               </div>
-              <Badge variant="outline" className="text-[10px] shrink-0"
+              <Badge variant="outline" className="text-[11px] shrink-0"
                 style={{ color: styleColors[a.style], borderColor: `${styleColors[a.style]}30`, background: `${styleColors[a.style]}10` }}>
                 {a.style.split('-')[0]}
               </Badge>
               <div className="flex items-center gap-0.5 shrink-0">
                 <TrendingUp className="w-3 h-3 text-chart-4" />
-                <span className="text-[10px] font-semibold text-chart-4">{a.confidence}%</span>
+                <span className="text-[11px] font-semibold text-chart-4">{a.confidence}%</span>
               </div>
             </div>
           ))}

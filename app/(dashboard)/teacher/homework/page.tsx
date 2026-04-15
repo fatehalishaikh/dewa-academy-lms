@@ -82,22 +82,22 @@ export default function TeacherHomework() {
                     <p className="text-sm font-semibold text-foreground">{hw.title}</p>
                     <p className="text-[11px] text-muted-foreground mt-0.5">{cls?.name ?? hw.classId} · {hw.totalPoints} pts</p>
                   </div>
-                  <Badge variant="outline" className={`text-[10px] h-5 shrink-0 ${cfg.color} ${cfg.border}`}>
+                  <Badge variant="outline" className={`text-[11px] h-5 shrink-0 ${cfg.color} ${cfg.border}`}>
                     {cfg.label}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                    <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
                       <Clock className="w-3 h-3" />
                       Due {dueFormatted}
                     </div>
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                    <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
                       <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                       {submittedCount}/{subs.length} submitted
                     </div>
                     {pendingCount > 0 && (
-                      <div className="flex items-center gap-1 text-[10px] text-amber-400">
+                      <div className="flex items-center gap-1 text-[11px] text-amber-400">
                         <AlertCircle className="w-3 h-3" />
                         {pendingCount} to grade
                       </div>

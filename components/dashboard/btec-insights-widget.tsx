@@ -68,18 +68,18 @@ export function BTECInsightsWidget() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-medium text-foreground truncate max-w-[150px]">{doc.filename.replace('.pdf', '')}</p>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       {doc.uploadDate}
                       {doc.fieldsExtracted > 0 && ` · ${doc.fieldsExtracted} fields extracted`}
                     </p>
                   </div>
                 </div>
-                <Badge variant="outline" className={`text-[10px] ${docStatusStyles[doc.status]}`}>
+                <Badge variant="outline" className={`text-[11px] ${docStatusStyles[doc.status]}`}>
                   {docStatusLabels[doc.status]}
                 </Badge>
               </div>
             ))}
-            <p className="text-[10px] text-muted-foreground pt-1 px-1">
+            <p className="text-[11px] text-muted-foreground pt-1 px-1">
               OCR accuracy: <span className="text-primary font-semibold">97.3%</span> · 14 documents processed this week
             </p>
           </TabsContent>
@@ -97,7 +97,7 @@ export function BTECInsightsWidget() {
                     <Progress value={insight.completionRate} className="h-1.5 flex-1" style={{ '--progress-color': color } as React.CSSProperties} />
                     <span className="text-[11px] font-semibold shrink-0" style={{ color }}>{insight.completionRate}%</span>
                   </div>
-                  <p className="text-[10px] text-muted-foreground">Cohort avg: {insight.cohortAvg}%</p>
+                  <p className="text-[11px] text-muted-foreground">Cohort avg: {insight.cohortAvg}%</p>
                 </div>
               )
             })}

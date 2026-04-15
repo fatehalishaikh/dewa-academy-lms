@@ -44,24 +44,24 @@ export function RegIntegrationWidget() {
                     <StatusIcon status={connectionStatus} />
                     <span className="text-sm font-semibold text-foreground">{system}</span>
                   </div>
-                  <Badge variant="outline" className={`text-[9px] ${statusBadge(connectionStatus)}`}>{connectionStatus}</Badge>
+                  <Badge variant="outline" className={`text-[11px] ${statusBadge(connectionStatus)}`}>{connectionStatus}</Badge>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-2">
                   <div className="bg-background/50 rounded-lg px-2 py-1.5 text-center">
                     <p className="text-base font-bold text-foreground">{recordsSynced.toLocaleString()}</p>
-                    <p className="text-[9px] text-muted-foreground">Records Synced</p>
+                    <p className="text-[11px] text-muted-foreground">Records Synced</p>
                   </div>
                   <div className="bg-background/50 rounded-lg px-2 py-1.5 text-center">
                     <p className="text-base font-bold text-green-400">{successCount}/{syncHistory.length}</p>
-                    <p className="text-[9px] text-muted-foreground">Success Rate</p>
+                    <p className="text-[11px] text-muted-foreground">Success Rate</p>
                   </div>
                 </div>
 
                 {/* Last sync + mini history */}
                 <div>
-                  <p className="text-[9px] text-muted-foreground mb-1.5">Last sync: {lastSync}</p>
+                  <p className="text-[11px] text-muted-foreground mb-1.5">Last sync: {lastSync}</p>
                   <div className="flex gap-1">
                     {syncHistory.map((h, i) => (
                       <div
@@ -86,7 +86,7 @@ export function RegIntegrationWidget() {
                   </div>
                 </div>
 
-                <button className="w-full flex items-center justify-center gap-1.5 text-[10px] text-primary hover:text-primary/80 transition-colors py-1 rounded-lg hover:bg-primary/5">
+                <button className="w-full flex items-center justify-center gap-1.5 text-[11px] text-primary hover:text-primary/80 transition-colors py-1 rounded-lg hover:bg-primary/5">
                   <RefreshCw className="w-3 h-3" />
                   Sync Now
                 </button>

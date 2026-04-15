@@ -144,11 +144,11 @@ export default function StudentAttendancePage() {
               { label: 'Absent',          value: absentDays,    color: '#EF4444', icon: XCircle      },
               { label: 'Late',            value: lateDays,      color: '#F59E0B', icon: Clock        },
             ].map(({ label, value, color, icon: Icon }) => (
-              <Card key={label} className="rounded-[10px] border-border">
+              <Card key={label} className="rounded-xl border-border">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <p className="text-[10px] text-muted-foreground">{label}</p>
-                    <div className="w-6 h-6 rounded-[10px] flex items-center justify-center" style={{ background: color.startsWith('var') ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : `${color}20` }}>
+                    <p className="text-[11px] text-muted-foreground">{label}</p>
+                    <div className="w-6 h-6 rounded-xl flex items-center justify-center" style={{ background: color.startsWith('var') ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : `${color}20` }}>
                       <Icon className="w-3 h-3" style={{ color }} />
                     </div>
                   </div>
@@ -169,7 +169,7 @@ export default function StudentAttendancePage() {
           </div>
 
           {/* Calendar */}
-          <Card className="rounded-[10px] border-border">
+          <Card className="rounded-xl border-border">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm flex items-center gap-2">
@@ -200,7 +200,7 @@ export default function StudentAttendancePage() {
             <CardContent>
               <div className="grid grid-cols-7 gap-1.5 mb-2">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-                  <p key={d} className={`text-[10px] font-semibold text-center ${d === 'Sat' || d === 'Sun' ? 'text-muted-foreground/30' : 'text-muted-foreground'}`}>{d}</p>
+                  <p key={d} className={`text-[11px] font-semibold text-center ${d === 'Sat' || d === 'Sun' ? 'text-muted-foreground/30' : 'text-muted-foreground'}`}>{d}</p>
                 ))}
               </div>
               <div className="space-y-1.5">
@@ -210,21 +210,21 @@ export default function StudentAttendancePage() {
                       if (!cell.isCurrentMonth) return <div key={di} />
                       if (cell.isWeekend) {
                         return (
-                          <div key={di} className="aspect-square rounded-[10px] flex flex-col items-center justify-center border border-border/20 bg-muted/10">
-                            <p className="text-[10px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
+                          <div key={di} className="aspect-square rounded-xl flex flex-col items-center justify-center border border-border/20 bg-muted/10">
+                            <p className="text-[11px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
                           </div>
                         )
                       }
                       if (!cell.record) return (
-                        <div key={di} className="aspect-square rounded-[10px] border border-border/20 flex flex-col items-center justify-center">
-                          <p className="text-[10px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
+                        <div key={di} className="aspect-square rounded-xl border border-border/20 flex flex-col items-center justify-center">
+                          <p className="text-[11px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
                         </div>
                       )
                       const cfg = statusConfig[cell.record.status]
                       return (
                         <div
                           key={di}
-                          className={`aspect-square rounded-[10px] flex flex-col items-center justify-center gap-1 border ${
+                          className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-1 border ${
                             cell.record.status === 'present' ? 'border-emerald-500/20 bg-emerald-500/5' :
                             cell.record.status === 'absent'  ? 'border-red-500/20 bg-red-500/5' :
                             cell.record.status === 'late'    ? 'border-amber-500/20 bg-amber-500/5' :
@@ -232,7 +232,7 @@ export default function StudentAttendancePage() {
                           }`}
                           title={`${cell.date.toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })} — ${cfg.label}`}
                         >
-                          <p className="text-[10px] font-semibold text-muted-foreground leading-none">{cell.date.getDate()}</p>
+                          <p className="text-[11px] font-semibold text-muted-foreground leading-none">{cell.date.getDate()}</p>
                           <div className={`w-2 h-2 rounded-full ${cfg.dot}`} />
                         </div>
                       )
@@ -245,7 +245,7 @@ export default function StudentAttendancePage() {
 
           {/* Notable events */}
           {notable.length > 0 && (
-            <Card className="rounded-[10px] border-border">
+            <Card className="rounded-xl border-border">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm">Notable Events</CardTitle>
               </CardHeader>
@@ -254,15 +254,15 @@ export default function StudentAttendancePage() {
                   const cfg = statusConfig[rec.status]
                   const Icon = cfg.icon
                   return (
-                    <div key={i} className="flex items-center gap-3 p-2.5 rounded-[10px] bg-card border border-border">
+                    <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl bg-card border border-border">
                       <Icon className={`w-4 h-4 shrink-0 ${cfg.color}`} />
                       <div className="flex-1">
                         <p className="text-xs font-medium text-foreground">
                           {rec.date.toLocaleDateString('en-AE', { weekday: 'short', day: 'numeric', month: 'short' })}
                         </p>
-                        {rec.note && <p className="text-[10px] text-muted-foreground">{rec.note}</p>}
+                        {rec.note && <p className="text-[11px] text-muted-foreground">{rec.note}</p>}
                       </div>
-                      <Badge variant="outline" className={`text-[10px] h-5 ${cfg.color}`}>{cfg.label}</Badge>
+                      <Badge variant="outline" className={`text-[11px] h-5 ${cfg.color}`}>{cfg.label}</Badge>
                     </div>
                   )
                 })}
@@ -273,7 +273,7 @@ export default function StudentAttendancePage() {
 
         {/* Right column: Clock in/out */}
         <div className="space-y-4">
-          <Card className={`rounded-[10px] border-2 transition-colors ${clockedIn ? 'border-emerald-500/40 bg-emerald-500/5' : 'border-border bg-card'}`}>
+          <Card className={`rounded-xl border-2 transition-colors ${clockedIn ? 'border-emerald-500/40 bg-emerald-500/5' : 'border-border bg-card'}`}>
             <CardHeader className="pb-3 pt-5 px-5">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Fingerprint className="w-4 h-4 text-primary" />
@@ -282,12 +282,12 @@ export default function StudentAttendancePage() {
             </CardHeader>
             <CardContent className="px-5 pb-5 space-y-4">
               {/* Status indicator */}
-              <div className={`flex items-center gap-2 px-3 py-2 rounded-[10px] ${clockedIn ? 'bg-emerald-500/10' : 'bg-muted/30'}`}>
+              <div className={`flex items-center gap-2 px-3 py-2 rounded-xl ${clockedIn ? 'bg-emerald-500/10' : 'bg-muted/30'}`}>
                 <div className={`w-2.5 h-2.5 rounded-full ${clockedIn ? 'bg-emerald-400 animate-pulse' : 'bg-muted-foreground/40'}`} />
                 <p className={`text-xs font-medium ${clockedIn ? 'text-emerald-400' : 'text-muted-foreground'}`}>
                   {clockedIn ? 'Checked In' : 'Not Checked In'}
                 </p>
-                {clockTime && <p className="text-[10px] text-muted-foreground ml-auto">{clockTime}</p>}
+                {clockTime && <p className="text-[11px] text-muted-foreground ml-auto">{clockTime}</p>}
               </div>
 
               <div className="text-center space-y-2">
@@ -309,7 +309,7 @@ export default function StudentAttendancePage() {
               </div>
 
               <div className="space-y-2 pt-1 border-t border-border">
-                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Today</p>
+                <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Today</p>
                 <p className="text-xs text-muted-foreground">
                   {new Date().toLocaleDateString('en-AE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                 </p>
@@ -318,7 +318,7 @@ export default function StudentAttendancePage() {
           </Card>
 
           {/* Summary card */}
-          <Card className="rounded-[10px] border-border bg-card">
+          <Card className="rounded-xl border-border bg-card">
             <CardHeader className="pb-3 pt-5 px-5">
               <CardTitle className="text-sm font-semibold">Attendance Summary</CardTitle>
             </CardHeader>
@@ -335,7 +335,7 @@ export default function StudentAttendancePage() {
                   </div>
                 ))}
               </div>
-              <div className={`px-3 py-2 rounded-[10px] text-[11px] font-medium text-center ${
+              <div className={`px-3 py-2 rounded-xl text-[11px] font-medium text-center ${
                 rate >= 90 ? 'bg-emerald-500/10 text-emerald-400' :
                 rate >= 75 ? 'bg-amber-500/10 text-amber-400' :
                 'bg-red-500/10 text-red-400'

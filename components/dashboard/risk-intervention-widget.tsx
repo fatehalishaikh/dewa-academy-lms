@@ -109,7 +109,7 @@ export function RiskInterventionWidget() {
                   <span className="text-[11px] font-semibold w-8 text-right" style={{ color: cfg.color }}>{s.riskScore}</span>
                 </div>
                 <TrendIcon trend={s.trend} />
-                <Badge variant="outline" className={`text-[10px] capitalize ${cfg.badge}`}>
+                <Badge variant="outline" className={`text-[11px] capitalize ${cfg.badge}`}>
                   {s.riskLevel === 'none' ? 'Safe' : s.riskLevel === 'high' ? 'High' : s.riskLevel === 'moderate' ? 'Mod.' : 'Low'}
                 </Badge>
               </div>

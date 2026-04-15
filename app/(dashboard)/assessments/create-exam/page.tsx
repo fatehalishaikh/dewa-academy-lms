@@ -209,7 +209,7 @@ export default function AssessmentsCreateExam() {
               }`}>
                 {i < step ? <Check className="w-3.5 h-3.5" /> : i + 1}
               </div>
-              <span className={`text-[10px] whitespace-nowrap ${i === step ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>{label}</span>
+              <span className={`text-[11px] whitespace-nowrap ${i === step ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>{label}</span>
             </div>
             {i < STEP_LABELS.length - 1 && (
               <div className={`flex-1 h-px mx-2 mb-4 ${i < step ? 'bg-primary/40' : 'bg-border'}`} />
@@ -226,21 +226,21 @@ export default function AssessmentsCreateExam() {
           </CardHeader>
           <CardContent className="pt-4 space-y-4">
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Title *</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Title *</label>
               <input type="text" value={details.title} onChange={e => setD('title', e.target.value)}
                 placeholder="e.g. Mathematics Mid-Term Exam"
                 className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Class *</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Class *</label>
                 <select value={details.classId} onChange={e => setD('classId', e.target.value)}
                   className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50">
                   {academyClasses.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Exam Type</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Exam Type</label>
                 <select value={details.examType} onChange={e => setD('examType', e.target.value)}
                   className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50">
                   <option value="formative">Formative</option>
@@ -249,17 +249,17 @@ export default function AssessmentsCreateExam() {
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Date *</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Date *</label>
                 <input type="date" value={details.date} onChange={e => setD('date', e.target.value)}
                   className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Duration (minutes)</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Duration (minutes)</label>
                 <input type="number" value={details.duration} onChange={e => setD('duration', e.target.value)} min={10}
                   className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Passing Score (%)</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Passing Score (%)</label>
                 <input type="number" value={details.passingScore} onChange={e => setD('passingScore', e.target.value)} min={0} max={100}
                   className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:border-primary/50" />
               </div>
@@ -273,7 +273,7 @@ export default function AssessmentsCreateExam() {
               <div className="flex flex-wrap gap-1.5">
                 <button
                   onClick={() => setBloomsLevel('')}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-colors border ${
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors border ${
                     bloomsLevel === '' ? 'bg-primary text-white border-primary' : 'border-border text-muted-foreground hover:text-foreground'
                   }`}
                 >
@@ -283,7 +283,7 @@ export default function AssessmentsCreateExam() {
                   <button
                     key={level}
                     onClick={() => setBloomsLevel(level)}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-colors border ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors border ${
                       bloomsLevel === level ? 'bg-primary text-white border-primary' : 'border-border text-muted-foreground hover:text-foreground'
                     }`}
                   >
@@ -324,7 +324,7 @@ export default function AssessmentsCreateExam() {
                 <div className="space-y-3 pt-1 border-t border-border">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic <span className="font-normal">(optional)</span></label>
+                      <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic <span className="font-normal">(optional)</span></label>
                       <input
                         type="text"
                         value={adaptiveTopic}
@@ -334,7 +334,7 @@ export default function AssessmentsCreateExam() {
                       />
                     </div>
                     <div>
-                      <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Total questions per student</label>
+                      <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Total questions per student</label>
                       <input
                         type="number"
                         value={adaptiveCount}
@@ -348,7 +348,7 @@ export default function AssessmentsCreateExam() {
 
                   {/* Per-student preview */}
                   <div className="space-y-1">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
                       <Zap className="w-3 h-3 text-primary" /> Preview — each student&apos;s mix
                     </p>
                     {adaptiveStudents.map(as => {
@@ -360,15 +360,15 @@ export default function AssessmentsCreateExam() {
                             <span className="text-[8px] font-bold text-primary">{as.initials}</span>
                           </div>
                           <p className="text-[11px] text-foreground flex-1 truncate">{as.name}</p>
-                          <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded border ${
+                          <span className={`text-[11px] font-medium px-1.5 py-0.5 rounded border ${
                             profile.level === 'Hard' ? 'border-red-500/30 text-red-400 bg-red-500/5' :
                             profile.level === 'Medium' ? 'border-amber-500/30 text-amber-400 bg-amber-500/5' :
                             'border-emerald-500/30 text-emerald-400 bg-emerald-500/5'
                           }`}>{profile.level}</span>
                           <div className="flex items-center gap-1.5 shrink-0">
-                            {mix.easy > 0 && <span className="text-[9px] text-emerald-400">{mix.easy}e</span>}
-                            {mix.medium > 0 && <span className="text-[9px] text-amber-400">{mix.medium}m</span>}
-                            {mix.hard > 0 && <span className="text-[9px] text-red-400">{mix.hard}h</span>}
+                            {mix.easy > 0 && <span className="text-[11px] text-emerald-400">{mix.easy}e</span>}
+                            {mix.medium > 0 && <span className="text-[11px] text-amber-400">{mix.medium}m</span>}
+                            {mix.hard > 0 && <span className="text-[11px] text-red-400">{mix.hard}h</span>}
                           </div>
                         </div>
                       )
@@ -406,11 +406,11 @@ export default function AssessmentsCreateExam() {
                         className="mt-0.5 accent-primary shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-foreground line-clamp-1">{q.text}</p>
-                        <p className="text-[10px] text-muted-foreground">{q.subject} · {q.topic}</p>
+                        <p className="text-[11px] text-muted-foreground">{q.subject} · {q.topic}</p>
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
-                        <span className="text-[10px] text-muted-foreground">{q.points}pt</span>
+                        <Badge variant="outline" className={`text-[11px] h-4 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
+                        <span className="text-[11px] text-muted-foreground">{q.points}pt</span>
                       </div>
                     </label>
                   ))}
@@ -487,7 +487,7 @@ export default function AssessmentsCreateExam() {
                   { label: 'Total Points', value: adaptiveMode ? `~${adaptiveCount * 4} (varies)` : `${totalPoints} pts` },
                 ].map(({ label, value }) => (
                   <div key={label}>
-                    <p className="text-[10px] text-muted-foreground">{label}</p>
+                    <p className="text-[11px] text-muted-foreground">{label}</p>
                     <p className="text-sm font-medium text-foreground">{value}</p>
                   </div>
                 ))}
@@ -508,19 +508,19 @@ export default function AssessmentsCreateExam() {
                   There are <strong className="text-foreground">no fixed questions</strong> for this exam. When each student opens it, the system analyses their past performance and assembles a personalised set of {adaptiveCount} questions on-the-fly — drawing from the question bank and AI-generated questions as needed. This ensures top performers are challenged and weaker students aren&apos;t overwhelmed.
                 </p>
                 <div className="space-y-1">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Expected delivery per student</p>
+                  <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Expected delivery per student</p>
                   {adaptiveStudents.map(as => {
                     const profile = getStudentDifficultyProfile(as.studentId)
                     const mix = buildDifficultyMix(profile.level, adaptiveCount)
                     return (
                       <div key={as.studentId} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-background/50">
                         <span className="text-[11px] text-foreground flex-1 truncate">{as.name}</span>
-                        <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded border ${
+                        <span className={`text-[11px] font-medium px-1.5 py-0.5 rounded border ${
                           profile.level === 'Hard' ? 'border-red-500/30 text-red-400' :
                           profile.level === 'Medium' ? 'border-amber-500/30 text-amber-400' :
                           'border-emerald-500/30 text-emerald-400'
                         }`}>{profile.level}</span>
-                        <div className="flex items-center gap-1 text-[9px]">
+                        <div className="flex items-center gap-1 text-[11px]">
                           {mix.easy > 0 && <span className="text-emerald-400">{mix.easy}e</span>}
                           {mix.medium > 0 && <span className="text-amber-400">{mix.medium}m</span>}
                           {mix.hard > 0 && <span className="text-red-400">{mix.hard}h</span>}
@@ -539,10 +539,10 @@ export default function AssessmentsCreateExam() {
               <div className="divide-y divide-border max-h-52 overflow-y-auto">
                 {selectedQuestions.map((q, i) => (
                   <div key={q.id} className="flex items-start gap-3 px-5 py-2.5">
-                    <span className="text-[10px] text-muted-foreground w-5 shrink-0">{i + 1}.</span>
+                    <span className="text-[11px] text-muted-foreground w-5 shrink-0">{i + 1}.</span>
                     <p className="text-xs text-foreground flex-1 line-clamp-1">{q.text}</p>
-                    <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
-                    <span className="text-[10px] text-muted-foreground shrink-0">{q.points}pt</span>
+                    <Badge variant="outline" className={`text-[11px] h-4 shrink-0 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
+                    <span className="text-[11px] text-muted-foreground shrink-0">{q.points}pt</span>
                   </div>
                 ))}
               </div>

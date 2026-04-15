@@ -122,7 +122,7 @@ export function PredictiveAnalyticsWidget() {
                   <span className="text-[11px] font-semibold w-8 text-right" style={{ color: cfg.color }}>{s.predictedScore}%</span>
                 </div>
                 <TrendIcon trend={s.trend} />
-                <Badge variant="outline" className={`text-[10px] capitalize ${cfg.badge}`}>
+                <Badge variant="outline" className={`text-[11px] capitalize ${cfg.badge}`}>
                   {s.riskLevel === 'high' ? 'High Risk' : s.riskLevel === 'moderate' ? 'Moderate' : 'Low Risk'}
                 </Badge>
               </div>

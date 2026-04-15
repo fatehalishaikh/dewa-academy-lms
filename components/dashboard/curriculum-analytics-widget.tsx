@@ -126,7 +126,7 @@ export function CurriculumAnalyticsWidget() {
                 </span>
               </div>
               <TrendIcon trend={s.trend} />
-              <span className="text-[10px] text-muted-foreground w-24 text-right">
+              <span className="text-[11px] text-muted-foreground w-24 text-right">
                 {s.standardsCovered}% standards
               </span>
             </div>

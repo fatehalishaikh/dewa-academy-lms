@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import {
   LayoutGrid, LayoutDashboard, ClipboardList, BookOpen, FileCheck, BookMarked,
   BarChart3, Users, LogOut, ChevronRight, Building2,
-  GraduationCap, Briefcase,
+  GraduationCap, Briefcase, X,
 } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { NavLink } from '@/components/ui/nav-link'
@@ -26,7 +26,12 @@ const adminItems = [
   { label: 'Reports', icon: BarChart3, href: '/reports' as string | null },
 ]
 
-export function Sidebar() {
+interface SidebarProps {
+  mobileOpen: boolean
+  onClose: () => void
+}
+
+export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   const router = useRouter()
   const { clearRole } = useRoleStore()
@@ -44,76 +49,93 @@ export function Sidebar() {
     }`
 
   return (
-    <aside className="w-64 shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border/60">
-      {/* Logo */}
-      <div className="px-6 py-6 flex items-center gap-3">
-        <img src="/dewa-logo-only.svg" alt="DEWA" className="w-8 h-8 shrink-0" />
-        <div>
-          <p className="text-sm font-semibold text-sidebar-foreground leading-tight tracking-tight">DEWA Academy</p>
-          <p className="text-xs text-muted-foreground leading-tight mt-0.5">Admin Portal</p>
-        </div>
-      </div>
+    <>
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={onClose}
+        />
+      )}
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
-        <p className="px-3 mb-2 mt-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">Modules</p>
-        {navItems.map(({ label, icon: Icon, href }) => (
-          <NavLink
-            key={label}
-            href={href}
-            className={navLinkClass}
-          >
-            <Icon className="w-4 h-4 shrink-0" />
-            {label}
-          </NavLink>
-        ))}
-
-        <div className="pt-4">
-          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">Administration</p>
-          {adminItems.map(({ label, icon: Icon, href }) =>
-            href ? (
-              <NavLink key={label} href={href} className={navLinkClass}>
-                <Icon className="w-4 h-4 shrink-0" />
-                {label}
-              </NavLink>
-            ) : (
-              <div
-                key={label}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground/35 cursor-not-allowed select-none"
-              >
-                <Icon className="w-4 h-4 shrink-0" />
-                {label}
-              </div>
-            )
-          )}
-        </div>
-      </nav>
-
-      <div className="border-t border-sidebar-border/60 mx-3 mb-0" />
-
-      {/* User + theme toggle + switch role */}
-      <div className="px-4 py-4 space-y-1">
-        <div className="flex items-center gap-3 px-1 py-1.5">
-          <Avatar className="w-8 h-8">
-            <AvatarFallback className="text-xs font-semibold text-white" style={{ background: '#F59E0B' }}>
-              <Building2 className="w-3.5 h-3.5" />
-            </AvatarFallback>
-          </Avatar>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-sidebar-foreground truncate leading-tight">Dr. Hassan Al-Mansoori</p>
-            <p className="text-xs text-muted-foreground truncate mt-0.5">Administrator</p>
+      <aside className={`
+        w-64 shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border/60
+        fixed inset-y-0 left-0 z-50 transition-transform duration-200 ease-in-out
+        md:relative md:translate-x-0 md:z-auto
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+        {/* Logo */}
+        <div className="px-6 py-6 flex items-center gap-3">
+          <img src="/dewa-logo-only.svg" alt="DEWA" className="w-8 h-8 shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-sidebar-foreground leading-tight tracking-tight">DEWA Academy</p>
+            <p className="text-xs text-muted-foreground leading-tight mt-0.5">Admin Portal</p>
           </div>
-          <ThemeToggle className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0" />
+          <button
+            onClick={onClose}
+            className="md:hidden w-7 h-7 flex items-center justify-center rounded-lg hover:bg-sidebar-accent transition-colors shrink-0"
+          >
+            <X className="w-4 h-4 text-sidebar-foreground" />
+          </button>
         </div>
-        <button
-          onClick={switchRole}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/60 transition-colors"
-        >
-          <LogOut className="w-3.5 h-3.5" />
-          Switch Role
-          <ChevronRight className="w-3 h-3 ml-auto opacity-50" />
-        </button>
-      </div>
-    </aside>
+
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
+          <p className="px-3 mb-2 mt-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">Modules</p>
+          {navItems.map(({ label, icon: Icon, href }) => (
+            <NavLink key={label} href={href} className={navLinkClass} onClick={onClose}>
+              <Icon className="w-4 h-4 shrink-0" />
+              {label}
+            </NavLink>
+          ))}
+
+          <div className="pt-4">
+            <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">Administration</p>
+            {adminItems.map(({ label, icon: Icon, href }) =>
+              href ? (
+                <NavLink key={label} href={href} className={navLinkClass} onClick={onClose}>
+                  <Icon className="w-4 h-4 shrink-0" />
+                  {label}
+                </NavLink>
+              ) : (
+                <div
+                  key={label}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground/50 cursor-not-allowed select-none"
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  {label}
+                </div>
+              )
+            )}
+          </div>
+        </nav>
+
+        <div className="border-t border-sidebar-border/60 mx-3 mb-0" />
+
+        {/* User + theme toggle + switch role */}
+        <div className="px-4 py-4 space-y-1">
+          <div className="flex items-center gap-3 px-1 py-1.5">
+            <Avatar className="w-8 h-8">
+              <AvatarFallback className="text-xs font-semibold text-white" style={{ background: 'var(--accent-admin)' }}>
+                <Building2 className="w-3.5 h-3.5" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-sidebar-foreground truncate leading-tight">Dr. Hassan Al-Mansoori</p>
+              <p className="text-xs text-muted-foreground truncate mt-0.5">Administrator</p>
+            </div>
+            <ThemeToggle className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-colors shrink-0" />
+          </div>
+          <button
+            onClick={switchRole}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/60 transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            Switch Role
+            <ChevronRight className="w-3 h-3 ml-auto opacity-50" />
+          </button>
+        </div>
+      </aside>
+    </>
   )
 }

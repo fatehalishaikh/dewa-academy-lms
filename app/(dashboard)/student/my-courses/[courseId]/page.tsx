@@ -60,12 +60,12 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="outline" className="text-[10px] h-5 border-primary/30 text-primary">
+              <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary">
                 {course.subject}
               </Badge>
               <Badge
                 variant="outline"
-                className={`text-[10px] h-5 ${
+                className={`text-[11px] h-5 ${
                   course.status === 'completed'
                     ? 'border-emerald-500/30 text-emerald-400'
                     : 'border-amber-500/30 text-amber-400'
@@ -87,36 +87,36 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
 
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-3">
-        <Card className="rounded-[10px] border-border bg-card">
+        <Card className="rounded-xl border-border bg-card">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-[10px] bg-primary/10 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
               <BookOpen className="w-4 h-4 text-primary" />
             </div>
             <div>
               <p className="text-base font-bold text-foreground">{completedSections}/{course.sections.length}</p>
-              <p className="text-[10px] text-muted-foreground">Weeks Done</p>
+              <p className="text-[11px] text-muted-foreground">Weeks Done</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] border-border bg-card">
+        <Card className="rounded-xl border-border bg-card">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-[10px] bg-emerald-500/10 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
               <Trophy className="w-4 h-4 text-emerald-400" />
             </div>
             <div>
               <p className="text-base font-bold text-foreground">{achievedMilestones}/{course.milestones.length}</p>
-              <p className="text-[10px] text-muted-foreground">Milestones</p>
+              <p className="text-[11px] text-muted-foreground">Milestones</p>
             </div>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] border-border bg-card">
+        <Card className="rounded-xl border-border bg-card">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-[10px] bg-blue-500/10 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
               <TrendingUp className="w-4 h-4 text-blue-400" />
             </div>
             <div>
               <p className="text-base font-bold text-foreground">{course.progress}%</p>
-              <p className="text-[10px] text-muted-foreground">Progress</p>
+              <p className="text-[11px] text-muted-foreground">Progress</p>
             </div>
           </CardContent>
         </Card>
@@ -136,7 +136,7 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
           {course.sections.map(section => (
             <Card
               key={section.id}
-              className={`rounded-[10px] border transition-colors ${
+              className={`rounded-xl border transition-colors ${
                 section.completed ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border bg-card'
               }`}
             >
@@ -156,12 +156,12 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
                         {section.title}
                       </p>
                       <div className="flex items-center gap-2 shrink-0">
-                        <Badge variant="outline" className="text-[10px] h-5 border-blue-500/30 text-blue-400">
+                        <Badge variant="outline" className="text-[11px] h-5 border-blue-500/30 text-blue-400">
                           <Clock className="w-2.5 h-2.5 mr-1" />
                           {section.hoursRequired}h
                         </Badge>
                         {section.completed && (
-                          <Badge variant="outline" className="text-[10px] h-5 border-emerald-500/30 text-emerald-400">
+                          <Badge variant="outline" className="text-[11px] h-5 border-emerald-500/30 text-emerald-400">
                             Done
                           </Badge>
                         )}
@@ -187,7 +187,7 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
           {course.milestones.map((milestone, i) => (
             <Card
               key={i}
-              className={`rounded-[10px] border transition-colors ${
+              className={`rounded-xl border transition-colors ${
                 milestone.achieved ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border bg-card'
               }`}
             >
@@ -203,10 +203,10 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
                       {milestone.title}
                     </p>
                     <div className="flex items-center gap-2 shrink-0">
-                      <Badge variant="outline" className="text-[10px] h-5 border-border text-muted-foreground">
+                      <Badge variant="outline" className="text-[11px] h-5 border-border text-muted-foreground">
                         Week {milestone.targetWeek}
                       </Badge>
-                      <Badge variant="outline" className="text-[10px] h-5 border-border text-muted-foreground">
+                      <Badge variant="outline" className="text-[11px] h-5 border-border text-muted-foreground">
                         {milestone.subject}
                       </Badge>
                     </div>
@@ -222,15 +222,15 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
         <TabsContent value="resources" className="mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {course.resources.map((res, i) => (
-              <Card key={i} className="rounded-[10px] border-border bg-card">
+              <Card key={i} className="rounded-xl border-border bg-card">
                 <CardContent className="p-4 space-y-2">
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-semibold text-foreground leading-tight">{res.title}</p>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <Badge variant="outline" className={`text-[10px] h-5 ${resourceTypeColor[res.type] ?? 'text-muted-foreground border-border'}`}>
+                      <Badge variant="outline" className={`text-[11px] h-5 ${resourceTypeColor[res.type] ?? 'text-muted-foreground border-border'}`}>
                         {res.type}
                       </Badge>
-                      <Badge variant="outline" className={`text-[10px] h-5 ${priorityColor[res.priority] ?? 'text-muted-foreground border-border'}`}>
+                      <Badge variant="outline" className={`text-[11px] h-5 ${priorityColor[res.priority] ?? 'text-muted-foreground border-border'}`}>
                         {res.priority}
                       </Badge>
                     </div>
@@ -248,7 +248,7 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
         {/* Focus Areas */}
         <TabsContent value="focus" className="space-y-3 mt-4">
           {course.focusAreas.map((area, i) => (
-            <Card key={i} className="rounded-[10px] border-border bg-card">
+            <Card key={i} className="rounded-xl border-border bg-card">
               <CardHeader className="pb-2 pt-4 px-5">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -257,7 +257,7 @@ export default function CourseDetailPage({ params }: { params: Promise<{ courseI
                   </CardTitle>
                   <Badge
                     variant="outline"
-                    className={`text-[10px] h-5 ${priorityColor[area.priority] ?? 'text-muted-foreground border-border'}`}
+                    className={`text-[11px] h-5 ${priorityColor[area.priority] ?? 'text-muted-foreground border-border'}`}
                   >
                     {area.priority} priority
                   </Badge>

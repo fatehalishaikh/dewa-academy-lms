@@ -38,26 +38,26 @@ export function RegFlaggedWidget() {
             <div key={app.id} className="bg-muted/30 rounded-lg px-3 py-2.5 space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary shrink-0">{app.initials}</div>
+                  <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-[11px] font-bold text-primary shrink-0">{app.initials}</div>
                   <span className="text-xs font-medium text-foreground truncate">{app.nameEn}</span>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full" style={{ background: severity.dot }} />
-                  <span className={`text-[9px] font-semibold ${severity.text}`}>{severity.label}</span>
+                  <span className={`text-[11px] font-semibold ${severity.text}`}>{severity.label}</span>
                 </div>
               </div>
               <div className="flex flex-wrap gap-1">
                 {app.flagReasons.map(r => (
-                  <Badge key={r} variant="outline" className={`text-[9px] ${severity.bg} ${severity.text} border-current/20`}>{r}</Badge>
+                  <Badge key={r} variant="outline" className={`text-[11px] ${severity.bg} ${severity.text} border-current/20`}>{r}</Badge>
                 ))}
                 {app.assignedReviewer && (
-                  <span className="text-[9px] text-muted-foreground ml-auto">→ {app.assignedReviewer.split(' ').slice(-1)[0]}</span>
+                  <span className="text-[11px] text-muted-foreground ml-auto">→ {app.assignedReviewer.split(' ').slice(-1)[0]}</span>
                 )}
               </div>
             </div>
           )
         })}
-        <p className="text-[10px] text-muted-foreground text-center pt-1">+ 13 more flagged applications</p>
+        <p className="text-[11px] text-muted-foreground text-center pt-1">+ 13 more flagged applications</p>
       </CardContent>
     </Card>
   )

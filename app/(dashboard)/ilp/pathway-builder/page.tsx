@@ -56,7 +56,7 @@ export default function PathwayBuilder() {
                           style={{ background: color }}>
                           {stage.id}
                         </div>
-                        <Badge variant="outline" className="text-[10px]"
+                        <Badge variant="outline" className="text-[11px]"
                           style={{ color, borderColor: `${color}30`, background: `${color}10` }}>
                           {stage.studentCount} students
                         </Badge>
@@ -64,13 +64,13 @@ export default function PathwayBuilder() {
 
                       {/* Name */}
                       <div>
-                        <Label className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1 block">Stage Name</Label>
+                        <Label className="text-[11px] text-muted-foreground uppercase tracking-wide mb-1 block">Stage Name</Label>
                         <Input defaultValue={stage.name} className="h-7 text-xs rounded-lg" />
                       </div>
 
                       {/* Description */}
                       <div>
-                        <Label className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1 block">Description</Label>
+                        <Label className="text-[11px] text-muted-foreground uppercase tracking-wide mb-1 block">Description</Label>
                         <Textarea defaultValue={stage.description} className="text-xs rounded-lg min-h-[52px] resize-none" />
                       </div>
 
@@ -82,10 +82,10 @@ export default function PathwayBuilder() {
 
                       {/* Criteria */}
                       <div>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">Criteria</p>
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wide mb-1.5">Criteria</p>
                         <ul className="space-y-1">
                           {stage.criteria.map((c, ci) => (
-                            <li key={ci} className="text-[10px] text-muted-foreground flex items-start gap-1.5">
+                            <li key={ci} className="text-[11px] text-muted-foreground flex items-start gap-1.5">
                               <span className="text-primary mt-0.5 shrink-0">·</span>
                               {c}
                             </li>
@@ -133,7 +133,7 @@ export default function PathwayBuilder() {
                 {advancementRules.map((rule, i) => (
                   <TableRow key={i} className="hover:bg-muted/20">
                     <TableCell className="py-2">
-                      <Badge variant="outline" className="text-[10px]"
+                      <Badge variant="outline" className="text-[11px]"
                         style={{
                           color: stageColors[rule.from] ?? '#8B9BB4',
                           borderColor: `${stageColors[rule.from] ?? '#8B9BB4'}30`,
@@ -143,7 +143,7 @@ export default function PathwayBuilder() {
                       </Badge>
                     </TableCell>
                     <TableCell className="py-2">
-                      <Badge variant="outline" className="text-[10px]"
+                      <Badge variant="outline" className="text-[11px]"
                         style={{
                           color: stageColors[rule.to] ?? '#8B9BB4',
                           borderColor: `${stageColors[rule.to] ?? '#8B9BB4'}30`,

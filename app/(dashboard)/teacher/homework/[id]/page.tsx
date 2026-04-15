@@ -63,12 +63,12 @@ export default function HomeworkDetail() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 {hw.aiGenerated && (
-                  <Badge variant="outline" className="text-[10px] h-4 border-primary/30 text-primary gap-1">
+                  <Badge variant="outline" className="text-[11px] h-4 border-primary/30 text-primary gap-1">
                     <Sparkles className="w-2.5 h-2.5" />
                     AI Generated
                   </Badge>
                 )}
-                <Badge variant="outline" className={`text-[10px] h-4 ${hwStatus.color} ${hwStatus.border}`}>
+                <Badge variant="outline" className={`text-[11px] h-4 ${hwStatus.color} ${hwStatus.border}`}>
                   {hwStatus.label}
                 </Badge>
               </div>
@@ -96,24 +96,24 @@ export default function HomeworkDetail() {
         <CardContent className="pt-4 space-y-4">
           {hw.description && (
             <div>
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Description</p>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Description</p>
               <p className="text-sm text-foreground leading-relaxed">{hw.description}</p>
             </div>
           )}
           {hw.instructions && (
             <div>
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Instructions</p>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Instructions</p>
               <p className="text-sm text-foreground leading-relaxed">{hw.instructions}</p>
             </div>
           )}
           {hw.rubric.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Grading Rubric</p>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Grading Rubric</p>
               <div className="grid grid-cols-2 gap-1.5">
                 {hw.rubric.map(r => (
                   <div key={r.id} className="flex items-center justify-between p-2 rounded-lg bg-card border border-border">
                     <p className="text-xs text-foreground">{r.label}</p>
-                    <Badge variant="outline" className="text-[10px]">{r.maxPoints} pts</Badge>
+                    <Badge variant="outline" className="text-[11px]">{r.maxPoints} pts</Badge>
                   </div>
                 ))}
               </div>
@@ -132,8 +132,8 @@ export default function HomeworkDetail() {
                 Questions
               </CardTitle>
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">{hw.questions.length} questions</Badge>
-                <Badge variant="outline" className="text-[10px]">{hw.totalPoints} pts</Badge>
+                <Badge variant="outline" className="text-[11px] border-primary/30 text-primary">{hw.questions.length} questions</Badge>
+                <Badge variant="outline" className="text-[11px]">{hw.totalPoints} pts</Badge>
               </div>
             </div>
           </CardHeader>
@@ -146,9 +146,9 @@ export default function HomeworkDetail() {
                     <span className="text-xs font-semibold text-muted-foreground shrink-0 mt-0.5">{i + 1}.</span>
                     <p className="text-sm text-foreground flex-1 leading-snug">{q.text}</p>
                     <div className="flex items-center gap-1 shrink-0">
-                      <Badge variant="outline" className={`text-[9px] h-4 ${diffCls}`}>{q.difficulty}</Badge>
-                      <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
-                      <Badge variant="outline" className="text-[9px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
+                      <Badge variant="outline" className={`text-[11px] h-4 ${diffCls}`}>{q.difficulty}</Badge>
+                      <Badge variant="outline" className="text-[11px] h-4">{q.questionType}</Badge>
+                      <Badge variant="outline" className="text-[11px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
                     </div>
                   </div>
                   {q.questionType === 'MCQ' && q.options && (
@@ -162,7 +162,7 @@ export default function HomeworkDetail() {
                     </div>
                   )}
                   {q.questionType !== 'MCQ' && (
-                    <p className="pl-5 text-[10px] text-emerald-400">Answer: {q.correctAnswer}</p>
+                    <p className="pl-5 text-[11px] text-emerald-400">Answer: {q.correctAnswer}</p>
                   )}
                 </div>
               )
@@ -182,7 +182,7 @@ export default function HomeworkDetail() {
           <Card key={label} className="rounded-2xl border-border">
             <CardContent className="p-4">
               <div className="flex items-start justify-between mb-1">
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
                 <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: `${color}20` }}>
                   <Icon className="w-3 h-3" style={{ color }} />
                 </div>
@@ -229,7 +229,7 @@ export default function HomeworkDetail() {
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-foreground">{student.name}</p>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       {sub.submittedDate
                         ? `Submitted ${new Date(sub.submittedDate).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })}`
                         : 'Not submitted yet'}
@@ -238,19 +238,19 @@ export default function HomeworkDetail() {
                   <div className="flex items-center gap-3">
                     {sub.aiScore != null && sub.status !== 'graded' && (
                       <div className="text-center">
-                        <p className="text-[9px] text-muted-foreground">AI Score</p>
+                        <p className="text-[11px] text-muted-foreground">AI Score</p>
                         <p className="text-xs font-semibold text-primary">{sub.aiScore}/{hw.totalPoints}</p>
                       </div>
                     )}
                     {sub.status === 'graded' && sub.grade != null && (
                       <div className="text-center">
-                        <p className="text-[9px] text-muted-foreground">Grade</p>
+                        <p className="text-[11px] text-muted-foreground">Grade</p>
                         <p className={`text-sm font-bold ${sub.grade / hw.totalPoints >= 0.9 ? 'text-emerald-400' : sub.grade / hw.totalPoints >= 0.75 ? 'text-amber-400' : 'text-red-400'}`}>
                           {sub.grade}/{hw.totalPoints}
                         </p>
                       </div>
                     )}
-                    <Badge variant="outline" className={`text-[10px] h-5 ${cfg.color} ${cfg.border}`}>
+                    <Badge variant="outline" className={`text-[11px] h-5 ${cfg.color} ${cfg.border}`}>
                       <Icon className="w-2.5 h-2.5 mr-1" />
                       {cfg.label}
                     </Badge>

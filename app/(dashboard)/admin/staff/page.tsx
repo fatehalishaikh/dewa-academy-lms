@@ -46,7 +46,7 @@ export default function AdminStaffPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{value}</p>
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
               </div>
             </CardContent>
           </Card>
@@ -98,14 +98,14 @@ export default function AdminStaffPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="text-sm font-semibold text-foreground">{member.name}</p>
-                  <Badge variant="outline" className="text-[10px] h-5 border-border text-muted-foreground">{member.role}</Badge>
+                  <Badge variant="outline" className="text-[11px] h-5 border-border text-muted-foreground">{member.role}</Badge>
                 </div>
                 <p className="text-[11px] text-muted-foreground mt-0.5">{member.department} · {member.email}</p>
               </div>
               <div className="flex items-center gap-4 shrink-0">
                 <Badge
                   variant="outline"
-                  className={`text-[10px] h-5 ${
+                  className={`text-[11px] h-5 ${
                     member.status === 'active'
                       ? 'border-emerald-500/30 text-emerald-400'
                       : 'border-amber-500/30 text-amber-400'
@@ -115,7 +115,7 @@ export default function AdminStaffPage() {
                 </Badge>
                 <div className="text-right">
                   <p className="text-sm font-bold text-foreground">{member.yearsExperience}y</p>
-                  <p className="text-[10px] text-muted-foreground">Experience</p>
+                  <p className="text-[11px] text-muted-foreground">Experience</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground" />
               </div>

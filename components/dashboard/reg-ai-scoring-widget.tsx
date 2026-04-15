@@ -62,12 +62,12 @@ export function RegAiScoringWidget() {
 
         {/* Top scored */}
         <div className="space-y-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Top Applicants</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Top Applicants</p>
           {topScored.map(app => (
             <div key={app.id} className="bg-muted/30 rounded-lg px-2.5 py-2 space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">{app.initials}</div>
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[11px] font-bold text-primary">{app.initials}</div>
                   <span className="text-xs font-medium text-foreground">{app.nameEn}</span>
                 </div>
                 <span className="text-sm font-bold" style={{ color: scoreColor(app.aiScore!) }}>{app.aiScore}</span>

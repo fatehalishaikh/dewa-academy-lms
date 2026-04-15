@@ -71,7 +71,7 @@ export function AdaptiveTestingWidget() {
           </ResponsiveContainer>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-2xl font-bold text-foreground">{adaptiveSummary.total}</span>
-            <span className="text-[10px] text-muted-foreground">Students</span>
+            <span className="text-[11px] text-muted-foreground">Students</span>
           </div>
         </div>
 
@@ -93,10 +93,10 @@ export function AdaptiveTestingWidget() {
                 <TrendIcon trend={s.trend} />
                 <div>
                   <p className="text-xs font-medium text-foreground">{s.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{s.questionsAnswered} answered · {s.accuracy}% accuracy</p>
+                  <p className="text-[11px] text-muted-foreground">{s.questionsAnswered} answered · {s.accuracy}% accuracy</p>
                 </div>
               </div>
-              <Badge variant="outline" className={`text-[10px] ${difficultyBadge[s.difficulty]}`}>
+              <Badge variant="outline" className={`text-[11px] ${difficultyBadge[s.difficulty]}`}>
                 {s.difficulty}
               </Badge>
             </div>

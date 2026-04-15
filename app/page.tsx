@@ -26,8 +26,8 @@ const roleConfigs: RoleConfig[] = [
     label: 'Student',
     description: 'View assignments, grades, schedule and AI-powered learning tools',
     icon: GraduationCap,
-    accentColor: '#00B8A9',
-    borderColor: 'rgba(0,184,169,0.3)',
+    accentColor: 'var(--accent-student)',
+    borderColor: 'color-mix(in srgb, var(--accent-student) 30%, transparent)',
     defaultRoute: '/student/dashboard',
     personas: students.slice(0, 3).map(s => ({
       id: s.id,
@@ -42,8 +42,8 @@ const roleConfigs: RoleConfig[] = [
     label: 'Parent',
     description: "Monitor your child's progress, grades, attendance and messages",
     icon: Users,
-    accentColor: '#8B5CF6',
-    borderColor: 'rgba(139,92,246,0.3)',
+    accentColor: 'var(--accent-parent)',
+    borderColor: 'color-mix(in srgb, var(--accent-parent) 30%, transparent)',
     defaultRoute: '/parent/dashboard',
     personas: parents.slice(0, 3).map(p => ({
       id: p.id,
@@ -58,8 +58,8 @@ const roleConfigs: RoleConfig[] = [
     label: 'Teacher',
     description: 'Manage classes, create homework, grade submissions and track students',
     icon: BookOpen,
-    accentColor: '#0EA5E9',
-    borderColor: 'rgba(14,165,233,0.3)',
+    accentColor: 'var(--accent-teacher)',
+    borderColor: 'color-mix(in srgb, var(--accent-teacher) 30%, transparent)',
     defaultRoute: '/teacher/dashboard',
     personas: teachers.map(t => ({
       id: t.id,
@@ -74,8 +74,8 @@ const roleConfigs: RoleConfig[] = [
     label: 'Administrator',
     description: 'Full access to all modules — registration, analytics, reports and system config',
     icon: Building2,
-    accentColor: '#F59E0B',
-    borderColor: 'rgba(245,158,11,0.3)',
+    accentColor: 'var(--accent-admin)',
+    borderColor: 'color-mix(in srgb, var(--accent-admin) 30%, transparent)',
     defaultRoute: '/admin/dashboard',
     personas: [
       { id: 'adm-001', name: 'Dr. Hassan Al-Mansoori', initials: 'HM', avatarColor: '#F59E0B', subtitle: 'Principal' },
@@ -101,7 +101,7 @@ export default function RoleSelectPage() {
         <img src="/dewa-logo-only.svg" alt="DEWA" className="w-8 h-8" />
         <div>
           <p className="text-sm font-semibold text-foreground leading-tight">DEWA Academy</p>
-          <p className="text-[11px] text-muted-foreground leading-tight">School Management System</p>
+          <p className="text-xs text-muted-foreground leading-tight">School Management System</p>
         </div>
         <div className="ml-auto flex items-center gap-3">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -145,7 +145,7 @@ export default function RoleSelectPage() {
                   <div className="flex items-center gap-3 mb-3">
                     <div
                       className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ background: `${config.accentColor}20` }}
+                      style={{ background: `color-mix(in srgb, ${config.accentColor} 12%, transparent)` }}
                     >
                       <Icon className="w-4.5 h-4.5" style={{ color: config.accentColor }} />
                     </div>
@@ -154,11 +154,11 @@ export default function RoleSelectPage() {
                     </div>
                   </div>
 
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-4">{config.description}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-4">{config.description}</p>
 
                   {/* Personas */}
                   <div className="space-y-2">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Select persona</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Select persona</p>
                     {config.personas.map((persona) => (
                       <button
                         key={persona.id}
@@ -167,15 +167,15 @@ export default function RoleSelectPage() {
                       >
                         <Avatar className="w-7 h-7 shrink-0">
                           <AvatarFallback
-                            className="text-[10px] font-bold text-white"
+                            className="text-[11px] font-bold text-white"
                             style={{ background: persona.avatarColor }}
                           >
                             {persona.initials}
                           </AvatarFallback>
                         </Avatar>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[11px] font-medium text-foreground truncate">{persona.name}</p>
-                          <p className="text-[10px] text-muted-foreground truncate">{persona.subtitle}</p>
+                          <p className="text-xs font-medium text-foreground truncate">{persona.name}</p>
+                          <p className="text-[11px] text-muted-foreground truncate">{persona.subtitle}</p>
                         </div>
                         <ChevronRight className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" style={{ color: config.accentColor }} />
                       </button>
@@ -187,7 +187,7 @@ export default function RoleSelectPage() {
           })}
         </div>
 
-        <p className="mt-8 text-[11px] text-muted-foreground">
+        <p className="mt-8 text-xs text-muted-foreground">
           This is a UI/UX prototype. All data is simulated.
         </p>
       </div>

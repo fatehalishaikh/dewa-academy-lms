@@ -32,14 +32,14 @@ function LessonCard({ subject, classGroup, recommendation, progress }: {
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs font-semibold text-foreground">{subject}</p>
-            <span className="text-[10px] text-muted-foreground shrink-0">{classGroup}</span>
+            <span className="text-[11px] text-muted-foreground shrink-0">{classGroup}</span>
           </div>
           <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">{recommendation}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
         <Progress value={progress} className="h-1.5 flex-1" style={{ '--progress-color': color } as React.CSSProperties} />
-        <span className="text-[10px] font-medium" style={{ color }}>{progress}%</span>
+        <span className="text-[11px] font-medium" style={{ color }}>{progress}%</span>
       </div>
     </div>
   )

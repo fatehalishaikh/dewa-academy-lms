@@ -222,7 +222,7 @@ export default function HomeworkCreate() {
                   {selectedClass?.name} · Due {form.dueDate || 'TBD'} · {form.totalPoints} pts
                 </p>
               </div>
-              <Badge variant="outline" className="text-[10px]">Preview</Badge>
+              <Badge variant="outline" className="text-[11px]">Preview</Badge>
             </div>
           </CardHeader>
           <CardContent className="pt-4 space-y-4">
@@ -250,9 +250,9 @@ export default function HomeworkCreate() {
                         <span className="text-xs font-semibold text-muted-foreground shrink-0 mt-0.5">{i + 1}.</span>
                         <p className="text-sm text-foreground flex-1 leading-snug">{q.text}</p>
                         <div className="flex items-center gap-1 shrink-0">
-                          <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty] ?? ''}`}>{q.difficulty}</Badge>
-                          <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
-                          <Badge variant="outline" className="text-[9px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
+                          <Badge variant="outline" className={`text-[11px] h-4 ${diffColor[q.difficulty] ?? ''}`}>{q.difficulty}</Badge>
+                          <Badge variant="outline" className="text-[11px] h-4">{q.questionType}</Badge>
+                          <Badge variant="outline" className="text-[11px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
                         </div>
                       </div>
                       {q.questionType === 'MCQ' && q.options && (
@@ -266,7 +266,7 @@ export default function HomeworkCreate() {
                         </div>
                       )}
                       {q.questionType !== 'MCQ' && (
-                        <p className="pl-5 text-[10px] text-emerald-400">Answer: {q.correctAnswer}</p>
+                        <p className="pl-5 text-[11px] text-emerald-400">Answer: {q.correctAnswer}</p>
                       )}
                     </div>
                   ))}
@@ -280,12 +280,12 @@ export default function HomeworkCreate() {
                   {form.rubric.map(r => (
                     <div key={r.id} className="flex items-center justify-between p-2.5 rounded-lg bg-card border border-border">
                       <p className="text-xs text-foreground">{r.label || '(unlabelled)'}</p>
-                      <Badge variant="outline" className="text-[10px]">{r.maxPoints} pts</Badge>
+                      <Badge variant="outline" className="text-[11px]">{r.maxPoints} pts</Badge>
                     </div>
                   ))}
                   <div className="flex items-center justify-between p-2.5 rounded-lg bg-primary/5 border border-primary/20">
                     <p className="text-xs font-semibold text-primary">Total</p>
-                    <Badge className="text-[10px] bg-primary">{rubricTotal} pts</Badge>
+                    <Badge className="text-[11px] bg-primary">{rubricTotal} pts</Badge>
                   </div>
                 </div>
               </div>
@@ -394,7 +394,7 @@ export default function HomeworkCreate() {
               {/* Topic + Type */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic</label>
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic</label>
                   <input
                     type="text"
                     value={questionTopic}
@@ -404,7 +404,7 @@ export default function HomeworkCreate() {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Question Type</label>
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Question Type</label>
                   <select
                     value={questionTypePref}
                     onChange={e => setQuestionTypePref(e.target.value)}
@@ -421,13 +421,13 @@ export default function HomeworkCreate() {
               {/* Difficulty mix */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Difficulty Mix</label>
-                  <span className="text-[10px] text-muted-foreground">{totalDiffCount} total question{totalDiffCount !== 1 ? 's' : ''}</span>
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Difficulty Mix</label>
+                  <span className="text-[11px] text-muted-foreground">{totalDiffCount} total question{totalDiffCount !== 1 ? 's' : ''}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {(['easy', 'medium', 'hard'] as const).map(level => (
                     <div key={level} className="flex items-center gap-2 p-2 rounded-lg bg-background border border-border">
-                      <span className={`text-[10px] font-semibold capitalize flex-1 ${level === 'easy' ? 'text-emerald-400' : level === 'medium' ? 'text-amber-400' : 'text-red-400'}`}>{level}</span>
+                      <span className={`text-[11px] font-semibold capitalize flex-1 ${level === 'easy' ? 'text-emerald-400' : level === 'medium' ? 'text-amber-400' : 'text-red-400'}`}>{level}</span>
                       <input
                         type="number"
                         min={0}
@@ -465,10 +465,10 @@ export default function HomeworkCreate() {
               {form.questions.length > 0 && (
                 <div className="space-y-2 pt-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Generated Questions</p>
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Generated Questions</p>
                     <button
                       onClick={() => setForm(prev => ({ ...prev, questions: [], totalPoints: rubricTotal || 20 }))}
-                      className="text-[10px] text-muted-foreground hover:text-red-400 transition-colors"
+                      className="text-[11px] text-muted-foreground hover:text-red-400 transition-colors"
                     >
                       Clear all
                     </button>
@@ -479,9 +479,9 @@ export default function HomeworkCreate() {
                         <span className="text-xs font-semibold text-muted-foreground shrink-0 mt-0.5">{i + 1}.</span>
                         <p className="text-xs text-foreground flex-1 leading-snug">{q.text}</p>
                         <div className="flex items-center gap-1 shrink-0">
-                          <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty] ?? ''}`}>{q.difficulty}</Badge>
-                          <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
-                          <Badge variant="outline" className="text-[9px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
+                          <Badge variant="outline" className={`text-[11px] h-4 ${diffColor[q.difficulty] ?? ''}`}>{q.difficulty}</Badge>
+                          <Badge variant="outline" className="text-[11px] h-4">{q.questionType}</Badge>
+                          <Badge variant="outline" className="text-[11px] h-4 text-primary border-primary/30">{q.points}pt</Badge>
                           <button
                             onClick={() => removeQuestion(q.id)}
                             className="w-5 h-5 rounded flex items-center justify-center text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors ml-0.5"
@@ -493,7 +493,7 @@ export default function HomeworkCreate() {
                       {q.questionType === 'MCQ' && q.options && (
                         <div className="pl-5 grid grid-cols-2 gap-1">
                           {q.options.map((opt, oi) => (
-                            <div key={oi} className={`flex items-center gap-1.5 text-[10px] px-2 py-1 rounded-lg ${opt === q.correctAnswer ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-muted-foreground'}`}>
+                            <div key={oi} className={`flex items-center gap-1.5 text-[11px] px-2 py-1 rounded-lg ${opt === q.correctAnswer ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-muted-foreground'}`}>
                               {opt === q.correctAnswer && <CheckCircle2 className="w-2.5 h-2.5 shrink-0" />}
                               <span>{opt}</span>
                             </div>
@@ -501,7 +501,7 @@ export default function HomeworkCreate() {
                         </div>
                       )}
                       {q.questionType !== 'MCQ' && (
-                        <p className="pl-5 text-[10px] text-emerald-400">Answer: {q.correctAnswer}</p>
+                        <p className="pl-5 text-[11px] text-emerald-400">Answer: {q.correctAnswer}</p>
                       )}
                     </div>
                   ))}
@@ -572,7 +572,7 @@ export default function HomeworkCreate() {
           <Send className="w-3.5 h-3.5" />
           Publish to Class
         </Button>
-        <p className="text-[10px] text-muted-foreground ml-auto">
+        <p className="text-[11px] text-muted-foreground ml-auto">
           * Required fields
         </p>
       </div>

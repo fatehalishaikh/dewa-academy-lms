@@ -76,7 +76,7 @@ export default function DataConnection() {
               <FileText className="w-4 h-4 text-primary shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-foreground truncate">students_2026.csv</p>
-                <p className="text-[10px] text-muted-foreground">128 KB · Uploaded Mar 24, 2026</p>
+                <p className="text-[11px] text-muted-foreground">128 KB · Uploaded Mar 24, 2026</p>
               </div>
               <CheckCircle2 className="w-4 h-4 text-chart-4 shrink-0" />
               <Button size="sm" variant="ghost" className="text-xs text-muted-foreground h-7 px-2">Remove</Button>
@@ -185,7 +185,7 @@ export default function DataConnection() {
                     <TableCell className="text-xs py-2">{imp.date}</TableCell>
                     <TableCell className="text-xs py-2">{imp.records.toLocaleString()}</TableCell>
                     <TableCell className="py-2">
-                      <Badge variant="outline" className={`text-[10px] ${importStatusStyle[imp.status]}`}>
+                      <Badge variant="outline" className={`text-[11px] ${importStatusStyle[imp.status]}`}>
                         {imp.status}
                       </Badge>
                     </TableCell>

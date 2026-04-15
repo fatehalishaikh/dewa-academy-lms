@@ -70,7 +70,7 @@ export default function AssessmentsSchedule() {
         </div>
         <div className="flex items-center gap-2">
           {published && (
-            <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-400 gap-1">
+            <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-400 gap-1">
               <CheckCircle2 className="w-2.5 h-2.5" /> Schedule published!
             </Badge>
           )}
@@ -86,9 +86,9 @@ export default function AssessmentsSchedule() {
           <table className="w-full min-w-[600px]">
             <thead>
               <tr className="bg-muted/20 border-b border-border">
-                <th className="text-left px-4 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-16">Time</th>
+                <th className="text-left px-4 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-16">Time</th>
                 {DAYS.map(d => (
-                  <th key={d} className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{d}</th>
+                  <th key={d} className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{d}</th>
                 ))}
               </tr>
             </thead>
@@ -107,7 +107,7 @@ export default function AssessmentsSchedule() {
                             return (
                               <div
                                 key={exam.id}
-                                className="px-2 py-1.5 rounded-lg text-[10px] leading-tight"
+                                className="px-2 py-1.5 rounded-lg text-[11px] leading-tight"
                                 style={{ background: cfg.bg, borderLeft: `2px solid ${cfg.border}` }}
                               >
                                 <p className="font-semibold truncate" style={{ color: cfg.color }}>{exam.title.split('—')[0].trim()}</p>
@@ -147,16 +147,16 @@ export default function AssessmentsSchedule() {
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-medium text-foreground truncate">{exam.title}</p>
                       {exam.adaptive?.enabled && (
-                        <Badge variant="outline" className="text-[9px] h-4 border-primary/30 text-primary gap-0.5">
+                        <Badge variant="outline" className="text-[11px] h-4 border-primary/30 text-primary gap-0.5">
                           <Brain className="w-2.5 h-2.5" /> Adaptive
                         </Badge>
                       )}
                     </div>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       {cls?.name ?? '—'} · {exam.date} · {exam.duration} min · Room {exam.room}
                     </p>
                   </div>
-                  <Badge variant="outline" className="text-[9px] shrink-0" style={{ borderColor: `${cfg.color}50`, color: cfg.color }}>
+                  <Badge variant="outline" className="text-[11px] shrink-0" style={{ borderColor: `${cfg.color}50`, color: cfg.color }}>
                     {cfg.label}
                   </Badge>
                 </div>
@@ -169,7 +169,7 @@ export default function AssessmentsSchedule() {
       {/* Legend */}
       <div className="flex flex-wrap gap-4">
         {Object.entries(examTypeConfig).map(([key, cfg]) => (
-          <div key={key} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+          <div key={key} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <div className="w-2 h-2 rounded-full" style={{ background: cfg.color }} />
             {cfg.label}
           </div>
@@ -188,7 +188,7 @@ export default function AssessmentsSchedule() {
           <CardContent className="space-y-2">
             {conflicts.map((c, i) => (
               <div key={i} className="flex items-center gap-3 text-xs">
-                <Badge variant="outline" className="text-[10px] border-amber-500/30 text-amber-400 shrink-0">{c.day} {c.time}</Badge>
+                <Badge variant="outline" className="text-[11px] border-amber-500/30 text-amber-400 shrink-0">{c.day} {c.time}</Badge>
                 <span className="text-muted-foreground">Room {c.room}:</span>
                 <span className="text-foreground">{c.exams.join(' & ')} both scheduled</span>
               </div>

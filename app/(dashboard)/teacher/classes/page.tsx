@@ -113,12 +113,12 @@ export default function TeacherClasses() {
               todayClasses.map((cls) => (
                 <div key={cls.id + cls.slot.time} className="flex items-start gap-3 p-2.5 rounded-xl bg-card border border-border">
                   <div className="text-center shrink-0">
-                    <p className="text-[10px] font-bold text-primary">{cls.slot.time.split('–')[0]}</p>
-                    <p className="text-[9px] text-muted-foreground">{cls.slot.room}</p>
+                    <p className="text-[11px] font-bold text-primary">{cls.slot.time.split('–')[0]}</p>
+                    <p className="text-[11px] text-muted-foreground">{cls.slot.room}</p>
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-medium text-foreground truncate">{cls.subject}</p>
-                    <p className="text-[10px] text-muted-foreground">{cls.name.split('—')[0].trim()}</p>
+                    <p className="text-[11px] text-muted-foreground">{cls.name.split('—')[0].trim()}</p>
                   </div>
                 </div>
               ))
@@ -155,15 +155,15 @@ export default function TeacherClasses() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div>
-                      <p className="text-[10px] text-muted-foreground">Average</p>
+                      <p className="text-[11px] text-muted-foreground">Average</p>
                       <p className={`text-sm font-bold ${gradeColor(cls.averageGrade)}`}>{cls.averageGrade}%</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-muted-foreground">Attendance</p>
+                      <p className="text-[11px] text-muted-foreground">Attendance</p>
                       <p className={`text-sm font-bold ${attendanceColor(cls.attendanceRate)}`}>{cls.attendanceRate}%</p>
                     </div>
                     {atRiskCount > 0 && (
-                      <Badge variant="outline" className="text-[10px] h-5 border-red-500/30 text-red-400 ml-auto">
+                      <Badge variant="outline" className="text-[11px] h-5 border-red-500/30 text-red-400 ml-auto">
                         {atRiskCount} at risk
                       </Badge>
                     )}
@@ -191,7 +191,7 @@ export default function TeacherClasses() {
               <Icon className="w-4.5 h-4.5" style={{ color }} />
             </div>
             <p className="text-sm font-semibold text-foreground">{label}</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">{sub}</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">{sub}</p>
           </button>
         ))}
       </div>
@@ -205,7 +205,7 @@ export default function TeacherClasses() {
                 <CalendarDays className="w-4 h-4 text-primary" />
                 My Weekly Timetable
               </CardTitle>
-              <p className="text-[10px] text-muted-foreground">{classes.length} classes · {allSlots.length} sessions/week</p>
+              <p className="text-[11px] text-muted-foreground">{classes.length} classes · {allSlots.length} sessions/week</p>
             </div>
           </CardHeader>
           <CardContent className="px-0 pb-4">
@@ -213,9 +213,9 @@ export default function TeacherClasses() {
               <table className="w-full min-w-[600px]">
                 <thead>
                   <tr className="bg-muted/20 border-b border-border">
-                    <th className="text-left px-4 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Time</th>
+                    <th className="text-left px-4 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Time</th>
                     {DAYS.map(d => (
-                      <th key={d} className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                      <th key={d} className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                         {d}
                       </th>
                     ))}
@@ -232,7 +232,7 @@ export default function TeacherClasses() {
                           <td key={day} className="px-2 py-1.5 align-top">
                             {entry && color && (
                               <div
-                                className="px-2 py-1.5 rounded-lg text-[10px] leading-tight cursor-pointer hover:opacity-80 transition-opacity"
+                                className="px-2 py-1.5 rounded-lg text-[11px] leading-tight cursor-pointer hover:opacity-80 transition-opacity"
                                 style={{ background: `${color}20`, borderLeft: `2px solid ${color}` }}
                                 onClick={() => router.push(`/teacher/classes/${entry.classId}`)}
                               >
@@ -254,7 +254,7 @@ export default function TeacherClasses() {
               {teacher && [...new Set(classes.map(c => c.subject))].map(s => {
                 const color = SUBJECT_COLORS[s] ?? '#6B7280'
                 return (
-                  <div key={s} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                  <div key={s} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                     <div className="w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
                     {s}
                   </div>

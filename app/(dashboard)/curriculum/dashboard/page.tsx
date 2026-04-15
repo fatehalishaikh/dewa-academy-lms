@@ -37,7 +37,7 @@ export default function CurriculumDashboardTab() {
             <div key={stat.label} className="bg-card border border-border rounded-xl px-4 py-3">
               <p className="text-xs text-muted-foreground">{stat.label}</p>
               <p className="text-xl font-bold text-foreground mt-0.5">{stat.value}</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">{stat.sub}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{stat.sub}</p>
             </div>
           ))}
         </div>
@@ -66,7 +66,7 @@ export default function CurriculumDashboardTab() {
             </div>
           )}
           {exported && (
-            <Badge variant="outline" className="absolute -bottom-7 right-0 text-[10px] border-emerald-500/30 text-emerald-400 whitespace-nowrap">
+            <Badge variant="outline" className="absolute -bottom-7 right-0 text-[11px] border-emerald-500/30 text-emerald-400 whitespace-nowrap">
               {exported} downloaded
             </Badge>
           )}

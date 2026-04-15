@@ -173,7 +173,7 @@ export default function GenerateCoursePage() {
 
           {/* Success state */}
           {courseRequested ? (
-            <Card className="rounded-[10px] border-emerald-500/30 bg-emerald-500/5">
+            <Card className="rounded-xl border-emerald-500/30 bg-emerald-500/5">
               <CardContent className="p-5 space-y-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
@@ -209,7 +209,7 @@ export default function GenerateCoursePage() {
           ) : (
             <>
               {/* Form card */}
-              <Card className="rounded-[10px] border-border bg-card">
+              <Card className="rounded-xl border-border bg-card">
                 <CardHeader className="pb-3 pt-5 px-5">
                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
                     <Target className="w-4 h-4 text-primary" />
@@ -220,7 +220,7 @@ export default function GenerateCoursePage() {
                   {/* Recommended chips */}
                   {belowTargetSubjects.length > 0 && (
                     <div className="space-y-1.5">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Recommended for you</p>
+                      <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">Recommended for you</p>
                       <div className="flex flex-wrap gap-2">
                         {belowTargetSubjects.map(s => (
                           <button
@@ -242,7 +242,7 @@ export default function GenerateCoursePage() {
 
                   {/* Subject select */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Subject</label>
+                    <label className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">Subject</label>
                     <Select value={selectedSubject} onValueChange={v => { setSelectedSubject(v ?? ''); setLearningPath(null) }}>
                       <SelectTrigger className="h-9 text-xs bg-muted/30 border-border">
                         <SelectValue placeholder="Select a subject…" />
@@ -259,7 +259,7 @@ export default function GenerateCoursePage() {
 
                   {/* Description */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">What do you want to learn?</label>
+                    <label className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">What do you want to learn?</label>
                     <Textarea
                       value={description}
                       onChange={e => setDescription(e.target.value)}
@@ -299,7 +299,7 @@ export default function GenerateCoursePage() {
 
               {/* Generated path preview */}
               {learningPath && (
-                <Card className="rounded-[10px] border-primary/20 bg-card">
+                <Card className="rounded-xl border-primary/20 bg-card">
                   <CardHeader className="pb-2 pt-5 px-5">
                     <div className="flex items-center gap-2">
                       <BarChart2 className="w-4 h-4 text-primary" />
@@ -328,7 +328,7 @@ export default function GenerateCoursePage() {
 
         {/* ── Sidebar info ── */}
         <div className="space-y-4">
-          <Card className="rounded-[10px] border-primary/20 bg-primary/5">
+          <Card className="rounded-xl border-primary/20 bg-primary/5">
             <CardContent className="px-5 py-4 space-y-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-3.5 h-3.5 text-primary" />
@@ -343,7 +343,7 @@ export default function GenerateCoursePage() {
                   'Track your progress week by week in My Courses',
                 ].map((step, i) => (
                   <li key={i} className="flex items-start gap-2 text-[11px] text-muted-foreground">
-                    <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
+                    <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">{i + 1}</span>
                     {step}
                   </li>
                 ))}
@@ -352,7 +352,7 @@ export default function GenerateCoursePage() {
           </Card>
 
           {student.status === 'at-risk' && (
-            <Card className="rounded-[10px] border-amber-500/30 bg-amber-500/5">
+            <Card className="rounded-xl border-amber-500/30 bg-amber-500/5">
               <CardContent className="px-5 py-4 flex items-start gap-3">
                 <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
@@ -387,16 +387,16 @@ function LearningPathDisplay({
     <div className="space-y-3">
       {/* Focus Areas */}
       <div className="space-y-2">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Focus Areas</p>
+        <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">Focus Areas</p>
         {path.focusAreas.map((fa, i) => (
-          <div key={i} className="p-3 rounded-[10px] bg-muted/20 border border-border space-y-1">
+          <div key={i} className="p-3 rounded-xl bg-muted/20 border border-border space-y-1">
             <div className="flex items-center justify-between gap-2">
               <p className="text-xs font-semibold text-foreground">{fa.subject}</p>
-              <Badge variant="outline" className={`text-[9px] h-4 ${priorityColor[fa.priority] ?? 'text-muted-foreground border-border'}`}>
+              <Badge variant="outline" className={`text-[11px] h-4 ${priorityColor[fa.priority] ?? 'text-muted-foreground border-border'}`}>
                 {fa.priority}
               </Badge>
             </div>
-            <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
               <span>{fa.currentLevel}</span><span>→</span>
               <span className="text-primary">{fa.targetLevel}</span>
             </div>
@@ -407,15 +407,15 @@ function LearningPathDisplay({
 
       {/* Milestones */}
       <div className="space-y-1.5">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Milestones</p>
+        <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">Milestones</p>
         {path.milestones.map((m, i) => (
-          <div key={i} className="flex items-start gap-2 p-2.5 rounded-[10px] bg-muted/20 border border-border">
+          <div key={i} className="flex items-start gap-2 p-2.5 rounded-xl bg-muted/20 border border-border">
             <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0 mt-0.5">
-              <span className="text-[9px] font-bold text-primary">W{m.targetWeek}</span>
+              <span className="text-[11px] font-bold text-primary">W{m.targetWeek}</span>
             </div>
             <div className="min-w-0">
               <p className="text-[11px] font-medium text-foreground">{m.title}</p>
-              <p className="text-[10px] text-muted-foreground">{m.metric}</p>
+              <p className="text-[11px] text-muted-foreground">{m.metric}</p>
             </div>
           </div>
         ))}
@@ -423,19 +423,19 @@ function LearningPathDisplay({
 
       {/* Weekly Plan (collapsible) */}
       <button
-        className="w-full flex items-center justify-between p-2.5 rounded-[10px] bg-muted/20 border border-border hover:bg-muted/30 transition-colors"
+        className="w-full flex items-center justify-between p-2.5 rounded-xl bg-muted/20 border border-border hover:bg-muted/30 transition-colors"
         onClick={() => setExpandedWeeklyPlan(!expandedWeeklyPlan)}
       >
-        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Weekly Plan</p>
+        <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Weekly Plan</p>
         {expandedWeeklyPlan ? <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" /> : <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />}
       </button>
       {expandedWeeklyPlan && (
         <div className="space-y-2">
           {path.weeklyPlan.map(w => (
-            <div key={w.week} className="p-3 rounded-[10px] bg-muted/20 border border-border">
+            <div key={w.week} className="p-3 rounded-xl bg-muted/20 border border-border">
               <div className="flex items-center justify-between mb-1.5">
                 <p className="text-xs font-semibold text-foreground">Week {w.week} — {w.theme}</p>
-                <Badge variant="outline" className="text-[9px] h-4 border-border text-muted-foreground flex items-center gap-1">
+                <Badge variant="outline" className="text-[11px] h-4 border-border text-muted-foreground flex items-center gap-1">
                   <Clock className="w-2.5 h-2.5" />{w.hoursRequired}h
                 </Badge>
               </div>
@@ -451,24 +451,24 @@ function LearningPathDisplay({
 
       {/* Resources (collapsible) */}
       <button
-        className="w-full flex items-center justify-between p-2.5 rounded-[10px] bg-muted/20 border border-border hover:bg-muted/30 transition-colors"
+        className="w-full flex items-center justify-between p-2.5 rounded-xl bg-muted/20 border border-border hover:bg-muted/30 transition-colors"
         onClick={() => setExpandedResources(!expandedResources)}
       >
-        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Resources</p>
+        <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Resources</p>
         {expandedResources ? <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" /> : <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />}
       </button>
       {expandedResources && (
         <div className="space-y-2">
           {path.resources.map((r, i) => (
-            <div key={i} className="flex items-center gap-3 p-2.5 rounded-[10px] bg-muted/20 border border-border">
-              <div className="w-7 h-7 rounded-[10px] bg-muted/40 flex items-center justify-center shrink-0">
+            <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl bg-muted/20 border border-border">
+              <div className="w-7 h-7 rounded-xl bg-muted/40 flex items-center justify-center shrink-0">
                 <BookMarked className="w-3.5 h-3.5 text-muted-foreground" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-medium text-foreground">{r.title}</p>
-                <p className="text-[10px] text-muted-foreground">{r.subject} · {r.estimatedTime}</p>
+                <p className="text-[11px] text-muted-foreground">{r.subject} · {r.estimatedTime}</p>
               </div>
-              <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${resourceTypeColor[r.type] ?? 'text-muted-foreground border-border'}`}>
+              <Badge variant="outline" className={`text-[11px] h-4 shrink-0 ${resourceTypeColor[r.type] ?? 'text-muted-foreground border-border'}`}>
                 {r.type}
               </Badge>
             </div>

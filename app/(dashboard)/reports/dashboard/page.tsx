@@ -59,8 +59,8 @@ export default function ReportsDashboard() {
               </div>
               <div>
                 <p className="text-xl font-bold text-foreground">{value}</p>
-                <p className="text-[10px] text-muted-foreground leading-tight">{label}</p>
-                <p className="text-[10px] text-primary">{sub}</p>
+                <p className="text-[11px] text-muted-foreground leading-tight">{label}</p>
+                <p className="text-[11px] text-primary">{sub}</p>
               </div>
             </CardContent>
           </Card>
@@ -180,7 +180,7 @@ export default function ReportsDashboard() {
                 variant="outline"
                 onClick={handleGenerateInsights}
                 disabled={generating}
-                className="h-7 text-[10px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                className="h-7 text-[11px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
               >
                 {generating
                   ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Analyzing…</>
@@ -225,7 +225,7 @@ export default function ReportsDashboard() {
           )}
         </div>
         {exported && (
-          <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-400 gap-1">
+          <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-400 gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
             {exported} download started
           </Badge>

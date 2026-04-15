@@ -63,12 +63,12 @@ function AppCard({ app, onClick }: { app: Application; onClick: () => void }) {
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">
+          <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-[11px] font-bold text-primary shrink-0">
             {app.initials}
           </div>
           <div className="min-w-0">
             <p className="text-xs font-semibold text-foreground truncate">{app.nameEn}</p>
-            <p className="text-[9px] text-muted-foreground truncate">{app.id}</p>
+            <p className="text-[11px] text-muted-foreground truncate">{app.id}</p>
           </div>
         </div>
         <div className="flex items-center gap-1 shrink-0">
@@ -79,10 +79,10 @@ function AppCard({ app, onClick }: { app: Application; onClick: () => void }) {
 
       {/* Badges */}
       <div className="flex items-center gap-1 flex-wrap">
-        <Badge variant="outline" className="text-[9px] bg-muted/40 border-border px-1.5 py-0">{app.applicationType}</Badge>
-        <Badge variant="outline" className="text-[9px] bg-muted/40 border-border px-1.5 py-0">{app.gradeApplying}</Badge>
+        <Badge variant="outline" className="text-[11px] bg-muted/40 border-border px-1.5 py-0">{app.applicationType}</Badge>
+        <Badge variant="outline" className="text-[11px] bg-muted/40 border-border px-1.5 py-0">{app.gradeApplying}</Badge>
         {app.aiScore !== null && (
-          <Badge variant="outline" className={`text-[9px] border-transparent px-1.5 py-0 font-bold ${scoreColor(app.aiScore)}`}>
+          <Badge variant="outline" className={`text-[11px] border-transparent px-1.5 py-0 font-bold ${scoreColor(app.aiScore)}`}>
             {app.aiScore}
           </Badge>
         )}
@@ -90,7 +90,7 @@ function AppCard({ app, onClick }: { app: Application; onClick: () => void }) {
 
       {/* Checklist progress */}
       <div className="space-y-1">
-        <div className="flex justify-between text-[9px] text-muted-foreground">
+        <div className="flex justify-between text-[11px] text-muted-foreground">
           <span>Documents</span>
           <span>{done}/{total}</span>
         </div>
@@ -99,7 +99,7 @@ function AppCard({ app, onClick }: { app: Application; onClick: () => void }) {
 
       {/* Footer */}
       <div className="flex items-center justify-between">
-        <span className="text-[9px] text-muted-foreground">{app.submittedDate}</span>
+        <span className="text-[11px] text-muted-foreground">{app.submittedDate}</span>
         {app.reviewerInitials && (
           <div className="w-4 h-4 rounded-full bg-chart-4/30 flex items-center justify-center text-[8px] font-bold text-chart-4">
             {app.reviewerInitials}
@@ -129,7 +129,7 @@ function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }
           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">{app.initials}</div>
           <div>
             <p className="text-sm font-semibold text-foreground">{app.nameEn}</p>
-            <p className="text-[10px] text-muted-foreground">{app.id}</p>
+            <p className="text-[11px] text-muted-foreground">{app.id}</p>
           </div>
         </div>
         <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
@@ -148,7 +148,7 @@ function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }
               { label: 'Gender', value: app.gender },
             ].map(({ label, value }) => (
               <div key={label} className="bg-muted/30 rounded-lg px-2.5 py-2">
-                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">{label}</p>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{label}</p>
                 <p className="text-xs font-medium text-foreground">{value}</p>
               </div>
             ))}
@@ -173,7 +173,7 @@ function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }
                 <div key={document} className="flex items-center gap-2 bg-muted/20 rounded-lg px-2.5 py-2">
                   <ChecklistIcon completed={completed} flagged={flagged} />
                   <span className="text-xs text-foreground flex-1">{document}</span>
-                  {required && <span className="text-[9px] text-muted-foreground">Required</span>}
+                  {required && <span className="text-[11px] text-muted-foreground">Required</span>}
                 </div>
               ))}
             </div>
@@ -195,7 +195,7 @@ function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }
                   { label: 'Interview', value: app.scoring.interview },
                 ].map(({ label, value }) => (
                   <div key={label} className="space-y-0.5">
-                    <div className="flex justify-between text-[10px] text-muted-foreground">
+                    <div className="flex justify-between text-[11px] text-muted-foreground">
                       <span>{label}</span>
                       <span className={`font-semibold ${scoreColor(value)}`}>{value}</span>
                     </div>
@@ -204,7 +204,7 @@ function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }
                 ))}
               </div>
               <div className="mt-3 bg-muted/30 rounded-lg p-2.5">
-                <p className="text-[9px] text-muted-foreground">{app.scoring.rationale}</p>
+                <p className="text-[11px] text-muted-foreground">{app.scoring.rationale}</p>
               </div>
             </div>
           )}
@@ -221,8 +221,8 @@ function DetailPanel({ app, onClose }: { app: Application; onClose: () => void }
                   </div>
                   <div className="pb-2 min-w-0">
                     <p className="text-xs font-medium text-foreground">{event.stage}</p>
-                    <p className="text-[9px] text-muted-foreground">{event.actor} · {event.date}</p>
-                    {event.note && <p className="text-[9px] text-muted-foreground/80 mt-0.5 italic">{event.note}</p>}
+                    <p className="text-[11px] text-muted-foreground">{event.actor} · {event.date}</p>
+                    {event.note && <p className="text-[11px] text-muted-foreground/80 mt-0.5 italic">{event.note}</p>}
                   </div>
                 </div>
               ))}
@@ -292,14 +292,14 @@ function TableView({ apps, onSelect }: { apps: Application[]; onSelect: (app: Ap
         <thead>
           <tr className="border-b border-border bg-muted/20">
             {['ID', 'Name', 'Type', 'Stage', 'Score', 'Submitted', 'Flag'].map(h => (
-              <th key={h} className="px-3 py-2.5 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">{h}</th>
+              <th key={h} className="px-3 py-2.5 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {apps.map(app => (
             <tr key={app.id} onClick={() => onSelect(app)} className="border-b border-border/50 hover:bg-muted/20 cursor-pointer transition-colors">
-              <td className="px-3 py-2.5 font-mono text-[10px] text-muted-foreground">{app.id}</td>
+              <td className="px-3 py-2.5 font-mono text-[11px] text-muted-foreground">{app.id}</td>
               <td className="px-3 py-2.5">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-[8px] font-bold text-primary shrink-0">{app.initials}</div>
@@ -308,7 +308,7 @@ function TableView({ apps, onSelect }: { apps: Application[]; onSelect: (app: Ap
               </td>
               <td className="px-3 py-2.5 whitespace-nowrap text-muted-foreground">{app.applicationType}</td>
               <td className="px-3 py-2.5 whitespace-nowrap">
-                <Badge variant="outline" className="text-[9px]">{app.stage}</Badge>
+                <Badge variant="outline" className="text-[11px]">{app.stage}</Badge>
               </td>
               <td className="px-3 py-2.5">
                 {app.aiScore !== null
@@ -424,9 +424,9 @@ export default function Applications() {
                   <div className={`flex items-center justify-between px-3 py-2 rounded-xl border mb-2 ${colors.bg} ${colors.border}`}>
                     <div className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full" style={{ background: colors.dot }} />
-                      <span className={`text-[10px] font-semibold ${colors.text}`}>{stage}</span>
+                      <span className={`text-[11px] font-semibold ${colors.text}`}>{stage}</span>
                     </div>
-                    <span className={`text-[10px] font-bold ${colors.text}`}>{stageApps.length}</span>
+                    <span className={`text-[11px] font-bold ${colors.text}`}>{stageApps.length}</span>
                   </div>
 
                   {/* Cards */}
@@ -435,7 +435,7 @@ export default function Applications() {
                       {stageApps.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 text-center">
                           <User className="w-5 h-5 text-muted-foreground/30 mb-1" />
-                          <p className="text-[10px] text-muted-foreground/50">No applications</p>
+                          <p className="text-[11px] text-muted-foreground/50">No applications</p>
                         </div>
                       ) : (
                         stageApps.map(app => (

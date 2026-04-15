@@ -126,7 +126,7 @@ function SectionDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-2 pt-1">
       <div className="h-px flex-1 bg-border" />
-      <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</span>
       <div className="h-px flex-1 bg-border" />
     </div>
   )
@@ -151,7 +151,7 @@ function LeaveAIPanel({
   return (
     <div className="space-y-4">
       {/* Leave policy */}
-      <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+      <Card className="rounded-xl border-border bg-card py-2 gap-2">
         <CardHeader className="pb-2 pt-2 px-4">
           <CardTitle className="text-xs font-semibold flex items-center gap-2">
             <FileCheck className="w-3.5 h-3.5 text-primary" />
@@ -170,7 +170,7 @@ function LeaveAIPanel({
               <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
               <div>
                 <p className="text-[11px] font-medium text-foreground">{title}</p>
-                <p className="text-[10px] text-muted-foreground">{desc}</p>
+                <p className="text-[11px] text-muted-foreground">{desc}</p>
               </div>
             </div>
           ))}
@@ -179,7 +179,7 @@ function LeaveAIPanel({
 
       {/* Academic impact */}
       {days > 0 && (
-        <Card className="rounded-[10px] border-amber-500/20 bg-amber-500/5 py-2 gap-2">
+        <Card className="rounded-xl border-amber-500/20 bg-amber-500/5 py-2 gap-2">
           <CardHeader className="pb-2 pt-2 px-4">
             <CardTitle className="text-xs font-semibold flex items-center gap-2">
               <Brain className="w-3.5 h-3.5 text-amber-400" />
@@ -194,23 +194,23 @@ function LeaveAIPanel({
             </p>
             <div className="space-y-2">
               {missedSubjects.map(({ subject, topic, teacher }) => (
-                <div key={subject} className="flex items-start gap-2 p-2 rounded-[10px] bg-background/60 border border-border">
+                <div key={subject} className="flex items-start gap-2 p-2 rounded-xl bg-background/60 border border-border">
                   <BookOpen className="w-3.5 h-3.5 text-amber-400 mt-0.5 shrink-0" />
                   <div>
                     <p className="text-[11px] font-semibold text-foreground">{subject}</p>
-                    <p className="text-[10px] text-muted-foreground">{topic}</p>
-                    <p className="text-[10px] text-muted-foreground/70">{teacher}</p>
+                    <p className="text-[11px] text-muted-foreground">{topic}</p>
+                    <p className="text-[11px] text-muted-foreground/70">{teacher}</p>
                   </div>
                 </div>
               ))}
             </div>
 
             {days >= 3 && (
-              <div className="flex items-start gap-2 p-2.5 rounded-[10px] bg-primary/5 border border-primary/20">
+              <div className="flex items-start gap-2 p-2.5 rounded-xl bg-primary/5 border border-primary/20">
                 <Lightbulb className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
                 <div className="space-y-1">
                   <p className="text-[11px] font-medium text-primary">AI Suggestion</p>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-[11px] text-muted-foreground">
                     Review materials 1–2 days before absence and arrange make-up sessions with teachers upon return.
                   </p>
                 </div>
@@ -222,7 +222,7 @@ function LeaveAIPanel({
 
       {/* Empty state if no dates */}
       {days === 0 && (
-        <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+        <Card className="rounded-xl border-border bg-card py-2 gap-2">
           <CardContent className="px-4 py-2 flex flex-col items-center gap-2">
             <Brain className="w-8 h-8 text-muted-foreground/30" />
             <p className="text-[11px] text-muted-foreground text-center">
@@ -254,7 +254,7 @@ function MeetingAIPanel({ teacherId, gradeLevel }: { teacherId: string; gradeLev
 
   if (!teacher) {
     return (
-      <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+      <Card className="rounded-xl border-border bg-card py-2 gap-2">
         <CardContent className="px-4 py-2 flex flex-col items-center gap-2">
           <Users className="w-8 h-8 text-muted-foreground/30" />
           <p className="text-[11px] text-muted-foreground text-center">
@@ -270,7 +270,7 @@ function MeetingAIPanel({ teacherId, gradeLevel }: { teacherId: string; gradeLev
   return (
     <div className="space-y-4">
       {/* Teacher card */}
-      <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+      <Card className="rounded-xl border-border bg-card py-2 gap-2">
         <CardContent className="px-4 py-2">
           <div className="flex items-center gap-3 mb-3">
             <div
@@ -281,17 +281,17 @@ function MeetingAIPanel({ teacherId, gradeLevel }: { teacherId: string; gradeLev
             </div>
             <div>
               <p className="text-xs font-semibold text-foreground">{teacher.name}</p>
-              <p className="text-[10px] text-muted-foreground">{teacher.department} · {teacher.subjects.join(', ')}</p>
-              <p className="text-[10px] text-muted-foreground">{teacher.yearsExperience} yrs experience</p>
+              <p className="text-[11px] text-muted-foreground">{teacher.department} · {teacher.subjects.join(', ')}</p>
+              <p className="text-[11px] text-muted-foreground">{teacher.yearsExperience} yrs experience</p>
             </div>
           </div>
-          <p className="text-[10px] text-muted-foreground border-t border-border pt-2">{teacher.email}</p>
+          <p className="text-[11px] text-muted-foreground border-t border-border pt-2">{teacher.email}</p>
         </CardContent>
       </Card>
 
       {/* AI recommendation */}
       {hasConcern && (
-        <Card className="rounded-[10px] border-amber-500/20 bg-amber-500/5 py-2 gap-2">
+        <Card className="rounded-xl border-amber-500/20 bg-amber-500/5 py-2 gap-2">
           <CardHeader className="pb-2 pt-2 px-4">
             <CardTitle className="text-xs font-semibold flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -310,7 +310,7 @@ function MeetingAIPanel({ teacherId, gradeLevel }: { teacherId: string; gradeLev
 
       {/* Recent grades */}
       {relatedGrades.length > 0 && (
-        <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+        <Card className="rounded-xl border-border bg-card py-2 gap-2">
           <CardHeader className="pb-2 pt-2 px-4">
             <CardTitle className="text-xs font-semibold flex items-center gap-2">
               <GraduationCap className="w-3.5 h-3.5 text-primary" />
@@ -336,8 +336,8 @@ function MeetingAIPanel({ teacherId, gradeLevel }: { teacherId: string; gradeLev
                 <div className="mt-1.5 space-y-0.5">
                   {g.assignments.slice(0, 2).map(a => (
                     <div key={a.title} className="flex items-center justify-between">
-                      <p className="text-[10px] text-muted-foreground truncate max-w-[120px]">{a.title}</p>
-                      <p className="text-[10px] font-medium text-foreground">{a.points}</p>
+                      <p className="text-[11px] text-muted-foreground truncate max-w-[120px]">{a.title}</p>
+                      <p className="text-[11px] font-medium text-foreground">{a.points}</p>
                     </div>
                   ))}
                 </div>
@@ -348,7 +348,7 @@ function MeetingAIPanel({ teacherId, gradeLevel }: { teacherId: string; gradeLev
       )}
 
       {/* Meeting tips */}
-      <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+      <Card className="rounded-xl border-border bg-card py-2 gap-2">
         <CardHeader className="pb-2 pt-2 px-4">
           <CardTitle className="text-xs font-semibold flex items-center gap-2">
             <Info className="w-3.5 h-3.5 text-primary" />
@@ -379,7 +379,7 @@ function DocumentAIPanel({ documentType }: { documentType: string }) {
     <div className="space-y-4">
       {documentType ? (
         <>
-          <Card className="rounded-[10px] border-primary/20 bg-primary/5 py-2 gap-2">
+          <Card className="rounded-xl border-primary/20 bg-primary/5 py-2 gap-2">
             <CardHeader className="pb-2 pt-2 px-4">
               <CardTitle className="text-xs font-semibold flex items-center gap-2">
                 <Timer className="w-3.5 h-3.5 text-primary" />
@@ -392,7 +392,7 @@ function DocumentAIPanel({ documentType }: { documentType: string }) {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+          <Card className="rounded-xl border-border bg-card py-2 gap-2">
             <CardHeader className="pb-2 pt-2 px-4">
               <CardTitle className="text-xs font-semibold flex items-center gap-2">
                 <FileCheck className="w-3.5 h-3.5 text-primary" />
@@ -410,7 +410,7 @@ function DocumentAIPanel({ documentType }: { documentType: string }) {
           </Card>
         </>
       ) : (
-        <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+        <Card className="rounded-xl border-border bg-card py-2 gap-2">
           <CardContent className="px-4 py-2 flex flex-col items-center gap-2">
             <FileText className="w-8 h-8 text-muted-foreground/30" />
             <p className="text-[11px] text-muted-foreground text-center">
@@ -420,7 +420,7 @@ function DocumentAIPanel({ documentType }: { documentType: string }) {
         </Card>
       )}
 
-      <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+      <Card className="rounded-xl border-border bg-card py-2 gap-2">
         <CardHeader className="pb-2 pt-2 px-4">
           <CardTitle className="text-xs font-semibold flex items-center gap-2">
             <Info className="w-3.5 h-3.5 text-primary" />
@@ -447,7 +447,7 @@ function DocumentAIPanel({ documentType }: { documentType: string }) {
 function OtherAIPanel() {
   return (
     <div className="space-y-4">
-      <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+      <Card className="rounded-xl border-border bg-card py-2 gap-2">
         <CardHeader className="pb-2 pt-2 px-4">
           <CardTitle className="text-xs font-semibold flex items-center gap-2">
             <MessageSquare className="w-3.5 h-3.5 text-primary" />
@@ -461,7 +461,7 @@ function OtherAIPanel() {
             { step: '3', text: 'The admin team will review and respond within 3–5 business days.' },
           ].map(({ step, text }) => (
             <div key={step} className="flex items-start gap-2.5">
-              <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+              <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                 {step}
               </span>
               <p className="text-[11px] text-muted-foreground">{text}</p>
@@ -470,7 +470,7 @@ function OtherAIPanel() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+      <Card className="rounded-xl border-border bg-card py-2 gap-2">
         <CardHeader className="pb-2 pt-2 px-4">
           <CardTitle className="text-xs font-semibold flex items-center gap-2">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
@@ -504,12 +504,12 @@ function RecentRequests({ requests }: { requests: RequestItem[] }) {
   if (requests.length === 0) return null
 
   return (
-    <Card className="rounded-[10px] border-border bg-card py-2 gap-2">
+    <Card className="rounded-xl border-border bg-card py-2 gap-2">
       <CardHeader className="pb-2 pt-2 px-5">
         <CardTitle className="text-sm font-semibold flex items-center gap-2">
           <ClipboardList className="w-4 h-4 text-primary" />
           Recent Requests
-          <Badge variant="outline" className="ml-auto text-[10px] h-5 text-muted-foreground border-border">
+          <Badge variant="outline" className="ml-auto text-[11px] h-5 text-muted-foreground border-border">
             {requests.length}
           </Badge>
         </CardTitle>
@@ -523,7 +523,7 @@ function RecentRequests({ requests }: { requests: RequestItem[] }) {
           const isExpanded = expandedId === req.id
 
           return (
-            <div key={req.id} className="rounded-[10px] border border-border overflow-hidden">
+            <div key={req.id} className="rounded-xl border border-border overflow-hidden">
               <button
                 className="w-full flex items-center gap-3 p-3 text-left hover:bg-muted/20 transition-colors"
                 onClick={() => setExpandedId(isExpanded ? null : req.id)}
@@ -534,13 +534,13 @@ function RecentRequests({ requests }: { requests: RequestItem[] }) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
                     <p className="text-xs font-medium text-foreground">{tc.label}</p>
-                    <span className="text-[10px] text-muted-foreground">·</span>
-                    <p className="text-[10px] text-muted-foreground">{req.studentName}</p>
+                    <span className="text-[11px] text-muted-foreground">·</span>
+                    <p className="text-[11px] text-muted-foreground">{req.studentName}</p>
                   </div>
-                  <p className="text-[10px] text-muted-foreground truncate">{requestSummary(req)}</p>
+                  <p className="text-[11px] text-muted-foreground truncate">{requestSummary(req)}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <Badge variant="outline" className={`text-[10px] h-5 ${sc.color} ${sc.border}`}>
+                  <Badge variant="outline" className={`text-[11px] h-5 ${sc.color} ${sc.border}`}>
                     <StatusIcon className="w-2.5 h-2.5 mr-1" />
                     {sc.label}
                   </Badge>
@@ -584,11 +584,11 @@ function RecentRequests({ requests }: { requests: RequestItem[] }) {
 
                   {req.reviewNote && (
                     <div className="p-2.5 rounded-lg bg-card border border-border mt-1">
-                      <p className="text-[10px] font-semibold text-muted-foreground mb-0.5">School Response</p>
+                      <p className="text-[11px] font-semibold text-muted-foreground mb-0.5">School Response</p>
                       <p className="text-[11px] text-foreground">{req.reviewNote}</p>
                     </div>
                   )}
-                  <p className="text-[10px] text-muted-foreground pt-0.5">
+                  <p className="text-[11px] text-muted-foreground pt-0.5">
                     Submitted: {formatDateShort(req.submittedDate)}
                     {req.reviewedBy && <> · Reviewed by {req.reviewedBy}</>}
                   </p>
@@ -715,7 +715,8 @@ export default function RequestsPage() {
 
   // ── Form sections ──────────────────────────────────────────────────────────
 
-  const childSelector = children.length > 1 && (
+  // Reusable inline child selector (for use inside grids)
+  const childSelectField = children.length > 1 ? (
     <div className="space-y-1.5">
       <Label className="text-xs">Child</Label>
       <Select value={selectedChildId} onValueChange={v => v && setSelectedChildId(v)}>
@@ -729,23 +730,26 @@ export default function RequestsPage() {
         </SelectContent>
       </Select>
     </div>
-  )
+  ) : null
 
   const leaveForm = (
     <>
-      {childSelector}
-      <div className="space-y-1.5">
-        <Label className="text-xs">Leave Type</Label>
-        <Select value={leaveType} onValueChange={v => setLeaveType(v as LeaveType)}>
-          <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {(Object.entries(LEAVE_TYPE_LABELS) as [LeaveType, string][]).map(([val, label]) => (
-              <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* First two dropdowns side by side */}
+      <div className="grid grid-cols-2 gap-3">
+        {childSelectField}
+        <div className={`space-y-1.5 ${children.length <= 1 ? 'col-span-2' : ''}`}>
+          <Label className="text-xs">Leave Type</Label>
+          <Select value={leaveType} onValueChange={v => setLeaveType(v as LeaveType)}>
+            <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.entries(LEAVE_TYPE_LABELS) as [LeaveType, string][]).map(([val, label]) => (
+                <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
@@ -767,10 +771,10 @@ export default function RequestsPage() {
       </div>
       <div className="space-y-1.5">
         <Label className="text-xs">Supporting Document <span className="text-muted-foreground">(optional)</span></Label>
-        <div className="border-2 border-dashed border-border rounded-[10px] px-4 py-2 text-center hover:border-primary/40 transition-colors cursor-pointer">
+        <div className="border-2 border-dashed border-border rounded-xl px-4 py-2 text-center hover:border-primary/40 transition-colors cursor-pointer">
           <Upload className="w-5 h-5 text-muted-foreground mx-auto mb-1.5" />
           <p className="text-[11px] text-muted-foreground">Drop file or <span className="text-primary">browse</span></p>
-          <p className="text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG — max 5 MB</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">PDF, JPG, PNG — max 5 MB</p>
         </div>
       </div>
     </>
@@ -778,21 +782,24 @@ export default function RequestsPage() {
 
   const meetingForm = (
     <>
-      {childSelector}
-      <div className="space-y-1.5">
-        <Label className="text-xs">Teacher</Label>
-        <Select value={teacherId} onValueChange={handleTeacherChange}>
-          <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
-            <SelectValue placeholder="Select teacher" />
-          </SelectTrigger>
-          <SelectContent>
-            {teachers.map(t => (
-              <SelectItem key={t.id} value={t.id} className="text-sm">
-                {t.name} <span className="text-muted-foreground">— {t.subjects.join(', ')}</span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* First two dropdowns side by side */}
+      <div className="grid grid-cols-2 gap-3">
+        {childSelectField}
+        <div className={`space-y-1.5 ${children.length <= 1 ? 'col-span-2' : ''}`}>
+          <Label className="text-xs">Teacher</Label>
+          <Select value={teacherId} onValueChange={handleTeacherChange}>
+            <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
+              <SelectValue placeholder="Select teacher" />
+            </SelectTrigger>
+            <SelectContent>
+              {teachers.map(t => (
+                <SelectItem key={t.id} value={t.id} className="text-sm">
+                  {t.name} — {t.subjects.join(', ')}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div className="space-y-1.5">
         <Label className="text-xs">Subject / Purpose</Label>
@@ -819,7 +826,7 @@ export default function RequestsPage() {
             <button
               key={m}
               onClick={() => setMeetingMode(m)}
-              className={`flex items-center gap-2 px-3 py-2.5 rounded-[10px] border text-xs font-medium transition-all ${
+              className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all ${
                 meetingMode === m
                   ? 'bg-primary/10 text-primary border-primary/30'
                   : 'border-border text-muted-foreground hover:border-border hover:bg-muted/20'
@@ -844,33 +851,69 @@ export default function RequestsPage() {
 
   const documentForm = (
     <>
-      {childSelector}
-      <div className="space-y-1.5">
-        <Label className="text-xs">Document Type</Label>
-        <Select value={docType} onValueChange={setDocType}>
-          <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
-            <SelectValue placeholder="Select document" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(DOCUMENT_TYPE_LABELS).map(([val, label]) => (
-              <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* First two dropdowns side by side */}
+      <div className="grid grid-cols-2 gap-3">
+        {childSelectField ?? (
+          // When single child, pair docType + deliveryMethod side by side
+          <div className="space-y-1.5">
+            <Label className="text-xs">Document Type</Label>
+            <Select value={docType} onValueChange={setDocType}>
+              <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
+                <SelectValue placeholder="Select document" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(DOCUMENT_TYPE_LABELS).map(([val, label]) => (
+                  <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+        {children.length > 1 ? (
+          <div className="space-y-1.5">
+            <Label className="text-xs">Document Type</Label>
+            <Select value={docType} onValueChange={setDocType}>
+              <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
+                <SelectValue placeholder="Select document" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(DOCUMENT_TYPE_LABELS).map(([val, label]) => (
+                  <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ) : (
+          <div className="space-y-1.5">
+            <Label className="text-xs">Delivery Method</Label>
+            <Select value={deliveryMethod} onValueChange={setDelivery}>
+              <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
+                <SelectValue placeholder="Select delivery" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(DELIVERY_METHOD_LABELS).map(([val, label]) => (
+                  <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
-      <div className="space-y-1.5">
-        <Label className="text-xs">Delivery Method</Label>
-        <Select value={deliveryMethod} onValueChange={setDelivery}>
-          <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
-            <SelectValue placeholder="Select delivery method" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(DELIVERY_METHOD_LABELS).map(([val, label]) => (
-              <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {children.length > 1 && (
+        <div className="space-y-1.5">
+          <Label className="text-xs">Delivery Method</Label>
+          <Select value={deliveryMethod} onValueChange={setDelivery}>
+            <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
+              <SelectValue placeholder="Select delivery method" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(DELIVERY_METHOD_LABELS).map(([val, label]) => (
+                <SelectItem key={val} value={val} className="text-sm">{label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       <div className="space-y-1.5">
         <Label className="text-xs">Notes <span className="text-muted-foreground">(optional)</span></Label>
         <Textarea value={docNotes} onChange={e => setDocNotes(e.target.value)}
@@ -882,7 +925,21 @@ export default function RequestsPage() {
 
   const otherForm = (
     <>
-      {childSelector}
+      {children.length > 1 && (
+        <div className="space-y-1.5">
+          <Label className="text-xs">Child</Label>
+          <Select value={selectedChildId} onValueChange={v => v && setSelectedChildId(v)}>
+            <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
+              <SelectValue placeholder="Select child" />
+            </SelectTrigger>
+            <SelectContent>
+              {children.map(child => child && (
+                <SelectItem key={child.id} value={child.id} className="text-sm">{child.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       <div className="space-y-1.5">
         <Label className="text-xs">Subject</Label>
         <Input value={otherSubject} onChange={e => setOtherSubject(e.target.value)}
@@ -927,7 +984,7 @@ export default function RequestsPage() {
           <button
             key={id}
             onClick={() => { setRequestType(id); setSubmitted(false) }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-[10px] border text-sm font-medium transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-sm font-medium transition-all ${
               requestType === id
                 ? 'bg-primary/10 text-primary border-primary/30'
                 : 'border-border text-muted-foreground hover:text-foreground hover:bg-muted/20'
@@ -944,7 +1001,7 @@ export default function RequestsPage() {
 
         {/* ── Form (3/5) ── */}
         <div className="lg:col-span-3">
-          <Card className="rounded-[10px] border-border bg-card h-full py-2 gap-2">
+          <Card className="rounded-xl border-border bg-card h-full py-2 gap-2">
             <CardHeader className="pb-2 pt-2 px-5">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 {(() => {
@@ -981,7 +1038,7 @@ export default function RequestsPage() {
                 <>
                   {/* Child summary chip (when only 1 child) */}
                   {children.length === 1 && selectedChild && (
-                    <div className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] bg-muted/20 border border-border">
+                    <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-muted/20 border border-border">
                       <div
                         className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0"
                         style={{ background: selectedChild.avatarColor }}
@@ -990,7 +1047,7 @@ export default function RequestsPage() {
                       </div>
                       <div>
                         <p className="text-xs font-medium text-foreground">{selectedChild.name}</p>
-                        <p className="text-[10px] text-muted-foreground">{selectedChild.gradeLevel} — Section {selectedChild.section}</p>
+                        <p className="text-[11px] text-muted-foreground">{selectedChild.gradeLevel} — Section {selectedChild.section}</p>
                       </div>
                     </div>
                   )}

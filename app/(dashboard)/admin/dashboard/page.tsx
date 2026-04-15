@@ -28,12 +28,12 @@ const attendanceByGrade = [
 ]
 
 const quickLinks = [
-  { label: 'Registration', icon: ClipboardList, href: '/registration', color: '#00B8A9' },
-  { label: 'All Students', icon: Users, href: '/admin/students', color: '#0EA5E9' },
-  { label: 'All Teachers', icon: GraduationCap, href: '/admin/teachers', color: '#8B5CF6' },
-  { label: 'Reports', icon: FileText, href: '/reports', color: '#F59E0B' },
+  { label: 'Registration', icon: ClipboardList, href: '/registration', color: 'var(--accent-student)' },
+  { label: 'All Students', icon: Users, href: '/admin/students', color: 'var(--accent-student)' },
+  { label: 'All Teachers', icon: GraduationCap, href: '/admin/teachers', color: 'var(--accent-teacher)' },
+  { label: 'Reports', icon: FileText, href: '/reports', color: 'var(--accent-admin)' },
   { label: 'Learning Plans', icon: BookOpen, href: '/ilp', color: '#10B981' },
-  { label: 'All Staff', icon: Briefcase, href: '/admin/staff', color: '#EF4444' },
+  { label: 'All Staff', icon: Briefcase, href: '/admin/staff', color: 'var(--accent-parent)' },
 ]
 
 const totalStudents = students.length
@@ -115,16 +115,16 @@ export default function AdminDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Students', value: totalStudents.toString(), sub: 'enrolled this term', icon: Users, color: '#00B8A9' },
-          { label: 'Total Teachers', value: totalTeachers.toString(), sub: 'active staff', icon: GraduationCap, color: '#0EA5E9' },
+          { label: 'Total Students', value: totalStudents.toString(), sub: 'enrolled this term', icon: Users, color: 'var(--accent-student)' },
+          { label: 'Total Teachers', value: totalTeachers.toString(), sub: 'active staff', icon: GraduationCap, color: 'var(--accent-teacher)' },
           { label: 'School Attendance', value: '91%', sub: 'average this week', icon: CalendarCheck, color: '#10B981' },
-          { label: 'Pending Registration', value: pendingReg.toString(), sub: 'applications awaiting', icon: ClipboardList, color: '#F59E0B' },
+          { label: 'Pending Registration', value: pendingReg.toString(), sub: 'applications awaiting', icon: ClipboardList, color: 'var(--accent-admin)' },
         ].map(({ label, value, sub, icon: Icon, color }) => (
           <Card key={label}>
             <CardContent className="p-5">
               <div className="flex items-start justify-between mb-3">
                 <p className="text-xs font-medium text-muted-foreground">{label}</p>
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${color}18` }}>
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: `color-mix(in srgb, ${color} 10%, transparent)` }}>
                   <Icon className="w-3.5 h-3.5" style={{ color }} />
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
               return (
                 <div key={student.studentId} className="flex items-center gap-3 p-3 rounded-xl bg-muted/30">
                   <div
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0"
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0"
                     style={{ background: riskColor }}
                   >
                     {student.initials}
@@ -251,7 +251,7 @@ export default function AdminDashboard() {
                   onClick={() => router.push(href)}
                   className="flex flex-col items-center gap-2.5 p-4 rounded-xl bg-muted/30 hover:bg-muted/60 transition-colors cursor-pointer"
                 >
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${color}18` }}>
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 10%, transparent)` }}>
                     <Icon className="w-4 h-4" style={{ color }} />
                   </div>
                   <span className="text-xs font-medium text-muted-foreground">{label}</span>

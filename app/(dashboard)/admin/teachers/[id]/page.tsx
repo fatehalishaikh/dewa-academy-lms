@@ -99,11 +99,11 @@ export default function AdminTeacherDetailPage({ params }: { params: Promise<{ i
                 <p className="text-sm text-muted-foreground">{teacher.qualification}</p>
               </div>
               <div className="flex items-center gap-3 flex-wrap">
-                <Badge variant="outline" className="text-[10px] h-5 border-primary/30 text-primary">
+                <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary">
                   {teacher.department}
                 </Badge>
                 {teacher.subjects.map(s => (
-                  <span key={s} className="text-[10px] bg-muted/40 text-muted-foreground px-2 py-0.5 rounded-full border border-border">{s}</span>
+                  <span key={s} className="text-[11px] bg-muted/40 text-muted-foreground px-2 py-0.5 rounded-full border border-border">{s}</span>
                 ))}
               </div>
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -131,7 +131,7 @@ export default function AdminTeacherDetailPage({ params }: { params: Promise<{ i
               </div>
               <div>
                 <p className="text-lg font-bold text-foreground">{value}</p>
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
               </div>
             </CardContent>
           </Card>
@@ -159,21 +159,21 @@ export default function AdminTeacherDetailPage({ params }: { params: Promise<{ i
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-foreground">{cls.name}</p>
                   <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                    <span className="text-[10px] text-muted-foreground">{cls.gradeLevel}</span>
-                    <span className="text-[10px] text-muted-foreground">·</span>
-                    <span className="text-[10px] text-muted-foreground">Room {cls.room}</span>
-                    <span className="text-[10px] text-muted-foreground">·</span>
-                    <span className="text-[10px] text-muted-foreground">{cls.studentIds.length} students</span>
+                    <span className="text-[11px] text-muted-foreground">{cls.gradeLevel}</span>
+                    <span className="text-[11px] text-muted-foreground">·</span>
+                    <span className="text-[11px] text-muted-foreground">Room {cls.room}</span>
+                    <span className="text-[11px] text-muted-foreground">·</span>
+                    <span className="text-[11px] text-muted-foreground">{cls.studentIds.length} students</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 shrink-0 text-right">
                   <div>
                     <p className={`text-sm font-bold ${gradeColor(cls.averageGrade)}`}>{cls.averageGrade}%</p>
-                    <p className="text-[10px] text-muted-foreground">Avg Grade</p>
+                    <p className="text-[11px] text-muted-foreground">Avg Grade</p>
                   </div>
                   <div>
                     <p className={`text-sm font-bold ${attendanceColor(cls.attendanceRate)}`}>{cls.attendanceRate}%</p>
-                    <p className="text-[10px] text-muted-foreground">Attendance</p>
+                    <p className="text-[11px] text-muted-foreground">Attendance</p>
                   </div>
                 </div>
               </CardContent>
@@ -198,9 +198,9 @@ export default function AdminTeacherDetailPage({ params }: { params: Promise<{ i
                   <table className="w-full min-w-[600px]">
                     <thead>
                       <tr className="bg-muted/20 border-b border-border">
-                        <th className="text-left px-4 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Time</th>
+                        <th className="text-left px-4 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Time</th>
                         {DAYS.map(d => (
-                          <th key={d} className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                          <th key={d} className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                             {d}
                           </th>
                         ))}
@@ -217,7 +217,7 @@ export default function AdminTeacherDetailPage({ params }: { params: Promise<{ i
                               <td key={day} className="px-2 py-1.5 align-top">
                                 {entry && color && (
                                   <div
-                                    className="px-2 py-1.5 rounded-lg text-[10px] leading-tight"
+                                    className="px-2 py-1.5 rounded-lg text-[11px] leading-tight"
                                     style={{ background: `${color}20`, borderLeft: `2px solid ${color}` }}
                                   >
                                     <p className="font-semibold truncate" style={{ color }}>{entry.subject}</p>
@@ -240,7 +240,7 @@ export default function AdminTeacherDetailPage({ params }: { params: Promise<{ i
                   {teacher.subjects.map(s => {
                     const color = SUBJECT_COLORS[s] ?? '#6B7280'
                     return (
-                      <div key={s} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                      <div key={s} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                         <div className="w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
                         {s}
                       </div>

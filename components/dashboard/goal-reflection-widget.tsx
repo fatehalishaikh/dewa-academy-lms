@@ -97,19 +97,19 @@ export function GoalReflectionWidget() {
             const cfg = statusStyles[s.status]
             return (
               <div key={s.student} className="flex items-center gap-3 py-1.5 px-3 rounded-lg bg-muted/40">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 bg-primary">
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0 bg-primary">
                   {s.initials}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium text-foreground truncate">{s.goal}</p>
-                  <p className="text-[10px] text-muted-foreground">{s.student} · Next reflection: {s.nextReflection}</p>
+                  <p className="text-[11px] text-muted-foreground">{s.student} · Next reflection: {s.nextReflection}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <div className="flex items-center gap-1">
                     <Progress value={s.progress} className="w-14 h-1.5" />
                     <span className="text-[11px] font-semibold w-8 text-right" style={{ color: cfg.color }}>{s.progress}%</span>
                   </div>
-                  <Badge variant="outline" className={`text-[10px] ${cfg.badge}`}>
+                  <Badge variant="outline" className={`text-[11px] ${cfg.badge}`}>
                     {s.status === 'on_track' ? 'On Track' : s.status === 'at_risk' ? 'At Risk' : 'Done'}
                   </Badge>
                 </div>

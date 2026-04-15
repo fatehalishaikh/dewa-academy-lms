@@ -21,9 +21,9 @@ export default function MyCoursesPage() {
       <div>
         <div className="flex items-center gap-2 mb-1">
           <BookOpen className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">My Learning</span>
+          <span className="text-xs font-medium text-primary uppercase tracking-wider">Learning</span>
         </div>
-        <h1 className="text-xl font-bold text-foreground">My Courses</h1>
+        <h1 className="text-xl font-bold text-foreground">Courses</h1>
         <p className="text-sm text-muted-foreground mt-0.5">Your AI-generated personalized courses</p>
       </div>
 
@@ -53,17 +53,17 @@ export default function MyCoursesPage() {
             const completedSections = course.sections.filter(s => s.completed).length
             const totalSections = course.sections.length
             return (
-              <Card key={course.id} className="rounded-[10px] border-border bg-card hover:border-primary/30 transition-colors">
+              <Card key={course.id} className="rounded-xl border-border bg-card hover:border-primary/30 transition-colors">
                 <CardContent className="p-5 space-y-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <Badge variant="outline" className="text-[10px] h-5 border-primary/30 text-primary shrink-0">
+                        <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary shrink-0">
                           {course.subject}
                         </Badge>
                         <Badge
                           variant="outline"
-                          className={`text-[10px] h-5 shrink-0 ${
+                          className={`text-[11px] h-5 shrink-0 ${
                             course.status === 'completed'
                               ? 'border-emerald-500/30 text-emerald-400'
                               : 'border-amber-500/30 text-amber-400'
@@ -86,7 +86,7 @@ export default function MyCoursesPage() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       Created {format(new Date(course.createdAt), 'MMM d, yyyy')}
                     </p>
                     <Link

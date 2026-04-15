@@ -121,7 +121,7 @@ export default function HomeworkGrade() {
           <p className="text-xs text-muted-foreground truncate">{hw.title}</p>
           <h1 className="text-base font-bold text-foreground flex items-center gap-2">
             Grading: {student.name}
-            <Badge variant="outline" className={`text-[10px] h-4 ${sub.status === 'late' ? 'border-amber-500/30 text-amber-400' : 'border-blue-500/30 text-blue-400'}`}>
+            <Badge variant="outline" className={`text-[11px] h-4 ${sub.status === 'late' ? 'border-amber-500/30 text-amber-400' : 'border-blue-500/30 text-blue-400'}`}>
               {sub.status}
             </Badge>
           </h1>
@@ -151,7 +151,7 @@ export default function HomeworkGrade() {
               </Avatar>
               <div>
                 <CardTitle className="text-sm">{student.name}'s Submission</CardTitle>
-                <p className="text-[10px] text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground">
                   Submitted {sub.submittedDate
                     ? new Date(sub.submittedDate).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })
                     : '—'}
@@ -210,7 +210,7 @@ export default function HomeworkGrade() {
                   <div key={r.id} className="space-y-1.5">
                     <div className="flex items-center justify-between">
                       <p className="text-xs font-medium text-foreground">{r.label}</p>
-                      <p className="text-[10px] text-muted-foreground">max {r.maxPoints}</p>
+                      <p className="text-[11px] text-muted-foreground">max {r.maxPoints}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <input
@@ -285,7 +285,7 @@ export default function HomeworkGrade() {
               {sub.aiFeedback && !feedback && (
                 <button
                   onClick={() => setFeedback(sub.aiFeedback ?? '')}
-                  className="mt-1.5 text-[10px] text-primary hover:underline flex items-center gap-1"
+                  className="mt-1.5 text-[11px] text-primary hover:underline flex items-center gap-1"
                 >
                   <Wand2 className="w-2.5 h-2.5" />
                   Use AI feedback as starting point

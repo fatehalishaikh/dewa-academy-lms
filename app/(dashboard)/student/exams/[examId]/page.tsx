@@ -100,7 +100,7 @@ export default function StudentExamTaking() {
   if (submitted) {
     return (
       <div className="p-6 flex flex-col items-center justify-center h-64 gap-4">
-        <div className="w-14 h-14 rounded-[10px] bg-primary/20 flex items-center justify-center">
+        <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center">
           <Sparkles className="w-7 h-7 text-primary" />
         </div>
         <div className="text-center">
@@ -150,30 +150,30 @@ export default function StudentExamTaking() {
         <div>
           <h2 className="text-base font-semibold text-foreground">{exam.title}</h2>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
-            <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+            <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
               <Clock className="w-3 h-3" /> {exam.duration} min
             </span>
-            <span className="text-[10px] text-muted-foreground">{totalQ} questions</span>
+            <span className="text-[11px] text-muted-foreground">{totalQ} questions</span>
           </div>
         </div>
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] border text-xs font-medium shrink-0 ${levelColor[assignment.targetDifficulty]}`}>
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium shrink-0 ${levelColor[assignment.targetDifficulty]}`}>
           <Brain className="w-3.5 h-3.5" />
           Personalized · {assignment.targetDifficulty}
         </div>
       </div>
 
       {/* Adaptive composition bar */}
-      <div className="p-3 rounded-[10px] bg-muted/30 border border-border space-y-1.5">
-        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Your question mix</p>
+      <div className="p-3 rounded-xl bg-muted/30 border border-border space-y-1.5">
+        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Your question mix</p>
         <div className="flex gap-3">
           {easy > 0 && (
-            <span className="text-[10px] text-emerald-400 font-medium">{easy} easy</span>
+            <span className="text-[11px] text-emerald-400 font-medium">{easy} easy</span>
           )}
           {medium > 0 && (
-            <span className="text-[10px] text-amber-400 font-medium">{medium} medium</span>
+            <span className="text-[11px] text-amber-400 font-medium">{medium} medium</span>
           )}
           {hard > 0 && (
-            <span className="text-[10px] text-red-400 font-medium">{hard} hard</span>
+            <span className="text-[11px] text-red-400 font-medium">{hard} hard</span>
           )}
         </div>
         <div className="flex h-1.5 rounded-full overflow-hidden gap-0.5">
@@ -181,7 +181,7 @@ export default function StudentExamTaking() {
           {medium > 0 && <div className="bg-amber-500/60 rounded-full" style={{ flex: medium }} />}
           {hard > 0 && <div className="bg-red-500/60 rounded-full" style={{ flex: hard }} />}
         </div>
-        <p className="text-[10px] text-muted-foreground italic">{assignment.rationale}</p>
+        <p className="text-[11px] text-muted-foreground italic">{assignment.rationale}</p>
       </div>
 
       {/* Progress */}
@@ -196,18 +196,18 @@ export default function StudentExamTaking() {
       </div>
 
       {/* Question card */}
-      <Card className="rounded-[10px] border-border">
+      <Card className="rounded-xl border-border">
         <CardHeader className="pb-3 border-b border-border">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm">Question {currentIdx + 1} of {totalQ}</CardTitle>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`text-[9px] h-4 ${diffBadge[current.difficulty]}`}>
+              <Badge variant="outline" className={`text-[11px] h-4 ${diffBadge[current.difficulty]}`}>
                 {current.difficulty}
               </Badge>
-              <span className="text-[10px] text-muted-foreground">{current.points} pt{current.points !== 1 ? 's' : ''}</span>
+              <span className="text-[11px] text-muted-foreground">{current.points} pt{current.points !== 1 ? 's' : ''}</span>
             </div>
           </div>
-          <p className="text-[10px] text-muted-foreground">{current.subject} · {current.topic}</p>
+          <p className="text-[11px] text-muted-foreground">{current.subject} · {current.topic}</p>
         </CardHeader>
         <CardContent className="pt-4 space-y-4">
           <p className="text-sm font-medium text-foreground leading-relaxed">{current.text}</p>
@@ -218,7 +218,7 @@ export default function StudentExamTaking() {
               {current.options.map((opt, i) => (
                 <label
                   key={i}
-                  className={`flex items-start gap-3 p-3 rounded-[10px] border cursor-pointer transition-colors ${
+                  className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
                     answers[current.id] === opt
                       ? 'border-primary/50 bg-primary/10 text-primary'
                       : 'border-border hover:border-border/80 hover:bg-muted/20'
@@ -244,7 +244,7 @@ export default function StudentExamTaking() {
               {(current.options ?? ['True', 'False']).map(opt => (
                 <label
                   key={opt}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-[10px] border cursor-pointer transition-colors flex-1 justify-center ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border cursor-pointer transition-colors flex-1 justify-center ${
                     answers[current.id] === opt
                       ? 'border-primary/50 bg-primary/10 text-primary'
                       : 'border-border hover:bg-muted/20'
@@ -271,7 +271,7 @@ export default function StudentExamTaking() {
               placeholder="Write your answer here…"
               value={answers[current.id] ?? ''}
               onChange={e => setAnswer(current.id, e.target.value)}
-              className="w-full bg-background border border-border rounded-[10px] px-3 py-2.5 text-sm resize-none focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground"
+              className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground"
             />
           )}
 
@@ -282,7 +282,7 @@ export default function StudentExamTaking() {
               placeholder="Write your matching answers here…"
               value={answers[current.id] ?? ''}
               onChange={e => setAnswer(current.id, e.target.value)}
-              className="w-full bg-background border border-border rounded-[10px] px-3 py-2.5 text-sm resize-none focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground"
+              className="w-full bg-background border border-border rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground"
             />
           )}
         </CardContent>

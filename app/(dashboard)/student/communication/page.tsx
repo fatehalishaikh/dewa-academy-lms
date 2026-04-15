@@ -262,7 +262,7 @@ export default function StudentCommunicationPage() {
               </div>
               <button
                 onClick={() => { setComposeOpen(false); setComposeRecipient(null); setComposeText(''); setContactSearch(''); setShowContactList(false) }}
-                className="w-7 h-7 rounded-[10px] flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                className="w-7 h-7 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -270,17 +270,17 @@ export default function StudentCommunicationPage() {
 
             {/* To field */}
             <div className="px-5 py-4 border-b border-border shrink-0">
-              <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">To</label>
+              <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 block">To</label>
               {composeRecipient ? (
-                <div className="flex items-center gap-2 bg-primary/8 border border-primary/20 rounded-[10px] px-3 py-2">
+                <div className="flex items-center gap-2 bg-primary/8 border border-primary/20 rounded-xl px-3 py-2">
                   <Avatar className="w-6 h-6 shrink-0">
-                    <AvatarFallback className="text-[9px] font-semibold text-white" style={{ background: composeRecipient.avatarColor }}>
+                    <AvatarFallback className="text-[11px] font-semibold text-white" style={{ background: composeRecipient.avatarColor }}>
                       {composeRecipient.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-foreground truncate">{composeRecipient.name}</p>
-                    <p className="text-[10px] text-muted-foreground truncate">{composeRecipient.role}</p>
+                    <p className="text-[11px] text-muted-foreground truncate">{composeRecipient.role}</p>
                   </div>
                   <button onClick={() => { setComposeRecipient(null); setContactSearch('') }} className="text-muted-foreground hover:text-foreground transition-colors">
                     <X className="w-3 h-3" />
@@ -290,13 +290,13 @@ export default function StudentCommunicationPage() {
                 <div className="relative">
                   <button
                     onClick={() => setShowContactList(v => !v)}
-                    className="w-full flex items-center justify-between gap-2 bg-muted/30 border border-border rounded-[10px] px-3 py-2.5 text-left hover:border-primary/30 transition-colors"
+                    className="w-full flex items-center justify-between gap-2 bg-muted/30 border border-border rounded-xl px-3 py-2.5 text-left hover:border-primary/30 transition-colors"
                   >
                     <span className="text-xs text-muted-foreground">Select a recipient…</span>
                     <ChevronDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                   </button>
                   {showContactList && (
-                    <div className="absolute top-full mt-1 w-full bg-card border border-border rounded-[10px] shadow-lg z-10 overflow-hidden">
+                    <div className="absolute top-full mt-1 w-full bg-card border border-border rounded-xl shadow-lg z-10 overflow-hidden">
                       <div className="p-2 border-b border-border">
                         <Input
                           value={contactSearch}
@@ -314,13 +314,13 @@ export default function StudentCommunicationPage() {
                             className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-muted/40 transition-colors text-left"
                           >
                             <Avatar className="w-7 h-7 shrink-0">
-                              <AvatarFallback className="text-[10px] font-semibold text-white" style={{ background: contact.avatarColor }}>
+                              <AvatarFallback className="text-[11px] font-semibold text-white" style={{ background: contact.avatarColor }}>
                                 {contact.initials}
                               </AvatarFallback>
                             </Avatar>
                             <div className="min-w-0">
                               <p className="text-xs font-medium text-foreground truncate">{contact.name}</p>
-                              <p className="text-[10px] text-muted-foreground truncate">{contact.role}</p>
+                              <p className="text-[11px] text-muted-foreground truncate">{contact.role}</p>
                             </div>
                           </button>
                         ))}
@@ -336,13 +336,13 @@ export default function StudentCommunicationPage() {
 
             {/* Message body */}
             <div className="flex-1 px-5 py-4 flex flex-col gap-3">
-              <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Message</label>
+              <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Message</label>
               <textarea
                 value={composeText}
                 onChange={e => setComposeText(e.target.value)}
                 placeholder={composeRecipient ? `Write to ${composeRecipient.name.split(' ')[0]}…` : 'Select a recipient first…'}
                 disabled={!composeRecipient}
-                className="flex-1 w-full resize-none rounded-[10px] bg-muted/30 border border-border text-sm text-foreground placeholder:text-muted-foreground px-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 w-full resize-none rounded-xl bg-muted/30 border border-border text-sm text-foreground placeholder:text-muted-foreground px-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 rows={8}
               />
             </div>
@@ -406,15 +406,15 @@ export default function StudentCommunicationPage() {
                       {conv.name}
                     </p>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <p className="text-[10px] text-muted-foreground">{conv.lastTime}</p>
+                      <p className="text-[11px] text-muted-foreground">{conv.lastTime}</p>
                       {conv.unread > 0 && (
                         <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center">
-                          <span className="text-[9px] font-bold text-primary-foreground">{conv.unread}</span>
+                          <span className="text-[11px] font-bold text-primary-foreground">{conv.unread}</span>
                         </div>
                       )}
                     </div>
                   </div>
-                  <p className="text-[10px] text-muted-foreground truncate">{conv.role}</p>
+                  <p className="text-[11px] text-muted-foreground truncate">{conv.role}</p>
                   <p className={`text-[11px] truncate mt-0.5 ${conv.unread > 0 ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                     {conv.lastMessage}
                   </p>
@@ -441,16 +441,16 @@ export default function StudentCommunicationPage() {
                   </Avatar>
                   <div>
                     <p className="text-sm font-semibold text-foreground">{selected.name}</p>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       {selected.role}{selected.subject ? ` · ${selected.subject}` : ''}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   {selected.subject && (
-                    <Badge variant="outline" className="text-[10px] h-5 border-primary/30 text-primary">{selected.subject}</Badge>
+                    <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary">{selected.subject}</Badge>
                   )}
-                  <button className="w-7 h-7 rounded-[10px] flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+                  <button className="w-7 h-7 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                     <MoreVertical className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -465,7 +465,7 @@ export default function StudentCommunicationPage() {
                       {!isMe && (
                         <Avatar className="w-7 h-7 shrink-0 mb-0.5">
                           <AvatarFallback
-                            className="text-[10px] font-semibold text-white"
+                            className="text-[11px] font-semibold text-white"
                             style={{ background: selected.avatarColor }}
                           >
                             {selected.initials}
@@ -474,7 +474,7 @@ export default function StudentCommunicationPage() {
                       )}
                       <div className={`max-w-[70%] space-y-1 ${isMe ? 'items-end' : 'items-start'} flex flex-col`}>
                         <div
-                          className={`px-4 py-2.5 rounded-[10px] text-sm leading-relaxed ${
+                          className={`px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
                             isMe
                               ? 'bg-primary text-primary-foreground rounded-br-sm'
                               : 'bg-card border border-border text-foreground rounded-bl-sm'
@@ -483,7 +483,7 @@ export default function StudentCommunicationPage() {
                           {msg.text}
                         </div>
                         <div className={`flex items-center gap-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
-                          <span className="text-[9px] text-muted-foreground">{msg.time}</span>
+                          <span className="text-[11px] text-muted-foreground">{msg.time}</span>
                           {isMe && (
                             msg.read
                               ? <CheckCheck className="w-2.5 h-2.5 text-primary" />
@@ -494,7 +494,7 @@ export default function StudentCommunicationPage() {
                       {isMe && (
                         <Avatar className="w-7 h-7 shrink-0 mb-0.5">
                           <AvatarFallback
-                            className="text-[10px] font-semibold text-white"
+                            className="text-[11px] font-semibold text-white"
                             style={{ background: student?.avatarColor ?? '#00B8A9' }}
                           >
                             {student?.initials ?? 'S'}
@@ -510,7 +510,7 @@ export default function StudentCommunicationPage() {
               {/* Input */}
               <div className="px-5 py-4 border-t border-border bg-card shrink-0">
                 <div className="flex items-end gap-2">
-                  <button className="w-8 h-8 rounded-[10px] flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors shrink-0">
+                  <button className="w-8 h-8 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors shrink-0">
                     <Paperclip className="w-3.5 h-3.5" />
                   </button>
                   <div className="flex-1 relative">
@@ -531,13 +531,13 @@ export default function StudentCommunicationPage() {
                     <Send className="w-3.5 h-3.5" />
                   </Button>
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-2 text-center">Press Enter to send</p>
+                <p className="text-[11px] text-muted-foreground mt-2 text-center">Press Enter to send</p>
               </div>
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center space-y-3">
-                <div className="w-12 h-12 rounded-[10px] bg-muted/30 flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 rounded-xl bg-muted/30 flex items-center justify-center mx-auto">
                   <MessageSquare className="w-6 h-6 text-muted-foreground" />
                 </div>
                 <p className="text-sm text-muted-foreground">Select a conversation to start</p>

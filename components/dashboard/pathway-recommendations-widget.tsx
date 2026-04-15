@@ -93,17 +93,17 @@ export function PathwayRecommendationsWidget() {
             const style = moveStyles[dir]
             return (
               <div key={rec.id} className="flex items-center gap-2.5 py-1.5 px-3 rounded-lg bg-muted/40">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 bg-primary">
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0 bg-primary">
                   {rec.initials}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium text-foreground truncate">{rec.student}</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{rec.subject} · {rec.reason}</p>
+                  <p className="text-[11px] text-muted-foreground truncate">{rec.subject} · {rec.reason}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <span className="text-[10px] text-muted-foreground">{rec.from.slice(0,4)}</span>
+                  <span className="text-[11px] text-muted-foreground">{rec.from.slice(0,4)}</span>
                   <ArrowRight className="w-3 h-3 text-muted-foreground" />
-                  <Badge variant="outline" className={`text-[10px] ${style}`}>{rec.to.slice(0,4)}</Badge>
+                  <Badge variant="outline" className={`text-[11px] ${style}`}>{rec.to.slice(0,4)}</Badge>
                 </div>
               </div>
             )

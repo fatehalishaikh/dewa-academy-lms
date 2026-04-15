@@ -83,7 +83,7 @@ export default function RiskIntervention() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-foreground">{factor.name}</p>
-                    <p className="text-[10px] text-muted-foreground">{factor.description}</p>
+                    <p className="text-[11px] text-muted-foreground">{factor.description}</p>
                   </div>
                   <span className="text-sm font-bold text-primary">{localWeights[factor.name] ?? factor.weight}%</span>
                 </div>
@@ -105,7 +105,7 @@ export default function RiskIntervention() {
                   <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: t.color }} />
                   <span className="text-xs text-foreground flex-1">{t.label}</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-muted-foreground">Score</span>
+                    <span className="text-[11px] text-muted-foreground">Score</span>
                     <span className="text-xs font-mono font-medium text-foreground bg-muted/40 px-2 py-0.5 rounded-md">
                       {t.range}
                     </span>
@@ -135,7 +135,7 @@ export default function RiskIntervention() {
                     className={`rounded-xl border px-4 ${styles.header}`}>
                     <AccordionTrigger className="py-3 text-xs font-semibold hover:no-underline">
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline" className={`text-[10px] ${styles.badge}`}>
+                        <Badge variant="outline" className={`text-[11px] ${styles.badge}`}>
                           {pb.label.split(' ')[0]}
                         </Badge>
                         <span>{pb.label}</span>
@@ -147,7 +147,7 @@ export default function RiskIntervention() {
                           const Icon = stepIcons[step.icon] ?? Bell
                           return (
                             <li key={i} className="flex items-start gap-2.5">
-                              <div className="w-5 h-5 rounded-full bg-background border border-border flex items-center justify-center text-[10px] font-semibold text-muted-foreground shrink-0 mt-0.5">
+                              <div className="w-5 h-5 rounded-full bg-background border border-border flex items-center justify-center text-[11px] font-semibold text-muted-foreground shrink-0 mt-0.5">
                                 {i + 1}
                               </div>
                               <div className="flex items-center gap-1.5 flex-1">

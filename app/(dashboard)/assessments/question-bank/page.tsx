@@ -124,9 +124,9 @@ export default function AssessmentsQuestionBank() {
         ].map(({ label, value, color }) => (
           <Card key={label} className="rounded-2xl border-border">
             <CardContent className="p-4">
-              <p className="text-[10px] text-muted-foreground">{label}</p>
+              <p className="text-[11px] text-muted-foreground">{label}</p>
               <p className="text-xl font-bold mt-0.5" style={{ color }}>{value}</p>
-              <p className="text-[10px] text-muted-foreground">{totalPoints} total pts</p>
+              <p className="text-[11px] text-muted-foreground">{totalPoints} total pts</p>
             </CardContent>
           </Card>
         ))}
@@ -182,21 +182,21 @@ export default function AssessmentsQuestionBank() {
           <CardContent className="pt-4 space-y-3">
             <div className="grid grid-cols-4 gap-3">
               <div className="col-span-2">
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Subject</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Subject</label>
                 <select value={form.subject} onChange={e => setF('subject', e.target.value)}
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50">
                   {SUBJECTS.slice(1).map(s => <option key={s}>{s}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Type</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Type</label>
                 <select value={form.questionType} onChange={e => setF('questionType', e.target.value as QuestionType)}
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50">
                   {QTYPES.slice(1).map(t => <option key={t}>{t}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Difficulty</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Difficulty</label>
                 <select value={form.difficulty} onChange={e => setF('difficulty', e.target.value as DifficultyLevel)}
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50">
                   {DIFFICULTIES.slice(1).map(d => <option key={d}>{d}</option>)}
@@ -205,30 +205,30 @@ export default function AssessmentsQuestionBank() {
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div className="col-span-2">
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic *</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Topic *</label>
                 <input type="text" value={form.topic} onChange={e => setF('topic', e.target.value)} placeholder="e.g. Quadratic Equations"
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Points</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Points</label>
                 <input type="number" value={form.points} onChange={e => setF('points', e.target.value)} min={1}
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50" />
               </div>
             </div>
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Question Text *</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Question Text *</label>
               <textarea value={form.text} onChange={e => setF('text', e.target.value)} rows={2} placeholder="Enter the question…"
                 className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs resize-none focus:outline-none focus:border-primary/50" />
             </div>
             {form.questionType === 'MCQ' && (
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Options (one per line)</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Options (one per line)</label>
                 <textarea value={form.options} onChange={e => setF('options', e.target.value)} rows={4} placeholder="Option A&#10;Option B&#10;Option C&#10;Option D"
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs resize-none font-mono focus:outline-none focus:border-primary/50" />
               </div>
             )}
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Correct Answer</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Correct Answer</label>
               <input type="text" value={form.correctAnswer} onChange={e => setF('correctAnswer', e.target.value)} placeholder="e.g. Option A or essay key points"
                 className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-primary/50" />
             </div>
@@ -255,13 +255,13 @@ export default function AssessmentsQuestionBank() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-muted/20">
-                <th className="text-left px-5 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Question</th>
-                <th className="text-left px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-28">Subject</th>
-                <th className="text-left px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Topic</th>
-                <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-20">Difficulty</th>
-                <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-24">Type</th>
-                <th className="text-left px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-36">Answer</th>
-                <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-16">Pts</th>
+                <th className="text-left px-5 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Question</th>
+                <th className="text-left px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-28">Subject</th>
+                <th className="text-left px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-32">Topic</th>
+                <th className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-20">Difficulty</th>
+                <th className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-24">Type</th>
+                <th className="text-left px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-36">Answer</th>
+                <th className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-16">Pts</th>
                 <th className="w-10" />
               </tr>
             </thead>
@@ -272,19 +272,19 @@ export default function AssessmentsQuestionBank() {
                     <p className="text-xs text-foreground line-clamp-2 max-w-xs">{q.text}</p>
                   </td>
                   <td className="px-3 py-3">
-                    <span className="text-[10px] text-muted-foreground">{q.subject}</span>
+                    <span className="text-[11px] text-muted-foreground">{q.subject}</span>
                   </td>
                   <td className="px-3 py-3">
-                    <span className="text-[10px] text-muted-foreground truncate block max-w-[120px]">{q.topic}</span>
+                    <span className="text-[11px] text-muted-foreground truncate block max-w-[120px]">{q.topic}</span>
                   </td>
                   <td className="px-3 py-3 text-center">
-                    <Badge variant="outline" className={`text-[9px] h-4 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
+                    <Badge variant="outline" className={`text-[11px] h-4 ${diffColor[q.difficulty]}`}>{q.difficulty}</Badge>
                   </td>
                   <td className="px-3 py-3 text-center">
-                    <Badge variant="outline" className="text-[9px] h-4">{q.questionType}</Badge>
+                    <Badge variant="outline" className="text-[11px] h-4">{q.questionType}</Badge>
                   </td>
                   <td className="px-3 py-3">
-                    <span className="text-[10px] text-emerald-400 block max-w-[130px] truncate" title={q.correctAnswer}>
+                    <span className="text-[11px] text-emerald-400 block max-w-[130px] truncate" title={q.correctAnswer}>
                       {q.correctAnswer || <span className="text-muted-foreground/50">—</span>}
                     </span>
                   </td>

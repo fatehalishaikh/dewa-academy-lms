@@ -132,7 +132,7 @@ export default function TeacherStudents() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-foreground">{value}</p>
-                    <p className="text-[10px] text-muted-foreground">{label}</p>
+                    <p className="text-[11px] text-muted-foreground">{label}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -182,21 +182,21 @@ export default function TeacherStudents() {
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-medium text-foreground">{stu.name}</p>
                       {stu.status === 'at-risk' && (
-                        <Badge variant="outline" className="text-[10px] h-4 border-red-500/30 text-red-400">At Risk</Badge>
+                        <Badge variant="outline" className="text-[11px] h-4 border-red-500/30 text-red-400">At Risk</Badge>
                       )}
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
                       {stu.gradeLevel} · {studentClasses.map(c => c.subject).join(', ')}
                     </p>
                   </div>
                   <div className="flex items-center gap-6 shrink-0">
                     <div className="text-center">
                       <p className={`text-sm font-bold ${gradeColor(stu.gpa)}`}>{stu.gpa.toFixed(1)}</p>
-                      <p className="text-[9px] text-muted-foreground">GPA</p>
+                      <p className="text-[11px] text-muted-foreground">GPA</p>
                     </div>
                     <div className="text-center">
                       <p className={`text-sm font-bold ${attendanceColor(stu.attendanceRate)}`}>{stu.attendanceRate}%</p>
-                      <p className="text-[9px] text-muted-foreground">Attend.</p>
+                      <p className="text-[11px] text-muted-foreground">Attend.</p>
                     </div>
                     <ArrowRight className="w-4 h-4 text-muted-foreground" />
                   </div>
@@ -225,7 +225,7 @@ export default function TeacherStudents() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-foreground">{riskCounts[key]}</p>
-                    <p className="text-[10px] text-muted-foreground">{label}</p>
+                    <p className="text-[11px] text-muted-foreground">{label}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -264,7 +264,7 @@ export default function TeacherStudents() {
                     <button
                       key={s}
                       onClick={() => setSortBy(s)}
-                      className={`px-2.5 py-1 rounded-lg text-[10px] font-medium border transition-colors ${sortBy === s ? 'border-primary/30 bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors ${sortBy === s ? 'border-primary/30 bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}
                     >
                       {s === 'risk' ? 'Risk Score' : s === 'gpa' ? 'GPA' : 'Attendance'}
                     </button>
@@ -275,7 +275,7 @@ export default function TeacherStudents() {
               {/* Table header */}
               <div className="grid grid-cols-[1fr_80px_80px_100px_60px_32px] gap-2 px-2 mb-1">
                 {['Student', 'GPA', 'Attend.', 'Risk Score', 'Trend', ''].map(h => (
-                  <p key={h} className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">{h}</p>
+                  <p key={h} className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{h}</p>
                 ))}
               </div>
 
@@ -292,7 +292,7 @@ export default function TeacherStudents() {
                       {/* Student */}
                       <div className="flex items-center gap-2 min-w-0">
                         <Avatar className="w-6 h-6 shrink-0">
-                          <AvatarFallback className="text-[9px] font-bold text-white" style={{ background: stu.avatarColor }}>
+                          <AvatarFallback className="text-[11px] font-bold text-white" style={{ background: stu.avatarColor }}>
                             {stu.initials}
                           </AvatarFallback>
                         </Avatar>
@@ -310,14 +310,14 @@ export default function TeacherStudents() {
                             style={{ width: `${stu.riskScore}%`, background: RISK_COLORS[stu.riskLevel] }}
                           />
                         </div>
-                        <span className={`text-[10px] font-bold w-6 text-right ${RISK_TEXT[stu.riskLevel]}`}>{stu.riskScore}</span>
+                        <span className={`text-[11px] font-bold w-6 text-right ${RISK_TEXT[stu.riskLevel]}`}>{stu.riskScore}</span>
                       </div>
                       {/* Trend */}
                       <div className="flex items-center gap-1">
                         <TrendIcon className={`w-3 h-3 ${trendColor}`} />
                         <Badge
                           variant="outline"
-                          className={`text-[9px] h-4 px-1.5 ${RISK_BORDER[stu.riskLevel]} ${RISK_TEXT[stu.riskLevel]}`}
+                          className={`text-[11px] h-4 px-1.5 ${RISK_BORDER[stu.riskLevel]} ${RISK_TEXT[stu.riskLevel]}`}
                         >
                           {stu.riskLevel}
                         </Badge>

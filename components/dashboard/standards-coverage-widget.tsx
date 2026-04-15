@@ -84,7 +84,7 @@ export function StandardsCoverageWidget() {
           </ResponsiveContainer>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-2xl font-bold text-foreground">74%</span>
-            <span className="text-[10px] text-muted-foreground">Covered</span>
+            <span className="text-[11px] text-muted-foreground">Covered</span>
           </div>
         </div>
 
@@ -104,15 +104,15 @@ export function StandardsCoverageWidget() {
             <div key={s.code} className="flex items-center gap-3 py-1.5 px-3 rounded-lg bg-muted/40">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-mono text-muted-foreground">{s.code}</span>
+                  <span className="text-[11px] font-mono text-muted-foreground">{s.code}</span>
                   <span className="text-xs font-medium text-foreground truncate">{s.name}</span>
                 </div>
                 <div className="mt-1 flex items-center gap-2">
                   <Progress value={s.coverage} className="h-1.5 flex-1" style={{ '--progress-background': coverageBarColor(s.status) } as React.CSSProperties} />
-                  <span className="text-[10px] text-muted-foreground w-8 text-right">{s.coverage}%</span>
+                  <span className="text-[11px] text-muted-foreground w-8 text-right">{s.coverage}%</span>
                 </div>
               </div>
-              <Badge variant="outline" className={`text-[10px] shrink-0 ${statusStyles[s.status]}`}>
+              <Badge variant="outline" className={`text-[11px] shrink-0 ${statusStyles[s.status]}`}>
                 {statusLabels[s.status]}
               </Badge>
             </div>

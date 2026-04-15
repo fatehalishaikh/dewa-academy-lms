@@ -56,7 +56,7 @@ export default function ReportsAttendance() {
             <CardContent className="p-4">
               <p className="text-xl font-bold" style={{ color }}>{value}</p>
               <p className="text-[11px] font-medium text-foreground mt-0.5">{label}</p>
-              <p className="text-[10px] text-muted-foreground">{sub}</p>
+              <p className="text-[11px] text-muted-foreground">{sub}</p>
             </CardContent>
           </Card>
         ))}
@@ -170,10 +170,10 @@ export default function ReportsAttendance() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border bg-muted/20">
-                  <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Month</th>
-                  <th className="px-4 py-2 text-center text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">Present</th>
-                  <th className="px-4 py-2 text-center text-[10px] font-semibold text-amber-400 uppercase tracking-wider">Late</th>
-                  <th className="px-4 py-2 text-center text-[10px] font-semibold text-red-400 uppercase tracking-wider">Absent</th>
+                  <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Month</th>
+                  <th className="px-4 py-2 text-center text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Present</th>
+                  <th className="px-4 py-2 text-center text-[11px] font-semibold text-amber-400 uppercase tracking-wider">Late</th>
+                  <th className="px-4 py-2 text-center text-[11px] font-semibold text-red-400 uppercase tracking-wider">Absent</th>
                 </tr>
               </thead>
               <tbody>
@@ -203,7 +203,7 @@ export default function ReportsAttendance() {
                 variant="outline"
                 onClick={handleAiAnalysis}
                 disabled={loading}
-                className="h-7 text-[10px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                className="h-7 text-[11px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
               >
                 {loading
                   ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Analyzing…</>
@@ -223,7 +223,7 @@ export default function ReportsAttendance() {
             )}
             {/* Change indicators legend */}
             {classAttendance.some(c => c.change !== 0) && (
-              <div className="pt-2 flex items-center gap-3 text-[10px] text-muted-foreground">
+              <div className="pt-2 flex items-center gap-3 text-[11px] text-muted-foreground">
                 <div className="flex items-center gap-1"><TrendingUp className="w-3 h-3 text-emerald-400" /> Improving</div>
                 <div className="flex items-center gap-1"><TrendingDown className="w-3 h-3 text-red-400" /> Declining</div>
                 <div className="flex items-center gap-1"><Minus className="w-3 h-3" /> No change</div>

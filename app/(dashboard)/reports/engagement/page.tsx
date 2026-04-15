@@ -57,7 +57,7 @@ export default function ReportsEngagement() {
             <CardContent className="p-4">
               <p className="text-xl font-bold" style={{ color }}>{value}</p>
               <p className="text-[11px] font-medium text-foreground mt-0.5">{label}</p>
-              <p className="text-[10px] text-muted-foreground">{sub}</p>
+              <p className="text-[11px] text-muted-foreground">{sub}</p>
             </CardContent>
           </Card>
         ))}
@@ -174,11 +174,11 @@ export default function ReportsEngagement() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border bg-muted/20">
-                  <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Student</th>
-                  <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Engage</th>
-                  <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Attend</th>
-                  <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">GPA</th>
-                  <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Risk</th>
+                  <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Student</th>
+                  <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Engage</th>
+                  <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Attend</th>
+                  <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">GPA</th>
+                  <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Risk</th>
                 </tr>
               </thead>
               <tbody>
@@ -191,7 +191,7 @@ export default function ReportsEngagement() {
                     <td className="px-4 py-2.5 text-center text-xs text-muted-foreground">{s.attendance}%</td>
                     <td className="px-4 py-2.5 text-center text-xs text-muted-foreground">{s.gpa}</td>
                     <td className="px-4 py-2.5 text-center">
-                      <Badge variant="outline" className={`text-[10px] h-5 ${riskBadge(s.riskLevel)}`}>
+                      <Badge variant="outline" className={`text-[11px] h-5 ${riskBadge(s.riskLevel)}`}>
                         {s.riskLevel}
                       </Badge>
                     </td>
@@ -215,7 +215,7 @@ export default function ReportsEngagement() {
                 variant="outline"
                 onClick={handleAiAnalysis}
                 disabled={loading}
-                className="h-7 text-[10px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                className="h-7 text-[11px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
               >
                 {loading
                   ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Analyzing…</>

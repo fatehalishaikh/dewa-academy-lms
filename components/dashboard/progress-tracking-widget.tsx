@@ -94,11 +94,11 @@ export function ProgressTrackingWidget() {
                 <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: cfg.color }} />
                 <div className="flex-1 min-w-0">
                   <p className="text-[11px] text-foreground truncate">{n.text}</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{n.student}</p>
+                  <p className="text-[11px] text-muted-foreground truncate">{n.student}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1 shrink-0">
-                  <Badge variant="outline" className={`text-[10px] ${cfg.badge}`}>{cfg.label}</Badge>
-                  <span className="text-[10px] text-muted-foreground">{n.timeAgo}</span>
+                  <Badge variant="outline" className={`text-[11px] ${cfg.badge}`}>{cfg.label}</Badge>
+                  <span className="text-[11px] text-muted-foreground">{n.timeAgo}</span>
                 </div>
               </div>
             )

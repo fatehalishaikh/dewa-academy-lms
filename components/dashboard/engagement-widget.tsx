@@ -84,7 +84,7 @@ export function EngagementWidget() {
                   <span className="text-[11px] font-semibold w-8 text-right" style={{ color: cfg.color }}>{s.score}%</span>
                 </div>
                 <TrendIcon trend={s.trend} />
-                <Badge variant="outline" className={`text-[10px] capitalize ${cfg.badge}`}>
+                <Badge variant="outline" className={`text-[11px] capitalize ${cfg.badge}`}>
                   {s.status === 'at-risk' ? 'At Risk' : s.status}
                 </Badge>
               </div>

@@ -15,12 +15,12 @@ const pendingApps = mockApplications.filter(a =>
 
 function VerificationBadge({ status }: { status: string }) {
   if (status === 'Verified')
-    return <Badge variant="outline" className="text-[9px] bg-green-500/10 text-green-400 border-green-500/20">Verified</Badge>
+    return <Badge variant="outline" className="text-[11px] bg-green-500/10 text-green-400 border-green-500/20">Verified</Badge>
   if (status === 'Flagged')
-    return <Badge variant="outline" className="text-[9px] bg-red-500/10 text-red-400 border-red-500/20">Flagged</Badge>
+    return <Badge variant="outline" className="text-[11px] bg-red-500/10 text-red-400 border-red-500/20">Flagged</Badge>
   if (status === 'Rejected')
-    return <Badge variant="outline" className="text-[9px] bg-red-500/10 text-red-400 border-red-500/20">Rejected</Badge>
-  return <Badge variant="outline" className="text-[9px] bg-amber-500/10 text-amber-400 border-amber-500/20">Pending</Badge>
+    return <Badge variant="outline" className="text-[11px] bg-red-500/10 text-red-400 border-red-500/20">Rejected</Badge>
+  return <Badge variant="outline" className="text-[11px] bg-amber-500/10 text-amber-400 border-amber-500/20">Pending</Badge>
 }
 
 function FieldStatusIcon({ matches }: { matches: boolean }) {
@@ -81,7 +81,7 @@ export default function DocumentVerification() {
         <div className="flex items-center gap-2">
           <ScanSearch className="w-4 h-4 text-primary" />
           <p className="text-xs font-semibold text-foreground">Pending Verification</p>
-          <Badge variant="outline" className="text-[9px] ml-auto">{pendingApps.length}</Badge>
+          <Badge variant="outline" className="text-[11px] ml-auto">{pendingApps.length}</Badge>
         </div>
         <ScrollArea className="flex-1">
           <div className="space-y-2 pr-1">
@@ -99,18 +99,18 @@ export default function DocumentVerification() {
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary shrink-0">{app.initials}</div>
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[11px] font-bold text-primary shrink-0">{app.initials}</div>
                     <div className="min-w-0">
                       <p className="text-xs font-medium text-foreground truncate">{app.nameEn}</p>
-                      <p className="text-[9px] text-muted-foreground">{app.id}</p>
+                      <p className="text-[11px] text-muted-foreground">{app.id}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
                     {flagged && <Flag className="w-3 h-3 text-red-400" />}
-                    <Badge variant="outline" className={`text-[9px] px-1 py-0 ${hasDoc ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-muted/40'}`}>
+                    <Badge variant="outline" className={`text-[11px] px-1 py-0 ${hasDoc ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-muted/40'}`}>
                       {app.documents.length} docs
                     </Badge>
-                    <span className="text-[9px] text-muted-foreground ml-auto">{app.stage === 'Emirates ID Verified' ? 'ID only' : 'In review'}</span>
+                    <span className="text-[11px] text-muted-foreground ml-auto">{app.stage === 'Emirates ID Verified' ? 'ID only' : 'In review'}</span>
                   </div>
                 </button>
               )
@@ -165,7 +165,7 @@ export default function DocumentVerification() {
                   ? 'AI Recommendation: Flag for Manual Review'
                   : 'AI Recommendation: Documents look consistent — approve'}
               </p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 {hasMismatch
                   ? 'Discrepancy detected between extracted data and application data. Review highlighted fields.'
                   : 'All extracted fields match application data within acceptable confidence range.'}
@@ -192,16 +192,16 @@ export default function DocumentVerification() {
                           <VerificationBadge status={doc.verificationStatus} />
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] text-muted-foreground">OCR: {doc.ocrConfidence}% confidence</span>
-                          <span className="text-[10px] text-muted-foreground">·</span>
-                          <span className="text-[10px] text-muted-foreground">{doc.uploadedDate}</span>
+                          <span className="text-[11px] text-muted-foreground">OCR: {doc.ocrConfidence}% confidence</span>
+                          <span className="text-[11px] text-muted-foreground">·</span>
+                          <span className="text-[11px] text-muted-foreground">{doc.uploadedDate}</span>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-1">
+                          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-1">
                             <ScanSearch className="w-3 h-3" />Extracted Data
                           </p>
                           {doc.extractedFields.map(f => (
@@ -210,24 +210,24 @@ export default function DocumentVerification() {
                             }`}>
                               <FieldStatusIcon matches={f.matchesApplication} />
                               <div className="min-w-0 flex-1">
-                                <p className="text-[9px] text-muted-foreground">{f.field}</p>
+                                <p className="text-[11px] text-muted-foreground">{f.field}</p>
                                 <p className="text-xs font-medium text-foreground truncate">{f.value}</p>
                               </div>
-                              <span className={`text-[9px] shrink-0 ${f.confidence >= 90 ? 'text-green-400' : f.confidence >= 80 ? 'text-amber-400' : 'text-red-400'}`}>
+                              <span className={`text-[11px] shrink-0 ${f.confidence >= 90 ? 'text-green-400' : f.confidence >= 80 ? 'text-amber-400' : 'text-red-400'}`}>
                                 {f.confidence}%
                               </span>
                             </div>
                           ))}
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Application Data</p>
+                          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Application Data</p>
                           {doc.extractedFields.map(f => (
                             <div key={f.field} className={`flex items-center gap-2 rounded-lg px-2.5 py-2 mb-1 ${
                               !f.matchesApplication ? 'bg-red-500/8 border border-red-500/20' : 'bg-muted/30'
                             }`}>
                               <FieldStatusIcon matches={f.matchesApplication} />
                               <div className="min-w-0 flex-1">
-                                <p className="text-[9px] text-muted-foreground">{f.field}</p>
+                                <p className="text-[11px] text-muted-foreground">{f.field}</p>
                                 <p className="text-xs font-medium text-foreground truncate">
                                   {f.matchesApplication ? f.value : <span className="text-red-400">Mismatch detected</span>}
                                 </p>
@@ -258,8 +258,8 @@ export default function DocumentVerification() {
                           : completed ? <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
                           : <Clock className="w-3.5 h-3.5 text-muted-foreground" />}
                         <span className="text-xs text-foreground flex-1">{document}</span>
-                        {required && <span className="text-[9px] text-muted-foreground">Required</span>}
-                        {f && <span className="text-[9px] text-red-400 font-medium">Flagged</span>}
+                        {required && <span className="text-[11px] text-muted-foreground">Required</span>}
+                        {f && <span className="text-[11px] text-red-400 font-medium">Flagged</span>}
                       </div>
                     ))}
                   </div>

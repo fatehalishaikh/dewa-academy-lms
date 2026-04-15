@@ -78,7 +78,7 @@ export function AutomatedGradingWidget() {
           </ResponsiveContainer>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-2xl font-bold text-foreground">{gradingSummary.autoGraded}%</span>
-            <span className="text-[10px] text-muted-foreground">Auto</span>
+            <span className="text-[11px] text-muted-foreground">Auto</span>
           </div>
         </div>
 
@@ -98,16 +98,16 @@ export function AutomatedGradingWidget() {
             <div key={g.student} className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-muted/40">
               <div className="flex items-center gap-2.5">
                 <Avatar className="w-7 h-7">
-                  <AvatarFallback className="text-[10px] font-semibold text-white bg-muted-foreground">{g.initials}</AvatarFallback>
+                  <AvatarFallback className="text-[11px] font-semibold text-white bg-muted-foreground">{g.initials}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="text-xs font-medium text-foreground">{g.student}</p>
-                  <p className="text-[10px] text-muted-foreground truncate max-w-[140px]">{g.assessment}</p>
+                  <p className="text-[11px] text-muted-foreground truncate max-w-[140px]">{g.assessment}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[11px] font-semibold" style={{ color: confidenceColor(g.confidence) }}>{g.confidence}%</span>
-                <Badge variant="outline" className={`text-[10px] ${statusStyles[g.status]}`}>
+                <Badge variant="outline" className={`text-[11px] ${statusStyles[g.status]}`}>
                   {statusLabels[g.status]}
                 </Badge>
               </div>

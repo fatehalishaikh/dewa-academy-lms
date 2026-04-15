@@ -113,7 +113,7 @@ export default function ParentReportsPage() {
       </div>
 
       {/* Controls */}
-      <Card className="rounded-[10px] border-border bg-card">
+      <Card className="rounded-xl border-border bg-card">
         <CardContent className="p-5">
           <div className="flex items-end gap-3 flex-wrap">
             {/* Child selector */}
@@ -155,7 +155,7 @@ export default function ParentReportsPage() {
 
       {/* Error */}
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-[10px] bg-red-500/10 border border-red-500/20">
+        <div className="flex items-center gap-2 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
           <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
           <p className="text-xs text-red-400">{error}</p>
         </div>
@@ -163,7 +163,7 @@ export default function ParentReportsPage() {
 
       {/* Report output */}
       {(reportText || isGenerating) && selectedChild && (
-        <Card className="rounded-[10px] border-primary/20 bg-card">
+        <Card className="rounded-xl border-primary/20 bg-card">
           <CardHeader className="pb-3 pt-5 px-5">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div>
@@ -176,12 +176,12 @@ export default function ParentReportsPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-[10px] h-5 border-primary/30 text-primary">
+                <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary">
                   <Bot className="w-2.5 h-2.5 mr-1" />
                   AI Generated
                 </Badge>
                 {isGenerating && (
-                  <Badge variant="outline" className="text-[10px] h-5 border-amber-500/30 text-amber-400">
+                  <Badge variant="outline" className="text-[11px] h-5 border-amber-500/30 text-amber-400">
                     <RefreshCw className="w-2.5 h-2.5 mr-1 animate-spin" />
                     Generating
                   </Badge>

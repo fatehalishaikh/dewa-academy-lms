@@ -97,7 +97,7 @@ export default function ReportsBuilder() {
                 variant="outline"
                 onClick={handleAiSuggest}
                 disabled={aiSuggesting}
-                className="h-7 text-[10px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                className="h-7 text-[11px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
               >
                 {aiSuggesting
                   ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Suggesting…</>
@@ -108,7 +108,7 @@ export default function ReportsBuilder() {
           <CardContent className="space-y-4 pt-4">
             {/* Report name */}
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Report Name</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Report Name</label>
               <input
                 type="text"
                 value={reportName}
@@ -120,13 +120,13 @@ export default function ReportsBuilder() {
 
             {/* Date range */}
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Date Range</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Date Range</label>
               <div className="flex flex-wrap gap-1.5">
                 {DATE_PRESETS.map(p => (
                   <button
                     key={p}
                     onClick={() => setDatePreset(p)}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-medium border transition-all ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all ${
                       datePreset === p
                         ? 'bg-primary/10 text-primary border-primary/30'
                         : 'border-border text-muted-foreground hover:border-border/70'
@@ -140,13 +140,13 @@ export default function ReportsBuilder() {
 
             {/* Metrics */}
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Metrics</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Metrics</label>
               <div className="flex flex-wrap gap-1.5">
                 {metrics.map(f => (
                   <button
                     key={f.id}
                     onClick={() => toggleField(f.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-medium border transition-all ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all ${
                       selectedFields.has(f.id)
                         ? 'bg-primary/10 text-primary border-primary/30'
                         : 'border-border text-muted-foreground hover:border-border/70'
@@ -160,13 +160,13 @@ export default function ReportsBuilder() {
 
             {/* Dimensions */}
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Dimensions</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Dimensions</label>
               <div className="flex flex-wrap gap-1.5">
                 {dimensions.map(f => (
                   <button
                     key={f.id}
                     onClick={() => toggleField(f.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-medium border transition-all ${
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all ${
                       selectedFields.has(f.id)
                         ? 'bg-violet-500/10 text-violet-400 border-violet-500/30'
                         : 'border-border text-muted-foreground hover:border-border/70'
@@ -180,7 +180,7 @@ export default function ReportsBuilder() {
 
             {/* Grade filter */}
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Grade Filter</label>
+              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">Grade Filter</label>
               <select
                 value={gradeFilter}
                 onChange={e => setGradeFilter(e.target.value)}
@@ -221,7 +221,7 @@ export default function ReportsBuilder() {
           </CardHeader>
           <CardContent className="pt-3">
             {exported && (
-              <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-400 gap-1 mb-3">
+              <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-400 gap-1 mb-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
                 {exported} download started
               </Badge>
@@ -238,7 +238,7 @@ export default function ReportsBuilder() {
             )}
             {!generating && showPreview && (
               <div className="overflow-x-auto">
-                <table className="w-full text-[10px]">
+                <table className="w-full text-[11px]">
                   <thead>
                     <tr className="border-b border-border">
                       {Array.from(selectedFields).map(id => (
@@ -266,7 +266,7 @@ export default function ReportsBuilder() {
                     ))}
                   </tbody>
                 </table>
-                <p className="text-[10px] text-muted-foreground mt-2">Showing 6 of {PREVIEW_ROWS.length} rows (preview)</p>
+                <p className="text-[11px] text-muted-foreground mt-2">Showing 6 of {PREVIEW_ROWS.length} rows (preview)</p>
               </div>
             )}
           </CardContent>
@@ -285,11 +285,11 @@ export default function ReportsBuilder() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-muted/20">
-                <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
-                <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Created</th>
-                <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Fields</th>
-                <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Schedule</th>
-                <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
+                <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
+                <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Created</th>
+                <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Fields</th>
+                <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Schedule</th>
+                <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -300,23 +300,23 @@ export default function ReportsBuilder() {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
                       {r.fields.slice(0, 3).map(fid => (
-                        <Badge key={fid} variant="outline" className="text-[9px] h-4 px-1.5">
+                        <Badge key={fid} variant="outline" className="text-[11px] h-4 px-1.5">
                           {reportFields.find(f => f.id === fid)?.label ?? fid}
                         </Badge>
                       ))}
                       {r.fields.length > 3 && (
-                        <Badge variant="outline" className="text-[9px] h-4 px-1.5 text-muted-foreground">+{r.fields.length - 3}</Badge>
+                        <Badge variant="outline" className="text-[11px] h-4 px-1.5 text-muted-foreground">+{r.fields.length - 3}</Badge>
                       )}
                     </div>
                   </td>
                   <td className="px-4 py-3">
                     {r.schedule
-                      ? <Badge variant="outline" className="text-[10px] border-primary/30 text-primary">{r.schedule}</Badge>
+                      ? <Badge variant="outline" className="text-[11px] border-primary/30 text-primary">{r.schedule}</Badge>
                       : <span className="text-[11px] text-muted-foreground">One-time</span>}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <Button size="sm" variant="outline" className="h-6 text-[10px] gap-1" onClick={() => setShowPreview(true)}>
+                      <Button size="sm" variant="outline" className="h-6 text-[11px] gap-1" onClick={() => setShowPreview(true)}>
                         <Play className="w-2.5 h-2.5" /> Run
                       </Button>
                       <button

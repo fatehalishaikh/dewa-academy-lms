@@ -71,12 +71,12 @@ export default function CurationRules() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs font-medium text-foreground truncate">{rule.name}</p>
-                  <Badge variant="outline" className={`text-[10px] shrink-0 ${statusStyles[rule.status]}`}>
+                  <Badge variant="outline" className={`text-[11px] shrink-0 ${statusStyles[rule.status]}`}>
                     {rule.status}
                   </Badge>
                 </div>
                 <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">{rule.preview}</p>
-                <p className="text-[10px] text-muted-foreground/60">{rule.affectedStudents} students affected</p>
+                <p className="text-[11px] text-muted-foreground/60">{rule.affectedStudents} students affected</p>
               </button>
             ))}
             <Button size="sm" variant="outline" className="rounded-full w-full text-xs gap-1 mt-1">
@@ -125,7 +125,7 @@ export default function CurationRules() {
                 className="text-xs rounded-xl min-h-[90px] resize-none font-mono leading-relaxed"
                 placeholder="Write a plain-English instruction for Curative AI…"
               />
-              <p className="text-[10px] text-muted-foreground mt-1">
+              <p className="text-[11px] text-muted-foreground mt-1">
                 Use variables: {'{'} student.learning_style {'}'}, {'{'} course.current_score {'}'}, {'{'} student.grade_level {'}'}
               </p>
             </div>

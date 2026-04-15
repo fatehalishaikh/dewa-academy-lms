@@ -78,11 +78,11 @@ export default function ClassActivitiesEngagement() {
         </div>
         <div className="ml-auto flex items-center gap-3">
           <div className="text-right">
-            <p className="text-[10px] text-muted-foreground">Class Avg</p>
+            <p className="text-[11px] text-muted-foreground">Class Avg</p>
             <p className={`text-lg font-bold ${classAvg >= 75 ? 'text-emerald-400' : classAvg >= 55 ? 'text-amber-400' : 'text-red-400'}`}>{classAvg}%</p>
           </div>
           {flaggedCount > 0 && (
-            <Badge variant="outline" className="text-[10px] border-red-500/30 text-red-400 gap-1">
+            <Badge variant="outline" className="text-[11px] border-red-500/30 text-red-400 gap-1">
               <AlertTriangle className="w-2.5 h-2.5" />
               {flaggedCount} flagged
             </Badge>
@@ -131,7 +131,7 @@ export default function ClassActivitiesEngagement() {
                         size="sm"
                         variant="outline"
                         onClick={() => { setAddingNote(isAdding ? null : stu.id); setNoteText(''); setNoteType('positive') }}
-                        className="h-7 text-[10px] gap-1"
+                        className="h-7 text-[11px] gap-1"
                       >
                         <Plus className="w-3 h-3" /> Note
                       </Button>
@@ -139,7 +139,7 @@ export default function ClassActivitiesEngagement() {
                         size="sm"
                         variant="outline"
                         onClick={() => toggleFlag(stu.id)}
-                        className={`h-7 text-[10px] gap-1 ${eng.flagged ? 'border-red-500/30 text-red-400 bg-red-500/10' : ''}`}
+                        className={`h-7 text-[11px] gap-1 ${eng.flagged ? 'border-red-500/30 text-red-400 bg-red-500/10' : ''}`}
                       >
                         <AlertTriangle className="w-3 h-3" />
                         {eng.flagged ? 'Flagged' : 'Flag'}
@@ -151,7 +151,7 @@ export default function ClassActivitiesEngagement() {
                   {eng.notes.length > 0 && (
                     <div className="pl-11 flex flex-wrap gap-1.5">
                       {eng.notes.map((note, i) => (
-                        <span key={i} className={`text-[10px] px-2 py-0.5 rounded-full ${
+                        <span key={i} className={`text-[11px] px-2 py-0.5 rounded-full ${
                           note.type === 'positive' ? 'bg-emerald-500/10 text-emerald-400' :
                           note.type === 'concern'  ? 'bg-red-500/10 text-red-400' :
                           'bg-muted text-muted-foreground'

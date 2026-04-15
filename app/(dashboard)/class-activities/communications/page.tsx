@@ -128,13 +128,13 @@ export default function ClassActivitiesCommunications() {
         <CardContent className="pt-4 space-y-4">
           {/* Templates */}
           <div>
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Templates</p>
+            <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Templates</p>
             <div className="flex flex-wrap gap-2">
               {TEMPLATES.map(t => (
                 <button
                   key={t.label}
                   onClick={() => applyTemplate(t.body, t.label)}
-                  className="text-[10px] px-2.5 py-1 rounded-full border border-primary/20 text-primary hover:bg-primary/10 transition-colors"
+                  className="text-[11px] px-2.5 py-1 rounded-full border border-primary/20 text-primary hover:bg-primary/10 transition-colors"
                 >
                   {t.label}
                 </button>
@@ -144,7 +144,7 @@ export default function ClassActivitiesCommunications() {
 
           {/* Audience */}
           <div>
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Send to</p>
+            <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Send to</p>
             <div className="flex items-center gap-2 flex-wrap">
               {([
                 { value: 'class' as const,      label: 'Specific Class', icon: Users  },
@@ -178,7 +178,7 @@ export default function ClassActivitiesCommunications() {
 
           {/* Title */}
           <div>
-            <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Subject *</label>
+            <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Subject *</label>
             <input
               type="text"
               value={title}
@@ -190,7 +190,7 @@ export default function ClassActivitiesCommunications() {
 
           {/* Body */}
           <div>
-            <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Message *</label>
+            <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Message *</label>
             <textarea
               value={body}
               onChange={e => setBody(e.target.value)}
@@ -237,20 +237,20 @@ export default function ClassActivitiesCommunications() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
                     <p className="text-sm font-medium text-foreground truncate">{msg.title}</p>
-                    <Badge variant="outline" className={`text-[10px] h-4 shrink-0 ${msg.status === 'sent' ? 'border-emerald-500/30 text-emerald-400' : 'border-amber-500/30 text-amber-400'}`}>
+                    <Badge variant="outline" className={`text-[11px] h-4 shrink-0 ${msg.status === 'sent' ? 'border-emerald-500/30 text-emerald-400' : 'border-amber-500/30 text-amber-400'}`}>
                       {msg.status === 'sent' ? 'Sent' : 'Scheduled'}
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground line-clamp-1">{msg.body}</p>
                   <div className="flex items-center gap-3 mt-1">
-                    <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                       <Avatar className="w-3 h-3 inline-block">
                         <AvatarFallback className="text-[6px] bg-primary/20 text-primary">→</AvatarFallback>
                       </Avatar>
                       {msg.audienceLabel}
                     </span>
-                    <span className="text-[10px] text-muted-foreground">{msg.recipients} recipients</span>
-                    <span className="text-[10px] text-muted-foreground ml-auto">
+                    <span className="text-[11px] text-muted-foreground">{msg.recipients} recipients</span>
+                    <span className="text-[11px] text-muted-foreground ml-auto">
                       {new Date(msg.sentAt).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })} at {new Date(msg.sentAt).toLocaleTimeString('en-AE', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>

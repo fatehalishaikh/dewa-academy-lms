@@ -203,11 +203,11 @@ export default function ContentManagement() {
                     <TableRow key={item.id} className="hover:bg-muted/20">
                       <TableCell className="text-xs font-medium py-2.5 max-w-48 truncate">{item.title}</TableCell>
                       <TableCell className="py-2.5">
-                        <Badge variant="outline" className={`text-[10px] ${typeStyles[item.type]}`}>{item.type}</Badge>
+                        <Badge variant="outline" className={`text-[11px] ${typeStyles[item.type]}`}>{item.type}</Badge>
                       </TableCell>
                       <TableCell className="text-xs text-muted-foreground py-2.5">{item.subject}</TableCell>
                       <TableCell className="py-2.5">
-                        <Badge variant="outline" className="text-[10px]"
+                        <Badge variant="outline" className="text-[11px]"
                           style={{ color: levelColor, borderColor: `${levelColor}30`, background: `${levelColor}10` }}>
                           {item.level}
                         </Badge>
@@ -215,17 +215,17 @@ export default function ContentManagement() {
                       <TableCell className="py-2.5">
                         <div className="flex flex-wrap gap-1 max-w-32">
                           {item.tags.slice(0, 2).map(tag => (
-                            <span key={tag} className="text-[10px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-md">
+                            <span key={tag} className="text-[11px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-md">
                               {tag}
                             </span>
                           ))}
                           {item.tags.length > 2 && (
-                            <span className="text-[10px] text-muted-foreground">+{item.tags.length - 2}</span>
+                            <span className="text-[11px] text-muted-foreground">+{item.tags.length - 2}</span>
                           )}
                         </div>
                       </TableCell>
                       <TableCell className="py-2.5">
-                        <Badge variant="outline" className={`text-[10px] ${statusStyles[item.status]}`}>
+                        <Badge variant="outline" className={`text-[11px] ${statusStyles[item.status]}`}>
                           {item.status}
                         </Badge>
                       </TableCell>
@@ -278,14 +278,14 @@ export default function ContentManagement() {
               <div className="space-y-2">
                 <p className="text-sm font-medium text-foreground">{previewItem.title}</p>
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline" className={`text-[10px] ${typeStyles[previewItem.type]}`}>{previewItem.type}</Badge>
-                  <Badge variant="outline" className={`text-[10px] ${statusStyles[previewItem.status]}`}>{previewItem.status}</Badge>
-                  <Badge variant="outline" className="text-[10px]">{previewItem.subject}</Badge>
-                  <Badge variant="outline" className="text-[10px]">{previewItem.level}</Badge>
+                  <Badge variant="outline" className={`text-[11px] ${typeStyles[previewItem.type]}`}>{previewItem.type}</Badge>
+                  <Badge variant="outline" className={`text-[11px] ${statusStyles[previewItem.status]}`}>{previewItem.status}</Badge>
+                  <Badge variant="outline" className="text-[11px]">{previewItem.subject}</Badge>
+                  <Badge variant="outline" className="text-[11px]">{previewItem.level}</Badge>
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {previewItem.tags.map(tag => (
-                    <span key={tag} className="text-[10px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-md">{tag}</span>
+                    <span key={tag} className="text-[11px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-md">{tag}</span>
                   ))}
                 </div>
               </div>

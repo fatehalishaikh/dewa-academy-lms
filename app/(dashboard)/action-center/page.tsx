@@ -62,7 +62,7 @@ export default function ActionCenterPage() {
               </div>
             </div>
             <p className="text-2xl font-bold text-foreground">{items.length}</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">open item{items.length === 1 ? '' : 's'}</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">open item{items.length === 1 ? '' : 's'}</p>
           </CardContent>
         </Card>
         <Card className="rounded-2xl border-border">
@@ -74,7 +74,7 @@ export default function ActionCenterPage() {
               </div>
             </div>
             <p className="text-2xl font-bold text-foreground">{highItems.length}</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">need quick action</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">need quick action</p>
           </CardContent>
         </Card>
         <Card className="rounded-2xl border-border">
@@ -86,7 +86,7 @@ export default function ActionCenterPage() {
               </div>
             </div>
             <p className="text-2xl font-bold text-foreground">{normalItems.length}</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">when you have time</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">when you have time</p>
           </CardContent>
         </Card>
       </div>
@@ -151,13 +151,13 @@ function InboxRow({ item }: { item: InboxItem }) {
       />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 mb-0.5">
-          <Badge variant="outline" className="text-[9px] h-4 px-1.5 border-border text-muted-foreground">
+          <Badge variant="outline" className="text-[11px] h-4 px-1.5 border-border text-muted-foreground">
             {TYPE_LABEL[item.type] ?? item.type}
           </Badge>
         </div>
         <p className="text-xs font-medium text-foreground truncate">{item.title}</p>
         {item.count !== undefined && (
-          <p className="text-[10px] text-muted-foreground">{item.count} item{item.count !== 1 ? 's' : ''}</p>
+          <p className="text-[11px] text-muted-foreground">{item.count} item{item.count !== 1 ? 's' : ''}</p>
         )}
       </div>
       <ChevronRight className="w-4 h-4 text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity shrink-0" />

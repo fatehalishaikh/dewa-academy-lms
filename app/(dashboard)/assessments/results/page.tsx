@@ -80,7 +80,7 @@ export default function AssessmentsResults() {
         </div>
         <div className="flex items-center gap-2">
           {exported && (
-            <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-400 gap-1">
+            <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-400 gap-1">
               <CheckCircle2 className="w-2.5 h-2.5" /> Exported!
             </Badge>
           )}
@@ -100,9 +100,9 @@ export default function AssessmentsResults() {
         ].map(({ label, value, sub }) => (
           <Card key={label} className="rounded-2xl border-border">
             <CardContent className="p-4">
-              <p className="text-[10px] text-muted-foreground">{label}</p>
+              <p className="text-[11px] text-muted-foreground">{label}</p>
               <p className="text-xl font-bold text-foreground mt-0.5">{value}</p>
-              <p className="text-[10px] text-muted-foreground">{sub}</p>
+              <p className="text-[11px] text-muted-foreground">{sub}</p>
             </CardContent>
           </Card>
         ))}
@@ -151,12 +151,12 @@ export default function AssessmentsResults() {
             <table className="w-full">
               <thead>
                 <tr className="bg-muted/20 border-b border-border">
-                  <th className="text-left px-5 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Student</th>
-                  <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Score</th>
-                  <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">%</th>
-                  <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Grade</th>
-                  <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
-                  <th className="text-left px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Feedback</th>
+                  <th className="text-left px-5 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Student</th>
+                  <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Score</th>
+                  <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">%</th>
+                  <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Grade</th>
+                  <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                  <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Feedback</th>
                   <th className="w-24" />
                 </tr>
               </thead>
@@ -175,7 +175,7 @@ export default function AssessmentsResults() {
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-2">
                           <Avatar className="w-6 h-6 shrink-0">
-                            <AvatarFallback className="text-[9px] font-bold text-white" style={{ background: student.avatarColor }}>
+                            <AvatarFallback className="text-[11px] font-bold text-white" style={{ background: student.avatarColor }}>
                               {student.initials}
                             </AvatarFallback>
                           </Avatar>
@@ -192,14 +192,14 @@ export default function AssessmentsResults() {
                         <span className="text-sm font-bold" style={{ color: gradeColor[letter] }}>{letter}</span>
                       </td>
                       <td className="px-3 py-3 text-center">
-                        <Badge variant="outline" className={`text-[9px] h-4 ${passed ? 'border-emerald-500/30 text-emerald-400' : 'border-red-500/30 text-red-400'}`}>
+                        <Badge variant="outline" className={`text-[11px] h-4 ${passed ? 'border-emerald-500/30 text-emerald-400' : 'border-red-500/30 text-red-400'}`}>
                           {passed ? 'Pass' : 'Fail'}
                         </Badge>
                       </td>
                       <td className="px-3 py-3">
                         {hasFeedback
-                          ? <p className="text-[10px] text-muted-foreground line-clamp-2">{generatedFeedback[sub.studentId] ?? sub.feedback}</p>
-                          : <span className="text-[10px] text-muted-foreground">—</span>
+                          ? <p className="text-[11px] text-muted-foreground line-clamp-2">{generatedFeedback[sub.studentId] ?? sub.feedback}</p>
+                          : <span className="text-[11px] text-muted-foreground">—</span>
                         }
                       </td>
                       <td className="px-3 py-3 text-center">
@@ -209,7 +209,7 @@ export default function AssessmentsResults() {
                             variant="outline"
                             onClick={() => handleGenerateFeedback(sub.studentId)}
                             disabled={isGenerating}
-                            className="h-6 text-[10px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                            className="h-6 text-[11px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
                           >
                             {isGenerating
                               ? <span className="w-2.5 h-2.5 rounded-full border-2 border-primary border-t-transparent animate-spin" />

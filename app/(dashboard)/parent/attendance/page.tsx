@@ -184,14 +184,14 @@ export default function ParentAttendance() {
             <button
               key={child.id}
               onClick={() => handleChildSwitch(i)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-[10px] border text-xs font-medium transition-all ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all ${
                 selectedIdx === i
                   ? 'border-primary/30 bg-primary/10 text-primary'
                   : 'border-border text-muted-foreground hover:text-foreground'
               }`}
             >
               <div
-                className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0"
+                className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0"
                 style={{ background: child.avatarColor }}
               >
                 {child.initials}
@@ -210,10 +210,10 @@ export default function ParentAttendance() {
           { label: 'Absent',          value: absentDays,                                                              color: '#EF4444', icon: XCircle      },
           { label: 'Late',            value: lateDays,                                                                color: '#F59E0B', icon: Clock        },
         ].map(({ label, value, color, icon: Icon }) => (
-          <Card key={label} className="rounded-[10px] border-border py-0 gap-0">
+          <Card key={label} className="rounded-xl border-border py-0 gap-0">
             <CardContent className="px-3 py-2">
               <div className="flex items-center justify-between mb-1">
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
                 <div className="w-5 h-5 rounded-lg flex items-center justify-center" style={{ background: `${color}20` }}>
                   <Icon className="w-3 h-3" style={{ color }} />
                 </div>
@@ -235,7 +235,7 @@ export default function ParentAttendance() {
       </div>
 
       {/* Calendar — Mon-first, 7-column */}
-      <Card className="rounded-[10px] border-border">
+      <Card className="rounded-xl border-border">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm flex items-center gap-2">
@@ -274,7 +274,7 @@ export default function ParentAttendance() {
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
               <p
                 key={d}
-                className={`text-[10px] font-semibold text-center ${
+                className={`text-[11px] font-semibold text-center ${
                   d === 'Sat' || d === 'Sun' ? 'text-muted-foreground/30' : 'text-muted-foreground'
                 }`}
               >
@@ -292,16 +292,16 @@ export default function ParentAttendance() {
 
                   if (cell.isWeekend) {
                     return (
-                      <div key={di} className="aspect-square rounded-[10px] flex flex-col items-center justify-center border border-border/20 bg-muted/10">
-                        <p className="text-[10px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
+                      <div key={di} className="aspect-square rounded-xl flex flex-col items-center justify-center border border-border/20 bg-muted/10">
+                        <p className="text-[11px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
                       </div>
                     )
                   }
 
                   if (!cell.record) {
                     return (
-                      <div key={di} className="aspect-square rounded-[10px] border border-border/20 flex flex-col items-center justify-center">
-                        <p className="text-[10px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
+                      <div key={di} className="aspect-square rounded-xl border border-border/20 flex flex-col items-center justify-center">
+                        <p className="text-[11px] font-semibold text-muted-foreground/30 leading-none">{cell.date.getDate()}</p>
                       </div>
                     )
                   }
@@ -310,7 +310,7 @@ export default function ParentAttendance() {
                   return (
                     <div
                       key={di}
-                      className={`aspect-square rounded-[10px] flex flex-col items-center justify-center gap-1 border ${
+                      className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-1 border ${
                         cell.record.status === 'present' ? 'border-emerald-500/20 bg-emerald-500/5' :
                         cell.record.status === 'absent'  ? 'border-red-500/20 bg-red-500/5' :
                         cell.record.status === 'late'    ? 'border-amber-500/20 bg-amber-500/5' :
@@ -318,7 +318,7 @@ export default function ParentAttendance() {
                       }`}
                       title={`${cell.date.toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })} — ${cfg.label}`}
                     >
-                      <p className="text-[10px] font-semibold text-muted-foreground leading-none">{cell.date.getDate()}</p>
+                      <p className="text-[11px] font-semibold text-muted-foreground leading-none">{cell.date.getDate()}</p>
                       <div className={`w-2 h-2 rounded-full ${cfg.dot}`} />
                     </div>
                   )
@@ -331,7 +331,7 @@ export default function ParentAttendance() {
 
       {/* Notable events */}
       {notable.length > 0 && (
-        <Card className="rounded-[10px] border-border">
+        <Card className="rounded-xl border-border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">
               Notable Events{multiChild && selectedChild ? ` — ${selectedChild.name.split(' ')[0]}` : ''}
@@ -342,15 +342,15 @@ export default function ParentAttendance() {
               const cfg  = statusConfig[rec.status]
               const Icon = cfg.icon
               return (
-                <div key={i} className="flex items-center gap-3 p-2.5 rounded-[10px] bg-card border border-border">
+                <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl bg-card border border-border">
                   <Icon className={`w-4 h-4 shrink-0 ${cfg.color}`} />
                   <div className="flex-1">
                     <p className="text-xs font-medium text-foreground">
                       {rec.date.toLocaleDateString('en-AE', { weekday: 'short', day: 'numeric', month: 'short' })}
                     </p>
-                    <p className="text-[10px] text-muted-foreground">{rec.note ?? cfg.label}</p>
+                    <p className="text-[11px] text-muted-foreground">{rec.note ?? cfg.label}</p>
                   </div>
-                  <Badge variant="outline" className={`text-[10px] h-5 ${cfg.color}`}>{cfg.label}</Badge>
+                  <Badge variant="outline" className={`text-[11px] h-5 ${cfg.color}`}>{cfg.label}</Badge>
                 </div>
               )
             })}

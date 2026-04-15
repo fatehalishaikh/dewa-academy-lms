@@ -129,7 +129,7 @@ export default function TeacherDashboard() {
                 </div>
               </div>
               <p className="text-2xl font-bold text-foreground">{value}</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">{sub}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{sub}</p>
             </CardContent>
           </Card>
         ))}
@@ -160,9 +160,9 @@ export default function TeacherDashboard() {
                 <div className="w-1 h-10 rounded-full bg-primary shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs font-medium text-foreground truncate">{cls.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{cls.slot.time} · {cls.slot.room}</p>
+                  <p className="text-[11px] text-muted-foreground">{cls.slot.time} · {cls.slot.room}</p>
                 </div>
-                <Badge variant="secondary" className="ml-auto text-[10px] shrink-0">{cls.studentIds.length} students</Badge>
+                <Badge variant="secondary" className="ml-auto text-[11px] shrink-0">{cls.studentIds.length} students</Badge>
               </div>
             ))}
           </CardContent>
@@ -189,16 +189,16 @@ export default function TeacherDashboard() {
                 <div key={cls.id} className="flex items-center gap-4">
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-medium text-foreground truncate">{cls.name}</p>
-                    <p className="text-[10px] text-muted-foreground">{cls.studentIds.length} students</p>
+                    <p className="text-[11px] text-muted-foreground">{cls.studentIds.length} students</p>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     <div className="text-right">
-                      <p className="text-[10px] text-muted-foreground">Avg Score</p>
+                      <p className="text-[11px] text-muted-foreground">Avg Score</p>
                       <p className="text-xs font-semibold" style={{ color: scoreColor }}>{cls.averageGrade}%</p>
                     </div>
                     <div className="w-px h-8 bg-border" />
                     <div className="text-right">
-                      <p className="text-[10px] text-muted-foreground">Attendance</p>
+                      <p className="text-[11px] text-muted-foreground">Attendance</p>
                       <p className="text-xs font-semibold" style={{ color: attColor }}>{cls.attendanceRate}%</p>
                     </div>
                     <div className="w-20 h-1.5 rounded-full bg-muted overflow-hidden">
@@ -228,16 +228,16 @@ export default function TeacherDashboard() {
             {pendingSubmissions.map((sub, i) => (
               <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl bg-muted/40">
                 <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0"
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0"
                   style={{ background: sub.color }}
                 >
                   {sub.initials}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-medium text-foreground truncate">{sub.student}</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{sub.assignment} · {sub.class}</p>
+                  <p className="text-[11px] text-muted-foreground truncate">{sub.assignment} · {sub.class}</p>
                 </div>
-                <span className="text-[10px] text-muted-foreground shrink-0">{sub.submitted}</span>
+                <span className="text-[11px] text-muted-foreground shrink-0">{sub.submitted}</span>
               </div>
             ))}
           </CardContent>
@@ -261,9 +261,9 @@ export default function TeacherDashboard() {
               <div key={i} className="p-2.5 rounded-xl bg-muted/40 space-y-1">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs font-medium text-foreground truncate">{lesson.title}</p>
-                  <Badge variant="outline" className="text-[10px] shrink-0">{lesson.date}</Badge>
+                  <Badge variant="outline" className="text-[11px] shrink-0">{lesson.date}</Badge>
                 </div>
-                <p className="text-[10px] text-muted-foreground">{lesson.class} · {lesson.topic}</p>
+                <p className="text-[11px] text-muted-foreground">{lesson.class} · {lesson.topic}</p>
               </div>
             ))}
           </CardContent>

@@ -78,9 +78,9 @@ function Step1({ onNext }: { onNext: () => void }) {
             <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
             <div className="flex-1">
               <p className="text-xs font-semibold text-green-400">Emirates ID extracted successfully</p>
-              <p className="text-[10px] text-green-400/70">ICP UAE verification • Overall confidence: {extractedId.overallConfidence}%</p>
+              <p className="text-[11px] text-green-400/70">ICP UAE verification • Overall confidence: {extractedId.overallConfidence}%</p>
             </div>
-            <Badge className="text-[10px] bg-green-500/15 text-green-400 border-green-500/20 border">AI Verified</Badge>
+            <Badge className="text-[11px] bg-green-500/15 text-green-400 border-green-500/20 border">AI Verified</Badge>
           </div>
 
           {/* Extracted fields */}
@@ -103,11 +103,11 @@ function Step1({ onNext }: { onNext: () => void }) {
                   { label: 'ID Expiry Date', value: extractedId.expiryDate, conf: 99 },
                 ].map(({ label, value, conf }) => (
                   <div key={label} className="bg-card rounded-lg px-3 py-2 space-y-0.5">
-                    <p className="text-[9px] text-muted-foreground uppercase tracking-wider">{label}</p>
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{label}</p>
                     <p className="text-xs font-medium text-foreground">{value}</p>
                     <div className="flex items-center gap-1">
                       <CheckCircle2 className="w-2.5 h-2.5 text-green-400" />
-                      <span className="text-[9px] text-green-400">{conf}% confidence</span>
+                      <span className="text-[11px] text-green-400">{conf}% confidence</span>
                     </div>
                   </div>
                 ))}
@@ -164,7 +164,7 @@ function Step2({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
               }`}
             >
               <p className="text-xs font-semibold">{t.label}</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">{t.desc}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{t.desc}</p>
             </button>
           ))}
         </div>
@@ -300,9 +300,9 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-medium text-foreground">{name}</span>
-                  {required && <Badge variant="outline" className="text-[9px] px-1.5 py-0">Required</Badge>}
+                  {required && <Badge variant="outline" className="text-[11px] px-1.5 py-0">Required</Badge>}
                 </div>
-                <p className="text-[10px] text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground">
                   {isProcessing ? 'AI extracting fields…'
                     : isUploaded && conf ? `Verified · ${conf}% confidence`
                     : isUploaded ? 'Pre-filled from Emirates ID scan'
@@ -315,7 +315,7 @@ function Step3({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
                 </Button>
               )}
               {isUploaded && conf && (
-                <span className="text-[10px] text-green-400 font-semibold shrink-0">{conf}%</span>
+                <span className="text-[11px] text-green-400 font-semibold shrink-0">{conf}%</span>
               )}
             </div>
           )
@@ -345,11 +345,11 @@ function Step4({ onBack, onSubmit }: { onBack: () => void; onSubmit: () => void 
         <Sparkles className="w-5 h-5 text-primary shrink-0" />
         <div className="flex-1">
           <p className="text-xs font-semibold text-primary">Estimated AI Eligibility Score</p>
-          <p className="text-[10px] text-muted-foreground">Based on submitted documents and Emirates ID data</p>
+          <p className="text-[11px] text-muted-foreground">Based on submitted documents and Emirates ID data</p>
         </div>
         <div className="text-right">
           <p className="text-2xl font-bold text-primary">87</p>
-          <p className="text-[9px] text-green-400">Likely: Admit</p>
+          <p className="text-[11px] text-green-400">Likely: Admit</p>
         </div>
       </div>
 
@@ -387,7 +387,7 @@ function Step4({ onBack, onSubmit }: { onBack: () => void; onSubmit: () => void 
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {['Emirates ID', 'Passport', 'Birth Certificate', 'Academic Transcript'].map(d => (
-                <Badge key={d} variant="outline" className="text-[10px] bg-green-500/10 text-green-400 border-green-500/20 gap-1">
+                <Badge key={d} variant="outline" className="text-[11px] bg-green-500/10 text-green-400 border-green-500/20 gap-1">
                   <CheckCircle2 className="w-2.5 h-2.5" />{d}
                 </Badge>
               ))}
@@ -468,7 +468,7 @@ export default function NewApplication() {
               }`}>
                 {i < step ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-3.5 h-3.5" />}
               </div>
-              <span className={`text-[9px] font-medium whitespace-nowrap ${i === step ? 'text-primary' : 'text-muted-foreground'}`}>{label}</span>
+              <span className={`text-[11px] font-medium whitespace-nowrap ${i === step ? 'text-primary' : 'text-muted-foreground'}`}>{label}</span>
             </div>
             {i < STEPS.length - 1 && (
               <div className={`flex-1 h-0.5 mx-2 mb-4 transition-all ${i < step ? 'bg-primary' : 'bg-border'}`} />

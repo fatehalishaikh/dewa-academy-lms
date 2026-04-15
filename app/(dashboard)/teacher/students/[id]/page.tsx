@@ -205,7 +205,7 @@ export default function StudentAnalysis() {
             <span className="text-sm text-muted-foreground font-arabic">{student.nameAr}</span>
             <Badge
               variant="outline"
-              className={`text-[10px] h-5 ${student.status === 'at-risk' ? 'border-red-500/30 text-red-400' : 'border-emerald-500/30 text-emerald-400'}`}
+              className={`text-[11px] h-5 ${student.status === 'at-risk' ? 'border-red-500/30 text-red-400' : 'border-emerald-500/30 text-emerald-400'}`}
             >
               {student.status === 'at-risk' ? 'At Risk' : 'On Track'}
             </Badge>
@@ -260,13 +260,13 @@ export default function StudentAnalysis() {
             ].map(({ label, value, sub, color, trend }) => (
               <Card key={label} className="rounded-2xl border-border">
                 <CardContent className="p-4">
-                  <p className="text-[10px] text-muted-foreground mb-1">{label}</p>
+                  <p className="text-[11px] text-muted-foreground mb-1">{label}</p>
                   <div className="flex items-end gap-1.5">
                     <p className="text-2xl font-bold" style={{ color }}>{value}</p>
                     {trend === 'up' && <TrendingUp className="w-3.5 h-3.5 text-emerald-400 mb-1" />}
                     {trend === 'down' && <TrendingDown className="w-3.5 h-3.5 text-red-400 mb-1" />}
                   </div>
-                  <p className="text-[10px] text-muted-foreground">{sub}</p>
+                  <p className="text-[11px] text-muted-foreground">{sub}</p>
                 </CardContent>
               </Card>
             ))}
@@ -296,12 +296,12 @@ export default function StudentAnalysis() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="text-sm">{cls.subject}</CardTitle>
-                    <p className="text-[10px] text-muted-foreground">{cls.name}</p>
+                    <p className="text-[11px] text-muted-foreground">{cls.name}</p>
                   </div>
                   {avg != null ? (
                     <div className="text-right">
                       <p className={`text-xl font-bold ${avg >= 80 ? 'text-emerald-400' : avg >= 70 ? 'text-amber-400' : 'text-red-400'}`}>{avg}%</p>
-                      <p className="text-[10px] text-muted-foreground">average</p>
+                      <p className="text-[11px] text-muted-foreground">average</p>
                     </div>
                   ) : (
                     <span className="text-xs text-muted-foreground">No grades yet</span>
@@ -315,7 +315,7 @@ export default function StudentAnalysis() {
                     <div key={hw.id} className="flex items-center gap-3 p-2.5 rounded-xl bg-card border border-border">
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium text-foreground truncate">{hw.title}</p>
-                        <p className="text-[10px] text-muted-foreground">Due {hw.dueDate} · {hw.totalPoints} pts</p>
+                        <p className="text-[11px] text-muted-foreground">Due {hw.dueDate} · {hw.totalPoints} pts</p>
                       </div>
                       <p className={`text-sm font-bold ${pct >= 90 ? 'text-emerald-400' : pct >= 75 ? 'text-amber-400' : 'text-red-400'}`}>
                         {sub!.grade!}/{hw.totalPoints} ({pct}%)
@@ -358,7 +358,7 @@ export default function StudentAnalysis() {
                   <div
                     key={date}
                     title={`${date}: ${status}`}
-                    className="w-7 h-7 rounded-md flex items-center justify-center text-[9px] font-semibold text-white"
+                    className="w-7 h-7 rounded-md flex items-center justify-center text-[11px] font-semibold text-white"
                     style={{ background: ATT_COLORS[status] }}
                   >
                     {new Date(date).getDate()}
@@ -369,7 +369,7 @@ export default function StudentAnalysis() {
                 {Object.entries(ATT_COLORS).map(([k, c]) => (
                   <div key={k} className="flex items-center gap-1.5">
                     <div className="w-3 h-3 rounded" style={{ background: c }} />
-                    <span className="text-[10px] text-muted-foreground capitalize">{k}</span>
+                    <span className="text-[11px] text-muted-foreground capitalize">{k}</span>
                   </div>
                 ))}
               </div>
@@ -392,7 +392,7 @@ export default function StudentAnalysis() {
                     <Icon className="w-4 h-4" style={{ color }} />
                   </div>
                   <div>
-                    <p className="text-[10px] text-muted-foreground">{label}</p>
+                    <p className="text-[11px] text-muted-foreground">{label}</p>
                     <p className="text-sm font-semibold text-foreground">{value}</p>
                   </div>
                 </CardContent>
@@ -412,7 +412,7 @@ export default function StudentAnalysis() {
                 <div key={goal} className="space-y-1">
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-foreground">{goal}</p>
-                    <p className="text-[10px] text-muted-foreground shrink-0 ml-2">{progress}%</p>
+                    <p className="text-[11px] text-muted-foreground shrink-0 ml-2">{progress}%</p>
                   </div>
                   <div className="h-1.5 bg-muted rounded-full">
                     <div className="h-1.5 bg-primary rounded-full transition-all" style={{ width: `${progress}%` }} />
@@ -463,11 +463,11 @@ export default function StudentAnalysis() {
                     <div key={i} className="p-3 rounded-xl bg-card border border-border space-y-1.5">
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-semibold text-foreground">{fa.subject}</p>
-                        <Badge variant="outline" className={`text-[9px] h-4 ${fa.priority === 'high' ? 'border-red-500/30 text-red-400' : fa.priority === 'medium' ? 'border-amber-500/30 text-amber-400' : 'border-emerald-500/30 text-emerald-400'}`}>
+                        <Badge variant="outline" className={`text-[11px] h-4 ${fa.priority === 'high' ? 'border-red-500/30 text-red-400' : fa.priority === 'medium' ? 'border-amber-500/30 text-amber-400' : 'border-emerald-500/30 text-emerald-400'}`}>
                           {fa.priority} priority
                         </Badge>
                       </div>
-                      <div className="flex gap-4 text-[10px] text-muted-foreground">
+                      <div className="flex gap-4 text-[11px] text-muted-foreground">
                         <span>Now: {fa.currentLevel}</span>
                         <span>→ Target: {fa.targetLevel}</span>
                       </div>
@@ -493,13 +493,13 @@ export default function StudentAnalysis() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
                           <p className="text-xs font-semibold text-foreground">{week.theme}</p>
-                          <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
                             <Clock className="w-3 h-3" /> {week.hoursRequired}h
                           </div>
                         </div>
                         <ul className="space-y-0.5">
                           {week.activities.map((act, i) => (
-                            <li key={i} className="text-[10px] text-muted-foreground flex gap-1.5">
+                            <li key={i} className="text-[11px] text-muted-foreground flex gap-1.5">
                               <span className="text-primary shrink-0">·</span>{act}
                             </li>
                           ))}
@@ -526,7 +526,7 @@ export default function StudentAnalysis() {
                         </div>
                         <div className="min-w-0">
                           <p className="text-[11px] font-medium text-foreground truncate">{r.title}</p>
-                          <p className="text-[9px] text-muted-foreground">{r.type} · {r.estimatedTime}</p>
+                          <p className="text-[11px] text-muted-foreground">{r.type} · {r.estimatedTime}</p>
                         </div>
                       </div>
                     ))}
@@ -544,9 +544,9 @@ export default function StudentAnalysis() {
                       <div key={i} className="p-2.5 rounded-xl bg-card border border-border">
                         <div className="flex items-center justify-between mb-0.5">
                           <p className="text-[11px] font-medium text-foreground">{m.title}</p>
-                          <Badge variant="outline" className="text-[9px] h-4 border-primary/30 text-primary">Wk {m.targetWeek}</Badge>
+                          <Badge variant="outline" className="text-[11px] h-4 border-primary/30 text-primary">Wk {m.targetWeek}</Badge>
                         </div>
-                        <p className="text-[10px] text-muted-foreground">{m.metric}</p>
+                        <p className="text-[11px] text-muted-foreground">{m.metric}</p>
                       </div>
                     ))}
                   </CardContent>
@@ -557,7 +557,7 @@ export default function StudentAnalysis() {
               <div className="flex items-center justify-between p-3 rounded-xl bg-muted/40 border border-border">
                 <div>
                   <p className="text-xs font-medium text-foreground">Publish to Student</p>
-                  <p className="text-[10px] text-muted-foreground">Student will see this path on their My Plan page</p>
+                  <p className="text-[11px] text-muted-foreground">Student will see this path on their My Plan page</p>
                 </div>
                 <Button
                   size="sm"
@@ -620,18 +620,18 @@ export default function StudentAnalysis() {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <Card className={`rounded-2xl border-2 ${riskLevelConfig[riskResult.riskLevel].border} bg-card`}>
                   <CardContent className="p-5 text-center space-y-2">
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Risk Score</p>
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Risk Score</p>
                     <p className="text-5xl font-bold" style={{ color: riskLevelConfig[riskResult.riskLevel].color }}>
                       {riskResult.riskScore}
                     </p>
                     <Badge
                       variant="outline"
-                      className={`text-[10px] h-5 ${riskLevelConfig[riskResult.riskLevel].border}`}
+                      className={`text-[11px] h-5 ${riskLevelConfig[riskResult.riskLevel].border}`}
                       style={{ color: riskLevelConfig[riskResult.riskLevel].color }}
                     >
                       {riskLevelConfig[riskResult.riskLevel].label}
                     </Badge>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground">
                       Priority: <span className="font-semibold capitalize">{riskResult.interventionPriority.replace('-', ' ')}</span>
                     </p>
                   </CardContent>
@@ -647,10 +647,10 @@ export default function StudentAnalysis() {
                         <div className="flex items-center justify-between">
                           <p className="text-xs text-foreground">{factor.name}</p>
                           <div className="flex items-center gap-2">
-                            <span className={`text-[10px] font-semibold ${factorStatusColors[factor.status]}`}>
+                            <span className={`text-[11px] font-semibold ${factorStatusColors[factor.status]}`}>
                               {factor.score}
                             </span>
-                            <span className="text-[10px] text-muted-foreground">({factor.weight}%)</span>
+                            <span className="text-[11px] text-muted-foreground">({factor.weight}%)</span>
                           </div>
                         </div>
                         <Progress value={factor.score} className="h-1.5" />
@@ -668,12 +668,12 @@ export default function StudentAnalysis() {
                 <CardContent className="px-5 pb-5 space-y-3">
                   <p className="text-sm text-muted-foreground">{riskResult.summary}</p>
                   <div>
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Recommended Interventions</p>
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Recommended Interventions</p>
                     <div className="space-y-1.5">
                       {riskResult.recommendations.map((rec, i) => (
                         <div key={i} className="flex items-start gap-2">
                           <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <span className="text-[9px] text-primary font-bold">{i + 1}</span>
+                            <span className="text-[11px] text-primary font-bold">{i + 1}</span>
                           </div>
                           <p className="text-xs text-muted-foreground">{rec}</p>
                         </div>
@@ -718,19 +718,19 @@ export default function StudentAnalysis() {
                   <div className="flex items-center gap-2">
                     <p className="text-xs font-semibold text-foreground">{note.author}</p>
                     {note.type === 'concern' && (
-                      <Badge variant="outline" className="text-[9px] h-4 border-amber-500/30 text-amber-400">
+                      <Badge variant="outline" className="text-[11px] h-4 border-amber-500/30 text-amber-400">
                         <AlertTriangle className="w-2.5 h-2.5 mr-1" />
                         Concern
                       </Badge>
                     )}
                     {note.type === 'positive' && (
-                      <Badge variant="outline" className="text-[9px] h-4 border-emerald-500/30 text-emerald-400">
+                      <Badge variant="outline" className="text-[11px] h-4 border-emerald-500/30 text-emerald-400">
                         <CheckCircle2 className="w-2.5 h-2.5 mr-1" />
                         Positive
                       </Badge>
                     )}
                   </div>
-                  <p className="text-[10px] text-muted-foreground">{note.date}</p>
+                  <p className="text-[11px] text-muted-foreground">{note.date}</p>
                 </div>
                 <p className="text-xs text-foreground leading-relaxed">{note.note}</p>
               </div>

@@ -85,7 +85,7 @@ export default function Communications() {
         <div className="flex items-center gap-2">
           <Bell className="w-4 h-4 text-primary" />
           <h3 className="text-sm font-semibold text-foreground">Notification Timeline</h3>
-          <Badge variant="outline" className="text-[10px]">{timeline.length} sent</Badge>
+          <Badge variant="outline" className="text-[11px]">{timeline.length} sent</Badge>
         </div>
         <Card className="border-border">
           <ScrollArea className="h-[420px]">
@@ -104,14 +104,14 @@ export default function Communications() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="text-xs font-semibold text-foreground">{n.subject}</p>
-                        <p className="text-[10px] text-muted-foreground">To: {n.recipientName} · {n.channel}</p>
+                        <p className="text-[11px] text-muted-foreground">To: {n.recipientName} · {n.channel}</p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <Badge variant="outline" className={`text-[9px] ${deliveryBadgeClass(n.deliveryStatus)}`}>{n.deliveryStatus}</Badge>
+                        <Badge variant="outline" className={`text-[11px] ${deliveryBadgeClass(n.deliveryStatus)}`}>{n.deliveryStatus}</Badge>
                         <DeliveryIcon status={n.deliveryStatus} />
                       </div>
                     </div>
-                    <p className="text-[9px] text-muted-foreground/60 mt-1">{n.sentDate}</p>
+                    <p className="text-[11px] text-muted-foreground/60 mt-1">{n.sentDate}</p>
                   </div>
                 </div>
               ))}
@@ -132,10 +132,10 @@ export default function Communications() {
                   <div key={t.id} className="flex items-start gap-2 bg-muted/20 rounded-lg px-2.5 py-2">
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium text-foreground truncate">{t.name}</p>
-                      <p className="text-[9px] text-muted-foreground">{t.channel} · {t.trigger}</p>
+                      <p className="text-[11px] text-muted-foreground">{t.channel} · {t.trigger}</p>
                     </div>
                     <button
-                      className="text-[9px] text-primary hover:underline shrink-0"
+                      className="text-[11px] text-primary hover:underline shrink-0"
                       onClick={() => setEditTemplate(t)}
                     >Edit</button>
                   </div>
@@ -224,7 +224,7 @@ export default function Communications() {
                 <div key={t.id} className="flex items-start gap-3 bg-muted/20 rounded-xl px-3 py-2.5">
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-foreground">{t.name}</p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">{t.channel} · {t.trigger}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">{t.channel} · {t.trigger}</p>
                   </div>
                   <Button size="sm" variant="outline" className="text-xs h-7 shrink-0" onClick={() => { handleTemplateSelect(t.id); setTemplatesOpen(false) }}>
                     Use

@@ -40,16 +40,16 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
   const isCorrect = selected === q.correctAnswer
 
   return (
-    <div className="p-4 rounded-[10px] bg-muted/20 border border-border space-y-3">
+    <div className="p-4 rounded-xl bg-muted/20 border border-border space-y-3">
       <div className="flex items-start gap-3">
-        <div className="w-6 h-6 rounded-[10px] bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-          <span className="text-[10px] font-bold text-primary">{index + 1}</span>
+        <div className="w-6 h-6 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+          <span className="text-[11px] font-bold text-primary">{index + 1}</span>
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-foreground leading-relaxed">{q.text}</p>
           <div className="flex items-center gap-2 mt-1">
-            <Badge variant="outline" className="text-[9px] h-4 border-border text-muted-foreground">{q.topic}</Badge>
-            <Badge variant="outline" className="text-[9px] h-4 border-border text-muted-foreground">{q.points} pt{q.points > 1 ? 's' : ''}</Badge>
+            <Badge variant="outline" className="text-[11px] h-4 border-border text-muted-foreground">{q.topic}</Badge>
+            <Badge variant="outline" className="text-[11px] h-4 border-border text-muted-foreground">{q.points} pt{q.points > 1 ? 's' : ''}</Badge>
           </div>
         </div>
         {answered && (
@@ -74,7 +74,7 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
               key={oi}
               disabled={answered || locked}
               onClick={() => !answered && !locked && setSelected(opt)}
-              className={`w-full flex items-center gap-3 p-3 rounded-[10px] border text-left transition-all ${optClass}`}
+              className={`w-full flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${optClass}`}
             >
               <div className={`w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center ${
                 answered && isAnswer ? 'border-emerald-500 bg-emerald-500' :
@@ -96,7 +96,7 @@ function McqQuestion({ q, index, locked }: { q: ExamQuestion; index: number; loc
       </div>
 
       {answered && (
-        <div className={`ml-9 flex items-start gap-2 p-2.5 rounded-[10px] text-xs ${
+        <div className={`ml-9 flex items-start gap-2 p-2.5 rounded-xl text-xs ${
           isCorrect ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
         }`}>
           {isCorrect
@@ -196,8 +196,8 @@ export default function AssignmentDetailPage() {
           ...(hasMCQ ? [{ label: 'Questions', value: `${questions.length} MCQ`, color: '#8B5CF6' }] : []),
           ...(assignment.submittedDate ? [{ label: 'Submitted', value: assignment.submittedDate, color: '#10B981' }] : []),
         ].map(({ label, value, color }) => (
-          <div key={label} className="px-3 py-2 rounded-[10px] bg-card border border-border">
-            <p className="text-[10px] text-muted-foreground">{label}</p>
+          <div key={label} className="px-3 py-2 rounded-xl bg-card border border-border">
+            <p className="text-[11px] text-muted-foreground">{label}</p>
             <p className="text-xs font-semibold mt-0.5" style={{ color }}>{value}</p>
           </div>
         ))}
@@ -205,7 +205,7 @@ export default function AssignmentDetailPage() {
 
       {/* Graded result banner */}
       {isGraded && (
-        <Card className="rounded-[10px] border-border bg-card">
+        <Card className="rounded-xl border-border bg-card">
           <CardHeader className="pb-3 pt-5 px-5">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Star className="w-4 h-4 text-amber-400" />
@@ -216,7 +216,7 @@ export default function AssignmentDetailPage() {
             <div className="flex items-center gap-4">
               <div className="text-center">
                 <p className={`text-4xl font-bold ${gradeColor}`}>{assignment.grade}</p>
-                <p className="text-[10px] text-muted-foreground mt-0.5">
+                <p className="text-[11px] text-muted-foreground mt-0.5">
                   /{assignment.totalPoints} pts ({gradePercent}%)
                 </p>
               </div>
@@ -230,12 +230,12 @@ export default function AssignmentDetailPage() {
             {assignment.feedback && (
               <div>
                 <p className="text-xs font-medium text-foreground mb-1.5">Teacher Feedback</p>
-                <div className="p-3 rounded-[10px] bg-muted/30 text-sm text-muted-foreground leading-relaxed">
+                <div className="p-3 rounded-xl bg-muted/30 text-sm text-muted-foreground leading-relaxed">
                   {assignment.feedback}
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-2 p-2.5 rounded-[10px] bg-emerald-500/10 border border-emerald-500/20">
+            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span className="text-xs font-medium text-emerald-400">Graded — results are final</span>
             </div>
@@ -247,7 +247,7 @@ export default function AssignmentDetailPage() {
         {/* Left column: description + MCQs + text submission */}
         <div className="lg:col-span-2 space-y-4">
           {/* Description */}
-          <Card className="rounded-[10px] border-border bg-card">
+          <Card className="rounded-xl border-border bg-card">
             <CardHeader className="pb-3 pt-5 px-5">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <FileText className="w-4 h-4 text-primary" />
@@ -261,7 +261,7 @@ export default function AssignmentDetailPage() {
 
           {/* Instructions */}
           {assignment.instructions && !hasMCQ && !isGraded && (
-            <Card className="rounded-[10px] border-border bg-card">
+            <Card className="rounded-xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-primary" />
@@ -278,14 +278,14 @@ export default function AssignmentDetailPage() {
 
           {/* MCQ Section */}
           {hasMCQ && (
-            <Card className="rounded-[10px] border-border bg-card">
+            <Card className="rounded-xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
                     <CircleDot className="w-4 h-4 text-primary" />
                     Multiple Choice Questions
                   </CardTitle>
-                  <Badge variant="outline" className="text-[10px] h-5 border-purple-500/30 text-purple-400">
+                  <Badge variant="outline" className="text-[11px] h-5 border-purple-500/30 text-purple-400">
                     {questions.length} questions · {questions.reduce((s, q) => s + q.points, 0)} pts
                   </Badge>
                 </div>
@@ -301,7 +301,7 @@ export default function AssignmentDetailPage() {
 
           {/* Submit / submitted state */}
           {canSubmit && !hasMCQ && (
-            <Card className="rounded-[10px] border-border bg-card">
+            <Card className="rounded-xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
                   <Send className="w-4 h-4 text-primary" />
@@ -342,7 +342,7 @@ export default function AssignmentDetailPage() {
 
           {/* Awaiting grading */}
           {(isSubmitted && !isGraded) && (
-            <Card className="rounded-[10px] border-border bg-card">
+            <Card className="rounded-xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -350,14 +350,14 @@ export default function AssignmentDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="px-5 pb-5 space-y-3">
-                <div className="flex items-center gap-2 p-2.5 rounded-[10px] bg-amber-500/10 border border-amber-500/20">
+                <div className="flex items-center gap-2 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
                   <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span className="text-xs font-medium text-amber-400">
                     {localSubmitted ? 'Submitted just now — awaiting grading' : `Submitted on ${assignment.submittedDate} — awaiting grading`}
                   </span>
                 </div>
                 {(assignment.submittedContent || submissionText) && !hasMCQ && (
-                  <div className="p-3 rounded-[10px] bg-muted/30 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                  <div className="p-3 rounded-xl bg-muted/30 text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
                     {assignment.submittedContent ?? submissionText}
                   </div>
                 )}
@@ -367,7 +367,7 @@ export default function AssignmentDetailPage() {
 
           {/* AI Feedback */}
           {isGraded && assignment.aiFeedback && (
-            <Card className="rounded-[10px] border-primary/20 bg-primary/5">
+            <Card className="rounded-xl border-primary/20 bg-primary/5">
               <CardHeader className="pb-2 pt-5 px-5">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -398,16 +398,16 @@ export default function AssignmentDetailPage() {
         {/* Right column: rubric + tips */}
         <div className="space-y-4">
           {assignment.rubric.length > 0 && (
-            <Card className="rounded-[10px] border-border bg-card">
+            <Card className="rounded-xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold">Rubric</CardTitle>
               </CardHeader>
               <CardContent className="px-5 pb-5 space-y-3">
                 {assignment.rubric.map((item, i) => (
-                  <div key={i} className="p-3 rounded-[10px] bg-muted/20 space-y-1">
+                  <div key={i} className="p-3 rounded-xl bg-muted/20 space-y-1">
                     <div className="flex items-center justify-between">
                       <p className="text-xs font-semibold text-foreground">{item.label}</p>
-                      <Badge variant="outline" className="text-[10px] h-4 border-primary/30 text-primary">
+                      <Badge variant="outline" className="text-[11px] h-4 border-primary/30 text-primary">
                         {item.maxPoints} pts
                       </Badge>
                     </div>
@@ -422,7 +422,7 @@ export default function AssignmentDetailPage() {
           )}
 
           {/* Grading status card */}
-          <Card className={`rounded-[10px] border ${isGraded ? 'border-emerald-500/30 bg-emerald-500/5' : isSubmitted ? 'border-amber-500/30 bg-amber-500/5' : 'border-border bg-card'}`}>
+          <Card className={`rounded-xl border ${isGraded ? 'border-emerald-500/30 bg-emerald-500/5' : isSubmitted ? 'border-amber-500/30 bg-amber-500/5' : 'border-border bg-card'}`}>
             <CardContent className="px-5 py-4 space-y-2">
               <div className="flex items-center gap-2">
                 {isGraded
@@ -443,7 +443,7 @@ export default function AssignmentDetailPage() {
           </Card>
 
           {canSubmit && (
-            <Card className="rounded-[10px] border-border bg-card">
+            <Card className="rounded-xl border-border bg-card">
               <CardHeader className="pb-3 pt-5 px-5">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-primary" />

@@ -132,7 +132,7 @@ export default function ClassActivitiesAttendance() {
               </div>
               <div>
                 <p className="text-lg font-bold text-foreground">{count}<span className="text-xs text-muted-foreground font-normal">/{total}</span></p>
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
               </div>
             </CardContent>
           </Card>
@@ -169,7 +169,7 @@ export default function ClassActivitiesAttendance() {
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <StudentNameLink studentId={stu.id} name={stu.name} className="text-sm font-medium text-foreground" />
-                    <p className="text-[10px] text-muted-foreground">Grade {stu.gradeLevel}{stu.section}</p>
+                    <p className="text-[11px] text-muted-foreground">Grade {stu.gradeLevel}{stu.section}</p>
                   </div>
                   <div className="flex items-center gap-1.5">
                     {(Object.keys(statusConfig) as AttendanceStatus[]).map(s => {
@@ -180,7 +180,7 @@ export default function ClassActivitiesAttendance() {
                         <button
                           key={s}
                           onClick={() => setStatus(stu.id, s)}
-                          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-medium transition-all ${
+                          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-medium transition-all ${
                             isSelected
                               ? `${cfg.bg} ${cfg.color}`
                               : 'border-border text-muted-foreground hover:border-border/70'

@@ -54,8 +54,8 @@ export default function GoalSetting() {
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium text-foreground">{t.name}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <Badge variant="outline" className={`text-[10px] ${categoryStyles[t.category]}`}>{t.category}</Badge>
-                    <span className="text-[10px] text-muted-foreground">Target: {t.targetType}</span>
+                    <Badge variant="outline" className={`text-[11px] ${categoryStyles[t.category]}`}>{t.category}</Badge>
+                    <span className="text-[11px] text-muted-foreground">Target: {t.targetType}</span>
                   </div>
                 </div>
                 <Select defaultValue={t.targetType}>
@@ -138,7 +138,7 @@ export default function GoalSetting() {
               <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-muted/40">
                 <div>
                   <p className="text-xs font-medium text-foreground">Send reminder 1 day before</p>
-                  <p className="text-[10px] text-muted-foreground">Notifies student via in-app push</p>
+                  <p className="text-[11px] text-muted-foreground">Notifies student via in-app push</p>
                 </div>
                 <Switch defaultChecked />
               </div>

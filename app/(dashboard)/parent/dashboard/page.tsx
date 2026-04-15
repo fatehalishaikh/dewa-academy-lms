@@ -70,23 +70,25 @@ export default function ParentDashboard() {
     <div className="p-4 space-y-6">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <Card className="rounded-[10px] border-border overflow-hidden py-0 gap-0">
+      <Card className="rounded-xl border-border overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-5">
-          <div className="lg:col-span-2 px-4 py-4 lg:border-r border-border">
-            <div className="flex items-center gap-2 mb-0.5">
-              <LayoutDashboard className="w-3.5 h-3.5 text-primary" />
-              <span className="text-[10px] font-medium text-primary uppercase tracking-wider">Parent Portal</span>
+          <div className="lg:col-span-2 px-4 py-2 lg:border-r border-border">
+            <div className="flex items-center gap-2 mb-1">
+              <LayoutDashboard className="w-4 h-4 text-primary" />
+              <span className="text-xs font-medium text-primary uppercase tracking-wider">Parent Dashboard</span>
             </div>
-            <h1 className="text-lg font-bold text-foreground leading-tight">Welcome, {parent?.name.split(' ')[0]} 👋</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {new Date().toLocaleDateString('en-AE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            <h1 className="text-xl font-bold text-foreground">
+              Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {parent?.name.split(' ')[0]} 👋
+            </h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {new Date().toLocaleDateString('en-AE', { weekday: 'long', day: 'numeric', month: 'long' })}
             </p>
-            <Button size="sm" variant="outline" onClick={() => router.push('/parent/messages')} className="mt-2 gap-1.5 h-7 text-xs">
-              <MessageSquare className="w-3 h-3" />
+            <Button size="sm" onClick={() => router.push('/parent/messages')} className="mt-3 gap-1.5">
+              <MessageSquare className="w-3.5 h-3.5" />
               Messages
             </Button>
           </div>
-          <div className="lg:col-span-3 px-4 py-4 flex flex-col justify-center">
+          <div className="lg:col-span-3 px-4 py-2 flex flex-col justify-center">
             {inboxItems.length === 0 ? (
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
@@ -99,7 +101,7 @@ export default function ParentDashboard() {
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-[10px] bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
                   <span className="text-xl font-bold text-amber-400">{inboxItems.length}</span>
                 </div>
                 <div className="min-w-0 flex-1">
@@ -127,9 +129,9 @@ export default function ParentDashboard() {
 
       {/* ── Children ──────────────────────────────────────────────────── */}
       {parent && parent.childIds.length > 0 && (
-        <Card className="rounded-[10px] border-border py-0 gap-0">
+        <Card className="rounded-xl border-border py-0 gap-0">
           <CardContent className="px-4 py-4">
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+            <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
               Your {parent.childIds.length > 1 ? 'Children' : 'Child'}
             </p>
             <div className="flex gap-2 flex-wrap">
@@ -137,19 +139,19 @@ export default function ParentDashboard() {
                 const child = getStudentById(cid)
                 if (!child) return null
                 return (
-                  <div key={cid} className="flex items-center gap-2.5 px-3 py-2 rounded-[10px] border border-primary/30 bg-primary/5">
+                  <div key={cid} className="flex items-center gap-2.5 px-3 py-2 rounded-xl border border-primary/30 bg-primary/5">
                     <Avatar className="w-7 h-7">
-                      <AvatarFallback className="text-[10px] font-bold text-white" style={{ background: child.avatarColor }}>
+                      <AvatarFallback className="text-[11px] font-bold text-white" style={{ background: child.avatarColor }}>
                         {child.initials}
                       </AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="text-xs font-medium text-foreground leading-tight">{child.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{child.gradeLevel} — Section {child.section}</p>
+                      <p className="text-[11px] text-muted-foreground">{child.gradeLevel} — Section {child.section}</p>
                     </div>
                     <Badge
                       variant="outline"
-                      className={`text-[10px] h-5 ml-1 ${child.status === 'at-risk' ? 'border-red-500/30 text-red-400' : 'border-emerald-500/30 text-emerald-400'}`}
+                      className={`text-[11px] h-5 ml-1 ${child.status === 'at-risk' ? 'border-red-500/30 text-red-400' : 'border-emerald-500/30 text-emerald-400'}`}
                     >
                       {child.status === 'at-risk' ? 'At Risk' : 'On Track'}
                     </Badge>
@@ -169,16 +171,16 @@ export default function ParentDashboard() {
           { label: 'Pending Work', value: '3',                                          sub: 'assignments due soon', icon: AlertTriangle,  color: '#F59E0B', action: () => {}                               },
           { label: 'Messages',     value: '1',                                          sub: 'unread message',       icon: MessageSquare, color: '#8B5CF6', action: () => router.push('/parent/messages')   },
         ].map(({ label, value, sub, icon: Icon, color, action }) => (
-          <Card key={label} className="rounded-[10px] border-border cursor-pointer hover:border-primary/30 transition-colors py-0 gap-0" onClick={action}>
+          <Card key={label} className="rounded-xl border-border cursor-pointer hover:border-primary/30 transition-colors py-0 gap-0" onClick={action}>
             <CardContent className="px-3 py-4">
               <div className="flex items-center justify-between mb-1">
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
                 <div className="w-5 h-5 rounded-lg flex items-center justify-center" style={{ background: `${color}20` }}>
                   <Icon className="w-3 h-3" style={{ color }} />
                 </div>
               </div>
               <p className="text-xl font-bold text-foreground leading-tight">{value}</p>
-              <p className="text-[10px] text-muted-foreground">{sub}</p>
+              <p className="text-[11px] text-muted-foreground">{sub}</p>
             </CardContent>
           </Card>
         ))}
@@ -186,7 +188,7 @@ export default function ParentDashboard() {
 
       {/* ── AI Insights ───────────────────────────────────────────────── */}
       {primaryChild && (
-        <Card className={`rounded-[10px] border transition-colors py-0 gap-0 ${insights ? riskLevelConfig[insights.riskLevel].border : 'border-primary/20'} bg-primary/5`}>
+        <Card className={`rounded-xl border transition-colors py-0 gap-0 ${insights ? riskLevelConfig[insights.riskLevel].border : 'border-primary/20'} bg-primary/5`}>
           <CardHeader className="pt-4 pb-2 px-4">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -195,7 +197,7 @@ export default function ParentDashboard() {
               </CardTitle>
               <div className="flex items-center gap-2">
                 {insights && (
-                  <Badge variant="outline" className={`text-[10px] h-5 ${riskLevelConfig[insights.riskLevel].color} ${riskLevelConfig[insights.riskLevel].border}`}>
+                  <Badge variant="outline" className={`text-[11px] h-5 ${riskLevelConfig[insights.riskLevel].color} ${riskLevelConfig[insights.riskLevel].border}`}>
                     {riskLevelConfig[insights.riskLevel].label}
                   </Badge>
                 )}
@@ -224,7 +226,7 @@ export default function ParentDashboard() {
               <div className="space-y-2">
                 <p className="text-xs text-foreground">{insights.summary}</p>
                 <div>
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Recommendations</p>
+                  <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Recommendations</p>
                   <div className="space-y-1">
                     {insights.recommendations.map((rec, i) => (
                       <div key={i} className="flex items-start gap-2">
@@ -249,7 +251,7 @@ export default function ParentDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
 
         {/* Recent Activity */}
-        <Card className="rounded-[10px] border-border py-0 gap-0">
+        <Card className="rounded-xl border-border py-0 gap-0">
           <CardHeader className="pb-2 pt-4 px-4">
             <CardTitle className="text-xs font-semibold">Recent Activity</CardTitle>
           </CardHeader>
@@ -263,7 +265,7 @@ export default function ParentDashboard() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-[11px] text-foreground truncate">{item.text}</p>
-                    <p className="text-[10px] text-muted-foreground">{item.time}</p>
+                    <p className="text-[11px] text-muted-foreground">{item.time}</p>
                   </div>
                 </div>
               )
@@ -272,7 +274,7 @@ export default function ParentDashboard() {
         </Card>
 
         {/* Quick Access */}
-        <Card className="rounded-[10px] border-border py-0 gap-0">
+        <Card className="rounded-xl border-border py-0 gap-0">
           <CardHeader className="pb-2 pt-4 px-4">
             <CardTitle className="text-xs font-semibold">Quick Access</CardTitle>
           </CardHeader>
@@ -287,14 +289,14 @@ export default function ParentDashboard() {
               <button
                 key={label}
                 onClick={() => router.push(to)}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[10px] border border-border hover:border-primary/30 transition-colors text-left"
+                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl border border-border hover:border-primary/30 transition-colors text-left"
               >
                 <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${color}20` }}>
                   <Icon className="w-3.5 h-3.5" style={{ color }} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[11px] font-medium text-foreground">{label}</p>
-                  <p className="text-[10px] text-muted-foreground">{sub}</p>
+                  <p className="text-[11px] text-muted-foreground">{sub}</p>
                 </div>
                 <ArrowRight className="w-3 h-3 text-muted-foreground shrink-0" />
               </button>

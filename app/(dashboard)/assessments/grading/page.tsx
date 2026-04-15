@@ -140,7 +140,7 @@ export default function AssessmentsGrading() {
               </div>
               <div>
                 <p className="text-lg font-bold text-foreground">{value}</p>
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
               </div>
             </CardContent>
           </Card>
@@ -166,23 +166,23 @@ export default function AssessmentsGrading() {
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">{exam.title}</p>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-[11px] text-muted-foreground">
                     {cls?.name ?? '—'} · {new Date(exam.date).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <div className="text-right">
                     <p className="text-xs font-semibold text-foreground">{gradedCount}/{examSubs.length}</p>
-                    <p className="text-[10px] text-muted-foreground">graded</p>
+                    <p className="text-[11px] text-muted-foreground">graded</p>
                   </div>
                   <div className="w-20">
                     <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                       <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${pct}%` }} />
                     </div>
-                    <p className="text-[10px] text-muted-foreground text-right mt-0.5">{pct}%</p>
+                    <p className="text-[11px] text-muted-foreground text-right mt-0.5">{pct}%</p>
                   </div>
                   {pendingCount > 0 && (
-                    <Badge variant="outline" className="text-[10px] border-amber-500/30 text-amber-400">{pendingCount} pending</Badge>
+                    <Badge variant="outline" className="text-[11px] border-amber-500/30 text-amber-400">{pendingCount} pending</Badge>
                   )}
                   {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                 </div>
@@ -201,13 +201,13 @@ export default function AssessmentsGrading() {
                       <div key={sub.id} className="border-b border-border last:border-0">
                         <div className="flex items-center gap-3 px-5 py-3">
                           <Avatar className="w-7 h-7 shrink-0">
-                            <AvatarFallback className="text-[10px] font-bold text-white" style={{ background: student.avatarColor }}>
+                            <AvatarFallback className="text-[11px] font-bold text-white" style={{ background: student.avatarColor }}>
                               {student.initials}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
                             <StudentNameLink studentId={student.id} name={student.name} className="text-sm font-medium text-foreground" />
-                            <p className="text-[10px] text-muted-foreground">
+                            <p className="text-[11px] text-muted-foreground">
                               Submitted {new Date(sub.submittedAt).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })}
                             </p>
                           </div>
@@ -215,10 +215,10 @@ export default function AssessmentsGrading() {
                             {sub.submissionStatus === 'graded' && sub.score != null && (
                               <div className="text-center">
                                 <p className="text-xs font-bold text-foreground">{sub.score}/{exam.totalPoints}</p>
-                                <p className="text-[10px] text-muted-foreground">{Math.round((sub.score / exam.totalPoints) * 100)}%</p>
+                                <p className="text-[11px] text-muted-foreground">{Math.round((sub.score / exam.totalPoints) * 100)}%</p>
                               </div>
                             )}
-                            <Badge variant="outline" className={`text-[10px] h-5 ${
+                            <Badge variant="outline" className={`text-[11px] h-5 ${
                               sub.submissionStatus === 'graded'
                                 ? 'border-emerald-500/30 text-emerald-400'
                                 : 'border-amber-500/30 text-amber-400'
@@ -241,7 +241,7 @@ export default function AssessmentsGrading() {
                           <div className="px-5 pb-4 space-y-3 bg-muted/5 border-t border-border">
                             <div className="flex items-center gap-3 pt-3">
                               <div>
-                                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Score</label>
+                                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Score</label>
                                 <div className="flex items-center gap-1.5">
                                   <input
                                     type="number"
@@ -266,7 +266,7 @@ export default function AssessmentsGrading() {
                                   : <><Wand2 className="w-3 h-3" /> AI Suggest</>}
                               </Button>
                               {aiResults[sub.id] && (
-                                <Badge variant="outline" className="text-[10px] h-5 border-primary/30 text-primary self-end">
+                                <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary self-end">
                                   {aiResults[sub.id].confidence}% confident
                                 </Badge>
                               )}
@@ -275,25 +275,25 @@ export default function AssessmentsGrading() {
                             {aiResults[sub.id] && (
                               <div className="grid grid-cols-2 gap-2">
                                 <div className="p-2 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-                                  <p className="text-[9px] font-semibold text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                                  <p className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1">
                                     <TrendingUp className="w-2.5 h-2.5" /> Strengths
                                   </p>
                                   {aiResults[sub.id].strengths.map((s, i) => (
-                                    <p key={i} className="text-[10px] text-muted-foreground">· {s}</p>
+                                    <p key={i} className="text-[11px] text-muted-foreground">· {s}</p>
                                   ))}
                                 </div>
                                 <div className="p-2 rounded-lg bg-amber-500/5 border border-amber-500/20">
-                                  <p className="text-[9px] font-semibold text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                                  <p className="text-[11px] font-semibold text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-1">
                                     <TrendingDown className="w-2.5 h-2.5" /> Improve
                                   </p>
                                   {aiResults[sub.id].improvements.map((s, i) => (
-                                    <p key={i} className="text-[10px] text-muted-foreground">· {s}</p>
+                                    <p key={i} className="text-[11px] text-muted-foreground">· {s}</p>
                                   ))}
                                 </div>
                               </div>
                             )}
                             <div>
-                              <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Feedback</label>
+                              <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Feedback</label>
                               <textarea
                                 value={form.feedback}
                                 onChange={e => setFormField(sub.id, 'feedback', e.target.value)}

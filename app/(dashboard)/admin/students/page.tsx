@@ -60,7 +60,7 @@ export default function AdminStudents() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{value}</p>
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
               </div>
             </CardContent>
           </Card>
@@ -110,21 +110,21 @@ export default function AdminStudents() {
               <div className="flex items-center gap-2">
                 <p className="text-sm font-medium text-foreground">{stu.name}</p>
                 {stu.status === 'at-risk' && (
-                  <Badge variant="outline" className="text-[10px] h-4 border-red-500/30 text-red-400">At Risk</Badge>
+                  <Badge variant="outline" className="text-[11px] h-4 border-red-500/30 text-red-400">At Risk</Badge>
                 )}
               </div>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
+              <p className="text-[11px] text-muted-foreground mt-0.5">
                 {stu.gradeLevel} · Section {stu.section} · {stu.emiratesId}
               </p>
             </div>
             <div className="flex items-center gap-6 shrink-0">
               <div className="text-center">
                 <p className={`text-sm font-bold ${gradeColor(stu.gpa)}`}>{stu.gpa.toFixed(1)}</p>
-                <p className="text-[9px] text-muted-foreground">GPA</p>
+                <p className="text-[11px] text-muted-foreground">GPA</p>
               </div>
               <div className="text-center">
                 <p className={`text-sm font-bold ${attendanceColor(stu.attendanceRate)}`}>{stu.attendanceRate}%</p>
-                <p className="text-[9px] text-muted-foreground">Attend.</p>
+                <p className="text-[11px] text-muted-foreground">Attend.</p>
               </div>
               <ArrowRight className="w-4 h-4 text-muted-foreground" />
             </div>

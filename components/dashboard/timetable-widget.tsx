@@ -104,12 +104,12 @@ export function TimetableWidget() {
           <div className="flex gap-1 mb-1">
             <div className="w-8" />
             {DAYS.map(d => (
-              <div key={d} className="flex-1 text-center text-[10px] font-medium text-muted-foreground">{d}</div>
+              <div key={d} className="flex-1 text-center text-[11px] font-medium text-muted-foreground">{d}</div>
             ))}
           </div>
           {PERIODS.map(period => (
             <div key={period} className="flex gap-1 mb-1">
-              <div className="w-8 text-[10px] text-muted-foreground flex items-center justify-center">P{period}</div>
+              <div className="w-8 text-[11px] text-muted-foreground flex items-center justify-center">P{period}</div>
               {DAYS.map(day => {
                 const cell = timetableHeatmap.find(c => c.day === day && c.period === period)
                 const load = cell?.load ?? 'normal'
@@ -154,15 +154,15 @@ export function TimetableWidget() {
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-sm bg-primary/35" />
-              <span className="text-[10px] text-muted-foreground">Normal</span>
+              <span className="text-[11px] text-muted-foreground">Normal</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-sm bg-chart-5/65" />
-              <span className="text-[10px] text-muted-foreground">Busy</span>
+              <span className="text-[11px] text-muted-foreground">Busy</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-sm bg-destructive/90" />
-              <span className="text-[10px] text-muted-foreground">Conflict</span>
+              <span className="text-[11px] text-muted-foreground">Conflict</span>
             </div>
           </div>
         </div>
@@ -182,7 +182,7 @@ export function TimetableWidget() {
                       <span className="text-xs font-medium text-muted-foreground">{c.day} P{c.period}</span>
                       <span className="text-xs text-foreground">{c.description}</span>
                     </div>
-                    <Badge variant="outline" className={`text-[10px] gap-1 ${cfg.className}`}>
+                    <Badge variant="outline" className={`text-[11px] gap-1 ${cfg.className}`}>
                       <Icon className="w-2.5 h-2.5" />
                       {cfg.label}
                     </Badge>

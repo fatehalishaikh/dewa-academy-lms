@@ -93,7 +93,7 @@ export default function AiScoring() {
               <CardTitle className="text-sm font-semibold">Scoring Criteria Weights</CardTitle>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20 flex items-center gap-1">
+              <Badge variant="outline" className="text-[11px] bg-primary/10 text-primary border-primary/20 flex items-center gap-1">
                 <Sparkles className="w-2.5 h-2.5" />AI Engine v2.4
               </Badge>
               <Button size="sm" className="text-xs h-7 bg-primary hover:bg-primary/90" onClick={recalculateAll} disabled={isRecalculating}>
@@ -137,7 +137,7 @@ export default function AiScoring() {
         <div className="xl:col-span-2 space-y-3">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-semibold text-foreground">Scored Applications</h3>
-            <Badge variant="outline" className="text-[10px]">{scoredApps.length} applicants</Badge>
+            <Badge variant="outline" className="text-[11px]">{scoredApps.length} applicants</Badge>
           </div>
           <div className="space-y-2">
             {scoredApps.map(app => {
@@ -149,10 +149,10 @@ export default function AiScoring() {
                     className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/20 transition-colors"
                     onClick={() => setExpandedId(expanded ? null : app.id)}
                   >
-                    <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">{app.initials}</div>
+                    <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-[11px] font-bold text-primary shrink-0">{app.initials}</div>
                     <div className="flex-1 text-left">
                       <p className="text-xs font-semibold text-foreground">{app.nameEn}</p>
-                      <p className="text-[9px] text-muted-foreground">{app.applicationType} · {app.gradeApplying}</p>
+                      <p className="text-[11px] text-muted-foreground">{app.applicationType} · {app.gradeApplying}</p>
                     </div>
                     {/* Mini scores */}
                     <div className="hidden sm:flex items-center gap-3">
@@ -162,7 +162,7 @@ export default function AiScoring() {
                         { label: 'Att', value: app.scoring.attendance },
                       ].map(({ label, value }) => (
                         <div key={label} className="text-center">
-                          <p className="text-[9px] text-muted-foreground">{label}</p>
+                          <p className="text-[11px] text-muted-foreground">{label}</p>
                           <p className="text-xs font-bold text-foreground">{value}</p>
                         </div>
                       ))}
@@ -187,7 +187,7 @@ export default function AiScoring() {
                           { label: 'Interview Score', value: app.scoring.interview },
                         ].map(({ label, value }) => (
                           <div key={label} className="space-y-1">
-                            <div className="flex justify-between text-[10px] text-muted-foreground">
+                            <div className="flex justify-between text-[11px] text-muted-foreground">
                               <span>{label}</span>
                               <span className={`font-semibold ${scoreColor(value).text}`}>{value}</span>
                             </div>
@@ -197,7 +197,7 @@ export default function AiScoring() {
                       </div>
                       {/* Rationale */}
                       <div className="bg-card rounded-lg px-3 py-2.5 border border-border">
-                        <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
+                        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-1">
                           <Sparkles className="w-2.5 h-2.5 text-primary" />AI Rationale
                         </p>
                         <p className="text-xs text-muted-foreground">{app.scoring.rationale}</p>
@@ -239,29 +239,29 @@ export default function AiScoring() {
           <div className="flex items-center gap-2">
             <Flag className="w-3.5 h-3.5 text-red-400" />
             <h3 className="text-sm font-semibold text-foreground">Flagged Queue</h3>
-            <Badge variant="outline" className="text-[10px] bg-red-500/10 text-red-400 border-red-500/20 ml-auto">{flaggedQueue.length}</Badge>
+            <Badge variant="outline" className="text-[11px] bg-red-500/10 text-red-400 border-red-500/20 ml-auto">{flaggedQueue.length}</Badge>
           </div>
           <div className="space-y-2">
             {flaggedQueue.map(app => (
               <Card key={app.id} className="border-red-500/20 bg-red-500/5">
                 <CardContent className="pt-4 space-y-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center text-[9px] font-bold text-red-400 shrink-0">{app.initials}</div>
+                    <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center text-[11px] font-bold text-red-400 shrink-0">{app.initials}</div>
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-foreground truncate">{app.nameEn}</p>
-                      <p className="text-[9px] text-muted-foreground">Score: {app.aiScore}</p>
+                      <p className="text-[11px] text-muted-foreground">Score: {app.aiScore}</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {app.flagReasons.map(r => (
-                      <Badge key={r} variant="outline" className="text-[9px] bg-red-500/10 text-red-400 border-red-500/20">{r}</Badge>
+                      <Badge key={r} variant="outline" className="text-[11px] bg-red-500/10 text-red-400 border-red-500/20">{r}</Badge>
                     ))}
                   </div>
                   <div className="space-y-1.5">
-                    <p className="text-[9px] text-muted-foreground">Assign Reviewer</p>
+                    <p className="text-[11px] text-muted-foreground">Assign Reviewer</p>
                     <div className="flex gap-1.5">
                       {[{ initials: 'SA', id: 'tch-001' }, { initials: 'OH', id: 'tch-002' }, { initials: 'FA', id: 'tch-003' }].map(({ initials, id }) => (
-                        <button key={initials} onClick={() => assignReviewer(app.id, id, initials)} className="w-6 h-6 rounded-full bg-muted hover:bg-primary/20 hover:text-primary flex items-center justify-center text-[9px] font-bold text-muted-foreground transition-colors">
+                        <button key={initials} onClick={() => assignReviewer(app.id, id, initials)} className="w-6 h-6 rounded-full bg-muted hover:bg-primary/20 hover:text-primary flex items-center justify-center text-[11px] font-bold text-muted-foreground transition-colors">
                           {initials}
                         </button>
                       ))}
@@ -269,14 +269,14 @@ export default function AiScoring() {
                   </div>
                   <div className="flex gap-1.5">
                     {confirmedFlags.has(app.id) ? (
-                      <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6 text-red-400 border-red-500/30 cursor-default">Flagged ✓</Button>
+                      <Button size="sm" variant="outline" className="flex-1 text-[11px] h-6 text-red-400 border-red-500/30 cursor-default">Flagged ✓</Button>
                     ) : (
-                      <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6" onClick={() => {
+                      <Button size="sm" variant="outline" className="flex-1 text-[11px] h-6" onClick={() => {
                         setConfirmedFlags(prev => new Set([...prev, app.id]))
                         flagApplication(app.id, true)
                       }}>Confirm Flag</Button>
                     )}
-                    <Button size="sm" variant="outline" className="flex-1 text-[10px] h-6 text-green-400 border-green-500/30 hover:bg-green-500/10" onClick={() => {
+                    <Button size="sm" variant="outline" className="flex-1 text-[11px] h-6 text-green-400 border-green-500/30 hover:bg-green-500/10" onClick={() => {
                       setOverriddenFlags(prev => new Set([...prev, app.id]))
                       flagApplication(app.id, false)
                     }}>Override</Button>

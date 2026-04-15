@@ -101,9 +101,9 @@ export function PacingAdaptationWidget() {
             <div key={a.subject} className="flex items-start justify-between gap-3 py-1.5 px-3 rounded-lg bg-muted/40">
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium text-foreground">{a.subject}</p>
-                <p className="text-[10px] text-muted-foreground leading-snug">{a.recommendation}</p>
+                <p className="text-[11px] text-muted-foreground leading-snug">{a.recommendation}</p>
               </div>
-              <Badge variant="outline" className={`text-[10px] capitalize shrink-0 ${urgencyStyles[a.urgency]}`}>
+              <Badge variant="outline" className={`text-[11px] capitalize shrink-0 ${urgencyStyles[a.urgency]}`}>
                 {a.urgency === 'high' ? 'Urgent' : a.urgency === 'moderate' ? 'Review' : 'On Track'}
               </Badge>
             </div>

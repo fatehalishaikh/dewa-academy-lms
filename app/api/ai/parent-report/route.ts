@@ -71,45 +71,66 @@ Keep the tone warm, professional, and parent-friendly. Avoid overly technical ja
 
   const encoder = new TextEncoder()
 
-  if (provider === 'openai') {
-    const openai = new OpenAI()
-    const stream = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      max_tokens: 1024,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-      stream: true,
-    })
+  function streamText(text: string): Response {
     const readable = new ReadableStream({
-      async start(controller) {
-        for await (const chunk of stream) {
-          const text = chunk.choices[0]?.delta?.content ?? ''
-          if (text) controller.enqueue(encoder.encode(text))
-        }
+      start(controller) {
+        controller.enqueue(encoder.encode(text))
         controller.close()
       },
     })
     return new Response(readable, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
   }
 
-  const client = new Anthropic()
-  const stream = await client.messages.stream({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 1024,
-    system: systemPrompt,
-    messages: [{ role: 'user', content: userPrompt }],
-  })
-  const readable = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of stream) {
-        if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-          controller.enqueue(encoder.encode(chunk.delta.text))
+  try {
+    if (provider === 'openai') {
+      const openai = new OpenAI()
+      const stream = await openai.chat.completions.create({
+        model: 'gpt-4o-mini',
+        max_tokens: 1024,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        stream: true,
+      })
+      const readable = new ReadableStream({
+        async start(controller) {
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content ?? ''
+            if (text) controller.enqueue(encoder.encode(text))
+          }
+          controller.close()
+        },
+      })
+      return new Response(readable, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
+    }
+
+    const client = new Anthropic()
+    const stream = await client.messages.stream({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    })
+    const readable = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of stream) {
+          if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+            controller.enqueue(encoder.encode(chunk.delta.text))
+          }
         }
-      }
-      controller.close()
-    },
-  })
-  return new Response(readable, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
+        controller.close()
+      },
+    })
+    return new Response(readable, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
+  } catch {
+    return streamText(
+      `## Progress Report — ${studentName}\n\n` +
+      `**Report Period:** ${periodLabel}\n\n` +
+      `---\n\n` +
+      `We were unable to generate the AI report at this time. This may be a temporary issue.\n\n` +
+      `**Please try again** by clicking the Generate Report button. If the issue persists, contact school support.\n\n` +
+      `*Student: ${studentName} · GPA: ${gpa.toFixed(2)} · Attendance: ${attendanceRate}%*`
+    )
+  }
 }

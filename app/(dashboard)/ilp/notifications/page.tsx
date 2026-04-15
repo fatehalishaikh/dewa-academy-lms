@@ -107,7 +107,7 @@ export default function Notifications() {
                     <TableCell className="py-2.5">
                       <div className="flex flex-wrap gap-1">
                         {trigger.recipients.split(', ').map(r => (
-                          <Badge key={r} variant="outline" className="text-[10px] bg-muted/40">{r}</Badge>
+                          <Badge key={r} variant="outline" className="text-[11px] bg-muted/40">{r}</Badge>
                         ))}
                       </div>
                     </TableCell>

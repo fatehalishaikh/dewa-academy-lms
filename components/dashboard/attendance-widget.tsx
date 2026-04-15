@@ -73,7 +73,7 @@ export function AttendanceWidget() {
           {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-2xl font-bold text-foreground">{attendanceSummary.present}%</span>
-            <span className="text-[10px] text-muted-foreground">Present</span>
+            <span className="text-[11px] text-muted-foreground">Present</span>
           </div>
         </div>
 
@@ -93,14 +93,14 @@ export function AttendanceWidget() {
             <div key={s.name} className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-muted/40">
               <div className="flex items-center gap-2.5">
                 <Avatar className="w-7 h-7">
-                  <AvatarFallback className="text-[10px] font-semibold text-white bg-muted-foreground">{s.initials}</AvatarFallback>
+                  <AvatarFallback className="text-[11px] font-semibold text-white bg-muted-foreground">{s.initials}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="text-xs font-medium text-foreground">{s.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{s.issue}</p>
+                  <p className="text-[11px] text-muted-foreground">{s.issue}</p>
                 </div>
               </div>
-              <Badge variant="outline" className={`text-[10px] ${badgeStyles[s.severity]}`}>
+              <Badge variant="outline" className={`text-[11px] ${badgeStyles[s.severity]}`}>
                 {badgeLabels[s.severity]}
               </Badge>
             </div>

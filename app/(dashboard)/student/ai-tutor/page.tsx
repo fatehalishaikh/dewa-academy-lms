@@ -208,7 +208,7 @@ export default function StudentAiTutor() {
             <div key={sub.id}>
               <button
                 onClick={() => { setSelectedSubject(sub); setSelectedTopic(null); setMessages([]) }}
-                className={`w-full flex items-center gap-2 px-3 py-2 rounded-[10px] text-xs font-semibold transition-colors border ${selectedSubject.id === sub.id ? 'border-primary/30 bg-primary/10 text-primary' : 'border-transparent text-muted-foreground hover:bg-accent'}`}
+                className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-colors border ${selectedSubject.id === sub.id ? 'border-primary/30 bg-primary/10 text-primary' : 'border-transparent text-muted-foreground hover:bg-accent'}`}
               >
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ background: sub.color }} />
                 {sub.label}
@@ -219,7 +219,7 @@ export default function StudentAiTutor() {
                     <button
                       key={topic}
                       onClick={() => selectTopic(topic)}
-                      className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-[10px] text-[11px] transition-colors ${selectedTopic === topic ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-accent hover:text-foreground'}`}
+                      className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-xl text-[11px] transition-colors ${selectedTopic === topic ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-accent hover:text-foreground'}`}
                     >
                       {masteredTopics.includes(topic) && <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />}
                       <ChevronRight className="w-2.5 h-2.5 shrink-0" />
@@ -233,10 +233,10 @@ export default function StudentAiTutor() {
         </div>
 
         {/* Center: Chat */}
-        <Card className="rounded-[10px] border-border flex flex-col min-h-0">
+        <Card className="rounded-xl border-border flex flex-col min-h-0">
           {!selectedTopic ? (
             <div className="flex-1 flex items-center justify-center flex-col gap-3">
-              <div className="w-12 h-12 rounded-[10px] bg-primary/10 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bot className="w-6 h-6 text-primary" />
               </div>
               <p className="text-sm font-medium text-foreground">Select a topic to get started</p>
@@ -253,7 +253,7 @@ export default function StudentAiTutor() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-[10px] h-6 gap-1"
+                    className="text-[11px] h-6 gap-1"
                     onClick={startPractice}
                   >
                     <Zap className="w-3 h-3" />
@@ -271,7 +271,7 @@ export default function StudentAiTutor() {
                           : <User className="w-3.5 h-3.5 text-muted-foreground" />
                         }
                       </div>
-                      <div className={`max-w-[85%] rounded-[10px] px-3.5 py-2.5 text-xs leading-relaxed ${msg.role === 'assistant' ? 'bg-card border border-border text-foreground' : 'bg-primary/10 border border-primary/20 text-foreground'}`}>
+                      <div className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-xs leading-relaxed ${msg.role === 'assistant' ? 'bg-card border border-border text-foreground' : 'bg-primary/10 border border-primary/20 text-foreground'}`}>
                         {msg.role === 'assistant' ? <MarkdownRenderer content={msg.content} size="xs" /> : msg.content}
                       </div>
                     </div>
@@ -281,7 +281,7 @@ export default function StudentAiTutor() {
                       <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
                         <Bot className="w-3.5 h-3.5 text-primary" />
                       </div>
-                      <div className="bg-card border border-border rounded-[10px] px-3.5 py-2.5">
+                      <div className="bg-card border border-border rounded-xl px-3.5 py-2.5">
                         <div className="flex gap-1 items-center h-4">
                           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
                           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -300,7 +300,7 @@ export default function StudentAiTutor() {
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); mode === 'practice' && practiceState === 'question' ? submitAnswer() : sendMessage() } }}
                     placeholder={mode === 'practice' ? 'Type your answer...' : 'Ask a question...'}
-                    className="flex-1 bg-background border border-border rounded-[10px] px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+                    className="flex-1 bg-background border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
                   />
                   <Button
                     size="sm"
@@ -318,7 +318,7 @@ export default function StudentAiTutor() {
 
         {/* Right: Progress */}
         <div className="space-y-3">
-          <Card className="rounded-[10px] border-border">
+          <Card className="rounded-xl border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-xs flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -327,10 +327,10 @@ export default function StudentAiTutor() {
             </CardHeader>
             <CardContent className="space-y-1.5">
               {masteredTopics.length === 0 ? (
-                <p className="text-[10px] text-muted-foreground">Complete practice to earn mastery</p>
+                <p className="text-[11px] text-muted-foreground">Complete practice to earn mastery</p>
               ) : (
                 masteredTopics.map(t => (
-                  <div key={t} className="flex items-center gap-1.5 text-[10px] text-emerald-400">
+                  <div key={t} className="flex items-center gap-1.5 text-[11px] text-emerald-400">
                     <CheckCircle2 className="w-3 h-3 shrink-0" />
                     {t}
                   </div>
@@ -339,7 +339,7 @@ export default function StudentAiTutor() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[10px] border-border">
+          <Card className="rounded-xl border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-xs">Study Tips</CardTitle>
             </CardHeader>
@@ -347,7 +347,7 @@ export default function StudentAiTutor() {
               {['Ask specific questions', 'Use Practice Mode to test yourself', 'Revisit weak topics'].map(tip => (
                 <div key={tip} className="flex items-start gap-1.5">
                   <Sparkles className="w-3 h-3 text-primary shrink-0 mt-0.5" />
-                  <p className="text-[10px] text-muted-foreground">{tip}</p>
+                  <p className="text-[11px] text-muted-foreground">{tip}</p>
                 </div>
               ))}
             </CardContent>

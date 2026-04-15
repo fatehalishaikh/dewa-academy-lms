@@ -134,13 +134,13 @@ export default function ClassActivitiesTimetable() {
         </div>
         <div className="flex items-center gap-2">
           {conflicts.length > 0 && !optimized && (
-            <Badge variant="outline" className="text-[10px] border-amber-500/30 text-amber-400 gap-1">
+            <Badge variant="outline" className="text-[11px] border-amber-500/30 text-amber-400 gap-1">
               <AlertTriangle className="w-2.5 h-2.5" />
               {conflicts.length} conflict{conflicts.length > 1 ? 's' : ''}
             </Badge>
           )}
           {optimized && (
-            <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-400 gap-1">
+            <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-400 gap-1">
               <Sparkles className="w-2.5 h-2.5" />
               AI Optimized
             </Badge>
@@ -167,9 +167,9 @@ export default function ClassActivitiesTimetable() {
           <table className="w-full min-w-[700px]">
             <thead>
               <tr className="bg-muted/20 border-b border-border">
-                <th className="text-left px-4 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-20">Time</th>
+                <th className="text-left px-4 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-20">Time</th>
                 {DAYS.map(d => (
-                  <th key={d} className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  <th key={d} className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     {d}
                   </th>
                 ))}
@@ -189,7 +189,7 @@ export default function ClassActivitiesTimetable() {
                             return (
                               <div
                                 key={j}
-                                className="px-2 py-1.5 rounded-lg text-[10px] leading-tight cursor-pointer hover:opacity-80 transition-opacity"
+                                className="px-2 py-1.5 rounded-lg text-[11px] leading-tight cursor-pointer hover:opacity-80 transition-opacity"
                                 style={{ background: `${color}20`, borderLeft: `2px solid ${entry.moved ? '#10B981' : color}` }}
                               >
                                 <p className="font-semibold truncate" style={{ color }}>{entry.name}</p>
@@ -214,7 +214,7 @@ export default function ClassActivitiesTimetable() {
       {/* Subject legend */}
       <div className="flex flex-wrap gap-2">
         {Object.entries(SUBJECT_COLORS).map(([subject, color]) => (
-          <div key={subject} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+          <div key={subject} className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <div className="w-2 h-2 rounded-full" style={{ background: color }} />
             {subject}
           </div>
@@ -255,7 +255,7 @@ export default function ClassActivitiesTimetable() {
           <CardContent className="space-y-2">
             {conflicts.map((c, i) => (
               <div key={i} className="flex items-center gap-3 text-xs">
-                <Badge variant="outline" className="text-[10px] border-amber-500/30 text-amber-400 shrink-0">{c.day} {c.slot}</Badge>
+                <Badge variant="outline" className="text-[11px] border-amber-500/30 text-amber-400 shrink-0">{c.day} {c.slot}</Badge>
                 <span className="text-muted-foreground">Room {c.room}:</span>
                 <span className="text-foreground">{c.classes.join(' & ')}</span>
               </div>

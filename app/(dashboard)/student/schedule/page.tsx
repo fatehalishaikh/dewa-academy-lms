@@ -61,14 +61,14 @@ export default function StudentSchedule() {
           <Sparkles className="w-4 h-4 text-primary" />
           <span className="text-xs font-medium text-primary uppercase tracking-wider">Weekly Timetable</span>
         </div>
-        <h1 className="text-xl font-bold text-foreground">My Schedule</h1>
+        <h1 className="text-xl font-bold text-foreground">Schedule</h1>
         <p className="text-sm text-muted-foreground mt-0.5">Current semester class timetable</p>
       </div>
 
       {sortedSlots.length === 0 ? (
         <p className="text-sm text-muted-foreground">No classes scheduled.</p>
       ) : (
-        <div className="rounded-[10px] border border-border overflow-hidden">
+        <div className="rounded-xl border border-border overflow-hidden">
           <table className="w-full table-fixed">
             {/* Column widths: day label col + one col per time slot */}
             <colgroup>
@@ -79,7 +79,7 @@ export default function StudentSchedule() {
             <thead>
               <tr className="bg-muted/30 border-b border-border">
                 <th className="px-3 py-3 text-left">
-                  <div className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     <Clock className="w-3 h-3" />
                     Day
                   </div>
@@ -110,7 +110,7 @@ export default function StudentSchedule() {
                       <td key={slot} className="p-1.5 align-top">
                         {entry ? (
                           <div
-                            className="px-2.5 py-2 rounded-[10px] border h-full"
+                            className="px-2.5 py-2 rounded-xl border h-full"
                             style={{
                               borderColor: `${entry.color}50`,
                               background: `${entry.color}14`,
@@ -122,13 +122,13 @@ export default function StudentSchedule() {
                             >
                               {entry.subject}
                             </p>
-                            <p className="text-[9px] text-muted-foreground mt-0.5 tabular-nums">
+                            <p className="text-[11px] text-muted-foreground mt-0.5 tabular-nums">
                               {entry.time}
                             </p>
-                            <p className="text-[9px] text-muted-foreground">{entry.room}</p>
+                            <p className="text-[11px] text-muted-foreground">{entry.room}</p>
                           </div>
                         ) : (
-                          <div className="rounded-[10px] bg-muted/10 h-[58px]" />
+                          <div className="rounded-xl bg-muted/10 h-[58px]" />
                         )}
                       </td>
                     )

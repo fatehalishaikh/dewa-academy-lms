@@ -120,9 +120,9 @@ export default function CurriculumReview() {
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           {canApprove ? (
-            <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-400">Can approve</Badge>
+            <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-400">Can approve</Badge>
           ) : (
-            <Badge variant="outline" className="text-[9px] border-amber-500/30 text-amber-400">Submit only</Badge>
+            <Badge variant="outline" className="text-[11px] border-amber-500/30 text-amber-400">Submit only</Badge>
           )}
         </div>
 
@@ -134,7 +134,7 @@ export default function CurriculumReview() {
           >
             <Bell className="w-3.5 h-3.5 text-muted-foreground" />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary text-[9px] text-primary-foreground font-bold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary text-[11px] text-primary-foreground font-bold flex items-center justify-center">
                 {unreadCount}
               </span>
             )}
@@ -143,12 +143,12 @@ export default function CurriculumReview() {
             <div className="absolute right-0 top-10 z-20 w-72 bg-card border border-border rounded-2xl shadow-xl overflow-hidden">
               <div className="px-3 py-2 border-b border-border flex items-center justify-between">
                 <span className="text-xs font-semibold text-foreground">Notifications</span>
-                <span className="text-[9px] text-muted-foreground">{unreadCount} unread</span>
+                <span className="text-[11px] text-muted-foreground">{unreadCount} unread</span>
               </div>
               {NOTIFICATIONS.map(n => (
                 <div key={n.id} className={`px-3 py-2.5 border-b border-border last:border-0 ${n.read ? '' : 'bg-primary/5'}`}>
-                  <p className="text-[10px] text-foreground">{n.text}</p>
-                  <p className="text-[9px] text-muted-foreground mt-0.5">{n.time}</p>
+                  <p className="text-[11px] text-foreground">{n.text}</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">{n.time}</p>
                 </div>
               ))}
             </div>
@@ -165,7 +165,7 @@ export default function CurriculumReview() {
               {/* Column header */}
               <div className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between ${STATUS_HEADER_COLORS[status]}`}>
                 <span>{STATUS_LABELS[status]}</span>
-                <span className="text-[10px] opacity-60">{col.length}</span>
+                <span className="text-[11px] opacity-60">{col.length}</span>
               </div>
 
               {/* Cards */}
@@ -204,11 +204,11 @@ export default function CurriculumReview() {
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1">
                               <Zap className="w-2.5 h-2.5 text-blue-400 shrink-0" />
-                              <span className="text-[9px] text-blue-400">{automation.route}</span>
+                              <span className="text-[11px] text-blue-400">{automation.route}</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className={`w-2.5 h-2.5 shrink-0 ${slaUrgent ? 'text-red-400' : 'text-muted-foreground'}`} />
-                              <span className={`text-[9px] ${slaUrgent ? 'text-red-400 font-medium' : 'text-muted-foreground'}`}>{automation.sla}</span>
+                              <span className={`text-[11px] ${slaUrgent ? 'text-red-400 font-medium' : 'text-muted-foreground'}`}>{automation.sla}</span>
                             </div>
                           </div>
                         )}
@@ -224,7 +224,7 @@ export default function CurriculumReview() {
                             ))}
                           </div>
                           {nodeComments.length > 0 && (
-                            <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                            <span className="text-[11px] text-muted-foreground flex items-center gap-0.5">
                               <MessageSquare className="w-2.5 h-2.5" /> {nodeComments.length}
                             </span>
                           )}
@@ -237,7 +237,7 @@ export default function CurriculumReview() {
                             {nodeComments.length > 0 && (
                               <div className="space-y-1">
                                 {nodeComments.map((c, i) => (
-                                  <p key={i} className="text-[10px] text-muted-foreground bg-muted/20 rounded-lg px-2 py-1">{c}</p>
+                                  <p key={i} className="text-[11px] text-muted-foreground bg-muted/20 rounded-lg px-2 py-1">{c}</p>
                                 ))}
                               </div>
                             )}
@@ -248,9 +248,9 @@ export default function CurriculumReview() {
                                 onChange={e => setNewComment(prev => ({ ...prev, [node.id]: e.target.value }))}
                                 onKeyDown={e => e.key === 'Enter' && handleAddComment(node.id)}
                                 placeholder="Add comment…"
-                                className="flex-1 bg-background border border-border rounded-lg px-2 py-1 text-[10px] focus:outline-none focus:border-primary/50"
+                                className="flex-1 bg-background border border-border rounded-lg px-2 py-1 text-[11px] focus:outline-none focus:border-primary/50"
                               />
-                              <Button size="sm" className="h-5 text-[9px] px-2" onClick={() => handleAddComment(node.id)}>+</Button>
+                              <Button size="sm" className="h-5 text-[11px] px-2" onClick={() => handleAddComment(node.id)}>+</Button>
                             </div>
 
                             {/* Role-based actions */}
@@ -263,19 +263,19 @@ export default function CurriculumReview() {
                                       onChange={e => setFeedbackText(prev => ({ ...prev, [node.id]: e.target.value }))}
                                       placeholder="Rejection reason…"
                                       rows={2}
-                                      className="w-full bg-background border border-border rounded-xl px-2 py-1 text-[10px] resize-none focus:outline-none focus:border-primary/50"
+                                      className="w-full bg-background border border-border rounded-xl px-2 py-1 text-[11px] resize-none focus:outline-none focus:border-primary/50"
                                     />
                                     <div className="flex gap-1">
-                                      <Button size="sm" variant="destructive" onClick={() => handleReject(node.id)} className="h-5 text-[9px] px-2">Reject</Button>
-                                      <Button size="sm" variant="outline" onClick={() => setRejectingId(null)} className="h-5 text-[9px] px-2">Cancel</Button>
+                                      <Button size="sm" variant="destructive" onClick={() => handleReject(node.id)} className="h-5 text-[11px] px-2">Reject</Button>
+                                      <Button size="sm" variant="outline" onClick={() => setRejectingId(null)} className="h-5 text-[11px] px-2">Cancel</Button>
                                     </div>
                                   </div>
                                 ) : (
                                   <div className="flex gap-1">
-                                    <Button size="sm" onClick={() => handleApprove(node.id)} className="h-6 text-[10px] gap-1 flex-1">
+                                    <Button size="sm" onClick={() => handleApprove(node.id)} className="h-6 text-[11px] gap-1 flex-1">
                                       <CheckCircle2 className="w-2.5 h-2.5" /> Approve
                                     </Button>
-                                    <Button size="sm" variant="outline" onClick={() => setRejectingId(node.id)} className="h-6 text-[10px] gap-1 border-red-500/30 text-red-400 hover:bg-red-500/10">
+                                    <Button size="sm" variant="outline" onClick={() => setRejectingId(node.id)} className="h-6 text-[11px] gap-1 border-red-500/30 text-red-400 hover:bg-red-500/10">
                                       <XCircle className="w-2.5 h-2.5" /> Reject
                                     </Button>
                                   </div>
@@ -285,7 +285,7 @@ export default function CurriculumReview() {
 
                             {/* Teacher: submit for review */}
                             {status === 'draft' && !canApprove && (
-                              <Button size="sm" variant="outline" onClick={() => handleAdvance(node.id)} className="w-full h-6 text-[10px] gap-1">
+                              <Button size="sm" variant="outline" onClick={() => handleAdvance(node.id)} className="w-full h-6 text-[11px] gap-1">
                                 Submit for Review <ChevronRight className="w-3 h-3" />
                               </Button>
                             )}
@@ -296,7 +296,7 @@ export default function CurriculumReview() {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => handleAdvance(node.id)}
-                                className="w-full h-6 text-[10px] gap-1"
+                                className="w-full h-6 text-[11px] gap-1"
                               >
                                 Move to {STATUS_LABELS[next]} <ChevronRight className="w-3 h-3" />
                               </Button>
@@ -308,7 +308,7 @@ export default function CurriculumReview() {
                   )
                 })}
                 {col.length === 0 && (
-                  <p className="text-[10px] text-muted-foreground text-center py-4">No items</p>
+                  <p className="text-[11px] text-muted-foreground text-center py-4">No items</p>
                 )}
               </div>
             </div>

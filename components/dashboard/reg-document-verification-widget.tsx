@@ -58,7 +58,7 @@ export function RegDocumentVerificationWidget() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="text-center">
               <p className="text-lg font-bold text-foreground">{total}</p>
-              <p className="text-[9px] text-muted-foreground">docs</p>
+              <p className="text-[11px] text-muted-foreground">docs</p>
             </div>
           </div>
         </div>
@@ -76,14 +76,14 @@ export function RegDocumentVerificationWidget() {
 
         {/* Recent scans */}
         <div className="space-y-1.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Recent Scans</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Recent Scans</p>
           {recentDocScans.map(({ name, confidence, docStatus, time }) => (
             <div key={name} className="flex items-center gap-2 bg-muted/30 rounded-lg px-2.5 py-2">
-              <span className="text-[10px] text-foreground flex-1 truncate">{name}</span>
-              <span className="text-[9px] text-muted-foreground shrink-0">{time}</span>
+              <span className="text-[11px] text-foreground flex-1 truncate">{name}</span>
+              <span className="text-[11px] text-muted-foreground shrink-0">{time}</span>
               <Badge
                 variant="outline"
-                className={`text-[9px] shrink-0 ${
+                className={`text-[11px] shrink-0 ${
                   docStatus === 'Verified'
                     ? 'bg-green-500/10 text-green-400 border-green-500/20'
                     : docStatus === 'Flagged'
@@ -93,7 +93,7 @@ export function RegDocumentVerificationWidget() {
               >
                 {docStatus}
               </Badge>
-              <span className="text-[10px] font-semibold text-muted-foreground shrink-0">{confidence}%</span>
+              <span className="text-[11px] font-semibold text-muted-foreground shrink-0">{confidence}%</span>
             </div>
           ))}
         </div>

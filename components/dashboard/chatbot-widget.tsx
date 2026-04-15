@@ -215,14 +215,14 @@ export function ChatbotWidget() {
               {/* Page context indicator */}
               <div className="flex items-center gap-1.5 mt-2 px-2 py-1.5 rounded-lg bg-muted/40 border border-border">
                 <LayoutGrid className="w-3 h-3 text-primary shrink-0" />
-                <span className="text-[10px] text-muted-foreground">Page context: <span className="text-foreground font-medium">{getPageName(pathname)}</span></span>
+                <span className="text-[11px] text-muted-foreground">Page context: <span className="text-foreground font-medium">{getPageName(pathname)}</span></span>
               </div>
 
               {/* Auto page entity context */}
               {autoContext && (
                 <div className="flex items-start gap-1.5 px-2 py-1.5 rounded-lg bg-primary/5 border border-primary/10">
                   <Info className="w-3 h-3 text-primary/50 shrink-0 mt-0.5" />
-                  <span className="text-[10px] text-muted-foreground leading-relaxed line-clamp-2">{autoContext}</span>
+                  <span className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">{autoContext}</span>
                 </div>
               )}
 
@@ -230,7 +230,7 @@ export function ChatbotWidget() {
               {contextEntries.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-2">
                   {contextEntries.map(([id, entry]) => (
-                    <div key={id} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] text-primary font-medium">
+                    <div key={id} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[11px] text-primary font-medium">
                       {entry.label}
                       <button onClick={() => removeContext(id)} className="hover:text-destructive transition-colors ml-0.5">
                         <X className="w-2.5 h-2.5" />

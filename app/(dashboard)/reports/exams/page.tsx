@@ -40,7 +40,7 @@ export default function ReportsExams() {
             <CardContent className="p-4">
               <p className="text-xl font-bold" style={{ color }}>{value}</p>
               <p className="text-[11px] font-medium text-foreground mt-0.5">{label}</p>
-              <p className="text-[10px] text-muted-foreground">{sub}</p>
+              <p className="text-[11px] text-muted-foreground">{sub}</p>
             </CardContent>
           </Card>
         ))}
@@ -62,7 +62,7 @@ export default function ReportsExams() {
                 <Download className="w-3 h-3" /> PDF
               </Button>
               {exported && (
-                <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-400">
+                <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-400">
                   {exported} downloaded
                 </Badge>
               )}
@@ -73,12 +73,12 @@ export default function ReportsExams() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-muted/20">
-                <th className="px-4 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Exam</th>
-                <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Students</th>
-                <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Avg Score</th>
-                <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Pass Rate</th>
-                <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">High</th>
-                <th className="px-4 py-2 text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Low</th>
+                <th className="px-4 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Exam</th>
+                <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Students</th>
+                <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Avg Score</th>
+                <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Pass Rate</th>
+                <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">High</th>
+                <th className="px-4 py-2 text-center text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Low</th>
               </tr>
             </thead>
             <tbody>

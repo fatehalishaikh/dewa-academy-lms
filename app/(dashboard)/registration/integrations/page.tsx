@@ -81,7 +81,7 @@ export default function Integrations() {
                   <StatusIcon status={intg.connectionStatus} />
                   <CardTitle className="text-base font-bold">{intg.system}</CardTitle>
                 </div>
-                <Badge variant="outline" className={`text-[9px] ${statusBadge(intg.connectionStatus)}`}>{intg.connectionStatus}</Badge>
+                <Badge variant="outline" className={`text-[11px] ${statusBadge(intg.connectionStatus)}`}>{intg.connectionStatus}</Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -89,30 +89,30 @@ export default function Integrations() {
               <div className="grid grid-cols-2 gap-2">
                 <div className="bg-muted/30 rounded-lg px-2.5 py-2 text-center">
                   <p className="text-lg font-bold text-foreground">{intg.recordsSynced.toLocaleString()}</p>
-                  <p className="text-[9px] text-muted-foreground">Records Synced</p>
+                  <p className="text-[11px] text-muted-foreground">Records Synced</p>
                 </div>
                 <div className="bg-muted/30 rounded-lg px-2.5 py-2 text-center">
                   <p className="text-xs font-medium text-foreground truncate">{intg.lastSync.split(' ')[1]}</p>
-                  <p className="text-[9px] text-muted-foreground">Last Sync</p>
-                  <p className="text-[9px] text-muted-foreground">{intg.lastSync.split(' ')[0]}</p>
+                  <p className="text-[11px] text-muted-foreground">Last Sync</p>
+                  <p className="text-[11px] text-muted-foreground">{intg.lastSync.split(' ')[0]}</p>
                 </div>
               </div>
 
               {/* Result banners */}
               {syncResults[intg.system] === 'success' && (
-                <div className="flex items-center gap-1.5 text-[10px] text-green-400 bg-green-500/10 rounded-lg px-2.5 py-1.5">
+                <div className="flex items-center gap-1.5 text-[11px] text-green-400 bg-green-500/10 rounded-lg px-2.5 py-1.5">
                   <CheckCircle2 className="w-3 h-3 shrink-0" />Sync completed successfully
                 </div>
               )}
               {testResults[intg.system] === 'success' && (
-                <div className="flex items-center gap-1.5 text-[10px] text-primary bg-primary/10 rounded-lg px-2.5 py-1.5">
+                <div className="flex items-center gap-1.5 text-[11px] text-primary bg-primary/10 rounded-lg px-2.5 py-1.5">
                   <CheckCircle2 className="w-3 h-3 shrink-0" />Connection test passed
                 </div>
               )}
 
               {/* Sync history mini bar */}
               <div>
-                <p className="text-[10px] text-muted-foreground mb-1.5">Recent Syncs (5 days)</p>
+                <p className="text-[11px] text-muted-foreground mb-1.5">Recent Syncs (5 days)</p>
                 <div className="flex gap-1">
                   {intg.syncHistory.map((h, i) => (
                     <div key={i} className="flex-1 space-y-1">
@@ -169,22 +169,22 @@ export default function Integrations() {
               {/* Settings panel */}
               {settingsOpen === intg.system && (
                 <div className="border border-border rounded-lg p-3 space-y-2 bg-muted/20">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Connection Settings</p>
+                  <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Connection Settings</p>
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground">Sync Frequency</span>
-                      <span className="text-[10px] text-foreground font-medium">Every 6 hours</span>
+                      <span className="text-[11px] text-muted-foreground">Sync Frequency</span>
+                      <span className="text-[11px] text-foreground font-medium">Every 6 hours</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground">Timeout</span>
-                      <span className="text-[10px] text-foreground font-medium">30s</span>
+                      <span className="text-[11px] text-muted-foreground">Timeout</span>
+                      <span className="text-[11px] text-foreground font-medium">30s</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground">Retry on fail</span>
-                      <span className="text-[10px] text-foreground font-medium">3×</span>
+                      <span className="text-[11px] text-muted-foreground">Retry on fail</span>
+                      <span className="text-[11px] text-foreground font-medium">3×</span>
                     </div>
                   </div>
-                  <Button size="sm" className="w-full h-6 text-[10px] rounded-md" onClick={() => setSettingsOpen(null)}>
+                  <Button size="sm" className="w-full h-6 text-[11px] rounded-md" onClick={() => setSettingsOpen(null)}>
                     Apply Settings
                   </Button>
                 </div>
@@ -210,16 +210,16 @@ export default function Integrations() {
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left pb-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Source Field</th>
-                    <th className="text-left pb-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Maps To</th>
-                    <th className="text-right pb-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                    <th className="text-left pb-2 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Source Field</th>
+                    <th className="text-left pb-2 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Maps To</th>
+                    <th className="text-right pb-2 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/50">
                   {integrations[0].fieldMappings.map(m => (
                     <tr key={m.source}>
-                      <td className="py-2 font-mono text-[10px] text-muted-foreground">{m.source}</td>
-                      <td className="py-2 font-mono text-[10px] text-foreground">{m.mapsTo}</td>
+                      <td className="py-2 font-mono text-[11px] text-muted-foreground">{m.source}</td>
+                      <td className="py-2 font-mono text-[11px] text-foreground">{m.mapsTo}</td>
                       <td className="py-2 text-right">
                         <Badge variant="outline" className={`text-[8px] capitalize ${mappingBadge(m.mappingStatus)}`}>{m.mappingStatus}</Badge>
                       </td>
@@ -268,20 +268,20 @@ export default function Integrations() {
 
             {/* Error log */}
             <div className="mt-4 space-y-2">
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Recent Issues</p>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Recent Issues</p>
               <div className="space-y-1.5">
                 <div className="flex items-start gap-2 bg-red-500/8 border border-red-500/20 rounded-lg px-2.5 py-2">
                   <XCircle className="w-3 h-3 text-red-400 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-[10px] font-medium text-red-400">SAP HCM — Connection timeout</p>
-                    <p className="text-[9px] text-muted-foreground">2026-03-25 02:00 · 0 records synced</p>
+                    <p className="text-[11px] font-medium text-red-400">SAP HCM — Connection timeout</p>
+                    <p className="text-[11px] text-muted-foreground">2026-03-25 02:00 · 0 records synced</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2 bg-amber-500/8 border border-amber-500/20 rounded-lg px-2.5 py-2">
                   <AlertTriangle className="w-3 h-3 text-amber-400 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-[10px] font-medium text-amber-400">Qudurat — Partial sync (field mapping warning)</p>
-                    <p className="text-[9px] text-muted-foreground">2026-03-25 06:00 · 8/12 records synced</p>
+                    <p className="text-[11px] font-medium text-amber-400">Qudurat — Partial sync (field mapping warning)</p>
+                    <p className="text-[11px] text-muted-foreground">2026-03-25 06:00 · 8/12 records synced</p>
                   </div>
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default function Integrations() {
               <thead>
                 <tr className="border-b border-border">
                   {['System', 'Date', 'Records', 'Duration', 'Status'].map(h => (
-                    <th key={h} className="text-left pb-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider pr-4">{h}</th>
+                    <th key={h} className="text-left pb-2 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider pr-4">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -339,13 +339,13 @@ export default function Integrations() {
             <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
               {integrations.map(intg => (
                 <div key={intg.system}>
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">{intg.system}</p>
+                  <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">{intg.system}</p>
                   <div className="space-y-1">
                     {intg.fieldMappings.map(m => (
                       <div key={m.source} className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-muted/30">
-                        <span className="font-mono text-[10px] text-muted-foreground">{m.source}</span>
-                        <span className="text-[10px] text-muted-foreground mx-2">→</span>
-                        <span className="font-mono text-[10px] text-foreground flex-1">{m.mapsTo}</span>
+                        <span className="font-mono text-[11px] text-muted-foreground">{m.source}</span>
+                        <span className="text-[11px] text-muted-foreground mx-2">→</span>
+                        <span className="font-mono text-[11px] text-foreground flex-1">{m.mapsTo}</span>
                         <Badge variant="outline" className={`text-[8px] capitalize ml-2 ${mappingBadge(m.mappingStatus)}`}>{m.mappingStatus}</Badge>
                       </div>
                     ))}

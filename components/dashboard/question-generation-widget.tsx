@@ -71,9 +71,9 @@ export function QuestionGenerationWidget() {
             <div key={g.subject} className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-muted/40">
               <div>
                 <p className="text-xs font-medium text-foreground">{g.subject}</p>
-                <p className="text-[10px] text-muted-foreground">{g.count} questions · {g.timeAgo}</p>
+                <p className="text-[11px] text-muted-foreground">{g.count} questions · {g.timeAgo}</p>
               </div>
-              <Badge variant="outline" className={`text-[10px] ${difficultyStyles[g.difficulty]}`}>
+              <Badge variant="outline" className={`text-[11px] ${difficultyStyles[g.difficulty]}`}>
                 {g.difficulty}
               </Badge>
             </div>

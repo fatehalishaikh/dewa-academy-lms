@@ -35,13 +35,13 @@ export function RegEmiratesIdWidget() {
 
         {/* Recent extractions */}
         <div className="space-y-1.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Recent</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Recent</p>
           {recentExtractions.map(({ initials, name, confidence, time }) => (
             <div key={name} className="flex items-center gap-2 bg-muted/30 rounded-lg px-2.5 py-2">
-              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary shrink-0">{initials}</div>
+              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[11px] font-bold text-primary shrink-0">{initials}</div>
               <span className="text-xs text-foreground flex-1 truncate">{name}</span>
-              <span className="text-[10px] text-muted-foreground">{time}</span>
-              <span className="text-[10px] font-semibold text-green-400">{confidence}%</span>
+              <span className="text-[11px] text-muted-foreground">{time}</span>
+              <span className="text-[11px] font-semibold text-green-400">{confidence}%</span>
             </div>
           ))}
         </div>

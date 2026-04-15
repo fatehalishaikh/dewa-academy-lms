@@ -17,8 +17,12 @@ const SUBJECTS = [
 const DATES = ['Mar 20', 'Mar 10', 'Feb 28', 'Mar 18', 'Mar 5', 'Feb 20', 'Mar 15', 'Mar 2', 'Feb 25']
 
 function getGradesByClass(studentId: string) {
-  let seed = 0
-  for (const c of studentId) seed = (seed * 31 + c.charCodeAt(0)) & 0xffff
+  // djb2 hash — produces very distinct seeds for similar IDs (e.g. stu-003 vs stu-009)
+  let seed = 5381
+  for (let i = 0; i < studentId.length; i++) {
+    seed = (((seed << 5) + seed) ^ studentId.charCodeAt(i)) | 0
+  }
+  seed = Math.abs(seed)
 
   return SUBJECTS.map((s) => {
     const assignments = s.assignmentTitles.map((title, i) => {
@@ -91,9 +95,9 @@ export default function ParentGrades() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="rounded-[10px] border-border">
+        <Card className="rounded-xl border-border">
           <CardContent className="p-5 text-center">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Current GPA</p>
+            <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Current GPA</p>
             <p className="text-4xl font-bold text-primary">{child?.gpa.toFixed(1) ?? '—'}</p>
             <p className="text-xs text-muted-foreground mt-1">out of 4.0</p>
             <div className="mt-3 flex items-center justify-center gap-1 text-emerald-400 text-xs">
@@ -102,7 +106,7 @@ export default function ParentGrades() {
             </div>
           </CardContent>
         </Card>
-        <Card className="rounded-[10px] border-border lg:col-span-2">
+        <Card className="rounded-xl border-border lg:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-primary" />
@@ -128,7 +132,7 @@ export default function ParentGrades() {
       </div>
 
       {(child ? getGradesByClass(child.id) : []).map((cls) => (
-        <Card key={cls.subject} className="rounded-[10px] border-border">
+        <Card key={cls.subject} className="rounded-xl border-border">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div>
@@ -137,20 +141,20 @@ export default function ParentGrades() {
               </div>
               <div className="text-right">
                 <p className={`text-xl font-bold ${gradeColor(cls.average)}`}>{cls.average}%</p>
-                <p className="text-[10px] text-muted-foreground">{letterGrade(cls.average)} grade</p>
+                <p className="text-[11px] text-muted-foreground">{letterGrade(cls.average)} grade</p>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               {cls.assignments.map((a) => (
-                <div key={a.title} className="flex items-center gap-3 p-2.5 rounded-[10px] bg-card border border-border">
+                <div key={a.title} className="flex items-center gap-3 p-2.5 rounded-xl bg-card border border-border">
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-medium text-foreground">{a.title}</p>
-                    <p className="text-[10px] text-muted-foreground">{a.date} · {a.points}</p>
+                    <p className="text-[11px] text-muted-foreground">{a.date} · {a.points}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-[10px] h-5">{letterGrade(a.grade)}</Badge>
+                    <Badge variant="outline" className="text-[11px] h-5">{letterGrade(a.grade)}</Badge>
                     <span className={`text-sm font-bold ${gradeColor(a.grade)}`}>{a.grade}%</span>
                   </div>
                 </div>

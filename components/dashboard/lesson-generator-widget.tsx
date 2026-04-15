@@ -73,7 +73,7 @@ export function LessonGeneratorWidget() {
             <div key={l.topic} className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-muted/40">
               <div>
                 <p className="text-xs font-medium text-foreground">{l.topic}</p>
-                <p className="text-[10px] text-muted-foreground">{l.subject} · {l.grade} · {l.timeAgo}</p>
+                <p className="text-[11px] text-muted-foreground">{l.subject} · {l.grade} · {l.timeAgo}</p>
               </div>
               <span className="text-[11px] font-semibold" style={{ color: alignmentColor(l.alignment) }}>
                 {l.alignment}%

@@ -80,11 +80,11 @@ export function ResourceRecommendationsWidget() {
             <div key={r.title} className="flex items-start justify-between gap-3 py-1.5 px-3 rounded-lg bg-muted/40">
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium text-foreground truncate">{r.title}</p>
-                <p className="text-[10px] text-muted-foreground leading-snug">{r.reason}</p>
+                <p className="text-[11px] text-muted-foreground leading-snug">{r.reason}</p>
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
                 <span className="text-[11px] font-semibold" style={{ color: relevanceColor(r.relevance) }}>{r.relevance}%</span>
-                <Badge variant="outline" className={`text-[10px] ${typeStyles[r.resourceType]}`}>
+                <Badge variant="outline" className={`text-[11px] ${typeStyles[r.resourceType]}`}>
                   {r.resourceType}
                 </Badge>
               </div>

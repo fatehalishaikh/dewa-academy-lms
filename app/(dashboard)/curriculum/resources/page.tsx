@@ -86,7 +86,7 @@ export default function CurriculumResources() {
                 </div>
                 <div>
                   <p className="text-base font-bold text-foreground">{countByType(t)}</p>
-                  <p className="text-[10px] text-muted-foreground capitalize">{t}s</p>
+                  <p className="text-[11px] text-muted-foreground capitalize">{t}s</p>
                 </div>
               </CardContent>
             </Card>
@@ -104,7 +104,7 @@ export default function CurriculumResources() {
             <>
               <Upload className="w-6 h-6 text-muted-foreground" />
               <p className="text-sm font-medium text-muted-foreground">Click or drag to upload a resource</p>
-              <p className="text-[10px] text-muted-foreground">PDF, DOCX, MP4, PPTX supported</p>
+              <p className="text-[11px] text-muted-foreground">PDF, DOCX, MP4, PPTX supported</p>
             </>
           )}
           {uploadingState === 'uploading' && (
@@ -144,7 +144,7 @@ export default function CurriculumResources() {
         >
           {TYPES.map(t => <option key={t} className="capitalize">{t}</option>)}
         </select>
-        <span className="text-[10px] text-muted-foreground ml-1">{filtered.length} resources</span>
+        <span className="text-[11px] text-muted-foreground ml-1">{filtered.length} resources</span>
       </div>
 
       {/* Resource table */}
@@ -153,12 +153,12 @@ export default function CurriculumResources() {
           <table className="w-full">
             <thead>
               <tr className="bg-muted/20 border-b border-border">
-                <th className="text-left px-5 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Resource</th>
-                <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Type</th>
-                <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Subject</th>
-                <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Grade</th>
-                <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Uploaded</th>
-                <th className="text-center px-3 py-2.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Links</th>
+                <th className="text-left px-5 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Resource</th>
+                <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Type</th>
+                <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Subject</th>
+                <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Grade</th>
+                <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Uploaded</th>
+                <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Links</th>
                 <th className="w-28" />
               </tr>
             </thead>
@@ -177,7 +177,7 @@ export default function CurriculumResources() {
                       </div>
                     </td>
                     <td className="px-3 py-3 text-center">
-                      <Badge variant="outline" className={`text-[9px] capitalize ${TYPE_COLORS[resource.resourceType]}`}>
+                      <Badge variant="outline" className={`text-[11px] capitalize ${TYPE_COLORS[resource.resourceType]}`}>
                         {resource.resourceType}
                       </Badge>
                     </td>
@@ -197,7 +197,7 @@ export default function CurriculumResources() {
                     </td>
                     <td className="px-3 py-3 text-center">
                       {linkFeedback === resource.id ? (
-                        <span className="text-[10px] text-emerald-400 flex items-center gap-1 justify-center">
+                        <span className="text-[11px] text-emerald-400 flex items-center gap-1 justify-center">
                           <CheckCircle2 className="w-3 h-3" /> Linked
                         </span>
                       ) : isLinking ? (
@@ -205,25 +205,25 @@ export default function CurriculumResources() {
                           <select
                             value={linkLesson}
                             onChange={e => setLinkLesson(e.target.value)}
-                            className="bg-background border border-border rounded-lg px-1.5 py-1 text-[10px] focus:outline-none focus:border-primary/50 max-w-[100px]"
+                            className="bg-background border border-border rounded-lg px-1.5 py-1 text-[11px] focus:outline-none focus:border-primary/50 max-w-[100px]"
                           >
                             <option value="">Pick lesson…</option>
                             {lessons.map(l => <option key={l.id} value={l.id}>{l.title.slice(0, 25)}…</option>)}
                           </select>
                           <Button
                             size="sm"
-                            className="h-5 text-[9px] px-2"
+                            className="h-5 text-[11px] px-2"
                             onClick={() => linkLesson && handleLink(resource.id, linkLesson)}
                             disabled={!linkLesson}
                           >Go</Button>
-                          <Button size="sm" variant="outline" className="h-5 text-[9px] px-2" onClick={() => setLinkingId(null)}>✕</Button>
+                          <Button size="sm" variant="outline" className="h-5 text-[11px] px-2" onClick={() => setLinkingId(null)}>✕</Button>
                         </div>
                       ) : (
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => setLinkingId(resource.id)}
-                          className="h-6 text-[10px] gap-1"
+                          className="h-6 text-[11px] gap-1"
                         >
                           <Link2 className="w-2.5 h-2.5" /> Link
                         </Button>

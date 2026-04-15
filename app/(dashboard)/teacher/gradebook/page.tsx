@@ -74,15 +74,15 @@ export default function TeacherGradebook() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
-                  <th className="text-left px-4 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-48">Student</th>
+                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-48">Student</th>
                   {assignments.map(a => (
                     <th key={a.id} className="px-3 py-3 text-center">
-                      <p className="text-[10px] font-semibold text-foreground truncate max-w-[100px]">{a.title}</p>
-                      <p className="text-[9px] text-muted-foreground">Due {a.dueDate} · {a.points}pts</p>
+                      <p className="text-[11px] font-semibold text-foreground truncate max-w-[100px]">{a.title}</p>
+                      <p className="text-[11px] text-muted-foreground">Due {a.dueDate} · {a.points}pts</p>
                     </th>
                   ))}
                   <th className="px-3 py-3 text-center">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Average</p>
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Average</p>
                   </th>
                 </tr>
               </thead>
@@ -96,7 +96,7 @@ export default function TeacherGradebook() {
                     <tr key={stu.id} className="border-b border-border hover:bg-muted/20 transition-colors">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0" style={{ background: stu.avatarColor }}>
+                          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0" style={{ background: stu.avatarColor }}>
                             {stu.initials}
                           </div>
                           <StudentNameLink studentId={stu.id} name={stu.name} className="text-xs font-medium text-foreground truncate" />
@@ -129,7 +129,7 @@ export default function TeacherGradebook() {
               <tfoot>
                 <tr className="bg-muted/30 border-t border-border">
                   <td className="px-4 py-2">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Class Average</p>
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Class Average</p>
                   </td>
                   {assignments.map(a => {
                     const vals = classStudents.map(s => s && gradeData[s.id]?.[a.id]).filter(v => v != null) as number[]
@@ -153,7 +153,7 @@ export default function TeacherGradebook() {
       </Card>
 
       {/* Legend */}
-      <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
+      <div className="flex items-center gap-4 text-[11px] text-muted-foreground">
         <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-500/20" />90–100 (A)</div>
         <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-500/20" />75–89 (B/C)</div>
         <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-red-500/20" />Below 75 (D/F)</div>

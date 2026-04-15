@@ -46,11 +46,11 @@ export default function ProfileAssessment() {
             <div key={a.id} className="flex items-center gap-3 py-3 px-4 rounded-xl bg-muted/40">
               <div className="flex-1 min-w-0 grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
                 <div>
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1 block">Name</Label>
+                  <Label className="text-[11px] text-muted-foreground uppercase tracking-wide mb-1 block">Name</Label>
                   <Input defaultValue={a.name} className="h-8 text-xs rounded-lg" />
                 </div>
                 <div>
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1 block">Type</Label>
+                  <Label className="text-[11px] text-muted-foreground uppercase tracking-wide mb-1 block">Type</Label>
                   <Select defaultValue={a.type}>
                     <SelectTrigger className="h-8 text-xs rounded-lg">
                       <SelectValue />
@@ -63,7 +63,7 @@ export default function ProfileAssessment() {
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1 block">Duration</Label>
+                  <Label className="text-[11px] text-muted-foreground uppercase tracking-wide mb-1 block">Duration</Label>
                   <div className="flex items-center gap-2">
                     <Input defaultValue={a.duration} type="number" className="h-8 text-xs rounded-lg w-16" />
                     <span className="text-xs text-muted-foreground">min</span>
@@ -131,11 +131,11 @@ export default function ProfileAssessment() {
                     opacity: 0.85,
                   }}
                 >
-                  <span className="text-[9px] font-semibold text-white truncate px-1">{band.label}</span>
+                  <span className="text-[11px] font-semibold text-white truncate px-1">{band.label}</span>
                 </div>
               ))}
             </div>
-            <div className="flex justify-between text-[10px] text-muted-foreground">
+            <div className="flex justify-between text-[11px] text-muted-foreground">
               <span>0%</span>
               <span>50%</span>
               <span>100%</span>

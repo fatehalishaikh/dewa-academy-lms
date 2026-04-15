@@ -228,13 +228,13 @@ export default function CurriculumBuilder() {
           ) : <span className="w-4 shrink-0" />}
           <NodeIcon className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
           <span className="flex-1 text-xs font-medium text-foreground truncate">{node.title}</span>
-          {node.version && <span className="text-[9px] text-muted-foreground/50 shrink-0">v{node.version}</span>}
-          <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${statusColor[node.status]}`}>{node.status}</Badge>
-          {node.duration && <span className="text-[10px] text-muted-foreground shrink-0">{node.duration}h</span>}
+          {node.version && <span className="text-[11px] text-muted-foreground/50 shrink-0">v{node.version}</span>}
+          <Badge variant="outline" className={`text-[11px] h-4 shrink-0 ${statusColor[node.status]}`}>{node.status}</Badge>
+          {node.duration && <span className="text-[11px] text-muted-foreground shrink-0">{node.duration}h</span>}
           {/* Submit for Review button */}
           {node.status === 'draft' && (
             <button
-              className="opacity-0 group-hover:opacity-100 h-5 px-1.5 flex items-center justify-center rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-all shrink-0 text-[9px] font-medium gap-1"
+              className="opacity-0 group-hover:opacity-100 h-5 px-1.5 flex items-center justify-center rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-all shrink-0 text-[11px] font-medium gap-1"
               onClick={e => { e.stopPropagation(); updateNodeStatus(node.id, 'under-review', 'teacher') }}
               title="Submit for Review"
             >
@@ -244,7 +244,7 @@ export default function CurriculumBuilder() {
           {/* Open content button for lessons */}
           {node.nodeType === 'lesson' && (
             <button
-              className="opacity-0 group-hover:opacity-100 h-5 px-1.5 flex items-center justify-center rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-all shrink-0 text-[9px] font-medium gap-1"
+              className="opacity-0 group-hover:opacity-100 h-5 px-1.5 flex items-center justify-center rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-all shrink-0 text-[11px] font-medium gap-1"
               onClick={e => { e.stopPropagation(); setContentView(node.id); setOpenSection('keyConcepts') }}
               title="Open lesson content"
             >
@@ -265,12 +265,12 @@ export default function CurriculumBuilder() {
 
         {addingForm?.parentId === node.id && (
           <div className="mx-3 mb-2 p-3 bg-muted/10 border border-border rounded-xl space-y-2" style={{ marginLeft: `${12 + depth * 20 + 24}px` }}>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">New {addingForm.nodeType}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">New {addingForm.nodeType}</p>
             <input autoFocus value={addingForm.title} onChange={e => setAddingForm(prev => prev ? { ...prev, title: e.target.value } : prev)} placeholder="Title…" className="w-full bg-background border border-border rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-primary/50" />
             <input value={addingForm.description} onChange={e => setAddingForm(prev => prev ? { ...prev, description: e.target.value } : prev)} placeholder="Description (optional)…" className="w-full bg-background border border-border rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-primary/50" />
             <div className="flex gap-2">
-              <Button size="sm" onClick={handleAddNode} className="h-6 text-[10px]">Add</Button>
-              <Button size="sm" variant="outline" onClick={() => setAddingForm(null)} className="h-6 text-[10px]">Cancel</Button>
+              <Button size="sm" onClick={handleAddNode} className="h-6 text-[11px]">Add</Button>
+              <Button size="sm" variant="outline" onClick={() => setAddingForm(null)} className="h-6 text-[11px]">Cancel</Button>
             </div>
           </div>
         )}
@@ -331,24 +331,24 @@ export default function CurriculumBuilder() {
           {/* Meta */}
           <div className="mt-4 pt-4 border-t border-border space-y-2">
             <div>
-              <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Status</p>
-              <Badge variant="outline" className={`text-[9px] ${statusColor[contentNode.status]}`}>{contentNode.status}</Badge>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Status</p>
+              <Badge variant="outline" className={`text-[11px] ${statusColor[contentNode.status]}`}>{contentNode.status}</Badge>
             </div>
             {contentNode.version && (
               <div>
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Version</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Version</p>
                 <span className="text-xs text-muted-foreground">v{contentNode.version}</span>
               </div>
             )}
             {content && (
               <div>
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Duration</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Duration</p>
                 <span className="text-xs text-muted-foreground">{content.estimatedMinutes} min</span>
               </div>
             )}
             {nodeAsmts.length > 0 && (
               <div>
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Assessments</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Assessments</p>
                 <div className="space-y-0.5">
                   {nodeAsmts.map(a => (
                     <Badge key={a.id} variant="outline" className={`text-[8px] block w-fit ${a.type === 'formative' ? 'border-blue-500/30 text-blue-400' : 'border-purple-500/30 text-purple-400'}`}>{a.type}</Badge>
@@ -366,12 +366,12 @@ export default function CurriculumBuilder() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Badge variant="outline" className={`text-[9px] h-4 ${statusColor[contentNode.status]}`}>{contentNode.nodeType} · {contentNode.status}</Badge>
-                    {contentNode.version && <Badge variant="outline" className="text-[9px] h-4 border-muted-foreground/30 text-muted-foreground">v{contentNode.version}</Badge>}
+                    <Badge variant="outline" className={`text-[11px] h-4 ${statusColor[contentNode.status]}`}>{contentNode.nodeType} · {contentNode.status}</Badge>
+                    {contentNode.version && <Badge variant="outline" className="text-[11px] h-4 border-muted-foreground/30 text-muted-foreground">v{contentNode.version}</Badge>}
                   </div>
                   <h2 className="text-base font-semibold text-foreground">{contentNode.title}</h2>
                   {contentNode.updatedAt && (
-                    <p className="text-[10px] text-muted-foreground mt-0.5">Updated {contentNode.updatedAt} · {contentNode.updatedBy}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">Updated {contentNode.updatedAt} · {contentNode.updatedBy}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -403,11 +403,11 @@ export default function CurriculumBuilder() {
               {/* Objectives */}
               {contentNode.objectives.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-border">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Learning Objectives</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Learning Objectives</p>
                   <ul className="space-y-1">
                     {contentNode.objectives.map((obj, i) => (
                       <li key={i} className="text-xs text-foreground flex gap-2">
-                        <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5">{i + 1}</span>
+                        <span className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5">{i + 1}</span>
                         {obj}
                       </li>
                     ))}
@@ -421,7 +421,7 @@ export default function CurriculumBuilder() {
               {/* Introduction */}
               {content && (
                 <div className="p-4 bg-primary/5 border border-primary/15 rounded-xl">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-2">Introduction</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-primary mb-2">Introduction</p>
                   <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">{content.introduction}</p>
                 </div>
               )}
@@ -455,15 +455,15 @@ export default function CurriculumBuilder() {
                     {content.workedExamples.map((ex, i) => (
                       <div key={i} className="border border-border rounded-xl overflow-hidden">
                         <div className="px-4 py-2.5 bg-emerald-500/5 border-b border-border flex items-center gap-2">
-                          <span className="w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-400 text-[9px] font-bold flex items-center justify-center shrink-0">E{i + 1}</span>
+                          <span className="w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-400 text-[11px] font-bold flex items-center justify-center shrink-0">E{i + 1}</span>
                           <p className="text-xs font-semibold text-foreground">{ex.title}</p>
                         </div>
                         <div className="p-4">
                           <div className="mb-3 p-3 bg-muted/10 rounded-xl border border-border">
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Problem</p>
+                            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Problem</p>
                             <p className="text-xs text-foreground">{ex.problem}</p>
                           </div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Solution</p>
+                          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Solution</p>
                           <ol className="space-y-1.5">
                             {ex.solution.map((step, j) => (
                               <li key={j} className="flex gap-2 text-xs text-foreground">
@@ -485,20 +485,20 @@ export default function CurriculumBuilder() {
                   <div className="flex items-center gap-2 mb-4">
                     <PenLine className="w-4 h-4 text-amber-400" />
                     <h3 className="text-sm font-semibold text-foreground">Practice Problems</h3>
-                    <span className="text-[10px] text-muted-foreground">({content.practiceProblems.length} problems)</span>
+                    <span className="text-[11px] text-muted-foreground">({content.practiceProblems.length} problems)</span>
                   </div>
                   <div className="space-y-4">
                     {content.practiceProblems.map((p, i) => (
                       <div key={i} className="border border-border rounded-xl p-4">
                         <div className="flex gap-2 mb-2">
-                          <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-400 text-[9px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                          <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-400 text-[11px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
                           <p className="text-xs text-foreground">{p.question}</p>
                         </div>
                         {p.hint && (
-                          <p className="text-[10px] text-blue-400 mt-1 ml-7 italic">Hint: {p.hint}</p>
+                          <p className="text-[11px] text-blue-400 mt-1 ml-7 italic">Hint: {p.hint}</p>
                         )}
                         <details className="mt-2 ml-7">
-                          <summary className="text-[10px] text-muted-foreground cursor-pointer hover:text-foreground">Show answer</summary>
+                          <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">Show answer</summary>
                           <p className="text-xs text-emerald-400 mt-1 font-mono">{p.answer}</p>
                         </details>
                       </div>
@@ -536,7 +536,7 @@ export default function CurriculumBuilder() {
                     <div className="space-y-3">
                       {nodeActs.map((act, i) => (
                         <div key={act.id} className="flex items-center gap-3 p-3 bg-muted/10 border border-border rounded-xl">
-                          <span className="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 text-[9px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                          <span className="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 text-[11px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
                           <span className="text-xs text-foreground flex-1">{act.title}</span>
                           <Badge variant="outline" className="text-[8px] h-4 border-cyan-500/30 text-cyan-400 shrink-0 capitalize">{act.activityType}</Badge>
                         </div>
@@ -554,7 +554,7 @@ export default function CurriculumBuilder() {
                   <div className="flex items-center gap-2 mb-4">
                     <Users className="w-4 h-4 text-orange-400" />
                     <h3 className="text-sm font-semibold text-foreground">Teacher Notes</h3>
-                    <Badge variant="outline" className="text-[9px] border-orange-500/30 text-orange-400">Internal</Badge>
+                    <Badge variant="outline" className="text-[11px] border-orange-500/30 text-orange-400">Internal</Badge>
                   </div>
                   <div className="p-4 bg-orange-500/5 border border-orange-500/15 rounded-xl">
                     <p className="text-xs text-foreground leading-relaxed whitespace-pre-line">{content.teacherNotes}</p>
@@ -621,7 +621,7 @@ export default function CurriculumBuilder() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-sm">Curriculum Structure</CardTitle>
-              <p className="text-[10px] text-muted-foreground mt-0.5">Hover a lesson and click "Open" to view its full content</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Hover a lesson and click "Open" to view its full content</p>
             </div>
             <Button size="sm" variant="outline" onClick={handleAiSuggest} disabled={aiGenerating} className="h-7 text-xs gap-1.5 border-primary/30 text-primary hover:bg-primary/10 shrink-0">
               {aiGenerating ? <><span className="w-3 h-3 rounded-full border-2 border-primary border-t-transparent animate-spin" /> Generating…</> : <><Wand2 className="w-3 h-3" /> AI Suggest Structure</>}
@@ -646,9 +646,9 @@ export default function CurriculumBuilder() {
 
               <div>
                 <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${statusColor[selectedNode.status]}`}>{selectedNode.nodeType} · {selectedNode.status}</Badge>
+                  <Badge variant="outline" className={`text-[11px] h-4 shrink-0 ${statusColor[selectedNode.status]}`}>{selectedNode.nodeType} · {selectedNode.status}</Badge>
                   <div className="flex items-center gap-1.5">
-                    {selectedNode.version && <Badge variant="outline" className="text-[9px] h-4 border-muted-foreground/30 text-muted-foreground">v{selectedNode.version}</Badge>}
+                    {selectedNode.version && <Badge variant="outline" className="text-[11px] h-4 border-muted-foreground/30 text-muted-foreground">v{selectedNode.version}</Badge>}
                     <button
                       onClick={() => {
                         setShareToast(true)
@@ -663,8 +663,8 @@ export default function CurriculumBuilder() {
                   </div>
                 </div>
                 <h3 className="text-sm font-semibold text-foreground">{selectedNode.title}</h3>
-                {selectedNode.duration && <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1"><Clock className="w-3 h-3" /> {selectedNode.duration}h duration</p>}
-                {selectedNode.updatedAt && <p className="text-[10px] text-muted-foreground mt-0.5">Updated {selectedNode.updatedAt} by {selectedNode.updatedBy}</p>}
+                {selectedNode.duration && <p className="text-[11px] text-muted-foreground mt-0.5 flex items-center gap-1"><Clock className="w-3 h-3" /> {selectedNode.duration}h duration</p>}
+                {selectedNode.updatedAt && <p className="text-[11px] text-muted-foreground mt-0.5">Updated {selectedNode.updatedAt} by {selectedNode.updatedBy}</p>}
               </div>
 
               {/* Submit for Review */}
@@ -689,12 +689,12 @@ export default function CurriculumBuilder() {
               {/* Collaborators */}
               {nodeCollaborators.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1"><Users className="w-3 h-3" /> Collaborators</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1"><Users className="w-3 h-3" /> Collaborators</p>
                   <div className="flex items-center gap-1.5 flex-wrap">
                     {nodeCollaborators.map(c => (
                       <div key={c.name} className="flex items-center gap-1">
                         <Avatar className="w-5 h-5"><AvatarFallback style={{ background: c.color + '33', color: c.color }} className="text-[8px] font-bold">{c.initials}</AvatarFallback></Avatar>
-                        <span className="text-[10px] text-muted-foreground">{c.name.split(' ')[0]}</span>
+                        <span className="text-[11px] text-muted-foreground">{c.name.split(' ')[0]}</span>
                         <Badge variant="outline" className="text-[8px] h-3.5 border-muted/40 text-muted-foreground px-1">{c.role}</Badge>
                       </div>
                     ))}
@@ -705,7 +705,7 @@ export default function CurriculumBuilder() {
               {/* Description */}
               {selectedNode.description && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Description</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Description</p>
                   <p className="text-xs text-muted-foreground">{selectedNode.description}</p>
                 </div>
               )}
@@ -713,7 +713,7 @@ export default function CurriculumBuilder() {
               {/* Objectives */}
               {selectedNode.objectives.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Objectives</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Objectives</p>
                   <ul className="space-y-0.5">
                     {selectedNode.objectives.map((obj, i) => (
                       <li key={i} className="text-xs text-muted-foreground flex gap-1.5"><span className="text-primary mt-0.5 shrink-0">•</span>{obj}</li>
@@ -725,9 +725,9 @@ export default function CurriculumBuilder() {
               {/* Linked Standards */}
               {selectedNode.standardIds.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Linked Standards</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Linked Standards</p>
                   <div className="flex flex-wrap gap-1">
-                    {selectedNode.standardIds.map(sid => <Badge key={sid} variant="outline" className="text-[9px] border-primary/30 text-primary">{sid}</Badge>)}
+                    {selectedNode.standardIds.map(sid => <Badge key={sid} variant="outline" className="text-[11px] border-primary/30 text-primary">{sid}</Badge>)}
                   </div>
                 </div>
               )}
@@ -735,11 +735,11 @@ export default function CurriculumBuilder() {
               {/* Competencies */}
               {(selectedNode.competencies ?? []).length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Competencies</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Competencies</p>
                   <div className="flex flex-wrap gap-1">
                     {(selectedNode.competencies ?? []).map(comp => {
                       const isLM = comp.startsWith('UAE Labor Market')
-                      return <Badge key={comp} variant="outline" className={`text-[9px] ${isLM ? 'border-amber-500/30 text-amber-400' : 'border-muted-foreground/30 text-muted-foreground'}`}>{comp.replace('UAE Labor Market: ', '')}</Badge>
+                      return <Badge key={comp} variant="outline" className={`text-[11px] ${isLM ? 'border-amber-500/30 text-amber-400' : 'border-muted-foreground/30 text-muted-foreground'}`}>{comp.replace('UAE Labor Market: ', '')}</Badge>
                     })}
                   </div>
                 </div>
@@ -748,7 +748,7 @@ export default function CurriculumBuilder() {
               {/* Assessments */}
               {nodeAssessments.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1"><ClipboardList className="w-3 h-3" /> Assessments</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1"><ClipboardList className="w-3 h-3" /> Assessments</p>
                   <div className="space-y-1">
                     {nodeAssessments.map(a => (
                       <div key={a.id} className="flex items-center justify-between bg-muted/10 rounded-lg px-2 py-1.5">
@@ -763,7 +763,7 @@ export default function CurriculumBuilder() {
               {/* Activities */}
               {nodeActivities.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1"><Activity className="w-3 h-3" /> Activities</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1"><Activity className="w-3 h-3" /> Activities</p>
                   <div className="space-y-1">
                     {nodeActivities.map(act => (
                       <div key={act.id} className="flex items-center justify-between bg-muted/10 rounded-lg px-2 py-1.5">
@@ -778,15 +778,15 @@ export default function CurriculumBuilder() {
               {/* Version history */}
               {nodeVersionHistory.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Version History</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Version History</p>
                   <div className="space-y-1">
                     {nodeVersionHistory.map(v => (
                       <div key={v.version} className="flex items-center justify-between bg-muted/10 rounded-lg px-2 py-1.5">
                         <div>
-                          <span className="text-[10px] font-mono text-foreground">v{v.version}</span>
-                          <span className="text-[10px] text-muted-foreground ml-2">{v.changedBy}</span>
+                          <span className="text-[11px] font-mono text-foreground">v{v.version}</span>
+                          <span className="text-[11px] text-muted-foreground ml-2">{v.changedBy}</span>
                         </div>
-                        <span className="text-[9px] text-muted-foreground">{v.changedAt}</span>
+                        <span className="text-[11px] text-muted-foreground">{v.changedAt}</span>
                       </div>
                     ))}
                   </div>

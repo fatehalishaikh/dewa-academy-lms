@@ -153,9 +153,9 @@ export default function CurriculumTemplates() {
               <table className="w-full text-xs">
                 <thead>
                   <tr>
-                    <th className="px-3 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase w-16 border-b border-border">Time</th>
+                    <th className="px-3 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase w-16 border-b border-border">Time</th>
                     {DAYS.map(day => (
-                      <th key={day} className="px-3 py-2 text-left text-[10px] font-semibold text-muted-foreground uppercase border-b border-border">
+                      <th key={day} className="px-3 py-2 text-left text-[11px] font-semibold text-muted-foreground uppercase border-b border-border">
                         {day}
                       </th>
                     ))}
@@ -164,7 +164,7 @@ export default function CurriculumTemplates() {
                 <tbody>
                   {TIME_SLOTS.map(time => (
                     <tr key={time} className="border-b border-border last:border-0">
-                      <td className="px-3 py-2 text-[10px] text-muted-foreground font-mono align-top">{time}</td>
+                      <td className="px-3 py-2 text-[11px] text-muted-foreground font-mono align-top">{time}</td>
                       {DAYS.map(day => {
                         const placement = WEEKLY_PLACEMENTS.find(p => p.day === day && p.time === time)
                         const tmpl = placement ? templates.find(t => t.id === placement.templateId) : null
@@ -173,11 +173,11 @@ export default function CurriculumTemplates() {
                             {tmpl ? (
                               <div className={`rounded-xl border px-2 py-1.5 ${subjectColor[placement!.subject] ?? 'border-border text-muted-foreground'} bg-muted/5`}>
                                 <p className="font-medium leading-tight truncate">{tmpl.title}</p>
-                                <p className="text-[9px] opacity-70 mt-0.5">{placement!.subject}</p>
+                                <p className="text-[11px] opacity-70 mt-0.5">{placement!.subject}</p>
                               </div>
                             ) : (
                               <div className="rounded-xl border border-dashed border-muted/30 px-2 py-1.5 text-center">
-                                <span className="text-[9px] text-muted-foreground/40">Free</span>
+                                <span className="text-[11px] text-muted-foreground/40">Free</span>
                               </div>
                             )}
                           </td>
@@ -204,7 +204,7 @@ export default function CurriculumTemplates() {
               <CardContent className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Title</label>
+                    <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Title</label>
                     <input
                       value={form.title}
                       onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))}
@@ -213,7 +213,7 @@ export default function CurriculumTemplates() {
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Subject</label>
+                    <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Subject</label>
                     <select
                       value={form.subject}
                       onChange={e => setForm(prev => ({ ...prev, subject: e.target.value }))}
@@ -227,7 +227,7 @@ export default function CurriculumTemplates() {
                 </div>
                 {SECTION_LABELS.map(key => (
                   <div key={key}>
-                    <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
+                    <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
                       {SECTION_DISPLAY[key]}
                     </label>
                     <textarea
@@ -265,11 +265,11 @@ export default function CurriculumTemplates() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-medium text-foreground truncate">{template.title}</p>
-                        <Badge variant="outline" className={`text-[9px] h-4 shrink-0 ${subjectColor[template.subject] ?? 'border-border text-muted-foreground'}`}>
+                        <Badge variant="outline" className={`text-[11px] h-4 shrink-0 ${subjectColor[template.subject] ?? 'border-border text-muted-foreground'}`}>
                           {template.subject}
                         </Badge>
                       </div>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
                         Created {new Date(template.createdDate).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })}
                         · {SECTION_LABELS.length} sections
                       </p>
@@ -280,7 +280,7 @@ export default function CurriculumTemplates() {
                         variant="outline"
                         onClick={e => { e.stopPropagation(); handleAiEnhance(template.id) }}
                         disabled={isEnhancing}
-                        className="h-6 text-[10px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
+                        className="h-6 text-[11px] gap-1 border-primary/30 text-primary hover:bg-primary/10"
                       >
                         {isEnhancing
                           ? <span className="w-2.5 h-2.5 rounded-full border-2 border-primary border-t-transparent animate-spin" />
@@ -292,7 +292,7 @@ export default function CurriculumTemplates() {
                         size="sm"
                         variant="outline"
                         onClick={e => { e.stopPropagation(); handleClone(template) }}
-                        className="h-6 text-[10px] gap-1"
+                        className="h-6 text-[11px] gap-1"
                       >
                         <Copy className="w-2.5 h-2.5" /> Clone
                       </Button>
@@ -300,7 +300,7 @@ export default function CurriculumTemplates() {
                         size="sm"
                         variant="outline"
                         onClick={e => handleShare(template.id, e)}
-                        className={`h-6 text-[10px] gap-1 ${isShared ? 'border-emerald-500/30 text-emerald-400' : ''}`}
+                        className={`h-6 text-[11px] gap-1 ${isShared ? 'border-emerald-500/30 text-emerald-400' : ''}`}
                       >
                         <Share2 className="w-2.5 h-2.5" /> {isShared ? 'Copied!' : 'Share'}
                       </Button>
@@ -312,7 +312,7 @@ export default function CurriculumTemplates() {
                     <div className="border-t border-border px-5 py-4 space-y-3">
                       {SECTION_LABELS.map(key => (
                         <div key={key}>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-0.5">
+                          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-0.5">
                             {SECTION_DISPLAY[key]}
                           </p>
                           <p className="text-xs text-foreground">{template.sections[key] || '—'}</p>

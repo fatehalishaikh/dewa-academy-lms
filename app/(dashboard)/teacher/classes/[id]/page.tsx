@@ -66,7 +66,7 @@ export default function ClassDetail() {
               </div>
               <div>
                 <p className="text-xl font-bold text-foreground">{value}</p>
-                <p className="text-[10px] text-muted-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{label}</p>
               </div>
             </CardContent>
           </Card>
@@ -87,7 +87,7 @@ export default function ClassDetail() {
               <div key={slot.day + slot.time} className="px-3 py-2 rounded-xl border border-primary/20 bg-primary/5">
                 <p className="text-xs font-semibold text-primary">{slot.day}</p>
                 <p className="text-[11px] text-muted-foreground">{slot.time}</p>
-                <p className="text-[10px] text-muted-foreground">{slot.room}</p>
+                <p className="text-[11px] text-muted-foreground">{slot.room}</p>
               </div>
             ))}
           </div>
@@ -107,13 +107,13 @@ export default function ClassDetail() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border bg-muted/20">
-                  <th className="text-left px-5 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider w-52">Student</th>
-                  <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">GPA</th>
-                  <th className="text-center px-3 py-3 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Attend.</th>
+                  <th className="text-left px-5 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-52">Student</th>
+                  <th className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">GPA</th>
+                  <th className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Attend.</th>
                   {classHomework.map(hw => (
                     <th key={hw.id} className="text-center px-3 py-3 min-w-[90px]">
-                      <p className="text-[10px] font-semibold text-foreground truncate">{hw.title.split(' ').slice(0, 2).join(' ')}</p>
-                      <p className="text-[9px] text-muted-foreground">{hw.totalPoints} pts</p>
+                      <p className="text-[11px] font-semibold text-foreground truncate">{hw.title.split(' ').slice(0, 2).join(' ')}</p>
+                      <p className="text-[11px] text-muted-foreground">{hw.totalPoints} pts</p>
                     </th>
                   ))}
                   <th className="w-10" />
@@ -131,7 +131,7 @@ export default function ClassDetail() {
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-2.5">
                           <Avatar className="w-7 h-7 shrink-0">
-                            <AvatarFallback className="text-[10px] font-bold text-white" style={{ background: stu.avatarColor }}>
+                            <AvatarFallback className="text-[11px] font-bold text-white" style={{ background: stu.avatarColor }}>
                               {stu.initials}
                             </AvatarFallback>
                           </Avatar>
@@ -140,7 +140,7 @@ export default function ClassDetail() {
                             {stu.status === 'at-risk' && (
                               <div className="flex items-center gap-1">
                                 <AlertTriangle className="w-2.5 h-2.5 text-red-400" />
-                                <span className="text-[9px] text-red-400">At risk</span>
+                                <span className="text-[11px] text-red-400">At risk</span>
                               </div>
                             )}
                           </div>
@@ -167,9 +167,9 @@ export default function ClassDetail() {
                                 {pct}%
                               </span>
                             ) : sub?.status === 'submitted' || sub?.status === 'late' ? (
-                              <Badge variant="outline" className="text-[9px] h-4 border-blue-500/30 text-blue-400">Pending</Badge>
+                              <Badge variant="outline" className="text-[11px] h-4 border-blue-500/30 text-blue-400">Pending</Badge>
                             ) : (
-                              <span className="text-[10px] text-muted-foreground">—</span>
+                              <span className="text-[11px] text-muted-foreground">—</span>
                             )}
                           </td>
                         )

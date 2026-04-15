@@ -182,28 +182,28 @@ export default function ClassActivitiesLessons() {
           <CardContent className="pt-4 space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Title *</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Title *</label>
                 <input type="text" value={form.title} onChange={e => setF('title', e.target.value)} placeholder="e.g. Forces and Motion Lab"
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Subject</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Subject</label>
                 <input type="text" value={form.subject} onChange={e => setF('subject', e.target.value)} placeholder="e.g. Physics"
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50" />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Class *</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Class *</label>
                 <input type="text" value={form.className} onChange={e => setF('className', e.target.value)} placeholder="e.g. Physics 9B"
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50" />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Date *</label>
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Date *</label>
                   <input type="date" value={form.date} onChange={e => setF('date', e.target.value)}
                     className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50" />
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Duration (min)</label>
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Duration (min)</label>
                   <input type="number" value={form.duration} onChange={e => setF('duration', e.target.value)} min={10}
                     className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50" />
                 </div>
@@ -216,7 +216,7 @@ export default function ClassActivitiesLessons() {
               { key: 'differentiation' as const,  label: 'Differentiation',          placeholder: 'Extension tasks, support strategies, EAL accommodations…' },
             ].map(({ key, label, placeholder }) => (
               <div key={key}>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">{label}</label>
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">{label}</label>
                 <textarea value={form[key]} onChange={e => setF(key, e.target.value)} placeholder={placeholder} rows={3}
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 resize-none" />
               </div>
@@ -248,9 +248,9 @@ export default function ClassActivitiesLessons() {
                 <BookOpen className="w-4 h-4 text-primary shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">{lesson.title}</p>
-                  <p className="text-[10px] text-muted-foreground">{lesson.className} · {new Date(lesson.date).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })} · {lesson.duration} min</p>
+                  <p className="text-[11px] text-muted-foreground">{lesson.className} · {new Date(lesson.date).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })} · {lesson.duration} min</p>
                 </div>
-                <Badge variant="outline" className={`text-[10px] h-5 shrink-0 ${cfg.color} ${cfg.border} gap-1`}>
+                <Badge variant="outline" className={`text-[11px] h-5 shrink-0 ${cfg.color} ${cfg.border} gap-1`}>
                   <Icon className="w-2.5 h-2.5" />{cfg.label}
                 </Badge>
                 {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
@@ -266,7 +266,7 @@ export default function ClassActivitiesLessons() {
                   ].map(({ label, content }) => (
                     content ? (
                       <div key={label}>
-                        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">{label}</p>
+                        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">{label}</p>
                         <p className="text-xs text-foreground leading-relaxed whitespace-pre-line">{content}</p>
                       </div>
                     ) : null
