@@ -111,29 +111,6 @@ export default function StudentDashboard() {
         </div>
       </Card>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Current GPA', value: student?.gpa.toFixed(1) ?? '—', sub: 'out of 4.0', icon: BarChart3, color: '#00B8A9' },
-          { label: 'Attendance', value: `${student?.attendanceRate ?? 0}%`, sub: 'this semester', icon: CheckCircle2, color: '#10B981' },
-          { label: 'Due Soon', value: upcomingAssignments.length.toString(), sub: 'assignments', icon: Clock, color: '#F59E0B' },
-          { label: 'Today\'s Classes', value: todayClasses.length.toString(), sub: 'sessions scheduled', icon: Calendar, color: '#0EA5E9' },
-        ].map(({ label, value, sub, icon: Icon, color }) => (
-          <Card key={label} className="rounded-[10px] border-border">
-            <CardContent className="px-4 py-2">
-              <div className="flex items-start justify-between mb-2">
-                <p className="text-xs text-muted-foreground">{label}</p>
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${color}20` }}>
-                  <Icon className="w-3.5 h-3.5" style={{ color }} />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-foreground">{value}</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">{sub}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
       {/* Clock In / Out — primary action */}
       <Card className={`rounded-[10px] border-2 transition-colors ${clockedIn ? 'border-emerald-500/40 bg-emerald-500/5' : 'border-primary/30 bg-primary/5'}`}>
         <CardContent className="p-4">
@@ -170,6 +147,29 @@ export default function StudentDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Current GPA', value: student?.gpa.toFixed(1) ?? '—', sub: 'out of 4.0', icon: BarChart3, color: 'var(--primary)', gradient: 'linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, var(--card)) 0%, var(--card) 100%)' },
+          { label: 'Attendance', value: `${student?.attendanceRate ?? 0}%`, sub: 'this semester', icon: CheckCircle2, color: '#10B981', gradient: 'linear-gradient(135deg, color-mix(in srgb, #10B981 12%, var(--card)) 0%, var(--card) 100%)' },
+          { label: 'Due Soon', value: upcomingAssignments.length.toString(), sub: 'assignments', icon: Clock, color: '#F59E0B', gradient: undefined },
+          { label: 'Today\'s Classes', value: todayClasses.length.toString(), sub: 'sessions scheduled', icon: Calendar, color: '#0EA5E9', gradient: undefined },
+        ].map(({ label, value, sub, icon: Icon, color, gradient }) => (
+          <Card key={label} className="rounded-[10px] border-border overflow-hidden" style={gradient ? { background: gradient } : undefined}>
+            <CardContent className="px-4 py-2">
+              <div className="flex items-start justify-between mb-2">
+                <p className="text-xs text-muted-foreground">{label}</p>
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: color.startsWith('var') ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : `${color}20` }}>
+                  <Icon className="w-3.5 h-3.5" style={{ color }} />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-foreground">{value}</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">{sub}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Today's Schedule */}

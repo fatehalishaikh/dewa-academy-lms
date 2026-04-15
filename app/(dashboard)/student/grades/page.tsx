@@ -2,7 +2,7 @@
 import { Sparkles, BarChart3, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { useCurrentStudent } from '@/stores/role-store'
 import { gradesByClass, gradeColor, letterGrade } from '@/data/mock-grades'
 
@@ -27,14 +27,14 @@ export default function StudentGrades() {
           <Sparkles className="w-4 h-4 text-primary" />
           <span className="text-xs font-medium text-primary uppercase tracking-wider">Academic Performance</span>
         </div>
-        <h1 className="text-xl font-bold text-foreground">My Grades</h1>
+        <h1 className="text-xl font-bold text-foreground">Grades</h1>
         <p className="text-sm text-muted-foreground mt-0.5">Current semester performance</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* GPA Summary */}
-        <Card className="rounded-[10px] border-border">
-          <CardContent className="p-5 text-center">
+        <Card className="rounded-[10px] border-border overflow-hidden" style={{ background: 'linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, var(--card)) 0%, var(--card) 100%)' }}>
+          <CardContent className="p-5 text-center relative">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Current GPA</p>
             <p className="text-4xl font-bold text-primary">{student?.gpa.toFixed(1) ?? '—'}</p>
             <p className="text-xs text-muted-foreground mt-1">out of 4.0</p>
@@ -55,17 +55,23 @@ export default function StudentGrades() {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={90} minWidth={0} initialDimension={{ width: 320, height: 200 }}>
-              <LineChart data={gpaTrend}>
-                <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
-                <YAxis domain={[2.5, 4]} tick={{ fontSize: 9, fill: '#8B9BB4' }} tickLine={false} axisLine={false} />
+              <AreaChart data={gpaTrend}>
+                <defs>
+                  <linearGradient id="studentGpaAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" style={{ stopColor: 'var(--primary)', stopOpacity: 0.25 }} />
+                    <stop offset="95%" style={{ stopColor: 'var(--primary)', stopOpacity: 0 }} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#9A9A9F' }} tickLine={false} axisLine={false} />
+                <YAxis domain={[2.5, 4]} tick={{ fontSize: 9, fill: '#9A9A9F' }} tickLine={false} axisLine={false} />
                 <Tooltip
-                  contentStyle={{ background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
-                  labelStyle={{ color: '#e2e8f0', fontWeight: 600 }}
-                  itemStyle={{ color: '#cbd5e1' }}
-                  cursor={{ stroke: 'rgba(255,255,255,0.15)', strokeWidth: 1 }}
+                  contentStyle={{ background: '#2A2D30', border: '1px solid #3A3D42', borderRadius: 8, fontSize: 11, padding: '8px 12px' }}
+                  labelStyle={{ color: '#E3E2E2', fontWeight: 600 }}
+                  itemStyle={{ color: '#9A9A9F' }}
+                  cursor={{ stroke: 'rgba(255,255,255,0.12)', strokeWidth: 1 }}
                 />
-                <Line type="monotone" dataKey="gpa" stroke="#00B8A9" strokeWidth={2} dot={{ r: 2, fill: '#00B8A9' }} />
-              </LineChart>
+                <Area type="monotone" dataKey="gpa" stroke="#27a086" strokeWidth={2} fill="url(#studentGpaAreaGrad)" dot={{ r: 2, fill: '#27a086' }} />
+              </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
