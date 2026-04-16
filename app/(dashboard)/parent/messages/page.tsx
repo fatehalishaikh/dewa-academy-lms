@@ -234,23 +234,37 @@ export default function ParentMessagesPage() {
     c.role.toLowerCase().includes(contactSearch.toLowerCase())
   )
 
+  const ACCENT = '#8B5CF6'
+
   return (
     <div className="h-[calc(100vh-0px)] flex flex-col relative">
 
-      {/* ── Page header ─────────────────────────────────────────────── */}
-      <div className="px-6 py-5 border-b border-border shrink-0">
-        <div className="flex items-center gap-2 mb-1">
-          <MessageSquare className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">Parent Communications</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Messages</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">
-              {totalUnread > 0 ? `${totalUnread} unread message${totalUnread > 1 ? 's' : ''}` : 'All caught up'}
-            </p>
+      {/* ── Hero header ─────────────────────────────────────────────── */}
+      <div
+        className="shrink-0 relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0d0920 0%, #150d2e 55%, #070d1f 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative px-6 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: `color-mix(in srgb, ${ACCENT} 20%, transparent)`, border: `1px solid color-mix(in srgb, ${ACCENT} 30%, transparent)` }}
+            >
+              <MessageSquare className="w-4 h-4" style={{ color: ACCENT }} />
+            </div>
+            <div>
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Parent Portal</p>
+              <h1 className="text-lg font-bold text-white mt-0.5">Messages</h1>
+              <p className="text-white/40 text-sm mt-0.5">
+                {totalUnread > 0 ? `${totalUnread} unread message${totalUnread > 1 ? 's' : ''}` : 'All caught up'}
+              </p>
+            </div>
           </div>
-          <Button size="sm" className="gap-1.5 h-8 text-xs" onClick={() => { setComposeOpen(true); setShowContactList(false) }}>
+          <Button size="sm" className="gap-1.5 h-8 text-xs shrink-0" onClick={() => { setComposeOpen(true); setShowContactList(false) }}>
             <Plus className="w-3.5 h-3.5" />
             New Message
           </Button>

@@ -100,58 +100,105 @@ export default function ParentReportsPage() {
     return <div className="p-6"><p className="text-sm text-muted-foreground">No children found.</p></div>
   }
 
-  return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">Progress Reports</span>
-        </div>
-        <h1 className="text-xl font-bold text-foreground">AI Progress Reports</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Generate personalized progress briefs for your child</p>
-      </div>
+  const ACCENT = '#8B5CF6'
 
-      {/* Controls */}
-      <Card className="rounded-xl border-border bg-card">
-        <CardContent className="p-5">
-          <div className="flex items-end gap-3 flex-wrap">
-            {/* Child selector */}
-            {children.length > 1 && (
-              <div className="space-y-1.5 flex-1 min-w-36">
-                <p className="text-xs text-muted-foreground">Child</p>
-                <Select value={selectedChildId} onValueChange={v => v && setSelectedChildId(v)}>
-                  <SelectTrigger className="bg-muted/30 border-border h-9 text-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {children.map(c => c && (
-                      <SelectItem key={c.id} value={c.id} className="text-sm">{c.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+  return (
+    <div className="p-6 space-y-5">
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #0d0920 0%, #150d2e 55%, #070d1f 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 p-7 flex flex-col gap-5">
+            <div className="flex items-center gap-4">
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background: `color-mix(in srgb, ${ACCENT} 20%, transparent)`, border: `1px solid color-mix(in srgb, ${ACCENT} 30%, transparent)` }}
+              >
+                <Bot className="w-5 h-5" style={{ color: ACCENT }} />
               </div>
-            )}
-            {/* Date range */}
-            <div className="space-y-1.5 flex-1 min-w-52">
-              <p className="text-xs text-muted-foreground">Report Period</p>
-              <DateRangePicker value={dateRange} onChange={setDateRange} />
+              <div>
+                <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Parent Portal</p>
+                <h1 className="text-xl font-bold text-white mt-0.5">AI Progress Reports</h1>
+                <p className="text-white/40 text-sm mt-0.5">Generate personalized AI-powered progress briefs</p>
+              </div>
             </div>
-            {/* Generate button */}
-            <Button onClick={generateReport} disabled={isGenerating} className="shrink-0">
-              {isGenerating
-                ? <><RefreshCw className="w-3.5 h-3.5 mr-2 animate-spin" />Generating…</>
-                : <><Bot className="w-3.5 h-3.5 mr-2" />Generate Report</>}
-            </Button>
-            {reportText && (
-              <Button variant="outline" size="sm" className="shrink-0" onClick={() => window.print()}>
-                <Printer className="w-3.5 h-3.5 mr-2" />
-                Print
+            {/* Controls embedded in hero */}
+            <div className="flex items-end gap-3 flex-wrap">
+              {children.length > 1 && (
+                <div className="space-y-1.5 flex-1 min-w-36">
+                  <p className="text-white/40 text-[11px] font-semibold uppercase tracking-wider">Child</p>
+                  <Select value={selectedChildId} onValueChange={v => v && setSelectedChildId(v)}>
+                    <SelectTrigger className="h-9 text-sm text-white border-white/20" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {children.map(c => c && (
+                        <SelectItem key={c.id} value={c.id} className="text-sm">{c.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <div className="space-y-1.5 flex-1 min-w-52">
+                <p className="text-white/40 text-[11px] font-semibold uppercase tracking-wider">Report Period</p>
+                <DateRangePicker value={dateRange} onChange={setDateRange} />
+              </div>
+              <Button
+                onClick={generateReport}
+                disabled={isGenerating}
+                className="shrink-0 gap-1.5"
+                style={{ background: ACCENT, borderColor: ACCENT }}
+              >
+                {isGenerating
+                  ? <><RefreshCw className="w-3.5 h-3.5 animate-spin" />Generating…</>
+                  : <><Sparkles className="w-3.5 h-3.5" />Generate Report</>}
               </Button>
-            )}
+              {reportText && (
+                <Button variant="outline" size="sm" className="shrink-0 border-white/20 text-white hover:bg-white/10" onClick={() => window.print()}>
+                  <Printer className="w-3.5 h-3.5 mr-1.5" />
+                  Print
+                </Button>
+              )}
+            </div>
           </div>
-        </CardContent>
-      </Card>
+          {/* Right — status indicators */}
+          <div className="lg:col-span-2 p-7 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            <div className="flex flex-col items-center gap-2.5">
+              <div
+                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: `color-mix(in srgb, ${ACCENT} 12%, transparent)`, border: `5px solid color-mix(in srgb, ${ACCENT} 35%, transparent)` }}
+              >
+                <Bot className="w-7 h-7" style={{ color: ACCENT }} />
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">AI Powered</p>
+                <p className="text-[11px] text-white/35">by Claude</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            <div className="flex flex-col items-center gap-2.5">
+              <div
+                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(16,185,129,0.12)', border: '5px solid rgba(16,185,129,0.35)' }}
+              >
+                <span className="text-xl font-bold text-white">{selectedChild?.gpa.toFixed(1)}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">GPA</p>
+                <p className="text-[11px] text-white/35">{selectedChild?.name.split(' ')[0]}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Error */}
       {error && (
@@ -163,7 +210,8 @@ export default function ParentReportsPage() {
 
       {/* Report output */}
       {(reportText || isGenerating) && selectedChild && (
-        <Card className="rounded-xl border-primary/20 bg-card">
+        <Card className="border overflow-hidden pt-0 gap-0" style={{ borderColor: 'color-mix(in srgb, #8B5CF6 30%, var(--border))' }}>
+          <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #8B5CF6, color-mix(in srgb, #8B5CF6 20%, transparent))' }} />
           <CardHeader className="pb-3 pt-5 px-5">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div>
@@ -202,14 +250,19 @@ export default function ParentReportsPage() {
 
       {/* Empty state */}
       {!reportText && !isGenerating && (
-        <div className="flex flex-col items-center justify-center py-16 space-y-3 text-center">
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Bot className="w-6 h-6 text-primary" />
+        <div className="flex flex-col items-center justify-center py-16 space-y-4 text-center">
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center"
+            style={{ background: 'color-mix(in srgb, #8B5CF6 12%, var(--muted))', border: '1px solid color-mix(in srgb, #8B5CF6 25%, transparent)' }}
+          >
+            <Bot className="w-7 h-7" style={{ color: '#8B5CF6' }} />
           </div>
-          <p className="text-sm font-medium text-foreground">No report generated yet</p>
-          <p className="text-xs text-muted-foreground max-w-xs">
-            Select a child and date range, then click &ldquo;Generate Report&rdquo; to create an AI-powered progress brief.
-          </p>
+          <div>
+            <p className="text-sm font-semibold text-foreground">No report generated yet</p>
+            <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+              Select a child and date range above, then click &ldquo;Generate Report&rdquo; to create an AI-powered progress brief.
+            </p>
+          </div>
           <ChevronDown className="w-4 h-4 text-muted-foreground animate-bounce" />
         </div>
       )}

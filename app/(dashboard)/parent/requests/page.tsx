@@ -966,34 +966,77 @@ export default function RequestsPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
-  return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <ClipboardList className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">Parent Portal</span>
-        </div>
-        <h1 className="text-xl font-bold text-foreground">Requests</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Submit and track requests for your child</p>
-      </div>
+  const ACCENT = '#8B5CF6'
 
-      {/* Request type selector */}
-      <div className="flex gap-2 flex-wrap">
-        {REQUEST_TABS.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => { setRequestType(id); setSubmitted(false) }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-sm font-medium transition-all ${
-              requestType === id
-                ? 'bg-primary/10 text-primary border-primary/30'
-                : 'border-border text-muted-foreground hover:text-foreground hover:bg-muted/20'
-            }`}
-          >
-            <Icon className="w-4 h-4" />
-            {label}
-          </button>
-        ))}
+  return (
+    <div className="p-6 space-y-5">
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #0d0920 0%, #150d2e 55%, #070d1f 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 p-7 flex flex-col gap-5">
+            <div className="flex items-center gap-4">
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background: `color-mix(in srgb, ${ACCENT} 20%, transparent)`, border: `1px solid color-mix(in srgb, ${ACCENT} 30%, transparent)` }}
+              >
+                <ClipboardList className="w-5 h-5" style={{ color: ACCENT }} />
+              </div>
+              <div>
+                <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Parent Portal</p>
+                <h1 className="text-xl font-bold text-white mt-0.5">Requests</h1>
+                <p className="text-white/40 text-sm mt-0.5">Submit and track requests for your child</p>
+              </div>
+            </div>
+            {/* Request type tabs inside hero */}
+            <div className="flex gap-2 flex-wrap">
+              {REQUEST_TABS.map(({ id, label, icon: Icon, desc }) => (
+                <button
+                  key={id}
+                  onClick={() => { setRequestType(id); setSubmitted(false) }}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-medium transition-all"
+                  style={requestType === id
+                    ? { background: `color-mix(in srgb, ${ACCENT} 20%, transparent)`, borderColor: `color-mix(in srgb, ${ACCENT} 40%, transparent)`, color: '#fff' }
+                    : { background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.5)' }
+                  }
+                  title={desc}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* Right — request counts */}
+          <div className="lg:col-span-2 p-7 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            {[
+              { label: 'Total', value: pastRequests.length, color: ACCENT },
+              { label: 'Pending', value: pastRequests.filter(r => r.status === 'pending').length, color: '#F59E0B' },
+              { label: 'Approved', value: pastRequests.filter(r => r.status === 'approved').length, color: '#10B981' },
+            ].map(({ label, value, color }, i, arr) => (
+              <div key={label} className="flex flex-col items-center gap-1">
+                {i > 0 && <div className="hidden" />}
+                <div
+                  className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                  style={{ background: `color-mix(in srgb, ${color} 12%, transparent)`, border: `5px solid color-mix(in srgb, ${color} 35%, transparent)` }}
+                >
+                  <span className="text-xl font-bold text-white">{value}</span>
+                </div>
+                <p className="text-xs font-semibold text-white/80">{label}</p>
+                <p className="text-[11px] text-white/35">requests</p>
+                {i < arr.length - 1 && <div className="hidden lg:block absolute" />}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Two-column layout */}
