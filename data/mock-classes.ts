@@ -544,8 +544,72 @@ export const academyClasses: AcademyClass[] = [
     averageGrade: 63,
     attendanceRate: 72,
   },
-  // ── Grade 10C (stu-012 already in 10A — this covers stu-010 extras) ──────────
-  // stu-012 is already covered by Grade 10A above
+  // ── Statistics (tch-001, second subject) ────────────────────────────────────
+  {
+    id: 'cls-033',
+    name: 'Grade 10A — Statistics',
+    subject: 'Statistics',
+    gradeLevel: 'Grade 10',
+    section: 'A',
+    teacherId: 'tch-001',
+    studentIds: ['stu-001', 'stu-004', 'stu-012'],
+    schedule: [
+      { day: 'Mon', time: '11:00–12:00', room: 'R-105' },
+      { day: 'Wed', time: '11:00–12:00', room: 'R-105' },
+    ],
+    room: 'R-105',
+    averageGrade: 76,
+    attendanceRate: 90,
+  },
+  {
+    id: 'cls-034',
+    name: 'Grade 9B — Statistics',
+    subject: 'Statistics',
+    gradeLevel: 'Grade 9',
+    section: 'B',
+    teacherId: 'tch-001',
+    studentIds: ['stu-002', 'stu-011'],
+    schedule: [
+      { day: 'Tue', time: '11:00–12:00', room: 'R-105' },
+      { day: 'Thu', time: '12:00–13:00', room: 'R-105' },
+    ],
+    room: 'R-105',
+    averageGrade: 80,
+    attendanceRate: 94,
+  },
+  // ── Biology (tch-004, second subject) ───────────────────────────────────────
+  {
+    id: 'cls-035',
+    name: 'Grade 9A — Biology',
+    subject: 'Biology',
+    gradeLevel: 'Grade 9',
+    section: 'A',
+    teacherId: 'tch-004',
+    studentIds: ['stu-005', 'stu-008'],
+    schedule: [
+      { day: 'Mon', time: '12:00–13:00', room: 'Lab-3' },
+      { day: 'Thu', time: '12:00–13:00', room: 'Lab-3' },
+    ],
+    room: 'Lab-3',
+    averageGrade: 83,
+    attendanceRate: 93,
+  },
+  {
+    id: 'cls-036',
+    name: 'Grade 10B — Biology',
+    subject: 'Biology',
+    gradeLevel: 'Grade 10',
+    section: 'B',
+    teacherId: 'tch-004',
+    studentIds: ['stu-006', 'stu-010'],
+    schedule: [
+      { day: 'Sun', time: '11:00–12:00', room: 'Lab-3' },
+      { day: 'Wed', time: '12:00–13:00', room: 'Lab-3' },
+    ],
+    room: 'Lab-3',
+    averageGrade: 78,
+    attendanceRate: 91,
+  },
 ]
 
 export function getClassById(id: string): AcademyClass | undefined {

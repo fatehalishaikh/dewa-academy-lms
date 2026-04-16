@@ -253,20 +253,23 @@ export default function StudentAnalysis() {
         <TabsContent value="overview" className="space-y-4 mt-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { label: 'GPA', value: student.gpa.toFixed(1), sub: 'out of 4.0', color: '#00B8A9', trend: 'up' },
-              { label: 'Attendance', value: `${student.attendanceRate}%`, sub: `${absentCount} absent`, color: student.attendanceRate >= 90 ? '#10B981' : '#F59E0B', trend: student.attendanceRate >= 90 ? 'up' : 'down' },
+              { label: 'GPA', value: student.gpa.toFixed(1), sub: 'out of 4.0', color: '#00B8A9', trend: 'up' as const },
+              { label: 'Attendance', value: `${student.attendanceRate}%`, sub: `${absentCount} absent days`, color: student.attendanceRate >= 90 ? '#10B981' : '#F59E0B', trend: (student.attendanceRate >= 90 ? 'up' : 'down') as 'up' | 'down' },
               { label: 'Classes', value: classes.length, sub: 'enrolled this term', color: '#0EA5E9', trend: null },
               { label: 'Risk Level', value: student.status === 'at-risk' ? 'High' : 'Low', sub: student.status === 'at-risk' ? 'Needs attention' : 'Performing well', color: student.status === 'at-risk' ? '#EF4444' : '#10B981', trend: null },
             ].map(({ label, value, sub, color, trend }) => (
-              <Card key={label} className="rounded-2xl border-border">
-                <CardContent className="p-4">
-                  <p className="text-[11px] text-muted-foreground mb-1">{label}</p>
-                  <div className="flex items-end gap-1.5">
-                    <p className="text-2xl font-bold" style={{ color }}>{value}</p>
-                    {trend === 'up' && <TrendingUp className="w-3.5 h-3.5 text-emerald-400 mb-1" />}
-                    {trend === 'down' && <TrendingDown className="w-3.5 h-3.5 text-red-400 mb-1" />}
+              <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+                <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+                <CardContent className="p-4 pt-3">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-1.5">
+                      {trend === 'up' && <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />}
+                      {trend === 'down' && <TrendingDown className="w-3.5 h-3.5 text-red-400" />}
+                    </div>
+                    <p className="text-[11px] font-semibold" style={{ color }}>{sub}</p>
                   </div>
-                  <p className="text-[11px] text-muted-foreground">{sub}</p>
+                  <p className="text-2xl font-bold tracking-tight" style={{ color }}>{value}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
                 </CardContent>
               </Card>
             ))}
@@ -335,13 +338,20 @@ export default function StudentAnalysis() {
         <TabsContent value="attendance" className="space-y-4 mt-4">
           <div className="grid grid-cols-3 gap-3">
             {[
-              { label: 'Present', value: presentCount, color: '#10B981' },
-              { label: 'Absent', value: absentCount, color: '#EF4444' },
-              { label: 'Late', value: lateCount, color: '#F59E0B' },
-            ].map(({ label, value, color }) => (
-              <Card key={label} className="rounded-2xl border-border">
-                <CardContent className="p-4 text-center">
-                  <p className="text-2xl font-bold" style={{ color }}>{value}</p>
+              { label: 'Present', value: presentCount, sub: 'days attended', color: '#10B981', icon: CheckCircle2 },
+              { label: 'Absent', value: absentCount, sub: 'days missed', color: '#EF4444', icon: AlertTriangle },
+              { label: 'Late', value: lateCount, sub: 'days late', color: '#F59E0B', icon: Clock },
+            ].map(({ label, value, sub, color, icon: Icon }) => (
+              <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+                <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+                <CardContent className="p-4 pt-3">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                      <Icon className="w-4 h-4" style={{ color }} />
+                    </div>
+                    <p className="text-[11px] font-semibold mt-1" style={{ color }}>{sub}</p>
+                  </div>
+                  <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
                 </CardContent>
               </Card>

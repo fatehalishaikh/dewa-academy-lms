@@ -9,6 +9,8 @@ import { useCurrentTeacher } from '@/stores/role-store'
 import { getClassesByTeacher } from '@/data/mock-classes'
 import { students } from '@/data/mock-students'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
+import { useSubjectStore } from '@/stores/subject-store'
+import { subjectColor } from '@/lib/subject-colors'
 
 const TOOLTIP_STYLE = {
   contentStyle: { background: '#1a2332', border: '1px solid #2d4057', borderRadius: 8, fontSize: 11, padding: '8px 12px' },
@@ -35,7 +37,9 @@ const RISK_BORDER = { high: 'border-red-500/30', moderate: 'border-amber-500/30'
 export default function TeacherStudents() {
   const router = useRouter()
   const teacher = useCurrentTeacher()
-  const classes = teacher ? getClassesByTeacher(teacher.id) : []
+  const { activeSubject } = useSubjectStore()
+  const allClasses = teacher ? getClassesByTeacher(teacher.id) : []
+  const classes = activeSubject === 'all' ? allClasses : allClasses.filter(c => c.subject === activeSubject)
   const myStudentIds = new Set(classes.flatMap(c => c.studentIds))
   const myStudents = students.filter(s => myStudentIds.has(s.id))
 
@@ -121,19 +125,21 @@ export default function TeacherStudents() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3">
             {[
-              { label: 'Total Students', value: myStudents.length, color: '#00B8A9', icon: Users },
-              { label: 'On Track', value: myStudents.filter(s => s.status === 'active').length, color: '#10B981', icon: CheckCircle2 },
-              { label: 'At Risk', value: myStudents.filter(s => s.status === 'at-risk').length, color: '#EF4444', icon: AlertTriangle },
-            ].map(({ label, value, color, icon: Icon }) => (
-              <Card key={label} className="rounded-2xl border-border">
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${color}20` }}>
-                    <Icon className="w-4.5 h-4.5" style={{ color }} />
+              { label: 'Total Students', value: myStudents.length, sub: 'in my classes', color: '#00B8A9', icon: Users },
+              { label: 'On Track', value: myStudents.filter(s => s.status === 'active').length, sub: 'performing well', color: '#10B981', icon: CheckCircle2 },
+              { label: 'At Risk', value: myStudents.filter(s => s.status === 'at-risk').length, sub: 'need attention', color: '#EF4444', icon: AlertTriangle },
+            ].map(({ label, value, sub, color, icon: Icon }) => (
+              <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+                <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+                <CardContent className="p-4 pt-3">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                      <Icon className="w-4 h-4" style={{ color }} />
+                    </div>
+                    <p className="text-[11px] font-semibold mt-1" style={{ color }}>{sub}</p>
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-foreground">{value}</p>
-                    <p className="text-[11px] text-muted-foreground">{label}</p>
-                  </div>
+                  <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
                 </CardContent>
               </Card>
             ))}
@@ -167,6 +173,7 @@ export default function TeacherStudents() {
           <div className="space-y-2">
             {filtered.map((stu) => {
               const studentClasses = classes.filter(c => c.studentIds.includes(stu.id))
+              const uniqueSubjects = [...new Set(studentClasses.map(c => c.subject))]
               return (
                 <div
                   key={stu.id}
@@ -179,14 +186,22 @@ export default function TeacherStudents() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <p className="text-sm font-medium text-foreground">{stu.name}</p>
                       {stu.status === 'at-risk' && (
                         <Badge variant="outline" className="text-[11px] h-4 border-red-500/30 text-red-400">At Risk</Badge>
                       )}
+                      {activeSubject === 'all' && uniqueSubjects.map(subject => {
+                        const color = subjectColor(subject)
+                        return (
+                          <span key={subject} className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11px] font-semibold" style={{ background: `${color}18`, color }}>
+                            {subject}
+                          </span>
+                        )
+                      })}
                     </div>
                     <p className="text-[11px] text-muted-foreground mt-0.5">
-                      {stu.gradeLevel} · {studentClasses.map(c => c.subject).join(', ')}
+                      {stu.gradeLevel} · {studentClasses.length} class{studentClasses.length !== 1 ? 'es' : ''}
                     </p>
                   </div>
                   <div className="flex items-center gap-6 shrink-0">
@@ -214,19 +229,21 @@ export default function TeacherStudents() {
           {/* Summary cards */}
           <div className="grid grid-cols-3 gap-3">
             {([
-              { label: 'High Risk', key: 'high' as const, icon: AlertTriangle },
-              { label: 'Moderate Risk', key: 'moderate' as const, icon: ShieldAlert },
-              { label: 'Low Risk', key: 'low' as const, icon: CheckCircle2 },
-            ]).map(({ label, key, icon: Icon }) => (
-              <Card key={key} className="rounded-2xl border-border">
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${RISK_BG[key]}`}>
-                    <Icon className={`w-4 h-4 ${RISK_TEXT[key]}`} />
+              { label: 'High Risk', key: 'high' as const, sub: 'immediate action', icon: AlertTriangle },
+              { label: 'Moderate Risk', key: 'moderate' as const, sub: 'monitor closely', icon: ShieldAlert },
+              { label: 'Low Risk', key: 'low' as const, sub: 'performing well', icon: CheckCircle2 },
+            ]).map(({ label, key, sub, icon: Icon }) => (
+              <Card key={key} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+                <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${RISK_COLORS[key]}, color-mix(in srgb, ${RISK_COLORS[key]} 30%, transparent))` }} />
+                <CardContent className="p-4 pt-3">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${RISK_BG[key]}`}>
+                      <Icon className={`w-4 h-4 ${RISK_TEXT[key]}`} />
+                    </div>
+                    <p className={`text-[11px] font-semibold mt-1 ${RISK_TEXT[key]}`}>{sub}</p>
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-foreground">{riskCounts[key]}</p>
-                    <p className="text-[11px] text-muted-foreground">{label}</p>
-                  </div>
+                  <p className="text-2xl font-bold text-foreground tracking-tight">{riskCounts[key]}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
                 </CardContent>
               </Card>
             ))}

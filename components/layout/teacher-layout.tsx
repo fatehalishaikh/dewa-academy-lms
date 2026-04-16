@@ -10,6 +10,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { NavLink } from '@/components/ui/nav-link'
 import { useRoleStore, useCurrentTeacher } from '@/stores/role-store'
 import { ChatbotWidget } from '@/components/dashboard/chatbot-widget'
+import { useSubjectStore } from '@/stores/subject-store'
+import { subjectColor } from '@/lib/subject-colors'
 
 const moduleLinks = [
   { label: 'Class Activities', icon: LayoutGrid, href: '/class-activities' },
@@ -29,6 +31,7 @@ function TeacherSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose:
   const router = useRouter()
   const { clearRole } = useRoleStore()
   const teacher = useCurrentTeacher()
+  const { activeSubject, setActiveSubject } = useSubjectStore()
 
   function switchRole() {
     clearRole()
@@ -63,6 +66,52 @@ function TeacherSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose:
             <X className="w-4 h-4 text-sidebar-foreground" />
           </button>
         </div>
+
+        {/* Subject switcher */}
+        {teacher && teacher.subjects.length > 1 && (
+          <div className="px-3 pb-3 border-b border-sidebar-border/60">
+            <p className="px-1 mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">Subject</p>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                onClick={() => setActiveSubject('all')}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors ${
+                  activeSubject === 'all'
+                    ? 'bg-primary/15 text-primary'
+                    : 'text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/60'
+                }`}
+              >
+                All
+              </button>
+              {teacher.subjects.map((subject) => {
+                const color = subjectColor(subject)
+                const isActive = activeSubject === subject
+                return (
+                  <button
+                    key={subject}
+                    onClick={() => setActiveSubject(subject)}
+                    className="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors flex items-center gap-1.5"
+                    style={isActive ? { background: `${color}20`, color } : undefined}
+                    onMouseEnter={e => {
+                      if (!isActive) {
+                        e.currentTarget.style.background = `${color}10`
+                        e.currentTarget.style.color = color
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (!isActive) {
+                        e.currentTarget.style.background = ''
+                        e.currentTarget.style.color = ''
+                      }
+                    }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: color }} />
+                    {subject}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
           <p className="px-3 mb-2 mt-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">My Workspace</p>

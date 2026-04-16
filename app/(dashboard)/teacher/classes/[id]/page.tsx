@@ -55,19 +55,21 @@ export default function ClassDetail() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: 'Students', value: cls.studentIds.length, color: '#00B8A9', icon: Users },
-          { label: 'Class Average', value: `${cls.averageGrade}%`, color: '#10B981', icon: BarChart3 },
-          { label: 'Attendance', value: `${cls.attendanceRate}%`, color: '#0EA5E9', icon: Calendar },
-        ].map(({ label, value, color, icon: Icon }) => (
-          <Card key={label} className="rounded-2xl border-border">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${color}20` }}>
-                <Icon className="w-4 h-4" style={{ color }} />
+          { label: 'Students', value: cls.studentIds.length, sub: 'enrolled', color: '#00B8A9', icon: Users },
+          { label: 'Class Average', value: `${cls.averageGrade}%`, sub: 'overall score', color: '#10B981', icon: BarChart3 },
+          { label: 'Attendance', value: `${cls.attendanceRate}%`, sub: 'this term', color: '#0EA5E9', icon: Calendar },
+        ].map(({ label, value, sub, color, icon: Icon }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{sub}</p>
               </div>
-              <div>
-                <p className="text-xl font-bold text-foreground">{value}</p>
-                <p className="text-[11px] text-muted-foreground">{label}</p>
-              </div>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
             </CardContent>
           </Card>
         ))}

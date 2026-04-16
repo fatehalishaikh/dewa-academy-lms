@@ -1,5 +1,5 @@
 'use client'
-import { Sparkles, Plus, ArrowRight, Clock, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Sparkles, Plus, ArrowRight, Clock, CheckCircle2, AlertCircle, ClipboardList } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { useHomeworkStore } from '@/stores/homework-store'
 import { useCurrentTeacher } from '@/stores/role-store'
 import { getClassById } from '@/data/mock-classes'
+import { useSubjectStore } from '@/stores/subject-store'
+import { subjectColor } from '@/lib/subject-colors'
 
 const statusConfig = {
   published: { label: 'Published', color: 'text-emerald-400', border: 'border-emerald-500/30' },
@@ -18,8 +20,12 @@ export default function TeacherHomework() {
   const router = useRouter()
   const teacher = useCurrentTeacher()
   const { homework, getSubmissionsForHomework } = useHomeworkStore()
+  const { activeSubject } = useSubjectStore()
 
-  const teacherHomework = homework.filter(h => h.teacherId === teacher?.id)
+  const teacherHomework = homework.filter(h =>
+    h.teacherId === teacher?.id &&
+    (activeSubject === 'all' || h.subject === activeSubject)
+  )
 
   const pendingGrading = teacherHomework.reduce((sum, hw) => {
     const subs = getSubmissionsForHomework(hw.id)
@@ -48,13 +54,20 @@ export default function TeacherHomework() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: 'Total Assignments', value: teacherHomework.length, color: '#00B8A9' },
-          { label: 'Published', value: teacherHomework.filter(h => h.status === 'published').length, color: '#10B981' },
-          { label: 'Pending Grading', value: pendingGrading, color: '#F59E0B' },
-        ].map(({ label, value, color }) => (
-          <Card key={label} className="rounded-2xl border-border">
-            <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold" style={{ color }}>{value}</p>
+          { label: 'Total Assignments', value: teacherHomework.length, sub: 'created', icon: ClipboardList, color: '#00B8A9' },
+          { label: 'Published', value: teacherHomework.filter(h => h.status === 'published').length, sub: 'active', icon: CheckCircle2, color: '#10B981' },
+          { label: 'Pending Grading', value: pendingGrading, sub: 'awaiting review', icon: AlertCircle, color: '#F59E0B' },
+        ].map(({ label, value, sub, icon: Icon, color }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{sub}</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
             </CardContent>
           </Card>
@@ -70,6 +83,7 @@ export default function TeacherHomework() {
           const pendingCount = subs.filter(s => s.status === 'submitted' || s.status === 'late').length
           const dueFormatted = new Date(hw.dueDate).toLocaleDateString('en-AE', { day: 'numeric', month: 'short', year: 'numeric' })
 
+          const hwColor = subjectColor(hw.subject)
           return (
             <Card
               key={hw.id}
@@ -79,7 +93,15 @@ export default function TeacherHomework() {
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-foreground">{hw.title}</p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-sm font-semibold text-foreground">{hw.title}</p>
+                      {activeSubject === 'all' && (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11px] font-semibold shrink-0" style={{ background: `${hwColor}18`, color: hwColor }}>
+                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: hwColor }} />
+                          {hw.subject}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-[11px] text-muted-foreground mt-0.5">{cls?.name ?? hw.classId} · {hw.totalPoints} pts</p>
                   </div>
                   <Badge variant="outline" className={`text-[11px] h-5 shrink-0 ${cfg.color} ${cfg.border}`}>

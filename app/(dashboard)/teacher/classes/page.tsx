@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { useCurrentTeacher } from '@/stores/role-store'
 import { getClassesByTeacher } from '@/data/mock-classes'
 import { students } from '@/data/mock-students'
+import { useSubjectStore } from '@/stores/subject-store'
+import { subjectColor } from '@/lib/subject-colors'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'] as const
 const todayDay = DAYS[new Date().getDay() === 5 || new Date().getDay() === 6 ? 0 : new Date().getDay() === 0 ? 0 : new Date().getDay()] as string
@@ -36,7 +38,9 @@ function attendanceColor(r: number) {
 export default function TeacherClasses() {
   const router = useRouter()
   const teacher = useCurrentTeacher()
-  const classes = teacher ? getClassesByTeacher(teacher.id) : []
+  const { activeSubject } = useSubjectStore()
+  const allClasses = teacher ? getClassesByTeacher(teacher.id) : []
+  const classes = activeSubject === 'all' ? allClasses : allClasses.filter(c => c.subject === activeSubject)
 
   const todayClasses = classes.flatMap(c =>
     c.schedule.filter(s => s.day === todayDay).map(s => ({ ...c, slot: s }))
@@ -45,8 +49,8 @@ export default function TeacherClasses() {
   const totalStudents = new Set(classes.flatMap(c => c.studentIds)).size
   const overallAvg = classes.length ? Math.round(classes.reduce((s, c) => s + c.averageGrade, 0) / classes.length) : 0
 
-  // Build personal timetable
-  const allSlots = classes.flatMap(cls =>
+  // Build personal timetable (always show full timetable)
+  const allSlots = allClasses.flatMap(cls =>
     cls.schedule.map(slot => ({ ...slot, className: cls.name, subject: cls.subject, classId: cls.id }))
   )
   const uniqueTimes = [...new Set(allSlots.map(s => s.time))].sort()
@@ -78,20 +82,22 @@ export default function TeacherClasses() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'My Classes', value: classes.length, icon: LayoutGrid, color: '#00B8A9' },
-          { label: 'My Students', value: totalStudents, icon: Users, color: '#0EA5E9' },
-          { label: 'Class Average', value: `${overallAvg}%`, icon: BarChart3, color: '#10B981' },
-          { label: 'Today\'s Sessions', value: todayClasses.length, icon: Calendar, color: '#F59E0B' },
-        ].map(({ label, value, icon: Icon, color }) => (
-          <Card key={label} className="rounded-2xl border-border">
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between mb-2">
-                <p className="text-xs text-muted-foreground">{label}</p>
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${color}20` }}>
-                  <Icon className="w-3.5 h-3.5" style={{ color }} />
+          { label: 'My Classes', value: classes.length, sub: 'this term', icon: LayoutGrid, color: '#00B8A9' },
+          { label: 'My Students', value: totalStudents, sub: 'across all classes', icon: Users, color: '#0EA5E9' },
+          { label: 'Class Average', value: `${overallAvg}%`, sub: 'overall', icon: BarChart3, color: '#10B981' },
+          { label: "Today's Sessions", value: todayClasses.length, sub: 'scheduled today', icon: Calendar, color: '#F59E0B' },
+        ].map(({ label, value, sub, icon: Icon, color }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
                 </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{sub}</p>
               </div>
-              <p className="text-2xl font-bold text-foreground">{value}</p>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
             </CardContent>
           </Card>
         ))}
@@ -138,6 +144,7 @@ export default function TeacherClasses() {
             {classes.map((cls) => {
               const classStudents = students.filter(s => cls.studentIds.includes(s.id))
               const atRiskCount = classStudents.filter(s => s.status === 'at-risk').length
+              const color = subjectColor(cls.subject)
               return (
                 <div
                   key={cls.id}
@@ -146,7 +153,15 @@ export default function TeacherClasses() {
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <p className="text-sm font-semibold text-foreground">{cls.name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-semibold text-foreground">{cls.name}</p>
+                        {activeSubject === 'all' && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11px] font-semibold" style={{ background: `${color}18`, color }}>
+                            <span className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
+                            {cls.subject}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[11px] text-muted-foreground mt-0.5">
                         {cls.studentIds.length} students · {cls.schedule.length}×/week · {cls.room}
                       </p>
