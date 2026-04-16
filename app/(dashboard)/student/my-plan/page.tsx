@@ -241,22 +241,92 @@ export default function StudentMyPlanPage() {
   const riskCfg = riskLevelConfig[derivedRiskLevel]
   const activeWeek = selectedWeek !== null ? WEEKS.find(w => w.week === selectedWeek) : null
 
+  const onTrackGoals  = allGoals.filter(g => g.status === 'on_track').length
+  const atRiskGoals   = allGoals.filter(g => g.status === 'at_risk').length
+  const completedGoalsCount = allGoals.filter(g => g.status === 'completed').length
+  const activeWeekNum = WEEKS.find(w => w.status === 'active')?.week ?? 1
+
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium text-primary uppercase tracking-wider">Learning Plan</span>
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #091810 0%, #0c2318 55%, #071420 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 px-7 py-6 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background: 'color-mix(in srgb, var(--accent-student) 20%, transparent)', border: '1px solid color-mix(in srgb, var(--accent-student) 30%, transparent)' }}
+              >
+                <Target className="w-5 h-5" style={{ color: 'var(--accent-student)' }} />
+              </div>
+              <div>
+                <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Student Portal</p>
+                <h1 className="text-xl font-bold text-white mt-0.5">My Plan</h1>
+                <p className="text-white/40 text-sm mt-0.5">Your personalized learning pathway</p>
+              </div>
+            </div>
+            <Button size="sm" variant="ghost" className="shrink-0 gap-1.5 bg-white/10 border border-white/15 text-white hover:bg-white/18 text-xs" onClick={() => router.push('/student/generate-course')}>
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              AI Course
+            </Button>
           </div>
-          <h1 className="text-xl font-bold text-foreground">Plan</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Your personalized learning pathway</p>
+
+          {/* Right — goals done + active week */}
+          <div className="lg:col-span-2 px-7 py-6 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center" style={{ background: 'rgba(0,184,169,0.12)', border: '5px solid rgba(0,184,169,0.35)' }}>
+                <span className="text-xl font-bold text-white">{allGoals.length > 0 ? Math.round((completedGoalsCount / allGoals.length) * 100) : 0}%</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Goals Done</p>
+                <p className="text-[11px] text-white/35">{completedGoalsCount} of {allGoals.length}</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center" style={{ background: 'rgba(14,165,233,0.12)', border: '5px solid rgba(14,165,233,0.35)' }}>
+                <span className="text-xl font-bold text-white">W{activeWeekNum}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Active Week</p>
+                <p className="text-[11px] text-white/35">of {WEEKS.length} total</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <Button size="sm" className="shrink-0 gap-1.5" onClick={() => router.push('/student/generate-course')}>
-          <Sparkles className="w-3.5 h-3.5" />
-          Generate AI Course
-        </Button>
+      </div>
+
+      {/* ── STAT CARDS ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: 'Total Goals',   value: allGoals.length,     color: 'var(--accent-student)', icon: Target,       trend: 'This semester' },
+          { label: 'On Track',      value: onTrackGoals,        color: '#10B981',               icon: CheckCircle2, trend: onTrackGoals > 0 ? 'Going well' : 'Set some goals' },
+          { label: 'At Risk',       value: atRiskGoals,         color: '#EF4444',               icon: AlertCircle,  trend: atRiskGoals > 0 ? 'Needs attention' : 'All clear' },
+          { label: 'Completed',     value: completedGoalsCount, color: '#F59E0B',               icon: Star,         trend: `${allGoals.length > 0 ? Math.round((completedGoalsCount / allGoals.length) * 100) : 0}% done` },
+        ].map(({ label, value, color, icon: Icon, trend }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{trend}</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       {/* Main tabs */}

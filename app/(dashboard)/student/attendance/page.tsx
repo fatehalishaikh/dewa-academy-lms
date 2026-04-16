@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import {
-  Sparkles, Calendar, CheckCircle2, XCircle, Clock,
+  Calendar, CheckCircle2, XCircle, Clock,
   AlertCircle, LogIn, LogOut, Fingerprint, ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -122,41 +122,93 @@ export default function StudentAttendancePage() {
     return <div className="p-6"><p className="text-sm text-muted-foreground">No student found.</p></div>
   }
 
+  const excusedDays = records.filter(r => r.status === 'excused').length
+
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">Attendance</span>
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #091810 0%, #0c2318 55%, #071420 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 px-7 py-6 flex items-center gap-4">
+            <div
+              className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+              style={{ background: 'color-mix(in srgb, #10B981 20%, transparent)', border: '1px solid color-mix(in srgb, #10B981 30%, transparent)' }}
+            >
+              <Calendar className="w-5 h-5 text-emerald-400" />
+            </div>
+            <div>
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Student Portal</p>
+              <h1 className="text-xl font-bold text-white mt-0.5">Attendance</h1>
+              <p className="text-white/40 text-sm mt-0.5">Your attendance record — last 30 school days</p>
+            </div>
+          </div>
+
+          {/* Right — attendance rate + school days */}
+          <div className="lg:col-span-2 px-7 py-6 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            <div className="flex flex-col items-center gap-2.5">
+              <div
+                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{
+                  background: rate >= 90 ? 'rgba(16,185,129,0.12)' : rate >= 75 ? 'rgba(245,158,11,0.12)' : 'rgba(239,68,68,0.12)',
+                  border: `5px solid ${rate >= 90 ? 'rgba(16,185,129,0.35)' : rate >= 75 ? 'rgba(245,158,11,0.35)' : 'rgba(239,68,68,0.35)'}`,
+                }}
+              >
+                <span className="text-xl font-bold text-white">{rate}%</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Attendance Rate</p>
+                <p className="text-[11px] text-white/35">this semester</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center" style={{ background: 'rgba(14,165,233,0.12)', border: '5px solid rgba(14,165,233,0.35)' }}>
+                <span className="text-xl font-bold text-white">{totalDays}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">School Days</p>
+                <p className="text-[11px] text-white/35">tracked</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <h1 className="text-xl font-bold text-foreground">Attendance</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Your attendance record — last 30 school days</p>
+      </div>
+
+      {/* ── STAT CARDS ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: 'Attendance Rate', value: `${rate}%`,   color: rate >= 90 ? '#10B981' : rate >= 75 ? '#F59E0B' : '#EF4444', icon: Calendar,     trend: rate >= 90 ? 'Excellent' : rate >= 75 ? 'Needs effort' : 'At risk' },
+          { label: 'Present',         value: presentDays,  color: '#10B981',                                                    icon: CheckCircle2, trend: `of ${totalDays} days` },
+          { label: 'Absent',          value: absentDays,   color: '#EF4444',                                                    icon: XCircle,      trend: absentDays === 0 ? 'All clear' : 'Unexcused' },
+          { label: 'Late / Excused',  value: lateDays + excusedDays, color: '#F59E0B',                                          icon: Clock,        trend: `${lateDays} late, ${excusedDays} excused` },
+        ].map(({ label, value, color, icon: Icon, trend }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{trend}</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { label: 'Attendance Rate', value: `${rate}%`,    color: 'var(--primary)', icon: Calendar     },
-              { label: 'Present',         value: presentDays,   color: '#10B981', icon: CheckCircle2 },
-              { label: 'Absent',          value: absentDays,    color: '#EF4444', icon: XCircle      },
-              { label: 'Late',            value: lateDays,      color: '#F59E0B', icon: Clock        },
-            ].map(({ label, value, color, icon: Icon }) => (
-              <Card key={label} className="rounded-xl border-border">
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <p className="text-[11px] text-muted-foreground">{label}</p>
-                    <div className="w-6 h-6 rounded-xl flex items-center justify-center" style={{ background: color.startsWith('var') ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : `${color}20` }}>
-                      <Icon className="w-3 h-3" style={{ color }} />
-                    </div>
-                  </div>
-                  <p className="text-xl font-bold" style={{ color }}>{value}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
 
           {/* Calendar legend */}
           <div className="flex items-center gap-4 flex-wrap">

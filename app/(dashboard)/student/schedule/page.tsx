@@ -1,5 +1,6 @@
 'use client'
-import { Sparkles, Clock } from 'lucide-react'
+import { Calendar, Clock, BookOpen, LayoutGrid } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 import { useCurrentStudent } from '@/stores/role-store'
 import { getClassesByStudent } from '@/data/mock-classes'
 
@@ -53,16 +54,87 @@ export default function StudentSchedule() {
   // Subject legend: only subjects this student actually has
   const mySubjects = [...new Set(classes.map(c => c.subject))]
 
+  const totalSlots = sortedSlots.length
+  const classesPerDay = DAYS.map(day => Object.keys(grid[day] ?? {}).length)
+  const busiest = DAYS[classesPerDay.indexOf(Math.max(...classesPerDay))]
+  const todayDay = DAYS[new Date().getDay() === 0 || new Date().getDay() === 5 || new Date().getDay() === 6 ? 0 : new Date().getDay()]
+  const todayCount = Object.keys(grid[todayDay as Day] ?? {}).length
+
   return (
     <div className="p-6 space-y-5">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">Weekly Timetable</span>
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #091810 0%, #0c2318 55%, #071420 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 px-7 py-6 flex items-center gap-4">
+            <div
+              className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+              style={{ background: 'color-mix(in srgb, var(--accent-student) 20%, transparent)', border: '1px solid color-mix(in srgb, var(--accent-student) 30%, transparent)' }}
+            >
+              <Calendar className="w-5 h-5" style={{ color: 'var(--accent-student)' }} />
+            </div>
+            <div>
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Student Portal</p>
+              <h1 className="text-xl font-bold text-white mt-0.5">Schedule</h1>
+              <p className="text-white/40 text-sm mt-0.5">Current semester weekly timetable</p>
+            </div>
+          </div>
+
+          {/* Right — today's count + total subjects */}
+          <div className="lg:col-span-2 px-7 py-6 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center" style={{ background: 'rgba(0,184,169,0.12)', border: '5px solid rgba(0,184,169,0.35)' }}>
+                <span className="text-xl font-bold text-white">{todayCount}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Today</p>
+                <p className="text-[11px] text-white/35">classes</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center" style={{ background: 'rgba(14,165,233,0.12)', border: '5px solid rgba(14,165,233,0.35)' }}>
+                <span className="text-xl font-bold text-white">{mySubjects.length}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Subjects</p>
+                <p className="text-[11px] text-white/35">this term</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <h1 className="text-xl font-bold text-foreground">Schedule</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Current semester class timetable</p>
+      </div>
+
+      {/* ── STAT CARDS ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: 'Subjects',      value: mySubjects.length, color: 'var(--accent-student)', icon: BookOpen,   trend: 'This semester' },
+          { label: "Today's Classes", value: todayCount,      color: '#0EA5E9',               icon: Calendar,   trend: todayDay },
+          { label: 'Time Slots',    value: totalSlots,        color: '#F59E0B',               icon: Clock,      trend: 'Per day' },
+          { label: 'Busiest Day',   value: busiest,           color: '#10B981',               icon: LayoutGrid, trend: `${Math.max(...classesPerDay)} classes` },
+        ].map(({ label, value, color, icon: Icon, trend }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{trend}</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       {sortedSlots.length === 0 ? (

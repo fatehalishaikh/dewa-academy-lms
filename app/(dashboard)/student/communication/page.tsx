@@ -229,23 +229,50 @@ export default function StudentCommunicationPage() {
 
   return (
     <div className="h-[calc(100vh-0px)] flex flex-col relative">
-      {/* Header */}
-      <div className="px-6 py-5 border-b border-border shrink-0">
-        <div className="flex items-center gap-2 mb-1">
-          <MessageSquare className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-primary uppercase tracking-wider">Communication</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Messages</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">
-              {totalUnread > 0 ? `${totalUnread} unread message${totalUnread > 1 ? 's' : ''}` : 'All caught up'}
-            </p>
+      {/* ── HERO HEADER ── */}
+      <div
+        className="shrink-0 relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #091810 0%, #0c2318 55%, #071420 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative flex items-center justify-between gap-4 px-6 py-5">
+          <div className="flex items-center gap-4">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: 'color-mix(in srgb, var(--accent-student) 20%, transparent)', border: '1px solid color-mix(in srgb, var(--accent-student) 30%, transparent)' }}
+            >
+              <MessageSquare className="w-4 h-4" style={{ color: 'var(--accent-student)' }} />
+            </div>
+            <div>
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Student Portal</p>
+              <h1 className="text-lg font-bold text-white">Messages</h1>
+              <p className="text-white/40 text-xs mt-0.5">
+                {totalUnread > 0 ? `${totalUnread} unread message${totalUnread > 1 ? 's' : ''}` : 'All caught up'}
+              </p>
+            </div>
           </div>
-          <Button size="sm" className="gap-1.5 h-8 text-xs" onClick={() => { setComposeOpen(true); setShowContactList(false) }}>
-            <Plus className="w-3.5 h-3.5" />
-            New Message
-          </Button>
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Mini stats */}
+            <div className="hidden sm:flex items-center gap-3">
+              <div className="text-center">
+                <p className="text-white text-base font-bold leading-none">{conversations.length}</p>
+                <p className="text-white/40 text-[11px] mt-0.5">Chats</p>
+              </div>
+              <div className="w-px h-8 bg-white/[0.08]" />
+              <div className="text-center">
+                <p className="text-white text-base font-bold leading-none">{totalUnread}</p>
+                <p className="text-white/40 text-[11px] mt-0.5">Unread</p>
+              </div>
+              <div className="w-px h-8 bg-white/[0.08]" />
+            </div>
+            <Button size="sm" variant="ghost" className="gap-1.5 h-8 text-xs bg-white/10 border border-white/15 text-white hover:bg-white/18" onClick={() => { setComposeOpen(true); setShowContactList(false) }}>
+              <Plus className="w-3.5 h-3.5" />
+              New Message
+            </Button>
+          </div>
         </div>
       </div>
 
