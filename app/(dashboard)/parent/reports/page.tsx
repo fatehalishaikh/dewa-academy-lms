@@ -174,19 +174,6 @@ export default function ParentReportsPage() {
             <div className="flex flex-col items-center gap-2.5">
               <div
                 className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
-                style={{ background: `color-mix(in srgb, ${ACCENT} 12%, transparent)`, border: `5px solid color-mix(in srgb, ${ACCENT} 35%, transparent)` }}
-              >
-                <Bot className="w-7 h-7" style={{ color: ACCENT }} />
-              </div>
-              <div className="text-center">
-                <p className="text-xs font-semibold text-white/80">AI Powered</p>
-                <p className="text-[11px] text-white/35">by Claude</p>
-              </div>
-            </div>
-            <div className="w-px h-14 bg-white/[0.08]" />
-            <div className="flex flex-col items-center gap-2.5">
-              <div
-                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
                 style={{ background: 'rgba(16,185,129,0.12)', border: '5px solid rgba(16,185,129,0.35)' }}
               >
                 <span className="text-xl font-bold text-white">{selectedChild?.gpa.toFixed(1)}</span>
