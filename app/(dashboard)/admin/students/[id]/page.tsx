@@ -96,61 +96,74 @@ export default function StudentAnalysis() {
 
   return (
     <div className="p-6 space-y-5">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" onClick={() => router.back()} className="gap-1.5 -ml-2">
-          <ChevronLeft className="w-4 h-4" />
-          Back
-        </Button>
-      </div>
+      {/* Back */}
+      <button
+        onClick={() => router.back()}
+        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronLeft className="w-3.5 h-3.5" />
+        All Students
+      </button>
 
-      {/* Student identity card */}
-      <div className="flex items-center gap-4 p-5 rounded-2xl border border-border bg-card">
-        <Avatar className="w-14 h-14">
-          <AvatarFallback className="text-lg font-bold text-white" style={{ background: student.avatarColor }}>
-            {student.initials}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-lg font-bold text-foreground">{student.name}</h1>
-            <span className="text-sm text-muted-foreground font-arabic">{student.nameAr}</span>
-            <Badge
-              variant="outline"
-              className={`text-[11px] h-5 ${student.status === 'at-risk' ? 'border-red-500/30 text-red-400' : 'border-emerald-500/30 text-emerald-400'}`}
-            >
-              {student.status === 'at-risk' ? 'At Risk' : 'On Track'}
-            </Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {student.gradeLevel} · Section {student.section} · Emirates ID: {student.emiratesId}
-          </p>
-          <div className="flex items-center gap-4 mt-2">
-            <div className="flex items-center gap-1">
-              <BarChart3 className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs font-semibold text-foreground">GPA {student.gpa.toFixed(1)}</span>
+      {/* Student identity — dark hero */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #1a0e00 0%, #271500 55%, #0f1420 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative p-6 flex items-center gap-5 flex-wrap">
+          <Avatar className="w-16 h-16 shrink-0 ring-2 ring-white/20">
+            <AvatarFallback className="text-xl font-bold text-white" style={{ background: student.avatarColor }}>
+              {student.initials}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h1 className="text-xl font-bold text-white">{student.name}</h1>
+              <span className="text-sm text-white/40">{student.nameAr}</span>
+              <span
+                className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${
+                  student.status === 'at-risk'
+                    ? 'border-red-500/40 text-red-300 bg-red-500/15'
+                    : 'border-emerald-500/40 text-emerald-300 bg-emerald-500/15'
+                }`}
+              >
+                {student.status === 'at-risk' ? 'At Risk' : 'On Track'}
+              </span>
             </div>
-            <div className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-xs font-semibold text-foreground">{student.attendanceRate}% Attendance</span>
+            <p className="text-sm text-white/40 mt-1">
+              {student.gradeLevel} · Section {student.section} · Emirates ID: {student.emiratesId}
+            </p>
+            <div className="flex items-center gap-4 mt-2.5">
+              <div className="flex items-center gap-1.5">
+                <BarChart3 className="w-3.5 h-3.5 text-amber-300" />
+                <span className="text-xs font-semibold text-white">GPA {student.gpa.toFixed(1)}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-xs font-semibold text-white">{student.attendanceRate}% Attendance</span>
+              </div>
             </div>
           </div>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="gap-1.5 text-xs shrink-0 bg-white/10 border border-white/15 text-white hover:bg-white/20"
+            onClick={() => addNotification({
+              type: 'message',
+              title: 'Message from teacher',
+              body: `Message sent regarding student ${student.name}`,
+              recipientRole: 'parent',
+              recipientId: student.parentId ?? undefined,
+            })}
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            Message Parent
+          </Button>
         </div>
-        <Button
-          size="sm"
-          variant="outline"
-          className="gap-1.5 text-xs shrink-0"
-          onClick={() => addNotification({
-            type: 'message',
-            title: 'Message from teacher',
-            body: `Message sent regarding student ${student.name}`,
-            recipientRole: 'parent',
-            recipientId: student.parentId ?? undefined,
-          })}
-        >
-          <MessageSquare className="w-3.5 h-3.5" />
-          Message Parent
-        </Button>
       </div>
 
       {/* Tabs */}
@@ -165,20 +178,20 @@ export default function StudentAnalysis() {
         <TabsContent value="overview" className="space-y-4 mt-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { label: 'GPA', value: student.gpa.toFixed(1), sub: 'out of 4.0', color: '#00B8A9', trend: 'up' },
-              { label: 'Attendance', value: `${student.attendanceRate}%`, sub: `${absentCount} absent`, color: student.attendanceRate >= 90 ? '#10B981' : '#F59E0B', trend: student.attendanceRate >= 90 ? 'up' : 'down' },
-              { label: 'Classes', value: classes.length, sub: 'enrolled this term', color: '#0EA5E9', trend: null },
-              { label: 'Risk Level', value: student.status === 'at-risk' ? 'High' : 'Low', sub: student.status === 'at-risk' ? 'Needs attention' : 'Performing well', color: student.status === 'at-risk' ? '#EF4444' : '#10B981', trend: null },
+              { label: 'GPA', value: student.gpa.toFixed(1), sub: 'out of 4.0', color: '#00B8A9', trend: 'Academic score' },
+              { label: 'Attendance', value: `${student.attendanceRate}%`, sub: `${absentCount} absent days`, color: student.attendanceRate >= 90 ? '#10B981' : '#F59E0B', trend: student.attendanceRate >= 90 ? 'On target' : 'Monitor' },
+              { label: 'Classes', value: classes.length, sub: 'enrolled this term', color: '#0EA5E9', trend: 'This semester' },
+              { label: 'Risk Level', value: student.status === 'at-risk' ? 'High' : 'Low', sub: student.status === 'at-risk' ? 'Needs attention' : 'Performing well', color: student.status === 'at-risk' ? '#EF4444' : '#10B981', trend: student.status === 'at-risk' ? 'Needs support' : 'On track' },
             ].map(({ label, value, sub, color, trend }) => (
-              <Card key={label} className="rounded-2xl border-border">
-                <CardContent className="p-4">
-                  <p className="text-[11px] text-muted-foreground mb-1">{label}</p>
-                  <div className="flex items-end gap-1.5">
-                    <p className="text-2xl font-bold" style={{ color }}>{value}</p>
-                    {trend === 'up' && <TrendingUp className="w-3.5 h-3.5 text-emerald-400 mb-1" />}
-                    {trend === 'down' && <TrendingDown className="w-3.5 h-3.5 text-red-400 mb-1" />}
+              <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+                <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+                <CardContent className="p-4 pt-3">
+                  <div className="flex items-start justify-between mb-2">
+                    <p className="text-[11px] text-muted-foreground">{label}</p>
+                    <p className="text-[11px] font-semibold" style={{ color }}>{trend}</p>
                   </div>
-                  <p className="text-[11px] text-muted-foreground">{sub}</p>
+                  <p className="text-2xl font-bold" style={{ color }}>{value}</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">{sub}</p>
                 </CardContent>
               </Card>
             ))}

@@ -21,6 +21,20 @@ function attendanceColor(r: number) {
   return 'text-red-400'
 }
 
+function RingProgress({ value, max, color, size = 80 }: { value: number; max: number; color: string; size?: number }) {
+  const sw = 5
+  const r = (size - sw * 2) / 2
+  const circ = 2 * Math.PI * r
+  const offset = circ - Math.min(value / max, 1) * circ
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={sw} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={sw}
+        strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export default function AdminStudents() {
   const router = useRouter()
   const [query, setQuery] = useState('')
@@ -39,29 +53,109 @@ export default function AdminStudents() {
     all: 'All', 'at-risk': 'At Risk', 'Grade 9': 'Grade 9', 'Grade 10': 'Grade 10', 'Grade 11': 'Grade 11',
   }
 
+  const onTrackCount = students.filter(s => s.status === 'active').length
+  const atRiskCount = students.filter(s => s.status === 'at-risk').length
+  const onTrackPct = Math.round((onTrackCount / students.length) * 100)
+
   return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-xl font-bold text-foreground">All Students</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">{students.length} students school-wide</p>
+    <div className="p-6 space-y-5">
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #1a0e00 0%, #271500 55%, #0f1420 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 p-7 flex flex-col justify-center gap-3">
+            <div>
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest mb-2">Student Management</p>
+              <h1 className="text-2xl font-bold text-white tracking-tight">All Students</h1>
+              <p className="text-white/40 text-sm mt-1">{students.length} students enrolled school-wide</p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap mt-1">
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full border border-emerald-500/30 text-emerald-300" style={{ background: 'rgba(16,185,129,0.12)' }}>
+                {onTrackCount} On Track
+              </span>
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full border border-red-500/30 text-red-300" style={{ background: 'rgba(239,68,68,0.12)' }}>
+                {atRiskCount} At Risk
+              </span>
+            </div>
+          </div>
+
+          {/* Right — rings */}
+          <div className="lg:col-span-2 p-7 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            {/* Total */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div
+                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(245,158,11,0.12)', border: '5px solid rgba(245,158,11,0.35)' }}
+              >
+                <span className="text-xl font-bold text-white">{students.length}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Total</p>
+                <p className="text-[11px] text-white/35">students</p>
+              </div>
+            </div>
+
+            <div className="w-px h-14 bg-white/[0.08]" />
+
+            {/* On Track ring */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="relative w-[80px] h-[80px]">
+                <RingProgress value={onTrackPct} max={100} color="#10B981" size={80} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-xl font-bold text-white leading-none">{onTrackPct}%</span>
+                </div>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">On Track</p>
+                <p className="text-[11px] text-white/35">{onTrackCount} students</p>
+              </div>
+            </div>
+
+            <div className="w-px h-14 bg-white/[0.08]" />
+
+            {/* At Risk */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div
+                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(239,68,68,0.12)', border: '5px solid rgba(239,68,68,0.35)' }}
+              >
+                <span className="text-xl font-bold text-white">{atRiskCount}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">At Risk</p>
+                <p className="text-[11px] text-white/35">need support</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Stats */}
+      {/* ── STAT CARDS ── */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: 'Total Students', value: students.length,                                       color: '#00B8A9', icon: Users },
-          { label: 'On Track',       value: students.filter(s => s.status === 'active').length,    color: '#10B981', icon: CheckCircle2 },
-          { label: 'At Risk',        value: students.filter(s => s.status === 'at-risk').length,   color: '#EF4444', icon: AlertTriangle },
-        ].map(({ label, value, color, icon: Icon }) => (
-          <Card key={label} className="rounded-2xl border-border">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${color}20` }}>
-                <Icon className="w-4 h-4" style={{ color }} />
+          { label: 'Total Students', value: students.length, sub: 'enrolled this term', color: '#00B8A9', icon: Users, trend: 'School-wide' },
+          { label: 'On Track', value: onTrackCount, sub: 'performing well', color: '#10B981', icon: CheckCircle2, trend: `${onTrackPct}% of total` },
+          { label: 'At Risk', value: atRiskCount, sub: 'need intervention', color: '#EF4444', icon: AlertTriangle, trend: 'Needs attention' },
+        ].map(({ label, value, sub, color, icon: Icon, trend }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{trend}</p>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">{value}</p>
-                <p className="text-[11px] text-muted-foreground">{label}</p>
-              </div>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>
             </CardContent>
           </Card>
         ))}
@@ -98,7 +192,7 @@ export default function AdminStudents() {
         {filtered.map(stu => (
           <div
             key={stu.id}
-            className="flex items-center gap-3 p-3.5 rounded-2xl border border-border hover:border-primary/30 bg-card transition-colors cursor-pointer"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-border hover:border-primary/30 hover:shadow-xs bg-card transition-all cursor-pointer"
             onClick={() => router.push(`/admin/students/${stu.id}`)}
           >
             <Avatar className="w-9 h-9 shrink-0">

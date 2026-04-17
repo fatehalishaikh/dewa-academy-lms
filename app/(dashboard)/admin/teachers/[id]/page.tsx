@@ -84,55 +84,62 @@ export default function AdminTeacherDetailPage({ params }: { params: Promise<{ i
         All Teachers
       </button>
 
-      {/* Identity card */}
-      <Card className="rounded-2xl border-border bg-card">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-5 flex-wrap">
-            <Avatar className="w-16 h-16 shrink-0">
-              <AvatarFallback className="text-xl font-bold text-white" style={{ background: teacher.avatarColor }}>
-                {teacher.initials}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0 space-y-2">
-              <div>
-                <h1 className="text-xl font-bold text-foreground">{teacher.name}</h1>
-                <p className="text-sm text-muted-foreground">{teacher.qualification}</p>
-              </div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary">
-                  {teacher.department}
-                </Badge>
-                {teacher.subjects.map(s => (
-                  <span key={s} className="text-[11px] bg-muted/40 text-muted-foreground px-2 py-0.5 rounded-full border border-border">{s}</span>
-                ))}
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Mail className="w-3.5 h-3.5" />
-                {teacher.email}
-              </div>
+      {/* Identity — dark hero */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #1a0e00 0%, #271500 55%, #0f1420 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative p-6 flex items-start gap-5 flex-wrap">
+          <Avatar className="w-16 h-16 shrink-0 ring-2 ring-white/20">
+            <AvatarFallback className="text-xl font-bold text-white" style={{ background: teacher.avatarColor }}>
+              {teacher.initials}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0 space-y-2">
+            <div>
+              <h1 className="text-xl font-bold text-white">{teacher.name}</h1>
+              <p className="text-sm text-white/40">{teacher.qualification}</p>
+            </div>
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full border border-amber-500/40 text-amber-300 bg-amber-500/15">
+                {teacher.department}
+              </span>
+              {teacher.subjects.map(s => (
+                <span key={s} className="text-[11px] text-white/50 bg-white/[0.07] px-2 py-0.5 rounded-full border border-white/10">{s}</span>
+              ))}
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-white/40">
+              <Mail className="w-3.5 h-3.5" />
+              {teacher.email}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Stats row */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         {[
-          { label: 'Classes', value: classes.length, color: '#00B8A9', icon: CalendarDays },
-          { label: 'Total Students', value: totalStudents, color: '#0EA5E9', icon: Users },
-          { label: 'Avg Class Grade', value: `${avgGrade}%`, color: avgGrade >= 80 ? '#10B981' : avgGrade >= 70 ? '#F59E0B' : '#EF4444', icon: BarChart3 },
-          { label: 'Avg Attendance', value: `${avgAttendance}%`, color: avgAttendance >= 90 ? '#10B981' : avgAttendance >= 80 ? '#F59E0B' : '#EF4444', icon: CalendarCheck },
-          { label: 'Years Experience', value: `${teacher.yearsExperience}y`, color: '#8B5CF6', icon: GraduationCap },
-        ].map(({ label, value, color, icon: Icon }) => (
-          <Card key={label} className="rounded-2xl border-border">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${color}20` }}>
-                <Icon className="w-4 h-4" style={{ color }} />
+          { label: 'Classes', value: classes.length, color: '#00B8A9', icon: CalendarDays, trend: 'Assigned' },
+          { label: 'Total Students', value: totalStudents, color: '#0EA5E9', icon: Users, trend: 'Across classes' },
+          { label: 'Avg Class Grade', value: `${avgGrade}%`, color: avgGrade >= 80 ? '#10B981' : avgGrade >= 70 ? '#F59E0B' : '#EF4444', icon: BarChart3, trend: avgGrade >= 80 ? 'Strong' : 'Average' },
+          { label: 'Avg Attendance', value: `${avgAttendance}%`, color: avgAttendance >= 90 ? '#10B981' : avgAttendance >= 80 ? '#F59E0B' : '#EF4444', icon: CalendarCheck, trend: avgAttendance >= 90 ? 'On target' : 'Monitor' },
+          { label: 'Experience', value: `${teacher.yearsExperience}y`, color: '#8B5CF6', icon: GraduationCap, trend: 'Years' },
+        ].map(({ label, value, color, icon: Icon, trend }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
+              <div className="flex items-start justify-between mb-2">
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <p className="text-[11px] font-semibold mt-0.5" style={{ color }}>{trend}</p>
               </div>
-              <div>
-                <p className="text-lg font-bold text-foreground">{value}</p>
-                <p className="text-[11px] text-muted-foreground">{label}</p>
-              </div>
+              <p className="text-xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{label}</p>
             </CardContent>
           </Card>
         ))}

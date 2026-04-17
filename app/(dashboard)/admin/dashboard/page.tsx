@@ -2,7 +2,8 @@
 import {
   Sparkles, Users, GraduationCap, CalendarCheck, ClipboardList,
   AlertTriangle, ArrowRight, BarChart3, BookOpen, FileText,
-  Briefcase, LayoutDashboard, TrendingUp, TrendingDown, Minus, ChevronRight, CheckCircle2,
+  Briefcase, LayoutDashboard, TrendingUp, TrendingDown, Minus,
+  ChevronRight, CheckCircle2, AlertCircle,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -41,6 +42,20 @@ const totalTeachers = teachers.length
 const pendingReg = pipelineData.find(p => p.stageName === 'Submitted')?.count ?? 0
 const pipelineMax = Math.max(...pipelineData.map(p => p.count))
 
+function RingProgress({ value, max, color, size = 80 }: { value: number; max: number; color: string; size?: number }) {
+  const sw = 5
+  const r = (size - sw * 2) / 2
+  const circ = 2 * Math.PI * r
+  const offset = circ - Math.min(value / max, 1) * circ
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={sw} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={sw}
+        strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export default function AdminDashboard() {
   const { personId } = useRoleStore()
   const router = useRouter()
@@ -54,88 +69,166 @@ export default function AdminDashboard() {
   const inboxItems = getDashboardInbox('admin', personId ?? 'admin')
 
   return (
-    <div className="p-8 space-y-6 max-w-[1400px]">
-      {/* Hero: greeting + inbox */}
-      <Card className="overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-5">
-          <div className="lg:col-span-2 p-6 lg:border-r border-border/50">
-            <div className="flex items-center gap-2 mb-3">
-              <LayoutDashboard className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs font-semibold text-primary uppercase tracking-widest">Admin Dashboard</span>
+    <div className="p-6 space-y-5">
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #1a0e00 0%, #271500 55%, #0f1420 100%)' }}
+      >
+        {/* Dot-grid overlay */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left — identity + inbox + actions */}
+          <div className="lg:col-span-3 p-7 flex flex-col gap-5">
+            {/* Identity row */}
+            <div className="flex items-center gap-4">
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ring-2 ring-white/20"
+                style={{ background: 'color-mix(in srgb, #F59E0B 25%, #271500)' }}
+              >
+                <LayoutDashboard className="w-6 h-6 text-amber-300" />
+              </div>
+              <div>
+                <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Admin Dashboard</p>
+                <h1 className="text-2xl font-bold text-white mt-0.5">{greeting}, {firstName} 👋</h1>
+                <p className="text-white/40 text-sm mt-0.5">{today}</p>
+              </div>
             </div>
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">{greeting}, {firstName}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{today}</p>
-            <Button size="sm" variant="outline" onClick={() => router.push('/reports')} className="mt-5 gap-1.5">
-              <BarChart3 className="w-3.5 h-3.5" />
-              View Reports
-            </Button>
-          </div>
-          <div className="lg:col-span-3 p-6 flex flex-col justify-center">
-            {inboxItems.length === 0 ? (
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+
+            {/* Inbox strip */}
+            <div className={`flex items-center justify-between gap-4 rounded-xl px-4 py-3 border transition-all ${
+              inboxItems.length === 0
+                ? 'bg-white/[0.05] border-white/10'
+                : 'bg-amber-500/15 border-amber-500/30'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                  inboxItems.length === 0 ? 'bg-white/10' : 'bg-amber-500/25'
+                }`}>
+                  {inboxItems.length === 0
+                    ? <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    : <AlertCircle className="w-4 h-4 text-amber-300" />
+                  }
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-foreground">All caught up</p>
-                  <p className="text-sm text-muted-foreground mt-0.5">Nothing needs your attention right now.</p>
+                  <p className="text-sm font-semibold text-white">
+                    {inboxItems.length === 0 ? 'All caught up' : `${inboxItems.length} ${inboxItems.length === 1 ? 'item needs' : 'items need'} attention`}
+                  </p>
+                  <p className="text-xs text-white/35 mt-0.5">
+                    {inboxItems.length === 0
+                      ? 'Nothing needs your attention right now.'
+                      : `${inboxItems.filter(i => i.urgency === 'high').length} urgent · ${inboxItems.filter(i => i.urgency !== 'high').length} follow-up`
+                    }
+                  </p>
                 </div>
               </div>
-            ) : (
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <span className="text-2xl font-bold text-amber-500">{inboxItems.length}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-foreground">
-                    {inboxItems.length === 1 ? '1 item needs' : `${inboxItems.length} items need`} your attention
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && (
-                      <span className="text-amber-500 font-medium">{inboxItems.filter(i => i.urgency === 'high').length} urgent</span>
-                    )}
-                    {inboxItems.filter(i => i.urgency === 'high').length > 0 && inboxItems.filter(i => i.urgency !== 'high').length > 0 && ' · '}
-                    {inboxItems.filter(i => i.urgency !== 'high').length > 0 && (
-                      <span>{inboxItems.filter(i => i.urgency !== 'high').length} follow-up</span>
-                    )}
-                  </p>
-                  <Link
-                    href="/action-center"
-                    className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline mt-2"
-                  >
-                    Open Action Center <ChevronRight className="w-3 h-3" />
-                  </Link>
+            </div>
+
+            {/* CTA row */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => router.push('/reports')}
+                className="gap-1.5 bg-white/10 border border-white/15 text-white hover:bg-white/18 text-xs"
+              >
+                <BarChart3 className="w-3.5 h-3.5 text-amber-300" />
+                View Reports
+              </Button>
+              {inboxItems.length > 0 && (
+                <Link
+                  href="/action-center"
+                  className="flex items-center gap-1.5 text-xs text-amber-300/90 hover:text-amber-200 transition-colors"
+                >
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  Open Action Center
+                  <ChevronRight className="w-3 h-3" />
+                </Link>
+              )}
+            </div>
+          </div>
+
+          {/* Right — ring metrics */}
+          <div className="lg:col-span-2 p-7 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            {/* Total Students */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div
+                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(245,158,11,0.12)', border: '5px solid rgba(245,158,11,0.35)' }}
+              >
+                <span className="text-xl font-bold text-white">{totalStudents}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Students</p>
+                <p className="text-[11px] text-white/35">enrolled</p>
+              </div>
+            </div>
+
+            <div className="w-px h-14 bg-white/[0.08]" />
+
+            {/* School Attendance */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="relative w-[80px] h-[80px]">
+                <RingProgress value={91} max={100} color="#10B981" size={80} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-xl font-bold text-white leading-none">91%</span>
                 </div>
               </div>
-            )}
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Attendance</p>
+                <p className="text-[11px] text-white/35">this week</p>
+              </div>
+            </div>
+
+            <div className="w-px h-14 bg-white/[0.08]" />
+
+            {/* Total Teachers */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div
+                className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(14,165,233,0.12)', border: '5px solid rgba(14,165,233,0.35)' }}
+              >
+                <span className="text-xl font-bold text-white">{totalTeachers}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Teachers</p>
+                <p className="text-[11px] text-white/35">active</p>
+              </div>
+            </div>
           </div>
         </div>
-      </Card>
+      </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* ── STAT CARDS ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: 'Total Students', value: totalStudents.toString(), sub: 'enrolled this term', icon: Users, color: 'var(--accent-student)' },
-          { label: 'Total Teachers', value: totalTeachers.toString(), sub: 'active staff', icon: GraduationCap, color: 'var(--accent-teacher)' },
-          { label: 'School Attendance', value: '91%', sub: 'average this week', icon: CalendarCheck, color: '#10B981' },
-          { label: 'Pending Registration', value: pendingReg.toString(), sub: 'applications awaiting', icon: ClipboardList, color: 'var(--accent-admin)' },
-        ].map(({ label, value, sub, icon: Icon, color }) => (
-          <Card key={label}>
-            <CardContent className="p-5">
+          { label: 'Total Students', value: totalStudents.toString(), sub: 'enrolled this term', icon: Users, color: 'var(--accent-student)', trend: 'School-wide' },
+          { label: 'Total Teachers', value: totalTeachers.toString(), sub: 'active staff', icon: GraduationCap, color: 'var(--accent-teacher)', trend: 'All departments' },
+          { label: 'School Attendance', value: '91%', sub: 'average this week', icon: CalendarCheck, color: '#10B981', trend: 'Above target' },
+          { label: 'Pending Registration', value: pendingReg.toString(), sub: 'applications awaiting', icon: ClipboardList, color: 'var(--accent-admin)', trend: 'Needs review' },
+        ].map(({ label, value, sub, icon: Icon, color, trend }) => (
+          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
+            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
+            <CardContent className="p-4 pt-3">
               <div className="flex items-start justify-between mb-3">
-                <p className="text-xs font-medium text-muted-foreground">{label}</p>
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: `color-mix(in srgb, ${color} 10%, transparent)` }}>
-                  <Icon className="w-3.5 h-3.5" style={{ color }} />
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
+                  <Icon className="w-4 h-4" style={{ color }} />
                 </div>
+                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{trend}</p>
               </div>
-              <p className="text-3xl font-bold text-foreground tracking-tight">{value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{sub}</p>
+              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Content grid */}
+      {/* ── CONTENT GRID ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         {/* Registration Pipeline */}
