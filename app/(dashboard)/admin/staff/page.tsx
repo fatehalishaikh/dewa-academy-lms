@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Search, Users, CheckCircle2, Clock, ArrowRight, Briefcase } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Search, ArrowRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { useRouter } from 'next/navigation'
@@ -118,29 +117,6 @@ export default function AdminStaffPage() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* ── STAT CARDS ── */}
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          { label: 'Total Staff', value: staff.length, sub: 'school-wide', color: '#00B8A9', icon: Users, trend: 'All departments' },
-          { label: 'Active', value: activeCount, sub: 'currently working', color: '#10B981', icon: CheckCircle2, trend: `${activePct}% of total` },
-          { label: 'On Leave', value: onLeaveCount, sub: 'this period', color: '#F59E0B', icon: Clock, trend: 'Temporarily away' },
-        ].map(({ label, value, sub, color, icon: Icon, trend }) => (
-          <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow pt-0 gap-0">
-            <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
-            <CardContent className="p-4 pt-3">
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `color-mix(in srgb, ${color} 12%, transparent)` }}>
-                  <Icon className="w-4 h-4" style={{ color }} />
-                </div>
-                <p className="text-[11px] font-semibold mt-1" style={{ color }}>{trend}</p>
-              </div>
-              <p className="text-2xl font-bold text-foreground tracking-tight">{value}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>
-            </CardContent>
-          </Card>
-        ))}
       </div>
 
       {/* Search + filter */}
