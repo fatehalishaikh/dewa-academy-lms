@@ -32,23 +32,104 @@ export default function TeacherHomework() {
     return sum + subs.filter(s => s.status === 'submitted' || s.status === 'late').length
   }, 0)
 
+  const ACCENT = '#0EA5E9'
+  const publishedCount = teacherHomework.filter(h => h.status === 'published').length
+
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium text-primary uppercase tracking-wider">Assignment Management</span>
+    <div className="p-6 space-y-5">
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #00111e 0%, #001a2e 55%, #07111f 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 p-7 flex flex-col justify-center gap-3">
+            <div>
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest mb-2">Assignment Management</p>
+              <h1 className="text-2xl font-bold text-white tracking-tight">Homework</h1>
+              <p className="text-white/40 text-sm mt-1">
+                {pendingGrading > 0
+                  ? `${pendingGrading} submission${pendingGrading > 1 ? 's' : ''} awaiting grading`
+                  : 'All submissions graded'}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap mt-1">
+              {pendingGrading > 0 && (
+                <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full border border-amber-500/30 text-amber-300" style={{ background: 'rgba(245,158,11,0.12)' }}>
+                  {pendingGrading} to grade
+                </span>
+              )}
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => router.push('/teacher/homework/create')}
+                className="gap-1.5 bg-white/10 border border-white/15 text-white hover:bg-white/20 text-xs h-7"
+              >
+                <Plus className="w-3 h-3" />
+                New Assignment
+              </Button>
+            </div>
           </div>
-          <h1 className="text-xl font-bold text-foreground">Homework</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {pendingGrading > 0 ? `${pendingGrading} submission${pendingGrading > 1 ? 's' : ''} awaiting grading` : 'All submissions graded'}
-          </p>
+
+          {/* Right — rings */}
+          <div className="lg:col-span-2 p-7 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            {/* Total */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: `color-mix(in srgb, ${ACCENT} 12%, transparent)`, border: `5px solid color-mix(in srgb, ${ACCENT} 35%, transparent)` }}>
+                <span className="text-xl font-bold text-white">{teacherHomework.length}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Total</p>
+                <p className="text-[11px] text-white/35">assignments</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            {/* Published ring */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="relative w-[80px] h-[80px]">
+                {(() => {
+                  const sw = 5, size = 80, r = (size - sw * 2) / 2
+                  const circ = 2 * Math.PI * r
+                  const pct = teacherHomework.length ? publishedCount / teacherHomework.length : 0
+                  const offset = circ - pct * circ
+                  return (
+                    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+                      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={sw} />
+                      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#10B981" strokeWidth={sw}
+                        strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
+                    </svg>
+                  )
+                })()}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-xl font-bold text-white">{publishedCount}</span>
+                </div>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Published</p>
+                <p className="text-[11px] text-white/35">active</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            {/* Pending */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(245,158,11,0.12)', border: '5px solid rgba(245,158,11,0.35)' }}>
+                <span className="text-xl font-bold text-white">{pendingGrading}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">To Grade</p>
+                <p className="text-[11px] text-white/35">pending</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <Button size="sm" onClick={() => router.push('/teacher/homework/create')} className="gap-1.5">
-          <Plus className="w-3.5 h-3.5" />
-          New Assignment
-        </Button>
       </div>
 
       {/* Stats */}

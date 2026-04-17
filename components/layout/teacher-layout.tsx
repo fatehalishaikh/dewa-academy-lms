@@ -21,7 +21,7 @@ const moduleLinks = [
 
 const teacherLinks = [
   { label: 'Dashboard', icon: LayoutDashboard, href: '/teacher/dashboard' },
-  { label: 'My Classes', icon: LayoutGrid, href: '/teacher/classes' },
+  { label: 'Classes', icon: LayoutGrid, href: '/teacher/classes' },
   { label: 'Homework', icon: ClipboardList, href: '/teacher/homework' },
   { label: 'Gradebook', icon: TableProperties, href: '/teacher/gradebook' },
   { label: 'Students', icon: Users, href: '/teacher/students' },

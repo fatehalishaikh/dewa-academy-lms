@@ -90,33 +90,109 @@ export default function TeacherStudents() {
     return 'text-red-400'
   }
 
+  const ACCENT = '#0EA5E9'
+  const onTrackCount = myStudents.filter(s => s.status === 'active').length
+  const atRiskCount = myStudents.filter(s => s.status === 'at-risk').length
+  const onTrackPct = myStudents.length ? Math.round((onTrackCount / myStudents.length) * 100) : 0
+
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium text-primary uppercase tracking-wider">My Students</span>
+    <div className="p-6 space-y-5">
+
+      {/* ── HERO ── */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ background: 'linear-gradient(135deg, #00111e 0%, #001a2e 55%, #07111f 100%)' }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-5">
+          {/* Left */}
+          <div className="lg:col-span-3 p-7 flex flex-col justify-center gap-3">
+            <div>
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest mb-2">My Students</p>
+              <h1 className="text-2xl font-bold text-white tracking-tight">Students</h1>
+              <p className="text-white/40 text-sm mt-1">{myStudents.length} students across {classes.length} classes</p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap mt-1">
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full border border-emerald-500/30 text-emerald-300" style={{ background: 'rgba(16,185,129,0.12)' }}>
+                {onTrackCount} On Track
+              </span>
+              <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full border border-red-500/30 text-red-300" style={{ background: 'rgba(239,68,68,0.12)' }}>
+                {atRiskCount} At Risk
+              </span>
+              {/* View toggle */}
+              <div className="flex gap-1.5 ml-auto">
+                <button
+                  onClick={() => setView('roster')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors ${view === 'roster' ? 'border-white/30 bg-white/15 text-white' : 'border-white/10 text-white/50 hover:bg-white/10'}`}
+                >
+                  <LayoutList className="w-3.5 h-3.5" />
+                  Roster
+                </button>
+                <button
+                  onClick={() => setView('risk-dashboard')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors ${view === 'risk-dashboard' ? 'border-red-500/40 bg-red-500/20 text-red-300' : 'border-white/10 text-white/50 hover:bg-white/10'}`}
+                >
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  Risk
+                </button>
+              </div>
+            </div>
           </div>
-          <h1 className="text-xl font-bold text-foreground">Student Roster</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">{myStudents.length} students across {classes.length} classes</p>
-        </div>
-        {/* View toggle */}
-        <div className="flex gap-1.5 mt-1">
-          <button
-            onClick={() => setView('roster')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border transition-colors ${view === 'roster' ? 'border-primary/30 bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}
-          >
-            <LayoutList className="w-3.5 h-3.5" />
-            Roster
-          </button>
-          <button
-            onClick={() => setView('risk-dashboard')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border transition-colors ${view === 'risk-dashboard' ? 'border-red-500/30 bg-red-500/10 text-red-400' : 'border-border text-muted-foreground hover:bg-accent'}`}
-          >
-            <ShieldAlert className="w-3.5 h-3.5" />
-            Risk Dashboard
-          </button>
+
+          {/* Right — rings */}
+          <div className="lg:col-span-2 p-7 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
+            {/* Total */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: `color-mix(in srgb, ${ACCENT} 12%, transparent)`, border: `5px solid color-mix(in srgb, ${ACCENT} 35%, transparent)` }}>
+                <span className="text-xl font-bold text-white">{myStudents.length}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">Total</p>
+                <p className="text-[11px] text-white/35">students</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            {/* On Track ring */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="relative w-[80px] h-[80px]">
+                {(() => {
+                  const sw = 5, size = 80, r = (size - sw * 2) / 2
+                  const circ = 2 * Math.PI * r
+                  const offset = circ - (onTrackPct / 100) * circ
+                  return (
+                    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+                      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={sw} />
+                      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#10B981" strokeWidth={sw}
+                        strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
+                    </svg>
+                  )
+                })()}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-xl font-bold text-white">{onTrackPct}%</span>
+                </div>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">On Track</p>
+                <p className="text-[11px] text-white/35">{onTrackCount} students</p>
+              </div>
+            </div>
+            <div className="w-px h-14 bg-white/[0.08]" />
+            {/* At Risk */}
+            <div className="flex flex-col items-center gap-2.5">
+              <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(239,68,68,0.12)', border: '5px solid rgba(239,68,68,0.35)' }}>
+                <span className="text-xl font-bold text-white">{atRiskCount}</span>
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-semibold text-white/80">At Risk</p>
+                <p className="text-[11px] text-white/35">need support</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
