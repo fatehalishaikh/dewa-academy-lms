@@ -63,7 +63,7 @@ const PAGE_NAMES: Record<string, string> = {
   '/parent/dashboard':              'Parent Portal — Overview',
   '/parent/grades':                 'Parent Portal — Child\'s Grades',
   '/parent/attendance':             'Parent Portal — Attendance',
-  '/parent/messages':               'Parent Portal — Messages',
+  '/parent/communication':               'Parent Portal — Communication',
   '/parent/leave-request':          'Parent Portal — Leave Request',
   '/parent/reports':                'Parent Portal — Progress Reports',
   // Reports

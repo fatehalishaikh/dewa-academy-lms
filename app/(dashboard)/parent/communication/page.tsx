@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { useCurrentStudent } from '@/stores/role-store'
+import { useCurrentParent } from '@/stores/role-store'
 
 type Message = {
   id: string
@@ -24,7 +24,7 @@ type Conversation = {
   role: string
   initials: string
   avatarColor: string
-  subject?: string
+  tag?: string
   lastMessage: string
   lastTime: string
   unread: number
@@ -34,111 +34,126 @@ type Conversation = {
 const INITIAL_CONVERSATIONS: Conversation[] = [
   {
     id: 'conv-001',
-    name: 'Ms. Aisha Al-Zaabi',
+    name: 'Dr. Sarah Ahmed',
     role: 'Mathematics Teacher',
-    initials: 'AA',
-    avatarColor: '#3B82F6',
-    subject: 'Mathematics',
-    lastMessage: 'Please review Chapter 6 before next class.',
+    initials: 'SA',
+    avatarColor: '#00B8A9',
+    tag: 'Mathematics',
+    lastMessage: 'Please encourage Ahmed to review Chapter 7 before the test.',
     lastTime: 'Today',
     unread: 2,
     messages: [
-      { id: 'm1', text: 'Hello Ahmed, I wanted to check in on your progress with quadratic equations.', from: 'other', time: '09:10', read: true },
-      { id: 'm2', text: 'Hi Ms. Al-Zaabi, I\'ve been practising but Q15 is still giving me trouble.', from: 'me', time: '09:15', read: true },
-      { id: 'm3', text: 'That\'s a common sticking point. The key is to check the discriminant first. I\'ll send you a worked example tonight.', from: 'other', time: '09:18', read: true },
-      { id: 'm4', text: 'Thank you, that would really help!', from: 'me', time: '09:20', read: true },
-      { id: 'm5', text: 'Please review Chapter 6 before next class.', from: 'other', time: '10:45', read: false },
-      { id: 'm6', text: 'Also, your assignment is due this Thursday — let me know if you need an extension.', from: 'other', time: '10:46', read: false },
+      { id: 'm1', text: 'Good morning Mr. Mohammed. I wanted to share some positive news about Ahmed\'s progress in Mathematics this term.', from: 'other', time: '08:55', read: true },
+      { id: 'm2', text: 'His Chapter 4 quiz score came in at 92% — a strong improvement from last month.', from: 'other', time: '08:56', read: true },
+      { id: 'm3', text: 'That\'s wonderful to hear, thank you for letting me know! He has been putting in extra hours at home.', from: 'me', time: '09:10', read: true },
+      { id: 'm4', text: 'It really shows. If he keeps this momentum, a top grade for the semester is very achievable.', from: 'other', time: '09:14', read: true },
+      { id: 'm5', text: 'Please encourage Ahmed to review Chapter 7 before the test on Thursday.', from: 'other', time: '10:30', read: false },
+      { id: 'm6', text: 'I can share additional practice problems if he would like more preparation material.', from: 'other', time: '10:31', read: false },
     ],
   },
   {
     id: 'conv-002',
-    name: 'Mr. Khalid Al-Mansouri',
+    name: 'Mr. James Wilson',
     role: 'Physics Teacher',
-    initials: 'KM',
-    avatarColor: '#8B5CF6',
-    subject: 'Physics',
-    lastMessage: 'Great work on the lab report!',
+    initials: 'JW',
+    avatarColor: '#0EA5E9',
+    tag: 'Physics',
+    lastMessage: 'The midterm results are now available on the portal.',
     lastTime: 'Yesterday',
     unread: 0,
     messages: [
-      { id: 'm1', text: 'Ahmed, I just finished reviewing your Newton\'s Laws lab report.', from: 'other', time: '14:30', read: true },
-      { id: 'm2', text: 'Great work on the lab report! Your analysis of error sources was particularly strong.', from: 'other', time: '14:31', read: true },
-      { id: 'm3', text: 'Thank you so much, sir! I spent a lot of time on the discussion section.', from: 'me', time: '15:00', read: true },
-      { id: 'm4', text: 'It shows. You\'ve earned a well-deserved grade. Keep this up for the end-of-term exam.', from: 'other', time: '15:05', read: true },
+      { id: 'm1', text: 'Dear Mr. Mohammed, Ahmed\'s Physics midterm results have been finalised.', from: 'other', time: '14:00', read: true },
+      { id: 'm2', text: 'He scored 78/100. A passing grade, though he struggled with the optics section.', from: 'other', time: '14:01', read: true },
+      { id: 'm3', text: 'Thank you for the update. Should I arrange extra tutoring for optics?', from: 'me', time: '14:20', read: true },
+      { id: 'm4', text: 'That would be very helpful. I can also recommend some online resources. The midterm results are now available on the portal.', from: 'other', time: '14:35', read: true },
     ],
   },
   {
     id: 'conv-003',
-    name: 'Ms. Sarah Johnson',
+    name: 'Ms. Layla Al-Farsi',
     role: 'English Teacher',
-    initials: 'SJ',
-    avatarColor: '#10B981',
-    subject: 'English Language',
-    lastMessage: 'Don\'t forget your essay draft is due Friday.',
+    initials: 'LF',
+    avatarColor: '#8B5CF6',
+    tag: 'English',
+    lastMessage: 'Ahmed\'s essay was very well structured — well done!',
     lastTime: 'Mon',
     unread: 1,
     messages: [
-      { id: 'm1', text: 'Hi Ahmed, just a reminder that your persuasive essay draft is due on Friday.', from: 'other', time: '11:00', read: false },
-      { id: 'm2', text: 'Make sure your thesis statement is in the first paragraph.', from: 'other', time: '11:01', read: true },
+      { id: 'm1', text: 'Mr. Mohammed, I just finished grading Ahmed\'s persuasive essay and wanted to share the result personally.', from: 'other', time: '16:00', read: false },
+      { id: 'm2', text: 'Ahmed\'s essay was very well structured — well done! He scored 47/50.', from: 'other', time: '16:01', read: true },
     ],
   },
   {
     id: 'conv-004',
-    name: 'Student Counsellor',
-    role: 'Ms. Hana Al-Rashidi',
-    initials: 'HR',
+    name: 'School Administration',
+    role: 'DEWA Academy — Admin Office',
+    initials: 'AD',
     avatarColor: '#F59E0B',
-    lastMessage: 'How are you feeling about the upcoming exams?',
-    lastTime: 'Thu',
+    lastMessage: 'Your leave request for Ahmed has been approved.',
+    lastTime: 'Apr 9',
     unread: 0,
     messages: [
-      { id: 'm1', text: 'Good morning Ahmed, I\'m reaching out to check how you\'re feeling ahead of the mid-term period.', from: 'other', time: '08:30', read: true },
-      { id: 'm2', text: 'How are you feeling about the upcoming exams?', from: 'other', time: '08:31', read: true },
-      { id: 'm3', text: 'A bit stressed about Physics honestly, but I\'m working on it.', from: 'me', time: '09:00', read: true },
-      { id: 'm4', text: 'That\'s completely normal. Please drop by my office if you\'d like to talk through any concerns. I\'m here to support you.', from: 'other', time: '09:05', read: true },
+      { id: 'm1', text: 'Dear Mr. Mohammed Al-Rashid, we have received your leave request for Ahmed Al-Rashid dated April 10–11.', from: 'other', time: '10:00', read: true },
+      { id: 'm2', text: 'We are pleased to inform you that your leave request for Ahmed has been approved. Please ensure he brings a medical note upon return.', from: 'other', time: '10:02', read: true },
+      { id: 'm3', text: 'Thank you very much. We will make sure to provide the documentation.', from: 'me', time: '10:15', read: true },
+      { id: 'm4', text: 'Thank you for your cooperation. We wish Ahmed a speedy recovery.', from: 'other', time: '10:18', read: true },
     ],
   },
   {
     id: 'conv-005',
-    name: 'Class Representative',
-    role: 'Group Chat — Grade 10A',
-    initials: 'G',
-    avatarColor: '#EC4899',
-    lastMessage: 'Study group meets tomorrow at 3pm in the library.',
-    lastTime: 'Tue',
+    name: 'Attendance Office',
+    role: 'DEWA Academy — Attendance',
+    initials: 'AT',
+    avatarColor: '#EF4444',
+    lastMessage: 'Ahmed was marked late on Mar 20. Please provide an excuse note.',
+    lastTime: 'Mar 20',
+    unread: 0,
+    messages: [
+      { id: 'm1', text: 'Dear Parent/Guardian, this is an automated notification. Ahmed Al-Rashid was marked late for the morning session on March 20, 2026.', from: 'other', time: '09:30', read: true },
+      { id: 'm2', text: 'Ahmed was marked late on Mar 20. Please provide an excuse note if this was due to a medical or family reason.', from: 'other', time: '09:31', read: true },
+      { id: 'm3', text: 'Apologies for the late arrival. There was a traffic delay on Sheikh Zayed Road. I will submit a note today.', from: 'me', time: '10:00', read: true },
+      { id: 'm4', text: 'Thank you for letting us know. We have noted this on Ahmed\'s record.', from: 'other', time: '10:10', read: true },
+    ],
+  },
+  {
+    id: 'conv-006',
+    name: 'Parent Representative',
+    role: 'Grade 10A — Parent Group',
+    initials: 'PG',
+    avatarColor: '#10B981',
+    lastMessage: 'Parent-Teacher Day is scheduled for April 22nd.',
+    lastTime: 'Apr 11',
     unread: 3,
     messages: [
-      { id: 'm1', text: 'Hey everyone! Study group for the Maths test is tomorrow at 3pm in the library.', from: 'other', time: '16:00', read: false },
-      { id: 'm2', text: 'Bring your Chapter 5 notes!', from: 'other', time: '16:01', read: false },
-      { id: 'm3', text: 'Study group meets tomorrow at 3pm in the library.', from: 'other', time: '16:02', read: false },
+      { id: 'm1', text: 'Dear parents, a reminder that Parent-Teacher Day is scheduled for April 22nd from 9am to 12pm.', from: 'other', time: '08:00', read: false },
+      { id: 'm2', text: 'Please book your slot through the parent portal under Requests → Meeting Request.', from: 'other', time: '08:01', read: false },
+      { id: 'm3', text: 'Parent-Teacher Day is scheduled for April 22nd. Slots are filling up — book early!', from: 'other', time: '08:02', read: false },
     ],
   },
 ]
 
 const CONTACTS = [
-  { id: 'c1', name: 'Ms. Aisha Al-Zaabi', role: 'Mathematics Teacher', initials: 'AA', avatarColor: '#3B82F6', subject: 'Mathematics' },
-  { id: 'c2', name: 'Mr. Khalid Al-Mansouri', role: 'Physics Teacher', initials: 'KM', avatarColor: '#8B5CF6', subject: 'Physics' },
-  { id: 'c3', name: 'Ms. Sarah Johnson', role: 'English Teacher', initials: 'SJ', avatarColor: '#10B981', subject: 'English Language' },
-  { id: 'c4', name: 'Student Counsellor', role: 'Ms. Hana Al-Rashidi', initials: 'HR', avatarColor: '#F59E0B', subject: undefined },
-  { id: 'c5', name: 'Mr. Omar Bin Saeed', role: 'Chemistry Teacher', initials: 'OS', avatarColor: '#EF4444', subject: 'Chemistry' },
-  { id: 'c6', name: 'Ms. Fatima Al-Nuaimi', role: 'Islamic Studies Teacher', initials: 'FN', avatarColor: '#6366F1', subject: 'Islamic Studies' },
-  { id: 'c7', name: 'Class Representative', role: 'Group Chat — Grade 10A', initials: 'G', avatarColor: '#EC4899', subject: undefined },
+  { id: 'c1', name: 'Dr. Sarah Ahmed',      role: 'Mathematics Teacher',            initials: 'SA', avatarColor: '#00B8A9', tag: 'Mathematics' },
+  { id: 'c2', name: 'Mr. James Wilson',      role: 'Physics Teacher',                initials: 'JW', avatarColor: '#0EA5E9', tag: 'Physics'     },
+  { id: 'c3', name: 'Ms. Layla Al-Farsi',    role: 'English Teacher',                initials: 'LF', avatarColor: '#8B5CF6', tag: 'English'     },
+  { id: 'c4', name: 'Mr. Hassan Mahmoud',    role: 'Chemistry Teacher',              initials: 'HM', avatarColor: '#10B981', tag: 'Chemistry'   },
+  { id: 'c5', name: 'Ms. Fatima Al-Zaabi',   role: 'Arabic Teacher',                 initials: 'FZ', avatarColor: '#F59E0B', tag: 'Arabic'      },
+  { id: 'c6', name: 'School Administration', role: 'DEWA Academy — Admin Office',    initials: 'AD', avatarColor: '#F59E0B', tag: undefined     },
+  { id: 'c7', name: 'Attendance Office',     role: 'DEWA Academy — Attendance',      initials: 'AT', avatarColor: '#EF4444', tag: undefined     },
+  { id: 'c8', name: 'Student Counsellor',    role: 'Ms. Hana Al-Rashidi',            initials: 'HR', avatarColor: '#6366F1', tag: undefined     },
+  { id: 'c9', name: 'Parent Representative', role: 'Grade 10A — Parent Group',       initials: 'PG', avatarColor: '#10B981', tag: undefined     },
 ]
 
-function formatMessages(msgs: Message[]) {
-  return msgs
-}
+export default function ParentCommunicationPage() {
+  const parent = useCurrentParent()
 
-export default function StudentCommunicationPage() {
-  const student = useCurrentStudent()
   const [conversations, setConversations] = useState<Conversation[]>(INITIAL_CONVERSATIONS)
-  const [selectedId, setSelectedId] = useState<string>('conv-001')
-  const [search, setSearch] = useState('')
-  const [inputText, setInputText] = useState('')
-  const [composeOpen, setComposeOpen] = useState(false)
+  const [selectedId, setSelectedId]       = useState<string>('conv-001')
+  const [search, setSearch]               = useState('')
+  const [inputText, setInputText]         = useState('')
+  const [composeOpen, setComposeOpen]     = useState(false)
   const [composeRecipient, setComposeRecipient] = useState<typeof CONTACTS[0] | null>(null)
-  const [composeText, setComposeText] = useState('')
+  const [composeText, setComposeText]     = useState('')
   const [contactSearch, setContactSearch] = useState('')
   const [showContactList, setShowContactList] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -156,7 +171,6 @@ export default function StudentCommunicationPage() {
 
   function openConversation(id: string) {
     setSelectedId(id)
-    // Mark as read
     setConversations(prev => prev.map(c =>
       c.id === id ? { ...c, unread: 0, messages: c.messages.map(m => ({ ...m, read: true })) } : c
     ))
@@ -165,13 +179,7 @@ export default function StudentCommunicationPage() {
   function sendMessage() {
     if (!inputText.trim() || !selectedId) return
     const now = new Date().toLocaleTimeString('en-AE', { hour: '2-digit', minute: '2-digit' })
-    const newMsg: Message = {
-      id: `msg-${Date.now()}`,
-      text: inputText.trim(),
-      from: 'me',
-      time: now,
-      read: false,
-    }
+    const newMsg: Message = { id: `msg-${Date.now()}`, text: inputText.trim(), from: 'me', time: now, read: false }
     setConversations(prev => prev.map(c =>
       c.id === selectedId
         ? { ...c, messages: [...c.messages, newMsg], lastMessage: inputText.trim(), lastTime: 'Now' }
@@ -184,12 +192,16 @@ export default function StudentCommunicationPage() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
   }
 
+  function closeCompose() {
+    setComposeOpen(false); setComposeRecipient(null)
+    setComposeText(''); setContactSearch(''); setShowContactList(false)
+  }
+
   function sendNewMessage() {
     if (!composeRecipient || !composeText.trim()) return
     const now = new Date().toLocaleTimeString('en-AE', { hour: '2-digit', minute: '2-digit' })
     const existingConv = conversations.find(c => c.name === composeRecipient.name)
     if (existingConv) {
-      // append to existing conversation
       const newMsg: Message = { id: `msg-${Date.now()}`, text: composeText.trim(), from: 'me', time: now, read: false }
       setConversations(prev => prev.map(c =>
         c.id === existingConv.id
@@ -198,14 +210,13 @@ export default function StudentCommunicationPage() {
       ))
       setSelectedId(existingConv.id)
     } else {
-      // create brand-new conversation
       const newConv: Conversation = {
         id: `conv-${Date.now()}`,
         name: composeRecipient.name,
         role: composeRecipient.role,
         initials: composeRecipient.initials,
         avatarColor: composeRecipient.avatarColor,
-        subject: composeRecipient.subject,
+        tag: composeRecipient.tag,
         lastMessage: composeText.trim(),
         lastTime: 'Now',
         unread: 0,
@@ -214,11 +225,7 @@ export default function StudentCommunicationPage() {
       setConversations(prev => [newConv, ...prev])
       setSelectedId(newConv.id)
     }
-    setComposeOpen(false)
-    setComposeRecipient(null)
-    setComposeText('')
-    setContactSearch('')
-    setShowContactList(false)
+    closeCompose()
   }
 
   const totalUnread = conversations.reduce((s, c) => s + c.unread, 0)
@@ -227,68 +234,55 @@ export default function StudentCommunicationPage() {
     c.role.toLowerCase().includes(contactSearch.toLowerCase())
   )
 
+  const ACCENT = '#8B5CF6'
+
   return (
     <div className="h-[calc(100vh-0px)] flex flex-col relative">
-      {/* ── HERO HEADER ── */}
+
+      {/* ── Hero header ── */}
       <div
         className="shrink-0 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #091810 0%, #0c2318 55%, #071420 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #0d0920 0%, #150d2e 55%, #070d1f 100%)' }}
       >
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
           backgroundSize: '28px 28px',
         }} />
-        <div className="relative flex items-center justify-between gap-4 px-6 py-5">
+        <div className="relative px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: 'color-mix(in srgb, var(--accent-student) 20%, transparent)', border: '1px solid color-mix(in srgb, var(--accent-student) 30%, transparent)' }}
+              style={{ background: `color-mix(in srgb, ${ACCENT} 20%, transparent)`, border: `1px solid color-mix(in srgb, ${ACCENT} 30%, transparent)` }}
             >
-              <MessageSquare className="w-4 h-4" style={{ color: 'var(--accent-student)' }} />
+              <MessageSquare className="w-4 h-4" style={{ color: ACCENT }} />
             </div>
             <div>
-              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Student Portal</p>
-              <h1 className="text-lg font-bold text-white">Communication</h1>
-              <p className="text-white/40 text-xs mt-0.5">
+              <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest">Parent Portal</p>
+              <h1 className="text-lg font-bold text-white mt-0.5">Communication</h1>
+              <p className="text-white/40 text-sm mt-0.5">
                 {totalUnread > 0 ? `${totalUnread} unread message${totalUnread > 1 ? 's' : ''}` : 'All caught up'}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            {/* Mini stats */}
-            <div className="hidden sm:flex items-center gap-3">
-              <div className="text-center">
-                <p className="text-white text-base font-bold leading-none">{conversations.length}</p>
-                <p className="text-white/40 text-[11px] mt-0.5">Chats</p>
-              </div>
-              <div className="w-px h-8 bg-white/[0.08]" />
-              <div className="text-center">
-                <p className="text-white text-base font-bold leading-none">{totalUnread}</p>
-                <p className="text-white/40 text-[11px] mt-0.5">Unread</p>
-              </div>
-              <div className="w-px h-8 bg-white/[0.08]" />
-            </div>
-            <Button size="sm" variant="ghost" className="gap-1.5 h-8 text-xs bg-white/10 border border-white/15 text-white hover:bg-white/18" onClick={() => { setComposeOpen(true); setShowContactList(false) }}>
-              <Plus className="w-3.5 h-3.5" />
-              New Message
-            </Button>
-          </div>
+          <Button size="sm" className="gap-1.5 h-8 text-xs shrink-0" onClick={() => { setComposeOpen(true); setShowContactList(false) }}>
+            <Plus className="w-3.5 h-3.5" />
+            New Message
+          </Button>
         </div>
       </div>
 
-      {/* Compose slide-in panel */}
+      {/* ── Compose slide-in panel ── */}
       {composeOpen && (
         <>
-          <div className="fixed inset-0 z-30 bg-black/20" onClick={() => { setComposeOpen(false); setComposeRecipient(null); setComposeText(''); setContactSearch(''); setShowContactList(false) }} />
+          <div className="fixed inset-0 z-30 bg-black/20" onClick={closeCompose} />
           <div className="fixed right-0 top-0 h-full w-[400px] z-40 bg-card border-l border-border flex flex-col shadow-xl">
-            {/* Panel header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
               <div className="flex items-center gap-2">
                 <Plus className="w-4 h-4 text-primary" />
                 <span className="text-sm font-semibold text-foreground">New Message</span>
               </div>
               <button
-                onClick={() => { setComposeOpen(false); setComposeRecipient(null); setComposeText(''); setContactSearch(''); setShowContactList(false) }}
+                onClick={closeCompose}
                 className="w-7 h-7 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
@@ -345,10 +339,13 @@ export default function StudentCommunicationPage() {
                                 {contact.initials}
                               </AvatarFallback>
                             </Avatar>
-                            <div className="min-w-0">
+                            <div className="min-w-0 flex-1">
                               <p className="text-xs font-medium text-foreground truncate">{contact.name}</p>
                               <p className="text-[11px] text-muted-foreground truncate">{contact.role}</p>
                             </div>
+                            {contact.tag && (
+                              <Badge variant="outline" className="text-[11px] h-4 shrink-0 border-primary/20 text-primary">{contact.tag}</Badge>
+                            )}
                           </button>
                         ))}
                         {filteredContacts.length === 0 && (
@@ -367,7 +364,7 @@ export default function StudentCommunicationPage() {
               <textarea
                 value={composeText}
                 onChange={e => setComposeText(e.target.value)}
-                placeholder={composeRecipient ? `Write to ${composeRecipient.name.split(' ')[0]}…` : 'Select a recipient first…'}
+                placeholder={composeRecipient ? `Write to ${composeRecipient.name.split(' ').slice(-1)[0]}…` : 'Select a recipient first…'}
                 disabled={!composeRecipient}
                 className="flex-1 w-full resize-none rounded-xl bg-muted/30 border border-border text-sm text-foreground placeholder:text-muted-foreground px-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 rows={8}
@@ -376,17 +373,9 @@ export default function StudentCommunicationPage() {
 
             {/* Actions */}
             <div className="px-5 py-4 border-t border-border shrink-0 flex items-center justify-end gap-2">
+              <Button variant="outline" size="sm" className="h-8 text-xs" onClick={closeCompose}>Cancel</Button>
               <Button
-                variant="outline"
-                size="sm"
-                className="h-8 text-xs"
-                onClick={() => { setComposeOpen(false); setComposeRecipient(null); setComposeText(''); setContactSearch(''); setShowContactList(false) }}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                className="h-8 text-xs gap-1.5"
+                size="sm" className="h-8 text-xs gap-1.5"
                 onClick={sendNewMessage}
                 disabled={!composeRecipient || !composeText.trim()}
               >
@@ -398,8 +387,10 @@ export default function StudentCommunicationPage() {
         </>
       )}
 
+      {/* ── Main split layout ── */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar: conversation list */}
+
+        {/* Conversation list */}
         <div className="w-80 shrink-0 border-r border-border flex flex-col overflow-hidden">
           <div className="p-3 border-b border-border">
             <div className="relative">
@@ -407,7 +398,7 @@ export default function StudentCommunicationPage() {
               <Input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Search messages…"
+                placeholder="Search conversations…"
                 className="pl-8 h-8 text-xs bg-muted/30 border-border"
               />
             </div>
@@ -417,13 +408,12 @@ export default function StudentCommunicationPage() {
               <button
                 key={conv.id}
                 onClick={() => openConversation(conv.id)}
-                className={`w-full flex items-start gap-3 p-4 border-b border-border text-left hover:bg-muted/30 transition-colors ${selectedId === conv.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''}`}
+                className={`w-full flex items-start gap-3 p-4 border-b border-border text-left hover:bg-muted/30 transition-colors ${
+                  selectedId === conv.id ? 'bg-primary/5 border-l-2 border-l-primary' : ''
+                }`}
               >
                 <Avatar className="w-9 h-9 shrink-0">
-                  <AvatarFallback
-                    className="text-xs font-semibold text-white"
-                    style={{ background: conv.avatarColor }}
-                  >
+                  <AvatarFallback className="text-xs font-semibold text-white" style={{ background: conv.avatarColor }}>
                     {conv.initials}
                   </AvatarFallback>
                 </Avatar>
@@ -451,7 +441,7 @@ export default function StudentCommunicationPage() {
           </div>
         </div>
 
-        {/* Main chat area */}
+        {/* Chat area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {selected ? (
             <>
@@ -459,23 +449,20 @@ export default function StudentCommunicationPage() {
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-border bg-card shrink-0">
                 <div className="flex items-center gap-3">
                   <Avatar className="w-8 h-8">
-                    <AvatarFallback
-                      className="text-xs font-semibold text-white"
-                      style={{ background: selected.avatarColor }}
-                    >
+                    <AvatarFallback className="text-xs font-semibold text-white" style={{ background: selected.avatarColor }}>
                       {selected.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="text-sm font-semibold text-foreground">{selected.name}</p>
                     <p className="text-[11px] text-muted-foreground">
-                      {selected.role}{selected.subject ? ` · ${selected.subject}` : ''}
+                      {selected.role}{selected.tag ? ` · ${selected.tag}` : ''}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {selected.subject && (
-                    <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary">{selected.subject}</Badge>
+                  {selected.tag && (
+                    <Badge variant="outline" className="text-[11px] h-5 border-primary/30 text-primary">{selected.tag}</Badge>
                   )}
                   <button className="w-7 h-7 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                     <MoreVertical className="w-3.5 h-3.5" />
@@ -485,28 +472,23 @@ export default function StudentCommunicationPage() {
 
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-5 space-y-4">
-                {formatMessages(selected.messages).map((msg) => {
+                {selected.messages.map(msg => {
                   const isMe = msg.from === 'me'
                   return (
                     <div key={msg.id} className={`flex items-end gap-2 ${isMe ? 'justify-end' : 'justify-start'}`}>
                       {!isMe && (
                         <Avatar className="w-7 h-7 shrink-0 mb-0.5">
-                          <AvatarFallback
-                            className="text-[11px] font-semibold text-white"
-                            style={{ background: selected.avatarColor }}
-                          >
+                          <AvatarFallback className="text-[11px] font-semibold text-white" style={{ background: selected.avatarColor }}>
                             {selected.initials}
                           </AvatarFallback>
                         </Avatar>
                       )}
-                      <div className={`max-w-[70%] space-y-1 ${isMe ? 'items-end' : 'items-start'} flex flex-col`}>
-                        <div
-                          className={`px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
-                            isMe
-                              ? 'bg-primary text-primary-foreground rounded-br-sm'
-                              : 'bg-card border border-border text-foreground rounded-bl-sm'
-                          }`}
-                        >
+                      <div className={`max-w-[70%] space-y-1 flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                        <div className={`px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
+                          isMe
+                            ? 'bg-primary text-primary-foreground rounded-br-sm'
+                            : 'bg-card border border-border text-foreground rounded-bl-sm'
+                        }`}>
                           {msg.text}
                         </div>
                         <div className={`flex items-center gap-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
@@ -520,11 +502,8 @@ export default function StudentCommunicationPage() {
                       </div>
                       {isMe && (
                         <Avatar className="w-7 h-7 shrink-0 mb-0.5">
-                          <AvatarFallback
-                            className="text-[11px] font-semibold text-white"
-                            style={{ background: student?.avatarColor ?? '#00B8A9' }}
-                          >
-                            {student?.initials ?? 'S'}
+                          <AvatarFallback className="text-[11px] font-semibold text-white" style={{ background: parent?.avatarColor ?? '#00B8A9' }}>
+                            {parent?.initials ?? 'P'}
                           </AvatarFallback>
                         </Avatar>
                       )}
@@ -534,27 +513,22 @@ export default function StudentCommunicationPage() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Input */}
+              {/* Input bar */}
               <div className="px-5 py-4 border-t border-border bg-card shrink-0">
                 <div className="flex items-end gap-2">
                   <button className="w-8 h-8 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors shrink-0">
                     <Paperclip className="w-3.5 h-3.5" />
                   </button>
-                  <div className="flex-1 relative">
+                  <div className="flex-1">
                     <Input
                       value={inputText}
                       onChange={e => setInputText(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder={`Message ${selected.name.split(' ')[0]}…`}
-                      className="bg-muted/30 border-border text-sm pr-10 h-10"
+                      placeholder={`Message ${selected.name.split(' ').slice(-1)[0]}…`}
+                      className="bg-muted/30 border-border text-sm h-10"
                     />
                   </div>
-                  <Button
-                    size="sm"
-                    className="h-10 w-10 p-0 shrink-0"
-                    onClick={sendMessage}
-                    disabled={!inputText.trim()}
-                  >
+                  <Button size="sm" className="h-10 w-10 p-0 shrink-0" onClick={sendMessage} disabled={!inputText.trim()}>
                     <Send className="w-3.5 h-3.5" />
                   </Button>
                 </div>

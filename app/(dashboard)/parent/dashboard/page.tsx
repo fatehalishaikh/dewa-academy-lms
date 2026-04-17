@@ -186,11 +186,11 @@ export default function ParentDashboard() {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => router.push('/parent/messages')}
+                onClick={() => router.push('/parent/communication')}
                 className="gap-1.5 bg-white/10 border border-white/15 text-white hover:bg-white/18 text-xs"
               >
                 <MessageSquare className="w-3.5 h-3.5" style={{ color: ACCENT }} />
-                Messages
+                Communication
               </Button>
               <Button
                 size="sm"
@@ -273,7 +273,7 @@ export default function ParentDashboard() {
           { label: 'Current GPA',  value: gpa.toFixed(1),   sub: 'out of 4.0',      icon: TrendingUp,    color: ACCENT,    trend: gpa >= 3.5 ? 'Excellent' : gpa >= 3.0 ? 'Good standing' : 'Needs attention', action: () => router.push('/parent/grades')     },
           { label: 'Attendance',   value: `${attendance}%`, sub: 'this semester',   icon: Calendar,      color: '#10B981', trend: attendance >= 90 ? 'Above target' : attendance >= 75 ? 'Acceptable' : 'Below target',        action: () => router.push('/parent/attendance') },
           { label: 'Pending Work', value: '3',              sub: 'due soon',        icon: AlertTriangle, color: '#F59E0B', trend: '1 due tomorrow',   action: () => {}                               },
-          { label: 'Messages',     value: '1',              sub: 'unread message',  icon: MessageSquare, color: '#8B5CF6', trend: 'Dr. Sarah Ahmed',  action: () => router.push('/parent/messages')   },
+          { label: 'Communication',     value: '1',              sub: 'unread message',  icon: MessageSquare, color: '#8B5CF6', trend: 'Dr. Sarah Ahmed',  action: () => router.push('/parent/communication')   },
         ].map(({ label, value, sub, icon: Icon, color, trend, action }) => (
           <Card key={label} className="border-border overflow-hidden hover:shadow-elevated transition-shadow cursor-pointer pt-0 gap-0" onClick={action}>
             <div className="h-1 w-full shrink-0" style={{ background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 30%, transparent))` }} />
@@ -410,7 +410,7 @@ export default function ParentDashboard() {
             {[
               { label: 'View All Grades',      sub: 'See detailed grade breakdown',       to: '/parent/grades',     color: ACCENT,    icon: BarChart3     },
               { label: 'Attendance Records',   sub: 'Monthly attendance calendar',        to: '/parent/attendance', color: '#10B981', icon: Calendar      },
-              { label: 'Messages',             sub: '1 unread from Dr. Sarah Ahmed',      to: '/parent/messages',   color: '#8B5CF6', icon: MessageSquare },
+              { label: 'Communication',             sub: '1 unread from Dr. Sarah Ahmed',      to: '/parent/communication',   color: '#8B5CF6', icon: MessageSquare },
               { label: 'Requests',             sub: 'Leave, meeting & document requests', to: '/parent/requests',   color: '#F59E0B', icon: AlertTriangle  },
               { label: 'AI Progress Reports',  sub: 'Generate personalized insights',     to: '/parent/reports',    color: ACCENT,    icon: FileText       },
             ].map(({ label, sub, to, color, icon: Icon }) => (

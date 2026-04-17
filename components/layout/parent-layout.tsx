@@ -15,7 +15,7 @@ const parentLinks = [
   { label: 'Dashboard', icon: LayoutDashboard, href: '/parent/dashboard' },
   { label: "Child's Grades", icon: BarChart3, href: '/parent/grades' },
   { label: 'Attendance', icon: Calendar, href: '/parent/attendance' },
-  { label: 'Messages', icon: MessageSquare, href: '/parent/messages' },
+  { label: 'Communication', icon: MessageSquare, href: '/parent/communication' },
   { label: 'Requests', icon: ClipboardList, href: '/parent/requests' },
   { label: 'Reports', icon: FileText, href: '/parent/reports' },
 ]
