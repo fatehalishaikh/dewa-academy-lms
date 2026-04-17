@@ -341,7 +341,7 @@ export const initialHomework: Homework[] = [
     subject: 'Statistics',
     dueDate: '2026-04-30',
     createdDate: '2026-04-12',
-    status: 'draft',
+    status: 'published',
     totalPoints: 20,
     aiGenerated: true,
     rubric: [

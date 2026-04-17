@@ -1,5 +1,5 @@
 'use client'
-import { Sparkles, TableProperties, ChevronDown } from 'lucide-react'
+import { TableProperties, ChevronDown } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { useCurrentTeacher } from '@/stores/role-store'
@@ -23,9 +23,19 @@ export default function TeacherGradebook() {
   const { activeSubject } = useSubjectStore()
   const { homework, getSubmissionsForHomework, getSubmissionForStudent } = useHomeworkStore()
 
-  const allClasses = teacher ? getClassesByTeacher(teacher.id) : []
-  const classes = activeSubject === 'all' ? allClasses : allClasses.filter(c => c.subject === activeSubject)
+  const teacherSubjects = teacher?.subjects ?? []
+
+  // When sidebar is set to "all", default to the teacher's first subject.
+  // Gradebook is always scoped to a single subject — cross-subject summaries
+  // belong to the Admin persona only.
+  const effectiveSubject = teacherSubjects.includes(activeSubject)
+    ? activeSubject
+    : teacherSubjects[0] ?? ''
+
   const [selectedClass, setSelectedClass] = useState('')
+
+  const allClasses = teacher ? getClassesByTeacher(teacher.id) : []
+  const classes = allClasses.filter(c => c.subject === effectiveSubject)
 
   const effectiveClass = selectedClass && classes.find(c => c.id === selectedClass)
     ? selectedClass
@@ -34,7 +44,6 @@ export default function TeacherGradebook() {
   const cls = classes.find(c => c.id === effectiveClass)
   const classStudents = cls ? cls.studentIds.map(id => getStudentById(id)).filter(Boolean) : []
 
-  // Dynamic homework for selected class
   const classHomework = cls
     ? homework.filter(h => h.classId === cls.id && h.status !== 'draft')
     : []
@@ -42,7 +51,6 @@ export default function TeacherGradebook() {
   const clsColor = cls ? subjectColor(cls.subject) : 'var(--accent-teacher)'
 
   const ACCENT = '#0EA5E9'
-  const avgGrade = classes.length ? Math.round(classes.reduce((s, c) => s + c.averageGrade, 0) / classes.length) : 0
 
   return (
     <div className="p-6 space-y-5">
@@ -63,7 +71,7 @@ export default function TeacherGradebook() {
               <p className="text-white/40 text-[11px] font-semibold uppercase tracking-widest mb-2">Grade Management</p>
               <h1 className="text-2xl font-bold text-white tracking-tight">Gradebook</h1>
               <p className="text-white/40 text-sm mt-1">
-                {activeSubject === 'all' ? 'All subjects' : activeSubject} · {classes.length} class{classes.length !== 1 ? 'es' : ''}
+                {effectiveSubject} · {classes.length} class{classes.length !== 1 ? 'es' : ''}
               </p>
             </div>
             {/* Class selector */}
@@ -83,9 +91,8 @@ export default function TeacherGradebook() {
             </div>
           </div>
 
-          {/* Right — rings */}
+          {/* Right — rings scoped to selected subject, no cross-subject avg */}
           <div className="lg:col-span-2 p-7 flex items-center justify-around border-t lg:border-t-0 lg:border-l border-white/[0.08]">
-            {/* Classes */}
             <div className="flex flex-col items-center gap-2.5">
               <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
                 style={{ background: `color-mix(in srgb, ${ACCENT} 12%, transparent)`, border: `5px solid color-mix(in srgb, ${ACCENT} 35%, transparent)` }}>
@@ -93,37 +100,10 @@ export default function TeacherGradebook() {
               </div>
               <div className="text-center">
                 <p className="text-xs font-semibold text-white/80">Classes</p>
-                <p className="text-[11px] text-white/35">total</p>
+                <p className="text-[11px] text-white/35">in subject</p>
               </div>
             </div>
             <div className="w-px h-14 bg-white/[0.08]" />
-            {/* Avg grade ring */}
-            <div className="flex flex-col items-center gap-2.5">
-              <div className="relative w-[80px] h-[80px]">
-                {(() => {
-                  const sw = 5, size = 80, r = (size - sw * 2) / 2
-                  const circ = 2 * Math.PI * r
-                  const offset = circ - (avgGrade / 100) * circ
-                  const color = avgGrade >= 80 ? '#10B981' : avgGrade >= 70 ? '#F59E0B' : '#EF4444'
-                  return (
-                    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
-                      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={sw} />
-                      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw}
-                        strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
-                    </svg>
-                  )
-                })()}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-xl font-bold text-white">{avgGrade}%</span>
-                </div>
-              </div>
-              <div className="text-center">
-                <p className="text-xs font-semibold text-white/80">Avg Grade</p>
-                <p className="text-[11px] text-white/35">all classes</p>
-              </div>
-            </div>
-            <div className="w-px h-14 bg-white/[0.08]" />
-            {/* Selected class students */}
             <div className="flex flex-col items-center gap-2.5">
               <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center"
                 style={{ background: 'rgba(139,92,246,0.12)', border: '5px solid rgba(139,92,246,0.35)' }}>
@@ -138,6 +118,7 @@ export default function TeacherGradebook() {
         </div>
       </div>
 
+      {/* ── GRADE TABLE ── */}
       <Card className="rounded-2xl border-border overflow-hidden">
         <CardHeader className="pb-2 border-b border-border">
           <CardTitle className="text-sm flex items-center gap-2">
@@ -226,7 +207,6 @@ export default function TeacherGradebook() {
                   )
                 })}
               </tbody>
-              {/* Class Average row */}
               <tfoot>
                 <tr className="bg-muted/30 border-t border-border">
                   <td className="px-4 py-2">

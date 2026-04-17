@@ -66,7 +66,7 @@ const roleConfigs: RoleConfig[] = [
       name: t.name,
       initials: t.initials,
       avatarColor: t.avatarColor,
-      subtitle: t.department,
+      subtitle: t.subjects.join(' · '),
     })),
   },
   {
